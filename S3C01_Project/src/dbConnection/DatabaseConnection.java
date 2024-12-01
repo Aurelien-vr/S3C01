@@ -13,10 +13,10 @@ public class DatabaseConnection {
 	
 	public static Connection getInstance(){
 		mdp = getMaskedPasswordWithinEclipse("Password");
-		if(instance != null) {
+		if(instance == null) {
 			try {
 				instance = DriverManager.getConnection("jdbc:mysql://" + "mysql-1ba067f8-s3c01.e.aivencloud.com:24004/defaultdb?sslmode=require", username, mdp);
-				System.out.println("Connected With the database successfully");
+				System.out.println("Connected with the database successfully");
 				
 			} catch (SQLException e) {
 				System.out.println("Error while connecting to the database");
@@ -37,7 +37,7 @@ public class DatabaseConnection {
     }
     
     
-    public void closeConnection() {
+    public static void closeConnection() {
     	if (instance != null) {    		
     		try {
     			instance.close();
@@ -46,9 +46,5 @@ public class DatabaseConnection {
     		}
     	}
     }
-    
-    public static void main(String[] args) {
-		DatabaseConnection.getInstance();
-	}
 
 }

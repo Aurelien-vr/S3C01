@@ -1,7 +1,6 @@
 package dao;
+import dao.entities.Contrat_location;
 
-import java.io.Serializable;
-
-public interface Contrat_locationDAO extends DAO<Serializable>{
-	
+public interface Contrat_locationDAO extends DAO<Contrat_location>{
+			
 }
