@@ -3,9 +3,7 @@ package dbConnection;
 import java.sql.*;
 import javax.swing.*;
 
-/**
- * Classe utilitaire pour gérer la connexion à la base de données.
- */
+import exception.ExceptionStorageHandler;
 public class DatabaseConnection {
     
     // Nom d'utilisateur pour la connexion à la base de données
@@ -71,6 +69,18 @@ public class DatabaseConnection {
         ) == JOptionPane.OK_OPTION ? new String(jpf.getPassword()) : ""; // Si OK, récupère le mot de passe
         return password; // Retourne le mot de passe
     }
+    
+    
+    public static void closeStatement(Statement statement) {
+		if(statement!=null) {
+			try {
+				statement.close();
+			}catch (Exception e) {
+				System.out.println(e.getMessage());
+				ExceptionStorageHandler.LogException(e, instance);
+			}
+		}
+	}
 
     /**
      * Méthode pour fermer la connexion à la base de données.

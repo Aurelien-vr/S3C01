@@ -1,4 +1,5 @@
 package dao.entities;
+import java.sql.*;
 
 import java.util.Date;
 
@@ -171,4 +172,5 @@ public class Contrat_location {
                ", date_versement=" + (date_versement != null ? date_versement : "N/A") +
                '}';
     }
+
 }
