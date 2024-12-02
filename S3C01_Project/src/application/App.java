@@ -10,11 +10,9 @@ public class App {
 		Contrat_locationDAO contrat_locationDAO = DAOFactory.createContrat_locationDAO();
 		Contrat_location contrat_location = contrat_locationDAO.findOne(1);
 		if(contrat_location!=null) {			
-			System.out.println(contrat_location); 
+			System.out.println(contrat_location);
 		}else {
 			System.out.println("CONTRAT LOCATION EST NULL");
 		}
 	}
-	
-	
 }
