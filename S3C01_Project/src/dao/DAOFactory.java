@@ -8,4 +8,8 @@ public class DAOFactory {
 		return new Contrat_locationImpl(DatabaseConnection.getInstance());
 	}
 	
+	public static BienDAO createBienDAO() {
+		return new BienImpl(DatabaseConnection.getInstance());
+	}
+	
 }
