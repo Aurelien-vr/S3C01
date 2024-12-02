@@ -7,6 +7,7 @@ import dao.entities.Contrat_location;
 import dbConnection.DatabaseConnection;
 
 
+
 /**
  * Classe principale de l'application.
  * Permet de tester l'accès aux données via le DAO (Data Access Object) pour les contrats de location.
@@ -33,5 +34,4 @@ public class App {
 		
 		DatabaseConnection.closeConnection();
 	}
-
 }

@@ -1,13 +1,11 @@
 package dbConnection;
 import java.sql.*;
 import javax.swing.*;
-
+import exception.ExceptionStorageHandler;
 
 /**
  * Classe utilitaire pour gérer la connexion à la base de données.
  */
-
-import exception.ExceptionStorageHandler;
 
 
 public class DatabaseConnection {

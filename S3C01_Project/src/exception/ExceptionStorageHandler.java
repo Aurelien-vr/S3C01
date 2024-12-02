@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 public class ExceptionStorageHandler {
 	
-	
 	public static void LogException(Exception exception, Connection connection) {
 		PreparedStatement statement = null;
 		String query = "INSERT INTO db1_sae.exception_log(Exception_type,Sql_error_code,Exception_message,Error_code) VALUES (?,?,?,?);";
@@ -20,6 +19,7 @@ public class ExceptionStorageHandler {
 				SQLException sqlException = (SQLException) exception;
 				statement.setString(2, sqlException.getSQLState());
 				statement.setInt(4, sqlException.getErrorCode());
+
 				
 				System.out.println(exception.getClass()+" |SQL state :"+sqlException.getSQLState()
 						+"|SQL error code:"+sqlException.getErrorCode()+"| -> " +exception.getMessage());
@@ -31,12 +31,10 @@ public class ExceptionStorageHandler {
 				System.out.println(exception.getClass()+" -> "+exception.getMessage());
 				//exception.printStackTrace();
 			}
-			
 			statement.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 }

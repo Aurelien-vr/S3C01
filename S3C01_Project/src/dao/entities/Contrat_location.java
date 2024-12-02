@@ -1,6 +1,9 @@
 package dao.entities;
 import java.sql.*;
 import java.util.Objects;
+
+
+
 /**
  * Représente un contrat de location pour un bien immobilier.
  * Cette classe contient les informations relatives au contrat de location, telles que
@@ -190,4 +193,5 @@ public class Contrat_location {
                ", date_versement=" + (date_versement != null ? date_versement : "N/A") +
                '}';
     }
+
 }
