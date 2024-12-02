@@ -2,6 +2,8 @@ package dbConnection;
 import java.sql.*;
 import javax.swing.*;
 
+import exception.ExceptionStorageHandler;
+
 public class DatabaseConnection {
 	private static String username = "avnadmin";
 	private static String mdp;
@@ -36,6 +38,17 @@ public class DatabaseConnection {
     	return password;
     }
     
+    
+    public static void closeStatement(Statement statement) {
+		if(statement!=null) {
+			try {
+				statement.close();
+			}catch (Exception e) {
+				System.out.println(e.getMessage());
+				ExceptionStorageHandler.LogException(e, instance);
+			}
+		}
+	}
     
     public static void closeConnection() {
     	if (instance != null) {    		

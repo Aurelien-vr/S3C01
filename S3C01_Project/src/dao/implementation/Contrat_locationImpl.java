@@ -3,12 +3,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import dao.Contrat_locationDAO;
 import dao.entities.Contrat_location;
 import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 public class Contrat_locationImpl implements Contrat_locationDAO{
 
@@ -36,11 +37,11 @@ public class Contrat_locationImpl implements Contrat_locationDAO{
 		}
 		
 		catch (Exception e) {
-			System.out.println(e);
+			ExceptionStorageHandler.LogException(e, connection);
 		}
 		
 		finally {
-			DatabaseConnection.closeConnection();
+			DatabaseConnection.closeStatement(statement);
 		}
 		
 		return null;
@@ -54,7 +55,23 @@ public class Contrat_locationImpl implements Contrat_locationDAO{
 
 	@Override
 	public void create(Contrat_location entity) {
-		// TODO Auto-generated method stub
+		PreparedStatement statement = null;
+		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut) VALUES (?,?);";
+		
+		try {
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, entity.getMontant_loyer());
+			statement.setDate(2, (java.sql.Date)entity.getDate_debut());
+			
+			if(statement.executeUpdate(query)>0) {
+				System.out.println("User inserted");
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+			System.out.println(e.getMessage());
+		}finally {
+			DatabaseConnection.closeStatement(statement);
+		}
 		
 	}
 
@@ -78,7 +95,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO{
 	
 	@Override
 	public Contrat_location createEntities(ResultSet result) throws SQLException {
-		Contrat_location contrat_location = new Contrat_location(result.getInt("Id_Contrat_location"));
+		Contrat_location contrat_location = new Contrat_location();
 		
 		int montant_loyer = result.getInt(2);
 		contrat_location.setMontant_loyer(montant_loyer);

@@ -1,9 +1,8 @@
 package dao.entities;
-import java.util.*;
+import java.sql.*;
 
 public class Contrat_location {
 	
-	private int id_numero_location;
 	private int montant_loyer;
 	private Date date_debut;
 	private Date date_fin;
@@ -11,17 +10,8 @@ public class Contrat_location {
 	private String modalite_eau_chaude_saniatire;
 	private Date date_versement;
 	
-	public Contrat_location(int numero_location) {
-		super();
-		this.id_numero_location = numero_location;
-	}
+	public Contrat_location() {}
 	
-	public int getNumero_location() {
-		return id_numero_location;
-	}
-	public void setNumero_location(int numero_location) {
-		this.id_numero_location = numero_location;
-	}
 	public int getMontant_loyer() {
 		return montant_loyer;
 	}
@@ -62,7 +52,6 @@ public class Contrat_location {
 	@Override
 	public String toString() {
 		return "ContratLocation{" +
-	               "numero_location=" + id_numero_location +
 	               ", montant_loyer=" + montant_loyer +
 	               ", date_debut=" + (date_debut != null ? date_debut : "N/A") +
 	               ", date_fin=" + (date_fin != null ? date_fin : "N/A") +
