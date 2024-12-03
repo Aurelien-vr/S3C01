@@ -43,7 +43,6 @@ public class Contrat_locationImpl implements Contrat_locationDAO{
 		finally {
 			DatabaseConnection.closeStatement(statement);
 		}
-		
 		return null;
 	}
 

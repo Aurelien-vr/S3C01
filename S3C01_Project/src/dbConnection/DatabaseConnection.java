@@ -10,7 +10,7 @@ public class DatabaseConnection {
 	
 	private static Connection instance;
 
-	private DatabaseConnection() {	}
+	private DatabaseConnection() {}
 
 	
 	public static Connection getInstance(){
