@@ -1,5 +1,4 @@
 package dao.implementation;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,7 +50,7 @@ public class BienImpl implements BienDAO{
 	}
 
 	@Override
-	public void create(Bien entity) {
+	public void insert(Bien entity) {
 		// TODO Auto-generated method stub
 		
 	}

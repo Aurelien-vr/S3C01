@@ -44,7 +44,6 @@ public class DatabaseConnection {
 			try {
 				statement.close();
 			}catch (Exception e) {
-				System.out.println(e.getMessage());
 				ExceptionStorageHandler.LogException(e, instance);
 			}
 		}
@@ -55,7 +54,7 @@ public class DatabaseConnection {
     		try {
     			instance.close();
     		} catch (SQLException e) {
-    			e.printStackTrace();
+    			ExceptionStorageHandler.LogException(e, instance);
     		}
     	}
     }

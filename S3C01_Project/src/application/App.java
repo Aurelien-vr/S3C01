@@ -18,6 +18,6 @@ public class App {
 		Contrat_location contrat_loc = new Contrat_location();
 		contrat_loc.setMontant_loyer(200);
 		contrat_loc.setDate_debut(Date.valueOf("2022-12-01"));
-		contrat_locationDAO.create(contrat_loc);		
+		contrat_locationDAO.insert(contrat_loc);		
 	}
 }
