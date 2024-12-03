@@ -1,6 +1,5 @@
 package dao.implementation;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,15 +68,6 @@ public class BienImpl implements BienDAO {
         return null;
     }
 
-    /**
-     * Crée un nouveau bien dans la base de données (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Bien à créer.
-     */
-    @Override
-    public void create(Bien entity) {
-        // TODO Auto-generated method stub
-    }
 
     /**
      * Met à jour un bien existant dans la base de données (fonctionnalité à implémenter).
@@ -88,6 +78,13 @@ public class BienImpl implements BienDAO {
     public void update(Bien entity) {
         // TODO Auto-generated method stub
     }
+
+	@Override
+	public void insert(Bien entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
     /**
      * Supprime un bien de la base de données (fonctionnalité à implémenter).

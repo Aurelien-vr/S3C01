@@ -1,7 +1,6 @@
 package dao.entities;
-import java.sql.*;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Représente un contrat de location pour un bien immobilier.

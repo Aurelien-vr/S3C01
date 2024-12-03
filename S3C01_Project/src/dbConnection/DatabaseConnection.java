@@ -76,24 +76,24 @@ public class DatabaseConnection {
 			try {
 				statement.close();
 			}catch (Exception e) {
-				System.out.println(e.getMessage());
 				ExceptionStorageHandler.LogException(e, instance);
 			}
 		}
 	}
 
+    
     /**
      * Méthode pour fermer la connexion à la base de données.
      * Elle vérifie d'abord si une connexion existe avant de tenter de la fermer.
      */
     public static void closeConnection() {
-        if (instance != null) { // Vérifie si la connexion existe
-            try {
-                instance.close(); // Ferme la connexion à la base de données
-            } catch (SQLException e) {
-                // Gestion des erreurs lors de la fermeture de la connexion
-                e.printStackTrace();
-            }
-        }
+    	if (instance != null) {    		
+    		try {
+    			instance.close();
+    		} catch (SQLException e) {
+    			ExceptionStorageHandler.LogException(e, instance);
+    		}
+    	}
     }
+
 }
