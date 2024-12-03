@@ -8,7 +8,6 @@ import java.util.List;
 
 import dao.BienDAO;
 import dao.entities.Bien;
-import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link BienDAO} pour gérer les opérations sur les entités "Bien".
@@ -50,7 +49,7 @@ public class BienImpl implements BienDAO {
                 return bien;
             } 
         } catch (Exception e) {
-        	ExceptionStorageHandler.LogException(e, connection);
+            System.out.println(e);  // Affichage de l'exception pour le débogage
         } finally {
             // Le bloc finally est prévu pour fermer les ressources (mais actuellement vide)
         }
@@ -69,16 +68,7 @@ public class BienImpl implements BienDAO {
         return null;
     }
 
-    /**
-     * Crée un nouveau bien dans la base de données (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Bien à créer.
-     */
-    @Override
-    public void insert(Bien entity) {
-        // TODO Auto-generated method stub
-    }
-    
+
     /**
      * Met à jour un bien existant dans la base de données (fonctionnalité à implémenter).
      * 
@@ -88,6 +78,13 @@ public class BienImpl implements BienDAO {
     public void update(Bien entity) {
         // TODO Auto-generated method stub
     }
+
+	@Override
+	public void insert(Bien entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
     /**
      * Supprime un bien de la base de données (fonctionnalité à implémenter).
@@ -99,10 +96,14 @@ public class BienImpl implements BienDAO {
         // TODO Auto-generated method stub
     }
 
+    /**
+     * Supprime un bien par son identifiant (fonctionnalité à implémenter).
+     * 
+     * @param entity L'entité Bien à supprimer par ID.
+     */
     @Override
-    public void deleteById(long id) {
-    	// TODO Auto-generated method stub
-    	
+    public void deleteById(Bien entity) {
+        // TODO Auto-generated method stub
     }
 
     /**
@@ -130,5 +131,4 @@ public class BienImpl implements BienDAO {
         
         return bien;  // Retourne l'entité Bien construite
     }
-
 }

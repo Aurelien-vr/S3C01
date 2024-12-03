@@ -19,22 +19,21 @@ public class ExceptionStorageHandler {
 				SQLException sqlException = (SQLException) exception;
 				statement.setString(2, sqlException.getSQLState());
 				statement.setInt(4, sqlException.getErrorCode());
-
 				
 				System.out.println(exception.getClass()+" |SQL state :"+sqlException.getSQLState()
 						+"|SQL error code:"+sqlException.getErrorCode()+"| -> " +exception.getMessage());
-				//exception.printStackTrace();
 				
 			}else {
 				statement.setString(2, null);
 				statement.setInt(4, 0);
 				System.out.println(exception.getClass()+" -> "+exception.getMessage());
-				//exception.printStackTrace();
 			}
+			
 			statement.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
 }

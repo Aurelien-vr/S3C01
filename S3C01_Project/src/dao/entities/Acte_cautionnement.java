@@ -1,6 +1,5 @@
 package dao.entities;
 import java.math.*;
-import java.util.Objects;
 
 /**
  * Représente un acte de cautionnement dans le système.
@@ -9,9 +8,27 @@ import java.util.Objects;
  */
 public class Acte_cautionnement {
 
+    private int id_acte_cautionnement;  // Identifiant unique de l'acte de cautionnement
     private BigDecimal montant_caution;  // Montant de la caution
     private int id_locataire;  // Identifiant du locataire concerné par l'acte de cautionnement
 
+    /**
+     * Récupère l'identifiant de l'acte de cautionnement.
+     *
+     * @return L'identifiant de l'acte de cautionnement.
+     */
+    public int getId_acte_cautionnement() {
+        return id_acte_cautionnement;
+    }
+
+    /**
+     * Définit l'identifiant de l'acte de cautionnement.
+     *
+     * @param id_acte_cautionnement L'identifiant de l'acte de cautionnement à définir.
+     */
+    public void setId_acte_cautionnement(int id_acte_cautionnement) {
+        this.id_acte_cautionnement = id_acte_cautionnement;
+    }
 
     /**
      * Récupère le montant de la caution.
@@ -58,25 +75,9 @@ public class Acte_cautionnement {
     @Override
     public String toString() {
         return "Acte_Cautionnement{" +
-               "montant_caution=" + (montant_caution != null ? montant_caution : "N/A") +
+               "id_acte_cautionnement=" + id_acte_cautionnement +
+               ", montant_caution=" + (montant_caution != null ? montant_caution : "N/A") +
                ", id_locataire=" + id_locataire +
                '}';
     }
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id_locataire, montant_caution);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Acte_cautionnement other = (Acte_cautionnement) obj;
-		return id_locataire == other.id_locataire && Objects.equals(montant_caution, other.montant_caution);
-	}
 }
