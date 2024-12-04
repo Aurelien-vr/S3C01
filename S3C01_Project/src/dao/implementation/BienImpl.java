@@ -75,10 +75,10 @@ public class BienImpl implements BienDAO {
      * @param entity L'entité Bien à créer.
      */
     @Override
-    public void create(Bien entity) {
+    public void insert(Bien entity) {
         // TODO Auto-generated method stub
     }
-
+    
     /**
      * Met à jour un bien existant dans la base de données (fonctionnalité à implémenter).
      * 

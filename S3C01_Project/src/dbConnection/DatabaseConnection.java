@@ -3,9 +3,14 @@ package dbConnection;
 import java.sql.*;
 import javax.swing.*;
 
+
 /**
  * Classe utilitaire pour gérer la connexion à la base de données.
  */
+
+import exception.ExceptionStorageHandler;
+
+
 public class DatabaseConnection {
     
     // Nom d'utilisateur pour la connexion à la base de données
@@ -17,11 +22,14 @@ public class DatabaseConnection {
     // Instance de la connexion unique (utilisée pour le pattern Singleton)
     private static Connection instance;
 
+
     /**
      * Constructeur privé pour empêcher l'instanciation directe de cette classe.
      * Utilise le pattern Singleton pour garantir qu'il n'y ait qu'une seule connexion à la fois.
      */
     private DatabaseConnection() { }
+
+
 
     /**
      * Méthode pour récupérer l'instance unique de la connexion à la base de données.
@@ -59,31 +67,41 @@ public class DatabaseConnection {
      * @return Le mot de passe saisi par l'utilisateur.
      */
     public static String getMaskedPasswordWithinEclipse(String msg) {
+
         final String password;
         final JPasswordField jpf = new JPasswordField(); // Création du champ de mot de passe
         // Affiche une boîte de dialogue pour demander le mot de passe
-        password = JOptionPane.showConfirmDialog(
-            null, 
-            jpf, 
-            msg,
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-        ) == JOptionPane.OK_OPTION ? new String(jpf.getPassword()) : ""; // Si OK, récupère le mot de passe
+        password = JOptionPane.showConfirmDialog(null, jpf, msg, 
+        		JOptionPane.OK_CANCEL_OPTION,
+    			JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION ? new String(jpf.getPassword()) : "";
+         		// Si OK, récupère le mot de passe
         return password; // Retourne le mot de passe
     }
-
+    
+    
+    public static void closeStatement(Statement statement) {
+		if(statement!=null) {
+			try {
+				statement.close();
+			}catch (Exception e) {
+				ExceptionStorageHandler.LogException(e, instance);
+			}
+		}
+	}
+    
     /**
      * Méthode pour fermer la connexion à la base de données.
      * Elle vérifie d'abord si une connexion existe avant de tenter de la fermer.
      */
     public static void closeConnection() {
-        if (instance != null) { // Vérifie si la connexion existe
-            try {
-                instance.close(); // Ferme la connexion à la base de données
-            } catch (SQLException e) {
-                // Gestion des erreurs lors de la fermeture de la connexion
-                e.printStackTrace();
-            }
-        }
+    	if (instance != null) {   // Vérifie si la connexion existe 		
+    		try {
+    			instance.close(); // Ferme la connexion à la base de données
+    		} catch (SQLException e) {
+    			// Gestion des erreurs lors de la fermeture de la connexion
+    			ExceptionStorageHandler.LogException(e, instance);
+    		}
+    	}
     }
+
 }

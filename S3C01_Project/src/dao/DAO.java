@@ -32,7 +32,7 @@ public interface DAO<T> {
      *
      * @param entity L'entité à créer.
      */
-    void create(T entity);
+    void insert(T entity);
 
     /**
      * Met à jour une entité existante dans la base de données.
@@ -63,4 +63,5 @@ public interface DAO<T> {
      * @throws SQLException Si une erreur se produit lors de l'extraction des données.
      */
     T createEntities(ResultSet result) throws SQLException;
+
 }

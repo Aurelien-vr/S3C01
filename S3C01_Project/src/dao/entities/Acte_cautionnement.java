@@ -1,6 +1,4 @@
 package dao.entities;
-
-import java.util.*;
 import java.math.*;
 
 /**

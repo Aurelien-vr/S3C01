@@ -1,14 +1,14 @@
 package dao.entities;
-
-import java.util.Date;
-
+import java.sql.*;
 /**
  * Représente un contrat de location pour un bien immobilier.
  * Cette classe contient les informations relatives au contrat de location, telles que
  * les dates de début et de fin, le montant du loyer, et les modalités de chauffage et d'eau chaude sanitaire.
  */
 public class Contrat_location {
-
+	
+	public Contrat_location() {}
+	
     private int id_numero_location;  // Identifiant unique du contrat de location
     private int montant_loyer;  // Montant du loyer mensuel
     private Date date_debut;  // Date de début du contrat
