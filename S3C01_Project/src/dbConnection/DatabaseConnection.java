@@ -71,15 +71,6 @@ public class DatabaseConnection {
     }
     
     
-    public static void closeStatement(Statement statement) {
-		if(statement!=null) {
-			try {
-				statement.close();
-			}catch (Exception e) {
-				ExceptionStorageHandler.LogException(e, instance);
-			}
-		}
-	}
 
     
     /**
@@ -93,6 +84,26 @@ public class DatabaseConnection {
     		} catch (SQLException e) {
     			ExceptionStorageHandler.LogException(e, instance);
     		}
+    	}
+    }
+    
+    public static void closeStatement(Statement statement) {
+    	if(statement!=null) {
+    		try {
+    			statement.close();
+    		}catch (Exception e) {
+    			ExceptionStorageHandler.LogException(e, instance);
+    		}
+    	}
+    }
+    
+    public static void closeResult(ResultSet result) {
+    	if (result != null) {
+    		try {
+				result.close();
+			} catch (Exception e) {
+				ExceptionStorageHandler.LogException(e, instance);
+			}
     	}
     }
 

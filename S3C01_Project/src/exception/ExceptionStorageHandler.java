@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 public class ExceptionStorageHandler {
 	
+	
 	public static void LogException(Exception exception, Connection connection) {
 		PreparedStatement statement = null;
 		String query = "INSERT INTO db1_sae.exception_log(Exception_type,Sql_error_code,Exception_message,Error_code) VALUES (?,?,?,?);";

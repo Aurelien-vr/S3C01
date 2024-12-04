@@ -14,18 +14,23 @@ public class Contrat_location {
     private Date date_debut;  // Date de début du contrat
     private Date date_fin;  // Date de fin du contrat
     private String modalite_chauffage;  // Modalité de chauffage (ex : gaz, électrique, etc.)
-    private String modalite_eau_chaude_saniatire;  // Modalité d'eau chaude sanitaire (ex : collective, individuelle, etc.)
+    private String modalite_eau_chaude_sanitaire;  // Modalité d'eau chaude sanitaire (ex : collective, individuelle, etc.)
     private Date date_versement;  // Date de versement du loyer
 
-    /**
-     * Constructeur de la classe Contrat_location avec un numéro de location.
-     *
-     * @param numero_location Identifiant unique du contrat de location.
-     */
-    public Contrat_location(int numero_location) {
-        super();
-        this.id_numero_location = numero_location;
-    }
+
+    public Contrat_location() {}
+	
+    public Contrat_location(int montant_loyer, Date date_debut, Date date_fin, String modalite_chauffage,
+			String modalite_eau_chaude_sanitaire, Date date_versement) {
+		super();
+		this.montant_loyer = montant_loyer;
+		this.date_debut = date_debut;
+		this.date_fin = date_fin;
+		this.modalite_chauffage = modalite_chauffage;
+		this.modalite_eau_chaude_sanitaire = modalite_eau_chaude_sanitaire;
+		this.date_versement = date_versement;
+	}
+    
 
     /**
      * Récupère le numéro unique du contrat de location.
@@ -123,7 +128,7 @@ public class Contrat_location {
      * @return Les modalités d'eau chaude sanitaire (ex : collective, individuelle).
      */
     public String getModalite_eau_chaude_saniatire() {
-        return modalite_eau_chaude_saniatire;
+        return modalite_eau_chaude_sanitaire;
     }
 
     /**
@@ -132,7 +137,7 @@ public class Contrat_location {
      * @param modalite_eau_chaude_saniatire Les modalités d'eau chaude sanitaire à définir.
      */
     public void setModalite_eau_chaude_saniatire(String modalite_eau_chaude_saniatire) {
-        this.modalite_eau_chaude_saniatire = modalite_eau_chaude_saniatire;
+        this.modalite_eau_chaude_sanitaire = modalite_eau_chaude_saniatire;
     }
 
     /**
@@ -167,7 +172,7 @@ public class Contrat_location {
                ", date_debut=" + (date_debut != null ? date_debut : "N/A") +
                ", date_fin=" + (date_fin != null ? date_fin : "N/A") +
                ", modalite_chauffage='" + (modalite_chauffage != null ? modalite_chauffage : "N/A") + '\'' +
-               ", modalite_eau_chaude_saniatire='" + (modalite_eau_chaude_saniatire != null ? modalite_eau_chaude_saniatire : "N/A") + '\'' +
+               ", modalite_eau_chaude_saniatire='" + (modalite_eau_chaude_sanitaire != null ? modalite_eau_chaude_sanitaire : "N/A") + '\'' +
                ", date_versement=" + (date_versement != null ? date_versement : "N/A") +
                '}';
     }
