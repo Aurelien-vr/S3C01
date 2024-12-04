@@ -10,6 +10,7 @@ public class App {
 	
 	public static void main(String[] args) {
 		Contrat_locationDAO contrat_locationDAO = DAOFactory.createContrat_locationDAO();
+		
 		/*
 		Contrat_location contrat_location = contrat_locationDAO.findOne(1);	
 		System.out.println(contrat_location);
