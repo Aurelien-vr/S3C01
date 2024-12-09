@@ -1,6 +1,5 @@
 package dao.implementation;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +8,7 @@ import java.util.List;
 
 import dao.BienDAO;
 import dao.entities.Bien;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link BienDAO} pour gérer les opérations sur les entités "Bien".
@@ -50,7 +50,7 @@ public class BienImpl implements BienDAO {
                 return bien;
             } 
         } catch (Exception e) {
-            System.out.println(e);  // Affichage de l'exception pour le débogage
+        	ExceptionStorageHandler.LogException(e, connection);
         } finally {
             // Le bloc finally est prévu pour fermer les ressources (mais actuellement vide)
         }

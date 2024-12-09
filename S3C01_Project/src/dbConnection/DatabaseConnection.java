@@ -1,5 +1,4 @@
 package dbConnection;
-
 import java.sql.*;
 import javax.swing.*;
 
@@ -40,7 +39,7 @@ public class DatabaseConnection {
     public static Connection getInstance(){
         // Demande le mot de passe masqué à l'utilisateur dans un champ de saisie sécurisé
         mdp = getMaskedPasswordWithinEclipse("Password");
-        
+       
         // Si l'instance n'existe pas encore, on crée la connexion
         if(instance == null) {
             try {
@@ -66,16 +65,15 @@ public class DatabaseConnection {
      * @param msg Le message à afficher dans la boîte de dialogue pour guider l'utilisateur.
      * @return Le mot de passe saisi par l'utilisateur.
      */
-    public static String getMaskedPasswordWithinEclipse(String msg) {
-
-        final String password;
-        final JPasswordField jpf = new JPasswordField(); // Création du champ de mot de passe
-        // Affiche une boîte de dialogue pour demander le mot de passe
-        password = JOptionPane.showConfirmDialog(null, jpf, msg, 
-        		JOptionPane.OK_CANCEL_OPTION,
-    			JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION ? new String(jpf.getPassword()) : "";
-         		// Si OK, récupère le mot de passe
-        return password; // Retourne le mot de passe
+	@SuppressWarnings("null")
+	public static String getMaskedPasswordWithinEclipse(String msg) {
+    	final String password;
+    	final JPasswordField jpf = new JPasswordField();
+    	password = JOptionPane.showConfirmDialog(null, jpf, msg,
+    			JOptionPane.OK_CANCEL_OPTION,
+    			JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION ?
+    					new String(jpf.getPassword()) : "";
+    	return password;
     }
     
     
