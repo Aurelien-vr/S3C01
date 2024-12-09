@@ -2,31 +2,71 @@ package dbConnection;
 import java.sql.*;
 import javax.swing.*;
 
+
+/**
+ * Classe utilitaire pour gérer la connexion à la base de données.
+ */
+
+import exception.ExceptionStorageHandler;
+
+
 public class DatabaseConnection {
-	private static String username = "avnadmin";
-	private static String mdp;
-	
-	private static Connection instance;
+    
+    // Nom d'utilisateur pour la connexion à la base de données
+    private static String username = "avnadmin";
+    
+    // Mot de passe masqué pour la connexion à la base de données
+    private static String mdp;
+    
+    // Instance de la connexion unique (utilisée pour le pattern Singleton)
+    private static Connection instance;
 
-	private DatabaseConnection() {	}
 
-	
-	public static Connection getInstance(){
-		mdp = getMaskedPasswordWithinEclipse("Password");
-		if(instance == null) {
-			try {
-				instance = DriverManager.getConnection("jdbc:mysql://" + "mysql-1ba067f8-s3c01.e.aivencloud.com:24004/defaultdb?sslmode=require", username, mdp);
-				System.out.println("Connected with the database successfully");
-				
-			} catch (SQLException e) {
-				System.out.println("Error while connecting to the database");
-			}
-		}
-		return instance;
-	}
-	
-	
-    public static String getMaskedPasswordWithinEclipse(String msg) {
+    /**
+     * Constructeur privé pour empêcher l'instanciation directe de cette classe.
+     * Utilise le pattern Singleton pour garantir qu'il n'y ait qu'une seule connexion à la fois.
+     */
+    private DatabaseConnection() { }
+
+
+
+    /**
+     * Méthode pour récupérer l'instance unique de la connexion à la base de données.
+     * Si la connexion n'existe pas encore, elle est créée.
+     * 
+     * @return L'instance de la connexion à la base de données.
+     */
+    public static Connection getInstance(){
+        // Demande le mot de passe masqué à l'utilisateur dans un champ de saisie sécurisé
+        mdp = getMaskedPasswordWithinEclipse("Password");
+       
+        // Si l'instance n'existe pas encore, on crée la connexion
+        if(instance == null) {
+            try {
+                // Connexion à la base de données avec les informations fournies
+                instance = DriverManager.getConnection(
+                    "jdbc:mysql://" + "mysql-1ba067f8-s3c01.e.aivencloud.com:24004/defaultdb?sslmode=require", 
+                    username, mdp
+                );
+                System.out.println("Connected with the database successfully");
+            } catch (SQLException e) {
+                // Gestion des erreurs de connexion
+                System.out.println("Error while connecting to the database");
+                e.printStackTrace();
+            }
+        }
+        return instance; // Retourne l'instance de la connexion
+    }
+
+    /**
+     * Méthode pour demander à l'utilisateur de saisir un mot de passe masqué.
+     * Utilise un champ de texte sécurisé pour masquer le mot de passe dans l'interface graphique.
+     * 
+     * @param msg Le message à afficher dans la boîte de dialogue pour guider l'utilisateur.
+     * @return Le mot de passe saisi par l'utilisateur.
+     */
+	@SuppressWarnings("null")
+	public static String getMaskedPasswordWithinEclipse(String msg) {
     	final String password;
     	final JPasswordField jpf = new JPasswordField();
     	password = JOptionPane.showConfirmDialog(null, jpf, msg,
@@ -37,12 +77,27 @@ public class DatabaseConnection {
     }
     
     
+    public static void closeStatement(Statement statement) {
+		if(statement!=null) {
+			try {
+				statement.close();
+			}catch (Exception e) {
+				ExceptionStorageHandler.LogException(e, instance);
+			}
+		}
+	}
+    
+    /**
+     * Méthode pour fermer la connexion à la base de données.
+     * Elle vérifie d'abord si une connexion existe avant de tenter de la fermer.
+     */
     public static void closeConnection() {
-    	if (instance != null) {    		
+    	if (instance != null) {   // Vérifie si la connexion existe 		
     		try {
-    			instance.close();
+    			instance.close(); // Ferme la connexion à la base de données
     		} catch (SQLException e) {
-    			e.printStackTrace();
+    			// Gestion des erreurs lors de la fermeture de la connexion
+    			ExceptionStorageHandler.LogException(e, instance);
     		}
     	}
     }
