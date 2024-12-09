@@ -3,10 +3,10 @@ package view;
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 import java.awt.*;
+import java.io.File;
 
 public class Page_bienlouable extends JFrame {
 
-    // Classe interne pour une bordure arrondie personnalisée
     static class RoundedBorder extends AbstractBorder {
         private final int arcWidth;
         private final int arcHeight;
@@ -42,98 +42,132 @@ public class Page_bienlouable extends JFrame {
     }
 
     public Page_bienlouable() {
-        // Configuration de la fenêtre principale
         setTitle("Liste des Biens");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
 
-        // Layout principal
         getContentPane().setLayout(new BorderLayout());
 
-        // Bande bleue avec le logo et les outils de sélection
         JPanel headerPanel = new JPanel();
         headerPanel.setBackground(new Color(135, 206, 250));
-        headerPanel.setLayout(new GridLayout(1, 6, 10, 0)); // 6 colonnes avec espace horizontal
+        headerPanel.setLayout(new GridLayout(1, 6, 10, 0));
 
-        // Ajout du logo
-        JLabel logoLabel = new JLabel("LBM"); // Remplace par un logo réel si nécessaire
+        JLabel logoLabel = new JLabel("LBM");
         logoLabel.setHorizontalAlignment(SwingConstants.LEFT);
         headerPanel.add(logoLabel);
 
-        // Label pour "Type de tri"
         JLabel label = new JLabel("Type de tri :");
         headerPanel.add(label);
 
-        // ComboBox pour le type de tri
         JComboBox<String> sortTypeComboBox = new JComboBox<>(new String[]{"Bien louable", "Locataire", "Immeuble"});
         headerPanel.add(sortTypeComboBox);
 
-        // ComboBox pour la catégorie (appartement ou garage)
         JComboBox<String> categoryComboBox = new JComboBox<>(new String[]{"Appartement", "Garage"});
         headerPanel.add(categoryComboBox);
 
-        // Icône de recherche (placeholder pour l'icône réelle)
-        JLabel searchIcon = new JLabel("🔍");
-        searchIcon.setHorizontalAlignment(SwingConstants.CENTER);
-        headerPanel.add(searchIcon);
+        JButton addPropertyButton = new JButton("Ajout de bien");
+        addPropertyButton.addActionListener(e -> showAddPropertyDialog());
+        headerPanel.add(addPropertyButton);
 
-        // Icône de retour (placeholder pour l'icône réelle)
-        JLabel backIcon = new JLabel("↩");
-        backIcon.setHorizontalAlignment(SwingConstants.CENTER);
-        headerPanel.add(backIcon);
-
-        // Ajout de la bande bleue en haut
         getContentPane().add(headerPanel, BorderLayout.NORTH);
 
-        // Panneau principal avec le JScrollPane
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(0, 1, 10, 10)); // Une seule colonne, espace vertical entre les éléments
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(Color.LIGHT_GRAY);
 
-        // Exemple de données pour les biens
-        String[][] propertyData = {
-            {"31000 Toulouse", "44, impasse Besnard"},
-            {"31000 Toulouse", "50, impasse de Grondin"},
-            {"31000 Toulouse", "880, place de Clement"}
-        };
-
-        // Ajout de panneaux pour chaque bien
-        for (String[] property : propertyData) {
-            JPanel propertyPanel = new JPanel();
-            propertyPanel.setLayout(new BorderLayout(10, 10));
-            propertyPanel.setBorder(new RoundedBorder(20, 20, Color.BLACK)); // Bordure arrondie appliquée au panneau
-            propertyPanel.setBackground(Color.WHITE);
-
-            // Label pour l'image
-            JLabel imageLabel = new JLabel("Image");
-            imageLabel.setPreferredSize(new Dimension(100, 100));
-            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // Placeholder pour l'image
-
-            // Labels pour les informations textuelles
-            JLabel regionLabel = new JLabel(property[0]);
-            JLabel addressLabel = new JLabel(property[1]);
-
-            // Panneau pour le texte
-            JPanel textPanel = new JPanel();
-            textPanel.setLayout(new GridLayout(2, 1)); // Deux lignes
-            textPanel.add(regionLabel);
-            textPanel.add(addressLabel);
-
-            // Ajout des composants au panneau de propriété
-            propertyPanel.add(imageLabel, BorderLayout.WEST);
-            propertyPanel.add(textPanel, BorderLayout.CENTER);
-
-            // Ajout au panneau principal
-            mainPanel.add(propertyPanel);
-        }
-
-        // Ajout du JScrollPane pour permettre le défilement
         JScrollPane scrollPane = new JScrollPane(mainPanel);
-        getContentPane().add(scrollPane, BorderLayout.CENTER); // Ajout au centre de la fenêtre
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-        // Rendre la fenêtre visible
         setVisible(true);
+
+        this.mainPanel = mainPanel;
+    }
+
+    private final JPanel mainPanel;
+
+    private void showAddPropertyDialog() {
+        JTextField departmentField = new JTextField(10);
+        JTextField addressField = new JTextField(10);
+
+        JPanel inputPanel = new JPanel(new GridLayout(2, 2));
+        inputPanel.add(new JLabel("Département:"));
+        inputPanel.add(departmentField);
+        inputPanel.add(new JLabel("Adresse:"));
+        inputPanel.add(addressField);
+
+        int result = JOptionPane.showConfirmDialog(this, inputPanel, "Ajout de bien",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String department = departmentField.getText();
+            String address = addressField.getText();
+            if (!department.isEmpty() && !address.isEmpty()) {
+                addPropertyPanel(mainPanel, department, address);
+            } else {
+                JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.", "Erreur",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void addPropertyPanel(JPanel mainPanel, String department, String address) {
+        JPanel propertyPanel = new JPanel();
+        propertyPanel.setLayout(new BorderLayout(10, 10));
+        propertyPanel.setBorder(new RoundedBorder(20, 20, Color.BLACK));
+        propertyPanel.setBackground(Color.WHITE);
+
+        propertyPanel.setPreferredSize(new Dimension(700, 120));
+        propertyPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
+        propertyPanel.setMinimumSize(new Dimension(700, 80));
+
+        JLabel imageLabel = new JLabel("Image");
+        imageLabel.setPreferredSize(new Dimension(100, 100));
+        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        // Button to select an image
+        JButton selectImageButton = new JButton("Sélectionner une image");
+        selectImageButton.addActionListener(e -> selectImage(imageLabel));
+
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new GridLayout(2, 1));
+        textPanel.add(new JLabel(department));
+        textPanel.add(new JLabel(address));
+
+        JButton deleteButton = new JButton("Supprimer");
+        deleteButton.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(this, "Voulez-vous vraiment supprimer ce bien ?", "Confirmation",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (confirm == JOptionPane.YES_OPTION) {
+                mainPanel.remove(propertyPanel);
+                mainPanel.revalidate();
+                mainPanel.repaint();
+            }
+        });
+
+        propertyPanel.add(imageLabel, BorderLayout.WEST);
+        propertyPanel.add(selectImageButton, BorderLayout.NORTH); // Ajout du bouton au panel
+        propertyPanel.add(textPanel, BorderLayout.CENTER);
+        propertyPanel.add(deleteButton, BorderLayout.EAST);
+
+        mainPanel.add(propertyPanel);
+        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
+    private void selectImage(JLabel imageLabel) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Images", "jpg", "png", "gif"));
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            ImageIcon imageIcon = new ImageIcon(selectedFile.getAbsolutePath());
+            Image image = imageIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Resize the image
+            imageLabel.setIcon(new ImageIcon(image));
+        }
     }
 
     public static void main(String[] args) {
