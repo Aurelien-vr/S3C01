@@ -7,5 +7,10 @@ import dao.entities.Acte_cautionnement;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface Acte_cautionnementDAO extends DAO<Acte_cautionnement> {
-    // Les méthodes spécifiques à l'entité Acte_cautionnement peuvent être ajoutées ici si nécessaire
+
+	/**
+	 * Supprime un acte de cautionnement par son identifiant (fonctionnalité à implémenter).
+	 * 
+	 * @param id L'identifiant de l'acte de cautionnement à supprimer.
+	 */
 }
