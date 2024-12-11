@@ -14,6 +14,13 @@ import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
 import javax.swing.JTextField;
+import java.awt.Canvas;
+import javax.swing.JEditorPane;
+import java.awt.Component;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
+import java.awt.Dimension;
 
 public class Page_specification {
 
@@ -61,8 +68,13 @@ public class Page_specification {
 		frame.getContentPane().add(header, BorderLayout.NORTH);
 		header.setLayout(new BorderLayout(0, 0));
 		
-		JButton btnNewButton = new JButton("Retour");
-		header.add(btnNewButton, BorderLayout.EAST);
+		JButton btn_retour = new JButton("Retour");
+		btn_retour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 // retour 
+			}
+		});
+		header.add(btn_retour, BorderLayout.EAST);
 		
 		JLabel Lbl_SpecificationAppartement = new JLabel("Spécification Appartement");
 		Lbl_SpecificationAppartement.setHorizontalAlignment(SwingConstants.CENTER);
@@ -75,33 +87,49 @@ public class Page_specification {
 		
 		JPanel gauche = new JPanel();
 		corps.add(gauche);
-		gauche.setLayout(new GridLayout(2, 0, 0, 0));
+		gauche.setLayout(new BorderLayout(0, 0));
 		
-		JTextPane txtpnCaSeraUne = new JTextPane();
-		txtpnCaSeraUne.setText("ca sera une image quand j'aurai trouvé comment faire ouai ouai");
-		gauche.add(txtpnCaSeraUne);
+		JEditorPane editorPane = new JEditorPane();
+		gauche.add(editorPane, BorderLayout.CENTER);
 		
-		JPanel panel = new JPanel();
-		gauche.add(panel);
-		panel.setLayout(new GridLayout(2, 2, 0, 0));
-		
-		JButton btn_listeLocataire = new JButton("Liste de locataire actuel");
-		panel.add(btn_listeLocataire);
+		JPanel boutons = new JPanel();
+		boutons.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		gauche.add(boutons, BorderLayout.SOUTH);
 		
 		JButton btn_historiqueLocataire = new JButton("Historique de locataire");
-		panel.add(btn_historiqueLocataire);
+		btn_historiqueLocataire.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// aller sur page Page_historiqueLocataire
+			}
+		});
+		boutons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
+		btn_historiqueLocataire.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		boutons.add(btn_historiqueLocataire);
 		
 		JButton btn_documents = new JButton("Documents");
-		panel.add(btn_documents);
+		btn_documents.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//aller sur page Page_documents
+			}
+		});
+		btn_documents.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		boutons.add(btn_documents);
 		
 		JButton btn_listeCharges = new JButton("Liste des charges");
-		panel.add(btn_listeCharges);
+		btn_listeCharges.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//aller sur page Page_listeCharges
+			}
+		});
+		btn_listeCharges.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		boutons.add(btn_listeCharges);
 		
 		JPanel droite = new JPanel();
 		corps.add(droite);
 		droite.setLayout(new GridLayout(0, 2, 0, 0));
 		
 		JLabel Lbl_adresse = new JLabel("Adresse : ");
+		Lbl_adresse.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		Lbl_adresse.setHorizontalAlignment(SwingConstants.CENTER);
 		droite.add(Lbl_adresse);
 		
@@ -111,6 +139,7 @@ public class Page_specification {
 		textField_adresse.setColumns(10);
 		
 		JLabel Lbl_numero = new JLabel("Numéro : ");
+		Lbl_numero.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		Lbl_numero.setHorizontalAlignment(SwingConstants.CENTER);
 		droite.add(Lbl_numero);
 		
@@ -120,6 +149,7 @@ public class Page_specification {
 		textField_numero.setColumns(10);
 		
 		JLabel Lbl_etage = new JLabel("Etage : ");
+		Lbl_etage.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		Lbl_etage.setHorizontalAlignment(SwingConstants.CENTER);
 		droite.add(Lbl_etage);
 		
@@ -129,6 +159,7 @@ public class Page_specification {
 		textField_etage.setColumns(10);
 		
 		JLabel Lbl_superficie = new JLabel("Superficie : ");
+		Lbl_superficie.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		Lbl_superficie.setHorizontalAlignment(SwingConstants.CENTER);
 		droite.add(Lbl_superficie);
 		
@@ -138,6 +169,7 @@ public class Page_specification {
 		textField_superficie.setColumns(10);
 		
 		JLabel Lbl_meuble = new JLabel("Meublé :");
+		Lbl_meuble.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		Lbl_meuble.setHorizontalAlignment(SwingConstants.CENTER);
 		droite.add(Lbl_meuble);
 		
@@ -147,12 +179,19 @@ public class Page_specification {
 		textField_meuble.setColumns(10);
 		
 		JButton btn_ListeMeubles = new JButton("Voir liste des meubles");
+		btn_ListeMeubles.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// aller page Page_listeMeubles
+			}
+		});
+		btn_ListeMeubles.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		droite.add(btn_ListeMeubles);
 		
 		JPanel panel_vide = new JPanel();
 		droite.add(panel_vide);
 		
 		JLabel Lbl_garage = new JLabel("Garage : ");
+		Lbl_garage.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		Lbl_garage.setHorizontalAlignment(SwingConstants.CENTER);
 		droite.add(Lbl_garage);
 		
