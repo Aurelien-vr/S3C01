@@ -39,7 +39,7 @@ public class DatabaseConnection {
     public static Connection getInstance(){
         // Demande le mot de passe masqué à l'utilisateur dans un champ de saisie sécurisé
         //mdp = getMaskedPasswordWithinEclipse("Password");
-        mdp = "";
+        
         // Si l'instance n'existe pas encore, on crée la connexion
         if(instance == null) {
             try {
@@ -65,7 +65,6 @@ public class DatabaseConnection {
      * @param msg Le message à afficher dans la boîte de dialogue pour guider l'utilisateur.
      * @return Le mot de passe saisi par l'utilisateur.
      */
-	@SuppressWarnings("null")
 	public static String getMaskedPasswordWithinEclipse(String msg) {
     	final String password;
     	final JPasswordField jpf = new JPasswordField();
