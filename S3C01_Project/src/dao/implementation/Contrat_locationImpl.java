@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.management.StandardEmitterMBean;
@@ -105,8 +106,25 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
     	PreparedStatement statement = null;
 		ResultSet result = null;
 		
+		try {
+			statement = connection.prepareStatement("SELECT * FROM db1_sae.Contrat_location");
+			result = statement.executeQuery();
+			
+			List<Contrat_location> contrats_locations = new ArrayList<Contrat_location>();
+			
+			while(result.next()) {
+				contrats_locations.add(createEntities(result));
+			}
+			return contrats_locations;
+			
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeResult(result);
+		}
+		return null;
 		
-        return null;
     }
 
     /**
@@ -136,7 +154,26 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
      */
     @Override
     public void update(Contrat_location entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	try {
+			statement = connection.prepareStatement("UPDATE db1_sae.Contrat_location"
+					+ "SET Montant_loyer=?,Date_debut=?,Date_fin=?,Modalite_chauffage=?,Modalite_eau_chaude_sanitaire=?,Date_versement=?"
+					+ "WHERE Id_Contrat_location = ?");
+			
+			statement.setInt(2, entity.getMontant_loyer());
+			statement.setDate(3, entity.getDate_debut());
+			statement.setDate(4, entity.getDate_fin());
+			statement.setString(5, entity.getModalite_chauffage());
+			statement.setString(6, entity.getModalite_eau_chaude_saniatire());
+			statement.setDate(7, entity.getDate_versement());
+			
+			statement.execute();
+			
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeStatement(statement);
+		}
     }
 
     /**
@@ -160,6 +197,8 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
     @Override
     public Contrat_location createEntities(ResultSet result) throws SQLException {
     	Contrat_location contrat_location = new Contrat_location();
+    	
+    	contrat_location.setId_Contrat_location(result.getInt(1));
     	
     	contrat_location.setMontant_loyer(result.getInt(2));
     	

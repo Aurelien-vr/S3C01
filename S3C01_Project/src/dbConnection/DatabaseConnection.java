@@ -13,7 +13,7 @@ import exception.ExceptionStorageHandler;
 public class DatabaseConnection {
     
     // Nom d'utilisateur pour la connexion à la base de données
-    private static String username = "avnadmin";
+    private static String username;
     
     // Mot de passe masqué pour la connexion à la base de données
     private static String mdp;
@@ -37,20 +37,16 @@ public class DatabaseConnection {
      * @return L'instance de la connexion à la base de données.
      */
     public static Connection getInstance(){
-        // Demande le mot de passe masqué à l'utilisateur dans un champ de saisie sécurisé
         //mdp = getMaskedPasswordWithinEclipse("Password");
-        
-        // Si l'instance n'existe pas encore, on crée la connexion
+
         if(instance == null) {
             try {
-                // Connexion à la base de données avec les informations fournies
                 instance = DriverManager.getConnection(
                     "jdbc:mysql://" + "mysql-1ba067f8-s3c01.e.aivencloud.com:24004/defaultdb?sslmode=require", 
                     username, mdp
                 );
                 System.out.println("Connected with the database successfully");
             } catch (SQLException e) {
-                // Gestion des erreurs de connexion
                 System.out.println("Error while connecting to the database");
                 e.printStackTrace();
             }
@@ -65,7 +61,6 @@ public class DatabaseConnection {
      * @param msg Le message à afficher dans la boîte de dialogue pour guider l'utilisateur.
      * @return Le mot de passe saisi par l'utilisateur.
      */
-	@SuppressWarnings("null")
 	public static String getMaskedPasswordWithinEclipse(String msg) {
     	final String password;
     	final JPasswordField jpf = new JPasswordField();
