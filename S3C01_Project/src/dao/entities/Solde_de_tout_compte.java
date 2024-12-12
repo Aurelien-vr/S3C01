@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Représente le solde de tout compte d'un locataire à la fin de son contrat de location.
@@ -121,4 +122,25 @@ public class Solde_de_tout_compte {
                ", id_contrat_location=" + id_contrat_location +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(caution, id_contrat_location, id_solde_de_tout_compte, provision_pour_charges,
+				reste_a_devoir);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Solde_de_tout_compte other = (Solde_de_tout_compte) obj;
+		return Objects.equals(caution, other.caution) && id_contrat_location == other.id_contrat_location
+				&& id_solde_de_tout_compte == other.id_solde_de_tout_compte
+				&& Objects.equals(provision_pour_charges, other.provision_pour_charges)
+				&& Objects.equals(reste_a_devoir, other.reste_a_devoir);
+	}
 }

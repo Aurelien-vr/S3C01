@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Date;
 import java.util.List;
+
+import javax.management.StandardEmitterMBean;
 
 import dao.Contrat_locationDAO;
 import dao.entities.Contrat_location;
@@ -43,23 +46,15 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
             statement.setLong(1, id);
             result = statement.executeQuery();
 			
-            // Si le contrat est trouvé, on le crée et le retourne
             if (result.next()) {
                 return createEntities(result);
             }
 
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la recherche du contrat de location : " + e.getMessage());
+        	ExceptionStorageHandler.LogException(e, connection);
         } finally {
-            // Fermeture des ressources après utilisation
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                // Note: Il est préférable de ne pas fermer la connexion ici si elle est partagée ailleurs
-                // DatabaseConnection.closeConnection(); // A gérer au niveau global si nécessaire
-            } catch (SQLException e) {
-                System.out.println("Erreur lors de la fermeture des ressources : " + e.getMessage());
-            }
+            if (result != null) DatabaseConnection.closeResult(result);
+			if (statement != null) DatabaseConnection.closeStatement(statement);
         }
         return null;
     }
@@ -72,16 +67,26 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 	@Override
 	public void insert(Contrat_location entity) {
 		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut) VALUES (?,?);";
+		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut,Date_fin,Modalite_chauffage,Modalite_eau_chaude_sanitaire,Date_versement) VALUES (?,?,?,?,?,?);";
 		
 		try {
-			statement = connection.prepareStatement(query);
+			statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 			statement.setInt(1, entity.getMontant_loyer());
 			statement.setDate(2, entity.getDate_debut());
+			statement.setDate(3, entity.getDate_fin());
+			statement.setString(4, entity.getModalite_chauffage());
+			statement.setString(5, entity.getModalite_eau_chaude_saniatire());
+			statement.setDate(6, entity.getDate_versement());
 			
 			if(statement.executeUpdate()>0) {
 				System.out.println("User inserted");
-			}
+				ResultSet result = statement.getGeneratedKeys();
+				if(result.next()) {
+					int id = result.getInt(1);
+					entity.setId_Contrat_location(id);
+				}
+				DatabaseConnection.closeResult(result);
+			}		
 		} catch (Exception e) {
 			ExceptionStorageHandler.LogException(e, connection);
 		}finally {
@@ -97,7 +102,10 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
      */
     @Override
     public List<Contrat_location> findAll() {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+		ResultSet result = null;
+		
+		
         return null;
     }
 
@@ -107,40 +115,18 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
      * @param entity L'entité Contrat_location à supprimer par ID.
      */
 	@Override
-	public void deleteById(Contrat_location entity) {
-		// TODO Auto-generated method stub
+	public void deleteById(long id) {
+		PreparedStatement statement = null;
+		try {
+			statement = connection.prepareStatement("DELETE FROM db1_sae.Contrat_location WHERE Id_Contrat_location = ?");
+			statement.setLong(1, id);
+			statement.executeUpdate();
+		}catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeStatement(statement);
+		}
 		
-	}
-	
-	/**
-     * Crée une entité Contrat_location à partir des résultats d'une requête SQL.
-     *
-     * @param result Le ResultSet contenant les données du contrat de location.
-     * @return L'entité Contrat_location construite.
-     * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
-     */
-	@Override
-	public Contrat_location createEntities(ResultSet result) throws SQLException {
-		Contrat_location contrat_location = new Contrat_location();
-		
-		contrat_location.setMontant_loyer(result.getInt(2));
-		
-		Date date_debut = result.getDate(3);
-		contrat_location.setDate_debut(date_debut);
-		
-		Date date_fin = result.getDate(4);
-		contrat_location.setDate_fin(date_fin);
-		
-		String modalite_chauffage = result.getString(5);
-		contrat_location.setModalite_chauffage(modalite_chauffage);
-		
-		String modalite_eau_chaude_saniatire = result.getString(6);
-		contrat_location.setModalite_eau_chaude_saniatire(modalite_eau_chaude_saniatire);
-		
-		Date date_versement = result.getDate(7);
-		contrat_location.setDate_versement(date_versement);
-		
-		return contrat_location;
 	}
 
     /**
@@ -161,6 +147,38 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
     @Override
     public void delete(Contrat_location entity) {
         // TODO Auto-generated method stub
+    }
+    
+    
+    /**
+     * Crée une entité Contrat_location à partir des résultats d'une requête SQL.
+     *
+     * @param result Le ResultSet contenant les données du contrat de location.
+     * @return L'entité Contrat_location construite.
+     * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
+     */
+    @Override
+    public Contrat_location createEntities(ResultSet result) throws SQLException {
+    	Contrat_location contrat_location = new Contrat_location();
+    	
+    	contrat_location.setMontant_loyer(result.getInt(2));
+    	
+    	Date date_debut = result.getDate(3);
+    	contrat_location.setDate_debut(date_debut);
+    	
+    	Date date_fin = result.getDate(4);
+    	contrat_location.setDate_fin(date_fin);
+    	
+    	String modalite_chauffage = result.getString(5);
+    	contrat_location.setModalite_chauffage(modalite_chauffage);
+    	
+    	String modalite_eau_chaude_saniatire = result.getString(6);
+    	contrat_location.setModalite_eau_chaude_saniatire(modalite_eau_chaude_saniatire);
+    	
+    	Date date_versement = result.getDate(7);
+    	contrat_location.setDate_versement(date_versement);
+    	
+    	return contrat_location;
     }
 }
 

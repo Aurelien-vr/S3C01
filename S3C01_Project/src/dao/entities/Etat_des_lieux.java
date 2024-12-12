@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Représente l'état des lieux d'une location.
@@ -141,4 +142,25 @@ public class Etat_des_lieux {
                ", est_entrer=" + est_entrer +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(date_signature, est_entrer, etat_des_elements, id_contrat_location, id_etat_des_lieux,
+				nombre_cles);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Etat_des_lieux other = (Etat_des_lieux) obj;
+		return Objects.equals(date_signature, other.date_signature) && est_entrer == other.est_entrer
+				&& Objects.equals(etat_des_elements, other.etat_des_elements)
+				&& id_contrat_location == other.id_contrat_location && id_etat_des_lieux == other.id_etat_des_lieux
+				&& nombre_cles == other.nombre_cles;
+	}
 }

@@ -38,8 +38,8 @@ public class DatabaseConnection {
      */
     public static Connection getInstance(){
         // Demande le mot de passe masqué à l'utilisateur dans un champ de saisie sécurisé
-        mdp = getMaskedPasswordWithinEclipse("Password");
-       
+        //mdp = getMaskedPasswordWithinEclipse("Password");
+        mdp = "AVNS_2XHyvNnytXBubKcoIqL";
         // Si l'instance n'existe pas encore, on crée la connexion
         if(instance == null) {
             try {
@@ -99,6 +99,17 @@ public class DatabaseConnection {
     			// Gestion des erreurs lors de la fermeture de la connexion
     			ExceptionStorageHandler.LogException(e, instance);
     		}
+    	}
+    }
+    
+    
+    public static void closeResult(ResultSet result) {
+    	if (result != null) {
+    		try {
+				result.close();
+			} catch (Exception e) {
+				ExceptionStorageHandler.LogException(e, instance);
+			}
     	}
     }
 
