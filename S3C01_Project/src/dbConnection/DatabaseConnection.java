@@ -39,7 +39,7 @@ public class DatabaseConnection {
     public static Connection getInstance(){
         // Demande le mot de passe masqué à l'utilisateur dans un champ de saisie sécurisé
         //mdp = getMaskedPasswordWithinEclipse("Password");
-        mdp = "AVNS_2XHyvNnytXBubKcoIqL";
+        mdp = "";
         // Si l'instance n'existe pas encore, on crée la connexion
         if(instance == null) {
             try {
