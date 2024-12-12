@@ -21,6 +21,7 @@ public class test_contrat_location {
 	
 	private Contrat_locationDAO contrat_locationDAO;
 	private Connection connection = DatabaseConnection.getInstance();
+	private Contrat_location contrat_location;
 	int idInsertSetup;
 	
 	@Before
@@ -33,7 +34,6 @@ public class test_contrat_location {
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		if(statement.executeUpdate()>0) {
-			System.out.println("User inserted TEST");
 			ResultSet result = statement.getGeneratedKeys();
 			if(result.next()) {
 				idInsertSetup = result.getInt(1);
@@ -43,7 +43,12 @@ public class test_contrat_location {
 	}catch (Exception e) {
 			ExceptionStorageHandler.LogException(e, connection);
 		}
+	
+	contrat_location = new Contrat_location(800, Date.valueOf("2023-4-7"), Date.valueOf("2024-4-7"),
+			"DPE=A, et autre truc", "chaudiere de 2024",Date.valueOf("1000-05-01"));
+	
 	}
+	
 
 	@After
 	public void tearDown() throws Exception {
@@ -53,14 +58,13 @@ public class test_contrat_location {
 	
 	@Test
 	public void testFindOne() {
-		Contrat_location contrat_location = new Contrat_location(800,
-				Date.valueOf("2023-4-7"),
-				Date.valueOf("2024-4-7"),
-				"DPE=A, et autre truc",
-				"chaudiere de 2024",
-				Date.valueOf("1000-05-01"));
-
-		assertEquals(contrat_locationDAO.findOne(999),contrat_location); 
+		assertEquals(contrat_locationDAO.findOne(idInsertSetup),contrat_location); 
+	}
+	
+	@Test
+	public void testInsert() {
+		contrat_locationDAO.insert(contrat_location);
+		assertEquals(contrat_location, contrat_locationDAO.findOne(idInsertSetup));
 	}
 
 }

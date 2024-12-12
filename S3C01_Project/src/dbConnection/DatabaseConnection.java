@@ -13,7 +13,7 @@ import exception.ExceptionStorageHandler;
 public class DatabaseConnection {
     
     // Nom d'utilisateur pour la connexion à la base de données
-    private static String username;
+    private static String username = "avnadmin";
     
     // Mot de passe masqué pour la connexion à la base de données
     private static String mdp;
@@ -37,7 +37,7 @@ public class DatabaseConnection {
      * @return L'instance de la connexion à la base de données.
      */
     public static Connection getInstance(){
-        //mdp = getMaskedPasswordWithinEclipse("Password");
+        mdp = getMaskedPasswordWithinEclipse("Password");
 
         if(instance == null) {
             try {
@@ -48,7 +48,9 @@ public class DatabaseConnection {
                 System.out.println("Connected with the database successfully");
             } catch (SQLException e) {
                 System.out.println("Error while connecting to the database");
-                e.printStackTrace();
+                System.out.println(e.getClass()+" |SQL state :"+e.getSQLState()
+				+"|SQL error code:"+e.getErrorCode()+"| -> " +e.getMessage());
+                //e.printStackTrace();
             }
         }
         return instance; // Retourne l'instance de la connexion
