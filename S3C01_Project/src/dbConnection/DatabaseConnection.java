@@ -65,6 +65,7 @@ public class DatabaseConnection {
      * @param msg Le message à afficher dans la boîte de dialogue pour guider l'utilisateur.
      * @return Le mot de passe saisi par l'utilisateur.
      */
+	@SuppressWarnings("null")
 	public static String getMaskedPasswordWithinEclipse(String msg) {
     	final String password;
     	final JPasswordField jpf = new JPasswordField();
