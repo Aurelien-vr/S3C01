@@ -37,10 +37,10 @@ public class DatabaseConnection {
      * @return L'instance de la connexion à la base de données.
      */
     public static Connection getInstance(){
-        mdp = getMaskedPasswordWithinEclipse("Password");
 
         if(instance == null) {
             try {
+            	mdp = getMaskedPasswordWithinEclipse("Password");
                 instance = DriverManager.getConnection(
                     "jdbc:mysql://" + "mysql-1ba067f8-s3c01.e.aivencloud.com:24004/defaultdb?sslmode=require", 
                     username, mdp
