@@ -1,5 +1,6 @@
 package dao.entities;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Représente un bien immobilier associé à un contrat de location.
@@ -253,4 +254,27 @@ public class Bien {
                ", numero_contrat_location=" + id_contrat_location +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(accesoire_commun, accesoire_prive, adresse, est_garage, etage, id_bien, id_contrat_location,
+				meuble, nombre_de_piece, superficie, ville);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bien other = (Bien) obj;
+		return Objects.equals(accesoire_commun, other.accesoire_commun)
+				&& Objects.equals(accesoire_prive, other.accesoire_prive) && Objects.equals(adresse, other.adresse)
+				&& est_garage == other.est_garage && etage == other.etage && id_bien == other.id_bien
+				&& id_contrat_location == other.id_contrat_location && meuble == other.meuble
+				&& nombre_de_piece == other.nombre_de_piece && Objects.equals(superficie, other.superficie)
+				&& Objects.equals(ville, other.ville);
+	}
 }

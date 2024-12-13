@@ -101,4 +101,13 @@ public class Facture_electricite {
                ", reference_facture='" + (reference_facture != null ? reference_facture : "N/A") + '\'' +
                '}';
     }
+
+	public Facture_electricite(int id_facture_electricite, BigDecimal compteur_electricite, String prix_kw_electricite,
+			String reference_facture) {
+		super();
+		this.id_facture_electricite = id_facture_electricite;
+		this.compteur_electricite = compteur_electricite;
+		this.prix_kw_electricite = prix_kw_electricite;
+		this.reference_facture = reference_facture;
+	}
 }

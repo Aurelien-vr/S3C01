@@ -142,4 +142,15 @@ public class Facture {
                ", id_bien=" + id_bien +
                '}';
     }
+
+	public Facture(String reference_facture, String type_facture, Date date_facture, BigDecimal montant_facture,
+			String moyen_paiement, int id_bien) {
+		super();
+		this.reference_facture = reference_facture;
+		this.type_facture = type_facture;
+		this.date_facture = date_facture;
+		this.montant_facture = montant_facture;
+		this.moyen_paiement = moyen_paiement;
+		this.id_bien = id_bien;
+	}
 }

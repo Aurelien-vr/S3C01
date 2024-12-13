@@ -99,14 +99,10 @@ public class BienImpl implements BienDAO {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Supprime un bien par son identifiant (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Bien à supprimer par ID.
-     */
     @Override
-    public void deleteById(Bien entity) {
-        // TODO Auto-generated method stub
+    public void deleteById(long id) {
+    	// TODO Auto-generated method stub
+    	
     }
 
     /**
@@ -134,4 +130,5 @@ public class BienImpl implements BienDAO {
         
         return bien;  // Retourne l'entité Bien construite
     }
+
 }
