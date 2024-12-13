@@ -13,7 +13,20 @@ public class Facture_gaz {
     private BigDecimal consommation_m3;  // Consommation de gaz en mètres cubes
     private String prix_m3_gaz;  // Prix par mètre cube de gaz
     private String reference_facture;  // Référence unique de la facture de gaz
+    
+    
+    
+    public Facture_gaz() {
+		super();
+	}
 
+	public Facture_gaz(BigDecimal consommation_m3, String prix_m3_gaz, String reference_facture) {
+    	super();
+    	this.consommation_m3 = consommation_m3;
+    	this.prix_m3_gaz = prix_m3_gaz;
+    	this.reference_facture = reference_facture;
+    }
+    
     /**
      * Récupère l'identifiant de la facture de gaz.
      *
@@ -23,7 +36,8 @@ public class Facture_gaz {
         return id_facture_gaz;
     }
 
-    /**
+
+	/**
      * Définit l'identifiant de la facture de gaz.
      *
      * @param id_facture_gaz L'identifiant de la facture de gaz à définir.

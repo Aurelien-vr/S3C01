@@ -95,7 +95,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 	
 	@Override
 	public Contrat_location createEntities(ResultSet result) throws SQLException {
-		Contrat_location contrat_location = new Contrat_location(result.getInt(1));
+		Contrat_location contrat_location = new Contrat_location();
 		
 		int montant_loyer = result.getInt(2);
 		contrat_location.setMontant_loyer(montant_loyer);

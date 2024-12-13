@@ -1,1 +1,5 @@
 /test/
+/application/
+/dao/
+/dbConnection/
+/exception/

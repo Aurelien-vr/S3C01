@@ -8,8 +8,17 @@ import java.math.BigDecimal;
  * incluant le compteur d'électricité, le prix par kilowatt et la référence de la facture.
  */
 public class Facture_electricite {
+	
+	public Facture_electricite() {super();}
+	
+    public Facture_electricite(BigDecimal compteur_electricite, String prix_kw_electricite, String reference_facture) {
+		super();
+		this.compteur_electricite = compteur_electricite;
+		this.prix_kw_electricite = prix_kw_electricite;
+		this.reference_facture = reference_facture;
+	}
 
-    private int id_facture_electricite;  // Identifiant unique de la facture d'électricité
+	private int id_facture_electricite;  // Identifiant unique de la facture d'électricité
     private BigDecimal compteur_electricite;  // Valeur du compteur d'électricité au moment de la facturation
     private String prix_kw_electricite;  // Prix du kilowatt pour la facture d'électricité
     private String reference_facture;  // Référence unique de la facture d'électricité
