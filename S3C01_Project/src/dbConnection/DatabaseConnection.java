@@ -38,11 +38,11 @@ public class DatabaseConnection {
      */
     public static Connection getInstance(){
         // Demande le mot de passe masqué à l'utilisateur dans un champ de saisie sécurisé
-        mdp = getMaskedPasswordWithinEclipse("Password");
-       
+        
         // Si l'instance n'existe pas encore, on crée la connexion
         if(instance == null) {
             try {
+            	mdp = getMaskedPasswordWithinEclipse("Password");
                 // Connexion à la base de données avec les informations fournies
                 instance = DriverManager.getConnection(
                     "jdbc:mysql://" + "mysql-1ba067f8-s3c01.e.aivencloud.com:24004/defaultdb?sslmode=require", 
@@ -86,6 +86,7 @@ public class DatabaseConnection {
 			}
 		}
 	}
+
     
     /**
      * Méthode pour fermer la connexion à la base de données.

@@ -64,4 +64,5 @@ public interface DAO<T> {
      */
     T createEntities(ResultSet result) throws SQLException;
 
+    
 }

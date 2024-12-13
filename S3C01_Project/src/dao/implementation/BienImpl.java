@@ -79,6 +79,7 @@ public class BienImpl implements BienDAO {
         // TODO Auto-generated method stub
     }
     
+
     /**
      * Met à jour un bien existant dans la base de données (fonctionnalité à implémenter).
      * 
@@ -88,6 +89,13 @@ public class BienImpl implements BienDAO {
     public void update(Bien entity) {
         // TODO Auto-generated method stub
     }
+
+	@Override
+	public void insert(Bien entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
     /**
      * Supprime un bien de la base de données (fonctionnalité à implémenter).

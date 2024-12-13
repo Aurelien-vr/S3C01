@@ -25,50 +25,34 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
         this.connection = connection;
     }
 
-    /**
-     * Recherche un contrat de location par son identifiant.
-     *
-     * @param id L'identifiant du contrat de location.
-     * @return L'entité Contrat_location si trouvée, sinon {@code null}.
-     */
-    @Override
-    public Contrat_location findOne(long id) {
-        PreparedStatement statement = null;
-        ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Contrat_location WHERE Id_Contrat_location = ?";
-
-
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setLong(1, id);
-            result = statement.executeQuery();
+	@Override
+	public Contrat_location findOne(long id) {
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		String query = "SELECT * FROM db1_sae.Contrat_location WHERE Id_Contrat_location = ?";
+		
+		try {
+			statement = connection.prepareStatement(query);
+			statement.setLong(1, id);
+			result = statement.executeQuery();
 			
-            // Si le contrat est trouvé, on le crée et le retourne
-            if (result.next()) {
-                return createEntities(result);
-            }
+			if(result.next()) {
+				Contrat_location contrat_location = createEntities(result);
+				return contrat_location;
+			}	
+		}
+		
+		catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}
+		
+		finally {
+			DatabaseConnection.closeStatement(statement);
+		}
+		return null;
+	}
 
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la recherche du contrat de location : " + e.getMessage());
-        } finally {
-            // Fermeture des ressources après utilisation
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-                // Note: Il est préférable de ne pas fermer la connexion ici si elle est partagée ailleurs
-                // DatabaseConnection.closeConnection(); // A gérer au niveau global si nécessaire
-            } catch (SQLException e) {
-                System.out.println("Erreur lors de la fermeture des ressources : " + e.getMessage());
-            }
-        }
-        return null;
-    }
-    
-    /**
-     * Crée un nouveau contrat de location dans la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Contrat_location à créer.
-     */
+
 	@Override
 	public void insert(Contrat_location entity) {
 		PreparedStatement statement = null;
@@ -87,9 +71,11 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 		}finally {
 			DatabaseConnection.closeStatement(statement);
 		}
-		
 	}
-	
+
+
+
+
     /**
      * Recherche tous les contrats de location (fonctionnalité à implémenter).
      *
@@ -112,16 +98,9 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 		
 	}
 	
-	/**
-     * Crée une entité Contrat_location à partir des résultats d'une requête SQL.
-     *
-     * @param result Le ResultSet contenant les données du contrat de location.
-     * @return L'entité Contrat_location construite.
-     * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
-     */
 	@Override
 	public Contrat_location createEntities(ResultSet result) throws SQLException {
-		Contrat_location contrat_location = new Contrat_location();
+		Contrat_location contrat_location = new Contrat_location(result.getInt(1));
 		
 		int montant_loyer = result.getInt(2);
 		contrat_location.setMontant_loyer(montant_loyer);
@@ -163,5 +142,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
     public void delete(Contrat_location entity) {
         // TODO Auto-generated method stub
     }
+
+
 }
 

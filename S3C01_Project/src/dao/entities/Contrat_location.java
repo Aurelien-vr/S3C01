@@ -171,4 +171,5 @@ public class Contrat_location {
                ", date_versement=" + (date_versement != null ? date_versement : "N/A") +
                '}';
     }
+
 }
