@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * Représente un contrat de location pour un bien immobilier.
@@ -176,5 +177,30 @@ public class Contrat_location {
                ", date_versement=" + (date_versement != null ? date_versement : "N/A") +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(date_debut, date_fin, date_versement, id_numero_location, modalite_chauffage,
+				modalite_eau_chaude_sanitaire, montant_loyer);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Contrat_location other = (Contrat_location) obj;
+		return Objects.equals(date_debut, other.date_debut) && Objects.equals(date_fin, other.date_fin)
+				&& Objects.equals(date_versement, other.date_versement)
+				&& id_numero_location == other.id_numero_location
+				&& Objects.equals(modalite_chauffage, other.modalite_chauffage)
+				&& Objects.equals(modalite_eau_chaude_sanitaire, other.modalite_eau_chaude_sanitaire)
+				&& montant_loyer == other.montant_loyer;
+	}
+    
+    
 
 }
