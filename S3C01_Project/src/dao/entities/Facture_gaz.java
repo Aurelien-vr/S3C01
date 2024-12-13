@@ -101,4 +101,12 @@ public class Facture_gaz {
                ", reference_facture='" + (reference_facture != null ? reference_facture : "N/A") + '\'' +
                '}';
     }
+
+	public Facture_gaz(int id_facture_gaz, BigDecimal consommation_m3, String prix_m3_gaz, String reference_facture) {
+		super();
+		this.id_facture_gaz = id_facture_gaz;
+		this.consommation_m3 = consommation_m3;
+		this.prix_m3_gaz = prix_m3_gaz;
+		this.reference_facture = reference_facture;
+	}
 }

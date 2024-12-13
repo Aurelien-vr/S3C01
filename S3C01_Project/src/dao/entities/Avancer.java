@@ -1,5 +1,7 @@
 package dao.entities;
 
+import java.util.Objects;
+
 /**
  * Représente une avance effectuée par un locataire.
  * Cette classe contient les informations relatives à une avance, 
@@ -59,4 +61,22 @@ public class Avancer {
                ", numero_facture=" + numero_facture +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id_locataire, numero_facture);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Avancer other = (Avancer) obj;
+		return id_locataire == other.id_locataire && numero_facture == other.numero_facture;
+	}
+    
 }

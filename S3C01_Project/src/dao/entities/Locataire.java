@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Représente un locataire.
@@ -140,4 +141,23 @@ public class Locataire {
                ", id_contrat_location=" + id_contrat_location +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(date_de_naissance, iban, id_contrat_location, id_locataire, nom, prenom);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Locataire other = (Locataire) obj;
+		return Objects.equals(date_de_naissance, other.date_de_naissance) && Objects.equals(iban, other.iban)
+				&& id_contrat_location == other.id_contrat_location && id_locataire == other.id_locataire
+				&& Objects.equals(nom, other.nom) && Objects.equals(prenom, other.prenom);
+	}
 }
