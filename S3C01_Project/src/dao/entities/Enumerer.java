@@ -1,5 +1,7 @@
 package dao.entities;
 
+import java.util.Objects;
+
 /**
  * Représente une entité qui fait le lien entre une facture et un solde de tout compte.
  * Cette classe contient la référence de la facture et l'identifiant du solde de tout compte associé.
@@ -58,4 +60,22 @@ public class Enumerer {
                ", id_solde_de_tout_compte=" + id_solde_de_tout_compte +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id_solde_de_tout_compte, reference_facture);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Enumerer other = (Enumerer) obj;
+		return id_solde_de_tout_compte == other.id_solde_de_tout_compte
+				&& Objects.equals(reference_facture, other.reference_facture);
+	}
 }

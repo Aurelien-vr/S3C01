@@ -2,6 +2,7 @@ package dao.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Représente les travaux effectués sur un bien, avec des informations relatives à la facture,
@@ -201,4 +202,28 @@ public class Travaux {
                ", reference_facture='" + (reference_facture != null ? reference_facture : "N/A") + '\'' +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(date_travaux, iban, montant, montant_non_deductible, nature, numero_facture, reduction,
+				reduction_special, reference_facture);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Travaux other = (Travaux) obj;
+		return Objects.equals(date_travaux, other.date_travaux) && Objects.equals(iban, other.iban)
+				&& Objects.equals(montant, other.montant)
+				&& Objects.equals(montant_non_deductible, other.montant_non_deductible)
+				&& Objects.equals(nature, other.nature) && numero_facture == other.numero_facture
+				&& Objects.equals(reduction, other.reduction)
+				&& Objects.equals(reduction_special, other.reduction_special)
+				&& Objects.equals(reference_facture, other.reference_facture);
+	}
 }

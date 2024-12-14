@@ -2,6 +2,7 @@ package dao.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Représente une régularisation des charges d'un locataire.
@@ -202,4 +203,27 @@ public class Regularisation_charges {
                ", id_contrat_location=" + id_contrat_location +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(charge_eau, charge_eclairage, charge_ordure_menagere, date_effet, entretien,
+				id_charge_locataire, id_contrat_location, indice, provision_pour_charge);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Regularisation_charges other = (Regularisation_charges) obj;
+		return Objects.equals(charge_eau, other.charge_eau) && Objects.equals(charge_eclairage, other.charge_eclairage)
+				&& Objects.equals(charge_ordure_menagere, other.charge_ordure_menagere)
+				&& Objects.equals(date_effet, other.date_effet) && Objects.equals(entretien, other.entretien)
+				&& id_charge_locataire == other.id_charge_locataire && id_contrat_location == other.id_contrat_location
+				&& Objects.equals(indice, other.indice)
+				&& Objects.equals(provision_pour_charge, other.provision_pour_charge);
+	}
 }

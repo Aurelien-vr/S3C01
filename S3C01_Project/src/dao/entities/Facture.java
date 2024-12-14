@@ -16,8 +16,24 @@ public class Facture {
     private BigDecimal montant_facture;  // Montant total de la facture
     private String moyen_paiement;  // Moyen de paiement utilisé pour régler la facture
     private int id_bien;  // Identifiant du bien associé à cette facture
+    
+    
+    
+    public Facture() {
+		super();
+	}
 
-    /**
+	public Facture(String type_facture, Date date_facture, BigDecimal montant_facture, String moyen_paiement,
+			int id_bien) {
+		super();
+		this.type_facture = type_facture;
+		this.date_facture = date_facture;
+		this.montant_facture = montant_facture;
+		this.moyen_paiement = moyen_paiement;
+		this.id_bien = id_bien;
+	}
+
+	/**
      * Récupère la référence de la facture.
      *
      * @return La référence de la facture.
@@ -142,4 +158,15 @@ public class Facture {
                ", id_bien=" + id_bien +
                '}';
     }
+
+	public Facture(String reference_facture, String type_facture, Date date_facture, BigDecimal montant_facture,
+			String moyen_paiement, int id_bien) {
+		super();
+		this.reference_facture = reference_facture;
+		this.type_facture = type_facture;
+		this.date_facture = date_facture;
+		this.montant_facture = montant_facture;
+		this.moyen_paiement = moyen_paiement;
+		this.id_bien = id_bien;
+	}
 }
