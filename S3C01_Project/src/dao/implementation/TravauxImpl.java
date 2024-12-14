@@ -110,7 +110,7 @@ public class TravauxImpl implements TravauxDAO {
      * @param numeroFacture Le numéro de la facture du travail à supprimer.
      */
     @Override
-    public void deleteById(Travaux entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 

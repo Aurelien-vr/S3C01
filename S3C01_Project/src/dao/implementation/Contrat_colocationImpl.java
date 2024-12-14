@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.Contrat_colocationDAO;
 import dao.entities.Contrat_colocation;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Contrat_colocationDAO} pour gérer les opérations sur les entités "Contrat_colocation".
@@ -48,18 +50,13 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
                 return createEntities(result);
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Affichage de l'exception pour le débogage
-        } finally {
-            // Fermeture des ressources
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return null; // Si aucun contrat n'est trouvé, retour de null
+			ExceptionStorageHandler.LogException(e, connection);
+		}
+		
+		finally {
+			DatabaseConnection.closeStatement(statement);
+		}
+		return null;
     }
 
     /**
@@ -121,11 +118,11 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
     /**
      * Supprime un contrat de colocation par son entité.
      *
-     * @param entity L'entité Contrat_colocation à supprimer.
+     * @param id L'entité Contrat_colocation à supprimer.
      */
     @Override
-    public void deleteById(Contrat_colocation entity) {
-        delete(entity);
+    public void deleteById(long id) {
+    	
     }
 
     /**
@@ -139,10 +136,8 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
     public Contrat_colocation createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Contrat_colocation à partir des données du ResultSet
         Contrat_colocation contrat = new Contrat_colocation();
-        contrat.setId_contrat_colocation(result.getInt("id_contrat_colocation"));
         contrat.setClause_solidarite(result.getBoolean("clause_solidarite"));
         contrat.setPart_des_charges(result.getBigDecimal("part_des_charges"));
-        contrat.setId_contrat_location(result.getInt("id_contrat_location"));
         return contrat; // Retourne l'entité Contrat_colocation construite
     }
 }

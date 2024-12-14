@@ -8,23 +8,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.sql.*;
+
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
-public class test_contrat_location {
+public class test_avis_taxe_fonciere {
 	
-	private Contrat_locationDAO contrat_locationDAO;
+	private Avis_Taxe_FonciereDAO avis_taxe_fonciereDAO;
 	private Connection connection = DatabaseConnection.getInstance();
-	private Contrat_location contrat_location;
+	private Avis_Taxe_Fonciere avis_taxe_fonciere;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
 		connection.setAutoCommit(false);
-		contrat_locationDAO = DAOFactory.createContrat_locationDAO();
+		avis_taxe_fonciereDAO = DAOFactory.createAvis_Taxe_FonciereDAO();
 		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut,Date_fin,Modalite_chauffage,Modalite_eau_chaude_sanitaire,Date_versement) "
-				+ " VALUES(800, '2023-4-7', '2024-4-7','DPE=A, et autre truc','chaudiere de 2024', '1000-05-01')";
+		String query = "INSERT INTO db1_sae.Avis_Taxe_Fonciere(date_etablissement, debiteur_legaux,total_cotisation) " +
+	               "VALUES ('2009-09-09','PaulSab',10.2)";
+
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		if(statement.executeUpdate()>0) {
@@ -38,34 +40,34 @@ public class test_contrat_location {
 			ExceptionStorageHandler.LogException(e, connection);
 		}
 	
-	contrat_location = new Contrat_location(800, Date.valueOf("2023-4-7"), Date.valueOf("2024-4-7"),
-			"DPE=A, et autre truc", "chaudiere de 2024",Date.valueOf("1000-05-01"));
+	avis_taxe_fonciere = new Avis_Taxe_Fonciere(Date.valueOf("2009-09-09"),"PaulSab",10.2);
+
 	
 	}
 	
 
 	@After
 	public void tearDown() throws Exception {
-		contrat_locationDAO = null;
+		avis_taxe_fonciereDAO = null;
 		connection.rollback();		
 	}
 	
 	@Test
 	public void testFindOne() {
-		assertEquals(contrat_locationDAO.findOne(idInsertSetup),contrat_location); 
+		assertEquals(avis_taxe_fonciereDAO.findOne(idInsertSetup),avis_taxe_fonciere); 
 	}
 	
 	@Test
 	public void testInsert() {
-		contrat_locationDAO.insert(contrat_location);
-		assertEquals(contrat_location, contrat_locationDAO.findOne(idInsertSetup));
+		avis_taxe_fonciereDAO.insert(avis_taxe_fonciere);
+		assertEquals(avis_taxe_fonciere, avis_taxe_fonciereDAO.findOne(idInsertSetup));
 
 	}
 	
 	@Test
 	public void testDelete() {
-		contrat_locationDAO.deleteById(idInsertSetup);
-		assertNull(contrat_locationDAO.findOne(idInsertSetup));
+		avis_taxe_fonciereDAO.deleteById(idInsertSetup);
+		assertNull(avis_taxe_fonciereDAO.findOne(idInsertSetup));
 		}
 
 }

@@ -16,7 +16,16 @@ public class Assurance {
     private BigDecimal protection_juridique;  // Montant de la protection juridique incluse
     private int id_bien;  // Identifiant du bien assuré
 
-    /**
+    public Assurance() {};
+    
+    public Assurance(BigDecimal prime, BigDecimal taux_augmentation, BigDecimal protection_juridique) {
+		super();
+		this.prime = prime;
+		this.taux_augmentation = taux_augmentation;
+		this.protection_juridique = protection_juridique;
+	}
+
+	/**
      * Récupère le numéro du contrat d'assurance.
      *
      * @return Le numéro de contrat d'assurance.

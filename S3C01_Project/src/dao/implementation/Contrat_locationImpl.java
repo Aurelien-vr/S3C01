@@ -88,8 +88,8 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
     }
 
 	@Override
-	public void deleteById(Contrat_location entity) {
-		// TODO Auto-generated method stub
+	public void deleteById(long id) {
+		
 		
 	}
 	

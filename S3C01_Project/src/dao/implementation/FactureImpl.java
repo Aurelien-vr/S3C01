@@ -104,7 +104,7 @@ public class FactureImpl implements FactureDAO {
     }
     
     @Override
-    public void deleteById(Facture entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 

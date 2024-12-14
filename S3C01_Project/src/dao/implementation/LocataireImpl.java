@@ -109,7 +109,7 @@ public class LocataireImpl implements LocataireDAO {
      * @param id L'identifiant du locataire à supprimer.
      */
     @Override
-    public void deleteById(Locataire entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 

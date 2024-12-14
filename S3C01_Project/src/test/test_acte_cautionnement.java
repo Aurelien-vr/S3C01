@@ -7,24 +7,26 @@ import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
-public class test_contrat_location {
+public class test_acte_cautionnement {
 	
-	private Contrat_locationDAO contrat_locationDAO;
+	private Acte_cautionnementDAO acte_cautionnementDAO;
 	private Connection connection = DatabaseConnection.getInstance();
-	private Contrat_location contrat_location;
+	private Acte_cautionnement acte_cautionnement;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
 		connection.setAutoCommit(false);
-		contrat_locationDAO = DAOFactory.createContrat_locationDAO();
+		acte_cautionnementDAO = DAOFactory.createActe_cautionnementDAO();
 		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut,Date_fin,Modalite_chauffage,Modalite_eau_chaude_sanitaire,Date_versement) "
-				+ " VALUES(800, '2023-4-7', '2024-4-7','DPE=A, et autre truc','chaudiere de 2024', '1000-05-01')";
+		String query = "INSERT INTO db1_sae.Acte_cautionnement(montant_caution) "
+				+ " VALUES(800)";
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		if(statement.executeUpdate()>0) {
@@ -38,34 +40,33 @@ public class test_contrat_location {
 			ExceptionStorageHandler.LogException(e, connection);
 		}
 	
-	contrat_location = new Contrat_location(800, Date.valueOf("2023-4-7"), Date.valueOf("2024-4-7"),
-			"DPE=A, et autre truc", "chaudiere de 2024",Date.valueOf("1000-05-01"));
+	acte_cautionnement = new Acte_cautionnement(new BigDecimal(800).setScale(2, RoundingMode.DOWN));
 	
 	}
 	
 
 	@After
 	public void tearDown() throws Exception {
-		contrat_locationDAO = null;
+		acte_cautionnementDAO = null;
 		connection.rollback();		
 	}
 	
 	@Test
 	public void testFindOne() {
-		assertEquals(contrat_locationDAO.findOne(idInsertSetup),contrat_location); 
+		assertEquals(acte_cautionnementDAO.findOne(idInsertSetup),acte_cautionnement); 
 	}
 	
 	@Test
 	public void testInsert() {
-		contrat_locationDAO.insert(contrat_location);
-		assertEquals(contrat_location, contrat_locationDAO.findOne(idInsertSetup));
+		acte_cautionnementDAO.insert(acte_cautionnement);
+		assertEquals(acte_cautionnement, acte_cautionnementDAO.findOne(idInsertSetup));
 
 	}
 	
 	@Test
 	public void testDelete() {
-		contrat_locationDAO.deleteById(idInsertSetup);
-		assertNull(contrat_locationDAO.findOne(idInsertSetup));
+		acte_cautionnementDAO.deleteById(idInsertSetup);
+		assertNull(acte_cautionnementDAO.findOne(idInsertSetup));
 		}
 
 }

@@ -110,7 +110,7 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      * @param id L'identifiant de la facture d'électricité à supprimer.
      */
     @Override
-    public void deleteById(Facture_electricite entity) {
+    public void deleteById(long id) {
         // Implémentation de la suppression de l'entité Facture_electricite par son identifiant
     }
 

@@ -7,7 +7,7 @@ import exception.ExceptionStorageHandler;
 public class DatabaseConnection {
     
     // Nom d'utilisateur pour la connexion à la base de données
-    private static String username = "avnadmin";
+    private static String username = "client";
     
     // Mot de passe masqué pour la connexion à la base de données
     private static String mdp;

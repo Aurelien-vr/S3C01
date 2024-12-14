@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.Avis_Taxe_FonciereDAO;
 import dao.entities.Avis_Taxe_Fonciere;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Avis_Taxe_FonciereDAO} pour gérer les opérations sur les entités "Avis_Taxe_Fonciere".
@@ -47,16 +49,14 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
             if (result.next()) {
                 return createEntities(result);
             }
+            
         } catch (Exception e) {
-            e.printStackTrace(); // Affichage de l'exception pour le débogage
-        } finally {
-            // Fermeture des ressources
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+			ExceptionStorageHandler.LogException(e, connection);
+		}
+		
+		finally {
+			DatabaseConnection.closeStatement(statement);
+		
         }
 
         return null; // Si aucun avis n'est trouvé, retour de null
@@ -109,7 +109,7 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
      * @param id Le numéro fiscal de l'avis à supprimer.
      */
     @Override
-    public void deleteById(Avis_Taxe_Fonciere entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 
@@ -124,11 +124,9 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
     public Avis_Taxe_Fonciere createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Avis_Taxe_Fonciere à partir des données du ResultSet
         Avis_Taxe_Fonciere avis = new Avis_Taxe_Fonciere();
-        avis.setNumero_fiscal(result.getInt("numero_fiscal"));
         avis.setDate_etablissement(result.getDate("date_etablissement"));
         avis.setDebiteur_legaux(result.getString("debiteur_legaux"));
         avis.setTotal_cotisation(result.getDouble("total_cotisation"));
-        avis.setId_bien(result.getInt("id_bien"));
         return avis; // Retourne l'entité Avis_Taxe_Fonciere construite
     }
 }

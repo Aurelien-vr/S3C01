@@ -110,7 +110,7 @@ public class Facture_eauImpl implements Facture_eauDAO {
      * @param id L'identifiant de la facture d'eau à supprimer.
      */
     @Override
-    public void deleteById(Facture_eau entity) {
+    public void deleteById(long id) {
         // Implémentation de la suppression de l'entité Facture_eau par son identifiant
     }
 

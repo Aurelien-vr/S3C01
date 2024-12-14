@@ -110,7 +110,7 @@ public class Facture_gazImpl implements Facture_gazDAO {
      * @param id L'identifiant de la facture de gaz à supprimer.
      */
     @Override
-    public void deleteById(Facture_gaz entity) {
+    public void deleteById(long id) {
         // Implémentation de la suppression de l'entité Facture_gaz par son identifiant
     }
 

@@ -51,9 +51,9 @@ public interface DAO<T> {
     /**
      * Supprime une entité en utilisant son identifiant unique.
      *
-     * @param entity L'entité à supprimer, identifié par son ID.
+     * @param id L'entité à supprimer, identifié par son ID.
      */
-    void deleteById(T entity);
+    void deleteById(long id);
 
     /**
      * Crée une entité à partir des données extraites d'un {@link ResultSet}.

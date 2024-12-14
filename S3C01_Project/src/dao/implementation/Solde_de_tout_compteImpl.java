@@ -110,7 +110,7 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
      * @param id L'identifiant du locataire de la régularisation des charges à supprimer.
      */
     @Override
-    public void deleteById(Solde_de_tout_compte entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 

@@ -7,24 +7,25 @@ import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+
 import java.sql.*;
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
-public class test_contrat_location {
+public class test_etat_des_lieux {
 	
-	private Contrat_locationDAO contrat_locationDAO;
+	private Etat_des_lieuxDAO etat_des_lieuxDAO;
 	private Connection connection = DatabaseConnection.getInstance();
-	private Contrat_location contrat_location;
+	private Etat_des_lieux etat_des_lieux;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
 		connection.setAutoCommit(false);
-		contrat_locationDAO = DAOFactory.createContrat_locationDAO();
+		etat_des_lieuxDAO = DAOFactory.createEtat_des_lieuxDAO();
 		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut,Date_fin,Modalite_chauffage,Modalite_eau_chaude_sanitaire,Date_versement) "
-				+ " VALUES(800, '2023-4-7', '2024-4-7','DPE=A, et autre truc','chaudiere de 2024', '1000-05-01')";
+		String query = "INSERT INTO db1_sae.Etat_des_lieux(date_signature, nombre_cles, etats_des_element, est_entrer) "
+				+ " VALUES('2024-12-09', 5, 'Detruit', true)";
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		if(statement.executeUpdate()>0) {
@@ -38,34 +39,33 @@ public class test_contrat_location {
 			ExceptionStorageHandler.LogException(e, connection);
 		}
 	
-	contrat_location = new Contrat_location(800, Date.valueOf("2023-4-7"), Date.valueOf("2024-4-7"),
-			"DPE=A, et autre truc", "chaudiere de 2024",Date.valueOf("1000-05-01"));
+	etat_des_lieux = new Etat_des_lieux(Date.valueOf("2024-12-09"),5, "Detruit",true);
 	
 	}
 	
 
 	@After
 	public void tearDown() throws Exception {
-		contrat_locationDAO = null;
+		etat_des_lieuxDAO = null;
 		connection.rollback();		
 	}
 	
 	@Test
 	public void testFindOne() {
-		assertEquals(contrat_locationDAO.findOne(idInsertSetup),contrat_location); 
+		assertEquals(etat_des_lieuxDAO.findOne(idInsertSetup),etat_des_lieux); 
 	}
 	
 	@Test
 	public void testInsert() {
-		contrat_locationDAO.insert(contrat_location);
-		assertEquals(contrat_location, contrat_locationDAO.findOne(idInsertSetup));
+		etat_des_lieuxDAO.insert(etat_des_lieux);
+		assertEquals(etat_des_lieux, etat_des_lieuxDAO.findOne(idInsertSetup));
 
 	}
 	
 	@Test
 	public void testDelete() {
-		contrat_locationDAO.deleteById(idInsertSetup);
-		assertNull(contrat_locationDAO.findOne(idInsertSetup));
+		etat_des_lieuxDAO.deleteById(idInsertSetup);
+		assertNull(etat_des_lieuxDAO.findOne(idInsertSetup));
 		}
 
 }

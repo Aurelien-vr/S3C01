@@ -7,24 +7,26 @@ import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
-public class test_contrat_location {
+public class test_declaration_revenu {
 	
-	private Contrat_locationDAO contrat_locationDAO;
+	private Declaration_revenuDAO declaration_revenuDAO;
 	private Connection connection = DatabaseConnection.getInstance();
-	private Contrat_location contrat_location;
+	private Declaration_revenu declaration_revenu;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
 		connection.setAutoCommit(false);
-		contrat_locationDAO = DAOFactory.createContrat_locationDAO();
+		declaration_revenuDAO = DAOFactory.createDeclaration_revenuDAO();
 		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut,Date_fin,Modalite_chauffage,Modalite_eau_chaude_sanitaire,Date_versement) "
-				+ " VALUES(800, '2023-4-7', '2024-4-7','DPE=A, et autre truc','chaudiere de 2024', '1000-05-01')";
+		String query = "INSERT INTO db1_sae.Declaration_revenu(date_acquisition, locataires, recette_immeuble) "
+				+ " VALUES('2008-07-14', 5, 65)";
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		if(statement.executeUpdate()>0) {
@@ -38,34 +40,33 @@ public class test_contrat_location {
 			ExceptionStorageHandler.LogException(e, connection);
 		}
 	
-	contrat_location = new Contrat_location(800, Date.valueOf("2023-4-7"), Date.valueOf("2024-4-7"),
-			"DPE=A, et autre truc", "chaudiere de 2024",Date.valueOf("1000-05-01"));
+	declaration_revenu = new Declaration_revenu(Date.valueOf("2008-07-14"),5,new BigDecimal(65).setScale(2, RoundingMode.DOWN));
 	
 	}
 	
 
 	@After
 	public void tearDown() throws Exception {
-		contrat_locationDAO = null;
+		declaration_revenuDAO = null;
 		connection.rollback();		
 	}
 	
 	@Test
 	public void testFindOne() {
-		assertEquals(contrat_locationDAO.findOne(idInsertSetup),contrat_location); 
+		assertEquals(declaration_revenuDAO.findOne(idInsertSetup),declaration_revenu); 
 	}
 	
 	@Test
 	public void testInsert() {
-		contrat_locationDAO.insert(contrat_location);
-		assertEquals(contrat_location, contrat_locationDAO.findOne(idInsertSetup));
+		declaration_revenuDAO.insert(declaration_revenu);
+		assertEquals(declaration_revenu, declaration_revenuDAO.findOne(idInsertSetup));
 
 	}
 	
 	@Test
 	public void testDelete() {
-		contrat_locationDAO.deleteById(idInsertSetup);
-		assertNull(contrat_locationDAO.findOne(idInsertSetup));
+		declaration_revenuDAO.deleteById(idInsertSetup);
+		assertNull(declaration_revenuDAO.findOne(idInsertSetup));
 		}
 
 }

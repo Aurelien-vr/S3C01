@@ -1,5 +1,6 @@
 package dao.entities;
 import java.math.*;
+import java.util.Objects;
 
 /**
  * Représente un acte de cautionnement dans le système.
@@ -12,6 +13,16 @@ public class Acte_cautionnement {
     private BigDecimal montant_caution;  // Montant de la caution
     private int id_locataire;  // Identifiant du locataire concerné par l'acte de cautionnement
 
+    
+    public Acte_cautionnement() {};
+    
+    public Acte_cautionnement(BigDecimal montant_caution) {
+    	super();
+		this.montant_caution = montant_caution;
+    };
+    
+    
+    
     /**
      * Récupère l'identifiant de l'acte de cautionnement.
      *
@@ -80,4 +91,25 @@ public class Acte_cautionnement {
                ", id_locataire=" + id_locataire +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id_acte_cautionnement, id_locataire, montant_caution);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Acte_cautionnement other = (Acte_cautionnement) obj;
+		return id_acte_cautionnement == other.id_acte_cautionnement && id_locataire == other.id_locataire
+				&& Objects.equals(montant_caution, other.montant_caution);
+	}
+    
+    
+    
 }

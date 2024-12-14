@@ -110,7 +110,7 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
      * @param id L'identifiant du locataire de la régularisation des charges à supprimer.
      */
     @Override
-    public void deleteById(Regularisation_charges entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 

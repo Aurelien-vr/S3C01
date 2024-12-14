@@ -17,7 +17,16 @@ public class Avis_Taxe_Fonciere {
     private double total_cotisation;  // Montant total de la cotisation de la taxe foncière
     private int id_bien;  // Identifiant du bien concerné par l'avis de taxe foncière
 
-    /**
+    public Avis_Taxe_Fonciere() {};
+    
+    public Avis_Taxe_Fonciere(Date date_etablissement, String debiteur_legaux, double total_cotisation) {
+		super();
+		this.date_etablissement = date_etablissement;
+		this.debiteur_legaux = debiteur_legaux;
+		this.total_cotisation = total_cotisation;
+	}
+
+	/**
      * Récupère le numéro fiscal de l'avis de taxe foncière.
      *
      * @return Le numéro fiscal.
