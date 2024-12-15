@@ -1,49 +1,38 @@
 package view;
 
 import javax.swing.*;
-import java.awt.*;
 
-public class Page_Coo extends JFrame {
+import dbConnection.DatabaseConnection;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Page_Coo extends windowSkeleton {
+	
+
 
     public Page_Coo() {
-        // Configuration de la fenêtre principale
-        setTitle("Page de Connexion");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 500);
-
-        // Utilisation de BorderLayout pour structurer l'interface
-        getContentPane().setLayout(new BorderLayout());
-
-        // Bande bleue avec logo
-        JPanel headerPanel = new JPanel();
-        headerPanel.setBackground(new Color(135, 206, 250)); // Bleu clair
-        headerPanel.setLayout(new BorderLayout()); // Layout pour gérer le logo
-        headerPanel.setPreferredSize(new Dimension(800, 100)); // Hauteur fixe
-
-        JLabel logoLabel = new JLabel(new ImageIcon("C:\\Users\\Lionel\\Pictures\\SAE AN2\\ok-celui-la.png")); // Remplace par le chemin de ton image
-        logoLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        logoLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Marge autour du logo
-        headerPanel.add(logoLabel, BorderLayout.WEST); // Ajout à gauche du header
-
-        getContentPane().add(headerPanel, BorderLayout.NORTH); // Positionner la bande bleue en haut
+    	super();
 
         // Panneau central pour le formulaire de connexion
         JPanel centerPanel = new JPanel();
         GridBagLayout gbl_centerPanel = new GridBagLayout();
-        gbl_centerPanel.rowHeights = new int[] {3};
-        gbl_centerPanel.columnWidths = new int[] {3};
+        gbl_centerPanel.rowHeights = new int[] {0, 3};
+        gbl_centerPanel.columnWidths = new int[] {0, 3};
         centerPanel.setLayout(gbl_centerPanel); // Utilisation de GridBagLayout pour centrer le formulaire
         centerPanel.setBackground(Color.WHITE);
 
-        // Panneau interne pour le formulaire de connexion
-        JPanel loginPanel = new JPanel();
-        loginPanel.setLayout(new GridBagLayout()); // Gestion des composants dans le formulaire
-        loginPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Bordure grise
-        loginPanel.setBackground(new Color(245, 245, 245)); // Gris clair
-
         // Contraintes communes
         Insets insets = new Insets(10, 10, 10, 10); // Marges entre les composants
-
+        getContentPane().add(centerPanel, BorderLayout.CENTER);
+        
+	    // Panneau interne pour le formulaire de connexion
+	    JPanel loginPanel = new JPanel();
+	    loginPanel.setLayout(new GridBagLayout()); // Gestion des composants dans le formulaire
+	    loginPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Bordure grise
+	    loginPanel.setBackground(new Color(245, 245, 245)); // Gris clair
+	    
         // Titre "Connexion"
         GridBagConstraints gbcTitle = new GridBagConstraints();
         gbcTitle.insets = insets;
@@ -55,7 +44,7 @@ public class Page_Coo extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         loginPanel.add(titleLabel, gbcTitle);
-
+	            
         // Label Identifiant
         GridBagConstraints gbcUsernameLabel = new GridBagConstraints();
         gbcUsernameLabel.insets = insets;
@@ -65,7 +54,7 @@ public class Page_Coo extends JFrame {
         JLabel usernameLabel = new JLabel("Identifiant :");
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         loginPanel.add(usernameLabel, gbcUsernameLabel);
-
+        
         // Champ Identifiant
         GridBagConstraints gbcUsernameField = new GridBagConstraints();
         gbcUsernameField.insets = insets;
@@ -75,7 +64,7 @@ public class Page_Coo extends JFrame {
         gbcUsernameField.weightx = 1.0; // Étend en largeur
         JTextField usernameField = new JTextField();
         loginPanel.add(usernameField, gbcUsernameField);
-
+        
         // Label Mot de passe
         GridBagConstraints gbcPasswordLabel = new GridBagConstraints();
         gbcPasswordLabel.insets = insets;
@@ -85,7 +74,7 @@ public class Page_Coo extends JFrame {
         JLabel passwordLabel = new JLabel("Mot de passe :");
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         loginPanel.add(passwordLabel, gbcPasswordLabel);
-
+        
         // Champ Mot de passe
         GridBagConstraints gbcPasswordField = new GridBagConstraints();
         gbcPasswordField.insets = insets;
@@ -95,7 +84,7 @@ public class Page_Coo extends JFrame {
         gbcPasswordField.weightx = 1.0;
         JPasswordField passwordField = new JPasswordField();
         loginPanel.add(passwordField, gbcPasswordField);
-
+                                                        
         // Bouton Connecter
         GridBagConstraints gbcConnectButton = new GridBagConstraints();
         gbcConnectButton.insets = insets;
@@ -105,7 +94,13 @@ public class Page_Coo extends JFrame {
         gbcConnectButton.anchor = GridBagConstraints.CENTER;
         JButton connectButton = new JButton("Connecter");
         loginPanel.add(connectButton, gbcConnectButton);
-
+        connectButton.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			buttonPressed(usernameField, passwordField);
+		}
+                                                            });
+                                                                
         // Bouton Annuler
         GridBagConstraints gbcCancelButton = new GridBagConstraints();
         gbcCancelButton.insets = insets;
@@ -115,10 +110,13 @@ public class Page_Coo extends JFrame {
         gbcCancelButton.anchor = GridBagConstraints.CENTER;
         JButton cancelButton = new JButton("Annuler");
         loginPanel.add(cancelButton, gbcCancelButton);
-
+                                                                        
         // Ajout du panneau de connexion au centre
-        centerPanel.add(loginPanel);
-        getContentPane().add(centerPanel, BorderLayout.CENTER);
+        GridBagConstraints gbc_loginPanel = new GridBagConstraints();
+        gbc_loginPanel.insets = new Insets(0, 0, 5, 5);
+        gbc_loginPanel.gridx = 0;
+        gbc_loginPanel.gridy = 0;
+        centerPanel.add(loginPanel, gbc_loginPanel);
 
         // Rendre la fenêtre visible
         setVisible(true);
@@ -127,4 +125,23 @@ public class Page_Coo extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Page_Coo());
     }
+    
+    private void buttonPressed(JTextField username, JPasswordField password){ 	
+    	if((username.getText().length() <= 1 || username.getText().length() > 30 ) || (password.getPassword().length <= 1 || password.getPassword().length > 40)) {
+    		ErrorMessage.errorDialog("La longueur du nom d'utilisateur ou du mot de passe est incorrecte");
+    		return;
+    	}
+    	DatabaseConnection.setUername(username.getText());
+    	DatabaseConnection.setPassword(password.getPassword());
+    	DatabaseConnection.getInstance();
+    	if(!DatabaseConnection.connected) {
+    		ErrorMessage.errorDialog("Nom d'utilisateur ou mot de passe incorrecte");
+    	}else {
+    		dispose();
+    		new Page_principale();
+      	}
+    	
+    }
+    
+    
 }

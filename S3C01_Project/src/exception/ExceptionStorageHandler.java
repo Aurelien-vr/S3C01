@@ -34,7 +34,8 @@ public class ExceptionStorageHandler {
 			
 			statement.execute();
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("EXCEPTION ExceptionStorageHandle" + e.getClass());
+			//e.printStackTrace();
 		}
 	}
 	
