@@ -1,13 +1,11 @@
 package dao.implementation;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
-
 import dao.BienDAO;
 import dao.entities.Bien;
+import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
@@ -92,18 +90,53 @@ public class BienImpl implements BienDAO {
     /**
      * Supprime un bien de la base de données (fonctionnalité à implémenter).
      * 
-     * @param entity L'entité Bien à supprimer.
+     * @param l'id du Bien à supprimer.
      */
-    @Override
-    public void delete(Bien entity) {
-        // TODO Auto-generated method stub
-    }
-
     @Override
     public void deleteById(long id) {
     	// TODO Auto-generated method stub
     	
     }
+    
+    @Override
+    public void delete(Bien entity) {
+        // TODO Auto-generated method stub
+    }
+    
+	@Override
+	public List<List<String>> BienStatus() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.status_page_principale()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<String>();
+					cell.add(result.getString(2));
+					cell.add(result.getString(3));
+					cell.add(result.getString(4));
+					cell.add(result.getString(5));
+					cell.add(result.getString(6));
+					cell.add(result.getString(7));
+					cell.add(result.getString(8));
+					cell.add(result.getString(9));
+					cell.add(result.getString(10));
+					cell.add(result.getString(11));	
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
 
     /**
      * Crée une entité {@link Bien} à partir des résultats d'une requête SQL.

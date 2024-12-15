@@ -1,10 +1,10 @@
 package application;
-import java.sql.Date;
+import java.util.List;
 
-import dao.Contrat_locationDAO;
+import dao.BienDAO;
 import dao.DAOFactory;
-import dao.entities.Contrat_location;
 import dbConnection.DatabaseConnection;
+import view.Page_Coo;
 
 
 /**
@@ -16,22 +16,26 @@ public class App {
     /**
      * Point d'entrée principal de l'application.
      */
-	
-	public static void main(String[] args) {
-		/*
-		Contrat_locationDAO contrat_locationDAO = DAOFactory.createContrat_locationDAO();
-		Contrat_location contrat_location = contrat_locationDAO.findOne(1);
-		Contrat_location contrat_location = contrat_locationDAO.findOne(1);	
-		System.out.println(contrat_location);
-		Contrat_location contrat_loc = new Contrat_location();
-		contrat_loc.setMontant_loyer(22);
-		contrat_loc.setDate_debut(Date.valueOf("2022-12-01"));
-		contrat_loc.setModalite_chauffage("je pense que c'est ok si je fais va");
-		contrat_locationDAO.insert(contrat_loc);
-		System.out.println(contrat_loc);
-		 */
+	public App() {
+		new Page_Coo();
 		
-		DatabaseConnection.closeConnection();
+		 while (!DatabaseConnection.connected) {
+           try {
+               Thread.sleep(100); // Avoid busy waiting
+           } catch (InterruptedException e) {
+               e.printStackTrace();
+           }
+       }
+		 
+		BienDAO bienDAO = DAOFactory.createBienDAO();
+		List<List<String>> res = bienDAO.BienStatus();
+		System.out.println(res);
+				
+
+	}
+	public static void main(String[] args) {
+		new App();
+		
 	}
 
 }

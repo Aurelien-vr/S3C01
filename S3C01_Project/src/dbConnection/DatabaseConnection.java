@@ -11,14 +11,9 @@ import exception.ExceptionStorageHandler;
 
 
 public class DatabaseConnection {
-    
-    // Nom d'utilisateur pour la connexion à la base de données
-    private static String username = "avnadmin";
-    
-    // Mot de passe masqué pour la connexion à la base de données
-    private static String mdp;
-    
-    // Instance de la connexion unique (utilisée pour le pattern Singleton)
+  
+    private static String username;
+    private static String password;
     private static Connection instance;
 
 
@@ -27,11 +22,12 @@ public class DatabaseConnection {
      * Utilise le pattern Singleton pour garantir qu'il n'y ait qu'une seule connexion à la fois.
      */
     private DatabaseConnection() { }
+    public static boolean connected = false;
 
 
 
     /**
-     * Méthode pour récupérer l'instance unique de la connexion à la base de données.
+     * Méthode singelton pour récupérer l'instance unique de la connexion à la base de données.
      * Si la connexion n'existe pas encore, elle est créée.
      * 
      * @return L'instance de la connexion à la base de données.
@@ -40,20 +36,19 @@ public class DatabaseConnection {
 
         if(instance == null) {
             try {
-            	mdp = getMaskedPasswordWithinEclipse("Password");
                 instance = DriverManager.getConnection(
                     "jdbc:mysql://" + "mysql-1ba067f8-s3c01.e.aivencloud.com:24004/defaultdb?sslmode=require", 
-                    username, mdp
+                    username, password
                 );
                 System.out.println("Connected with the database successfully");
+                DatabaseConnection.connected = true;
             } catch (SQLException e) {
                 System.out.println("Error while connecting to the database");
                 System.out.println(e.getClass()+" |SQL state :"+e.getSQLState()
 				+"|SQL error code:"+e.getErrorCode()+"| -> " +e.getMessage());
-                //e.printStackTrace();
             }
         }
-        return instance; // Retourne l'instance de la connexion
+        return instance;
     }
 
     /**
@@ -72,8 +67,15 @@ public class DatabaseConnection {
     					new String(jpf.getPassword()) : "";
     	return password;
     }
-    
-    
+	
+	public static void setUername(String usernameIN) {
+		username  = usernameIN;
+	}
+	
+	public static void setPassword(char[] tabPassword) {
+		password = new String(tabPassword);
+	}
+	
     public static void closeStatement(Statement statement) {
 		if(statement!=null) {
 			try {
@@ -92,6 +94,7 @@ public class DatabaseConnection {
     	if (instance != null) {   // Vérifie si la connexion existe 		
     		try {
     			instance.close(); // Ferme la connexion à la base de données
+    			DatabaseConnection.connected = false;
     		} catch (SQLException e) {
     			// Gestion des erreurs lors de la fermeture de la connexion
     			ExceptionStorageHandler.LogException(e, instance);

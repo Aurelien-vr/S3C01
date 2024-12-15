@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import application.App;
 import dao.Contrat_locationDAO;
 import dao.DAOFactory;
 import dao.entities.Contrat_location;
@@ -20,16 +21,25 @@ import exception.ExceptionStorageHandler;
 public class test_contrat_location {
 	
 	private Contrat_locationDAO contrat_locationDAO;
-	private Connection connection = DatabaseConnection.getInstance();
 	private Contrat_location contrat_location;
+	Connection connection = null;
 	int idInsertSetup;
+	
+	public test_contrat_location() {}
 	
 	@Before
 	public void setUp() throws Exception {
-		connection.setAutoCommit(false);
+		PreparedStatement statement;
+		String query = null;
+		connection = DatabaseConnection.getInstance();
+		if (connection == null) {
+			new App();
+			connection = DatabaseConnection.getInstance();
+		}
+		System.out.println(connection);
 		contrat_locationDAO = DAOFactory.createContrat_locationDAO();
-		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut,Date_fin,Modalite_chauffage,Modalite_eau_chaude_sanitaire,Date_versement) "
+		connection.setAutoCommit(false);
+		query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut,Date_fin,Modalite_chauffage,Modalite_eau_chaude_sanitaire,Date_versement) "
 				+ " VALUES(800, '2023-4-7', '2024-4-7','DPE=A, et autre truc','chaudiere de 2024', '1000-05-01')";
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
@@ -46,14 +56,14 @@ public class test_contrat_location {
 	
 	contrat_location = new Contrat_location(800, Date.valueOf("2023-4-7"), Date.valueOf("2024-4-7"),
 			"DPE=A, et autre truc", "chaudiere de 2024",Date.valueOf("1000-05-01"));
-	
 	}
 	
 
 	@After
 	public void tearDown() throws Exception {
 		contrat_locationDAO = null;
-		connection.rollback();		
+		Connection connection = DatabaseConnection.getInstance();
+		connection.rollback();
 	}
 	
 	@Test
@@ -65,6 +75,7 @@ public class test_contrat_location {
 	public void testInsert() {
 		contrat_locationDAO.insert(contrat_location);
 		assertEquals(contrat_location, contrat_locationDAO.findOne(idInsertSetup));
+		System.out.println("testInsert");
 	}
 
 }
