@@ -16,7 +16,17 @@ public class Locataire {
     private String iban;  // IBAN du locataire pour le paiement des loyers
     private int id_contrat_location;  // Identifiant du contrat de location associé
 
-    /**
+    public Locataire() {}
+    
+    public Locataire(String nom, String prenom, Date date_de_naissance, String iban) {
+		super();
+		this.nom = nom;
+		this.prenom = prenom;
+		this.date_de_naissance = date_de_naissance;
+		this.iban = iban;
+	}
+
+	/**
      * Récupère l'identifiant unique du locataire.
      *
      * @return L'identifiant du locataire.

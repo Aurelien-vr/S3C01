@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Représente une facture de gaz.
@@ -16,15 +17,12 @@ public class Facture_gaz {
     
     
     
-    public Facture_gaz() {
-		super();
-	}
+    public Facture_gaz() {}
 
-	public Facture_gaz(BigDecimal consommation_m3, String prix_m3_gaz, String reference_facture) {
+	public Facture_gaz(BigDecimal consommation_m3, String prix_m3_gaz) {
     	super();
     	this.consommation_m3 = consommation_m3;
     	this.prix_m3_gaz = prix_m3_gaz;
-    	this.reference_facture = reference_facture;
     }
     
     /**
@@ -116,11 +114,24 @@ public class Facture_gaz {
                '}';
     }
 
-	public Facture_gaz(int id_facture_gaz, BigDecimal consommation_m3, String prix_m3_gaz, String reference_facture) {
-		super();
-		this.id_facture_gaz = id_facture_gaz;
-		this.consommation_m3 = consommation_m3;
-		this.prix_m3_gaz = prix_m3_gaz;
-		this.reference_facture = reference_facture;
+	@Override
+	public int hashCode() {
+		return Objects.hash(consommation_m3, id_facture_gaz, prix_m3_gaz, reference_facture);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Facture_gaz other = (Facture_gaz) obj;
+		return Objects.equals(consommation_m3, other.consommation_m3) && id_facture_gaz == other.id_facture_gaz
+				&& Objects.equals(prix_m3_gaz, other.prix_m3_gaz)
+				&& Objects.equals(reference_facture, other.reference_facture);
+	}
+
+	
 }

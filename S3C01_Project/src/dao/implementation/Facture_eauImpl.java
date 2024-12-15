@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import dao.Facture_eauDAO;
@@ -125,10 +124,8 @@ public class Facture_eauImpl implements Facture_eauDAO {
     public Facture_eau createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture_eau à partir des données du ResultSet
         Facture_eau factureEau = new Facture_eau();
-        factureEau.setId_facture_eau(result.getInt("id_facture_eau"));
         factureEau.setPartie_fixe(result.getBigDecimal("partie_fixe"));
         factureEau.setConsommation(result.getBigDecimal("consommation"));
-        factureEau.setReference_facture(result.getString("reference_facture"));
         return factureEau; // Retourne l'entité Facture_eau construite
     }
 }

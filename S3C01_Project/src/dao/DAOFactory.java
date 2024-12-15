@@ -90,5 +90,49 @@ public class DAOFactory {
         return new Etat_des_lieuxImpl(DatabaseConnection.getInstance());
     }
     
+    /**
+     * Crée une instance de Facture_eauDAO.
+     *
+     * @return Une instance de {@link Facture_eauDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static Facture_eauDAO createFacture_eauDAO() {
+        return new Facture_eauImpl(DatabaseConnection.getInstance());
+    }
+    
+    /**
+     * Crée une instance de Facture_electriciteDAO.
+     *
+     * @return Une instance de {@link Facture_electriciteDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static Facture_electriciteDAO createFacture_electriciteDAO() {
+        return new Facture_electriciteImpl(DatabaseConnection.getInstance());
+    }
+    
+    /**
+     * Crée une instance de Facture_gazDAO.
+     *
+     * @return Une instance de {@link Facture_gazDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static Facture_gazDAO createFacture_gazDAO() {
+        return new Facture_gazImpl(DatabaseConnection.getInstance());
+    }
+    
+    /**
+     * Crée une instance de FactureDAO.
+     *
+     * @return Une instance de {@link FactureDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static FactureDAO createFactureDAO() {
+        return new FactureImpl(DatabaseConnection.getInstance());
+    }
+    
+    /**
+     * Crée une instance de LocataireDAO.
+     *
+     * @return Une instance de {@link LocataireDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static LocataireDAO createLocataireDAO() {
+        return new LocataireImpl(DatabaseConnection.getInstance());
+    }
 
 }
