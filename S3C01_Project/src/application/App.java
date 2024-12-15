@@ -1,15 +1,9 @@
 package application;
-import java.sql.Date;
+import java.util.List;
 
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-
-import dao.Contrat_locationDAO;
+import dao.BienDAO;
 import dao.DAOFactory;
-import dao.entities.Contrat_location;
 import dbConnection.DatabaseConnection;
-import test.testRunner;
-import test.test_contrat_location;
 import view.Page_Coo;
 
 
@@ -32,11 +26,16 @@ public class App {
                e.printStackTrace();
            }
        }
+		 
+		BienDAO bienDAO = DAOFactory.createBienDAO();
+		List<List<String>> res = bienDAO.BienStatus();
+		System.out.println(res);
 				
 
 	}
 	public static void main(String[] args) {
 		new App();
+		
 	}
 
 }
