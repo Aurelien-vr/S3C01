@@ -21,7 +21,23 @@ public class Regularisation_charges {
     private String entretien;  // Informations sur l'entretien
     private int id_contrat_location;  // Identifiant du contrat de location associé
 
-    /**
+    
+    
+    public Regularisation_charges() {}
+
+	public Regularisation_charges(Date date_effet, BigDecimal charge_eau, BigDecimal charge_ordure_menagere,
+			BigDecimal charge_eclairage, BigDecimal provision_pour_charge, BigDecimal indice, String entretien) {
+		super();
+		this.date_effet = date_effet;
+		this.charge_eau = charge_eau;
+		this.charge_ordure_menagere = charge_ordure_menagere;
+		this.charge_eclairage = charge_eclairage;
+		this.provision_pour_charge = provision_pour_charge;
+		this.indice = indice;
+		this.entretien = entretien;
+	}
+
+	/**
      * Récupère l'identifiant unique de la régularisation des charges du locataire.
      *
      * @return L'identifiant de la régularisation des charges.

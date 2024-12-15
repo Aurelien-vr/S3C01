@@ -20,7 +20,23 @@ public class Travaux {
     private BigDecimal reduction_special;  // Réduction spéciale applicable
     private String reference_facture;  // Référence de la facture associée aux travaux
 
-    /**
+    
+    
+    public Travaux() {}
+
+	public Travaux(Date date_travaux, String nature, String iban, BigDecimal reduction, BigDecimal montant,
+			BigDecimal montant_non_deductible, BigDecimal reduction_special) {
+		super();
+		this.date_travaux = date_travaux;
+		this.nature = nature;
+		this.iban = iban;
+		this.reduction = reduction;
+		this.montant = montant;
+		this.montant_non_deductible = montant_non_deductible;
+		this.reduction_special = reduction_special;
+	}
+
+	/**
      * Récupère le numéro de la facture.
      *
      * @return Le numéro de la facture.

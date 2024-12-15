@@ -134,5 +134,32 @@ public class DAOFactory {
     public static LocataireDAO createLocataireDAO() {
         return new LocataireImpl(DatabaseConnection.getInstance());
     }
+    
+    /**
+     * Crée une instance de Regularisation_chargesDAO.
+     *
+     * @return Une instance de {@link Regularisation_chargesDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static Regularisation_chargesDAO createRegularisation_chargesDAO() {
+        return new Regularisation_chargesImpl(DatabaseConnection.getInstance());
+    }
+    
+    /**
+     * Crée une instance de Solde_de_tout_compteDAO.
+     *
+     * @return Une instance de {@link Solde_de_tout_compteDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static Solde_de_tout_compteDAO createSolde_de_tout_compteDAO() {
+        return new Solde_de_tout_compteImpl(DatabaseConnection.getInstance());
+    }
+    
+    /**
+     * Crée une instance de TravauxDAO.
+     *
+     * @return Une instance de {@link TravauxDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static TravauxDAO createTravauxDAO() {
+        return new TravauxImpl(DatabaseConnection.getInstance());
+    }
 
 }
