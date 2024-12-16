@@ -74,15 +74,6 @@ public class DatabaseConnection {
 		password = new String(tabPassword);
 	}
 	
-    public static void closeStatement(Statement statement) {
-		if(statement!=null) {
-			try {
-				statement.close();
-			}catch (Exception e) {
-				ExceptionStorageHandler.LogException(e, instance);
-			}
-		}
-	}
     
     /**
      * Méthode pour fermer la connexion à la base de données.
