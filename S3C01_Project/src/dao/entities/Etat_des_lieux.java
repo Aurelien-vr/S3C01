@@ -13,11 +13,21 @@ public class Etat_des_lieux {
     private int id_etat_des_lieux;  // Identifiant unique de l'état des lieux
     private Date date_signature;  // Date de signature de l'état des lieux
     private int nombre_cles;  // Nombre de clés remises lors de l'état des lieux
-    private String etat_des_elements;  // État des éléments du bien (ex: pièces, équipements)
+    private String etats_des_element;  // État des éléments du bien (ex: pièces, équipements)
     private int id_contrat_location;  // Identifiant du contrat de location associé
     private boolean est_entrer;  // Indique si l'état des lieux a été fait à l'entrée (true) ou à la sortie (false)
 
-    /**
+    public Etat_des_lieux() {};
+    
+    public Etat_des_lieux(Date date_signature, int nombre_cles, String etat_des_elements, boolean est_entrer) {
+		super();
+		this.date_signature = date_signature;
+		this.nombre_cles = nombre_cles;
+		this.etats_des_element = etat_des_elements;
+		this.est_entrer = est_entrer;
+	}
+
+	/**
      * Récupère l'identifiant de l'état des lieux.
      *
      * @return L'identifiant de l'état des lieux.
@@ -77,7 +87,7 @@ public class Etat_des_lieux {
      * @return L'état des éléments (ex: pièces, équipements).
      */
     public String getEtat_des_elements() {
-        return etat_des_elements;
+        return etats_des_element;
     }
 
     /**
@@ -86,7 +96,7 @@ public class Etat_des_lieux {
      * @param etat_des_elements L'état des éléments à définir.
      */
     public void setEtat_des_elements(String etat_des_elements) {
-        this.etat_des_elements = etat_des_elements;
+        this.etats_des_element = etat_des_elements;
     }
 
     /**
@@ -137,7 +147,7 @@ public class Etat_des_lieux {
                "id_etat_des_lieux=" + id_etat_des_lieux +
                ", date_signature=" + (date_signature != null ? date_signature : "N/A") +
                ", nombre_cles=" + nombre_cles +
-               ", etat_des_elements='" + (etat_des_elements != null ? etat_des_elements : "N/A") + '\'' +
+               ", etats_des_elements='" + (etats_des_element != null ? etats_des_element : "N/A") + '\'' +
                ", id_contrat_location=" + id_contrat_location +
                ", est_entrer=" + est_entrer +
                '}';
@@ -145,7 +155,7 @@ public class Etat_des_lieux {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_signature, est_entrer, etat_des_elements, id_contrat_location, id_etat_des_lieux,
+		return Objects.hash(date_signature, est_entrer, etats_des_element, id_contrat_location, id_etat_des_lieux,
 				nombre_cles);
 	}
 
@@ -159,7 +169,7 @@ public class Etat_des_lieux {
 			return false;
 		Etat_des_lieux other = (Etat_des_lieux) obj;
 		return Objects.equals(date_signature, other.date_signature) && est_entrer == other.est_entrer
-				&& Objects.equals(etat_des_elements, other.etat_des_elements)
+				&& Objects.equals(etats_des_element, other.etats_des_element)
 				&& id_contrat_location == other.id_contrat_location && id_etat_des_lieux == other.id_etat_des_lieux
 				&& nombre_cles == other.nombre_cles;
 	}

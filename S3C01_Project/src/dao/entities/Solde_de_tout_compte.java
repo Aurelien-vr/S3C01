@@ -16,7 +16,18 @@ public class Solde_de_tout_compte {
     private BigDecimal caution;  // Montant de la caution à restituer ou à déduire
     private int id_contrat_location;  // Identifiant du contrat de location associé au solde de tout compte
 
-    /**
+    
+    
+    public Solde_de_tout_compte() {}
+
+	public Solde_de_tout_compte(BigDecimal reste_a_devoir, BigDecimal provision_pour_charges, BigDecimal caution) {
+		super();
+		this.reste_a_devoir = reste_a_devoir;
+		this.provision_pour_charges = provision_pour_charges;
+		this.caution = caution;
+	}
+
+	/**
      * Récupère l'identifiant unique du solde de tout compte.
      *
      * @return L'identifiant du solde de tout compte.

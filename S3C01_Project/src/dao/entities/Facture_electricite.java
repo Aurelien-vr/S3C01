@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Représente une facture d'électricité.
@@ -9,12 +10,20 @@ import java.math.BigDecimal;
  */
 public class Facture_electricite {
 
-    private int id_facture_electricite;  // Identifiant unique de la facture d'électricité
+	private int id_facture_electricite;  // Identifiant unique de la facture d'électricité
     private BigDecimal compteur_electricite;  // Valeur du compteur d'électricité au moment de la facturation
     private String prix_kw_electricite;  // Prix du kilowatt pour la facture d'électricité
     private String reference_facture;  // Référence unique de la facture d'électricité
 
-    /**
+    public Facture_electricite() {};
+    
+    public Facture_electricite(BigDecimal compteur_electricite, String prix_kw_electricite) {
+		super();
+		this.compteur_electricite = compteur_electricite;
+		this.prix_kw_electricite = prix_kw_electricite;
+	}
+
+	/**
      * Récupère l'identifiant de la facture d'électricité.
      *
      * @return L'identifiant de la facture d'électricité.
@@ -102,12 +111,25 @@ public class Facture_electricite {
                '}';
     }
 
-	public Facture_electricite(int id_facture_electricite, BigDecimal compteur_electricite, String prix_kw_electricite,
-			String reference_facture) {
-		super();
-		this.id_facture_electricite = id_facture_electricite;
-		this.compteur_electricite = compteur_electricite;
-		this.prix_kw_electricite = prix_kw_electricite;
-		this.reference_facture = reference_facture;
+	@Override
+	public int hashCode() {
+		return Objects.hash(compteur_electricite, id_facture_electricite, prix_kw_electricite, reference_facture);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Facture_electricite other = (Facture_electricite) obj;
+		return Objects.equals(compteur_electricite, other.compteur_electricite)
+				&& id_facture_electricite == other.id_facture_electricite
+				&& Objects.equals(prix_kw_electricite, other.prix_kw_electricite)
+				&& Objects.equals(reference_facture, other.reference_facture);
+	}
+    
+    
 }

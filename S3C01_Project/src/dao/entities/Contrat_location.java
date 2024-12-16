@@ -1,14 +1,25 @@
 package dao.entities;
-import java.sql.*;
+
+import java.sql.Date;
 import java.util.Objects;
+
 /**
  * Représente un contrat de location pour un bien immobilier.
  * Cette classe contient les informations relatives au contrat de location, telles que
  * les dates de début et de fin, le montant du loyer, et les modalités de chauffage et d'eau chaude sanitaire.
  */
 public class Contrat_location {
-	
-	public Contrat_location() {}
+
+    private int id_numero_location;  // Identifiant unique du contrat de location
+    private int montant_loyer;  // Montant du loyer mensuel
+    private Date date_debut;  // Date de début du contrat
+    private Date date_fin;  // Date de fin du contrat
+    private String modalite_chauffage;  // Modalité de chauffage (ex : gaz, électrique, etc.)
+    private String modalite_eau_chaude_sanitaire;  // Modalité d'eau chaude sanitaire (ex : collective, individuelle, etc.)
+    private Date date_versement;  // Date de versement du loyer
+
+
+    public Contrat_location() {}
 	
     public Contrat_location(int montant_loyer, Date date_debut, Date date_fin, String modalite_chauffage,
 			String modalite_eau_chaude_sanitaire, Date date_versement) {
@@ -20,25 +31,26 @@ public class Contrat_location {
 		this.modalite_eau_chaude_sanitaire = modalite_eau_chaude_sanitaire;
 		this.date_versement = date_versement;
 	}
-
-
-
-	private int id_Contrat_location;
-	private int montant_loyer;  // Montant du loyer mensuel
-    private Date date_debut;  // Date de début du contrat
-    private Date date_fin;  // Date de fin du contrat
-    private String modalite_chauffage;  // Modalité de chauffage (ex : gaz, électrique, etc.)
-    private String modalite_eau_chaude_sanitaire;  // Modalité d'eau chaude sanitaire (ex : collective, individuelle, etc.)
-    private Date date_versement;  // Date de versement du loyer
-
-    public int getId_Contrat_location() {
-    	return id_Contrat_location;
-    }
     
-    public void setId_Contrat_location(int id_Contrat_location) {
-    	this.id_Contrat_location = id_Contrat_location;
+
+    /**
+     * Récupère le numéro unique du contrat de location.
+     *
+     * @return Le numéro de location.
+     */
+    public int getNumero_location() {
+        return id_numero_location;
     }
-    
+
+    /**
+     * Définit le numéro unique du contrat de location.
+     *
+     * @param numero_location Le numéro de location à définir.
+     */
+    public void setNumero_location(int numero_location) {
+        this.id_numero_location = numero_location;
+    }
+
     /**
      * Récupère le montant du loyer mensuel.
      *
@@ -146,31 +158,6 @@ public class Contrat_location {
     public void setDate_versement(Date date_versement) {
         this.date_versement = date_versement;
     }
-    
-    
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;  // Same object
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;  // Different class or null object
-        }
-        Contrat_location that = (Contrat_location) obj;
-        return montant_loyer == that.montant_loyer &&
-                Objects.equals(date_debut, that.date_debut) &&
-                Objects.equals(date_fin, that.date_fin) &&
-                Objects.equals(modalite_chauffage, that.modalite_chauffage) &&
-                Objects.equals(modalite_eau_chaude_sanitaire, that.modalite_eau_chaude_sanitaire) &&
-                Objects.equals(date_versement, that.date_versement);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(montant_loyer, date_debut, date_fin, modalite_chauffage, modalite_eau_chaude_sanitaire, date_versement);
-    }
-    
 
     /**
      * Retourne une représentation textuelle de l'objet {@link Contrat_location}.
@@ -181,8 +168,8 @@ public class Contrat_location {
     @Override
     public String toString() {
         return "ContratLocation{" +
-        		"id_Contrat_location=" + id_Contrat_location +
-               " ,montant_loyer=" + montant_loyer +
+               "numero_location=" + id_numero_location +
+               ", montant_loyer=" + montant_loyer +
                ", date_debut=" + (date_debut != null ? date_debut : "N/A") +
                ", date_fin=" + (date_fin != null ? date_fin : "N/A") +
                ", modalite_chauffage='" + (modalite_chauffage != null ? modalite_chauffage : "N/A") + '\'' +
@@ -190,4 +177,31 @@ public class Contrat_location {
                ", date_versement=" + (date_versement != null ? date_versement : "N/A") +
                '}';
     }
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(date_debut, date_fin, date_versement, id_numero_location, modalite_chauffage,
+				modalite_eau_chaude_sanitaire, montant_loyer);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Contrat_location other = (Contrat_location) obj;
+		return Objects.equals(date_debut, other.date_debut) && Objects.equals(date_fin, other.date_fin)
+				&& Objects.equals(date_versement, other.date_versement)
+				&& id_numero_location == other.id_numero_location
+				&& Objects.equals(modalite_chauffage, other.modalite_chauffage)
+				&& Objects.equals(modalite_eau_chaude_sanitaire, other.modalite_eau_chaude_sanitaire)
+				&& montant_loyer == other.montant_loyer;
+	}
+    
+    
+
 }

@@ -15,7 +15,15 @@ public class Facture_eau {
     private BigDecimal consommation;  // Consommation d'eau facturée
     private String reference_facture;  // Référence unique de la facture
 
-    /**
+    public Facture_eau() {};
+    
+    public Facture_eau(BigDecimal partie_fixe, BigDecimal consommation) {
+		super();
+		this.partie_fixe = partie_fixe;
+		this.consommation = consommation;
+	}
+
+	/**
      * Récupère l'identifiant de la facture d'eau.
      *
      * @return L'identifiant de la facture d'eau.

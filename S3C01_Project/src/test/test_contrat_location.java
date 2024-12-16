@@ -1,20 +1,17 @@
 package test;
-import static org.junit.Assert.*;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import dao.*;
+import dao.entities.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import application.App;
 import dao.Contrat_locationDAO;
 import dao.DAOFactory;
 import dao.entities.Contrat_location;
+import java.sql.*;
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
@@ -75,7 +72,12 @@ public class test_contrat_location {
 	public void testInsert() {
 		contrat_locationDAO.insert(contrat_location);
 		assertEquals(contrat_location, contrat_locationDAO.findOne(idInsertSetup));
-		System.out.println("testInsert");
 	}
+	
+	@Test
+	public void testDelete() {
+		contrat_locationDAO.deleteById(idInsertSetup);
+		assertNull(contrat_locationDAO.findOne(idInsertSetup));
+		}
 
 }

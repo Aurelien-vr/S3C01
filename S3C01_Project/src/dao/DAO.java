@@ -51,7 +51,7 @@ public interface DAO<T> {
     /**
      * Supprime une entité en utilisant son identifiant unique.
      *
-     * @param entity L'entité à supprimer, identifié par son ID.
+     * @param id L'entité à supprimer, identifié par son ID.
      */
     void deleteById(long id);
 
@@ -63,5 +63,5 @@ public interface DAO<T> {
      * @throws SQLException Si une erreur se produit lors de l'extraction des données.
      */
     T createEntities(ResultSet result) throws SQLException;
-
+    
 }

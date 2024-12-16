@@ -17,7 +17,16 @@ public class Declaration_revenu {
     private BigDecimal recette_immeuble;  // Montant des recettes générées par l'immeuble
     private int id_bien;  // Identifiant du bien immobilier lié à la déclaration
 
-    /**
+    public Declaration_revenu() {};
+    
+    public Declaration_revenu(Date date_acquisition, int locataires, BigDecimal recette_immeuble) {
+		super();
+		this.date_acquisition = date_acquisition;
+		this.locataires = locataires;
+		this.recette_immeuble = recette_immeuble;
+	}
+
+	/**
      * Récupère l'identifiant unique de la déclaration de revenu.
      *
      * @return L'identifiant de la déclaration de revenu.

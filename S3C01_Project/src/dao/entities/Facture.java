@@ -2,6 +2,7 @@ package dao.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Représente une facture.
@@ -16,8 +17,20 @@ public class Facture {
     private BigDecimal montant_facture;  // Montant total de la facture
     private String moyen_paiement;  // Moyen de paiement utilisé pour régler la facture
     private int id_bien;  // Identifiant du bien associé à cette facture
+    
+    
+    
+    public Facture() {}
 
-    /**
+	public Facture(String type_facture, Date date_facture, BigDecimal montant_facture, String moyen_paiement) {
+		super();
+		this.type_facture = type_facture;
+		this.date_facture = date_facture;
+		this.montant_facture = montant_facture;
+		this.moyen_paiement = moyen_paiement;
+	}
+
+	/**
      * Récupère la référence de la facture.
      *
      * @return La référence de la facture.
@@ -143,14 +156,26 @@ public class Facture {
                '}';
     }
 
-	public Facture(String reference_facture, String type_facture, Date date_facture, BigDecimal montant_facture,
-			String moyen_paiement, int id_bien) {
-		super();
-		this.reference_facture = reference_facture;
-		this.type_facture = type_facture;
-		this.date_facture = date_facture;
-		this.montant_facture = montant_facture;
-		this.moyen_paiement = moyen_paiement;
-		this.id_bien = id_bien;
+	@Override
+	public int hashCode() {
+		return Objects.hash(date_facture, id_bien, montant_facture, moyen_paiement, reference_facture, type_facture);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Facture other = (Facture) obj;
+		return Objects.equals(date_facture, other.date_facture) && id_bien == other.id_bien
+				&& Objects.equals(montant_facture, other.montant_facture)
+				&& Objects.equals(moyen_paiement, other.moyen_paiement)
+				&& Objects.equals(reference_facture, other.reference_facture)
+				&& Objects.equals(type_facture, other.type_facture);
+	}
+
+	
 }

@@ -16,7 +16,16 @@ public class Contrat_colocation {
     private BigDecimal part_des_charges;  // Part des charges à payer par le locataire
     private int id_contrat_location;  // Identifiant du contrat de location associé
 
-    /**
+    
+    public Contrat_colocation() {};
+    
+    public Contrat_colocation(boolean clause_solidarite, BigDecimal part_des_charges) {
+		super();
+		this.clause_solidarite = clause_solidarite;
+		this.part_des_charges = part_des_charges;
+	}
+
+	/**
      * Récupère l'identifiant du contrat de colocation.
      *
      * @return L'identifiant du contrat de colocation.

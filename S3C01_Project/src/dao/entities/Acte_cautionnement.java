@@ -9,9 +9,37 @@ import java.util.Objects;
  */
 public class Acte_cautionnement {
 
+    private int id_acte_cautionnement;  // Identifiant unique de l'acte de cautionnement
     private BigDecimal montant_caution;  // Montant de la caution
     private int id_locataire;  // Identifiant du locataire concerné par l'acte de cautionnement
 
+    
+    public Acte_cautionnement() {};
+    
+    public Acte_cautionnement(BigDecimal montant_caution) {
+    	super();
+		this.montant_caution = montant_caution;
+    };
+    
+    
+    
+    /**
+     * Récupère l'identifiant de l'acte de cautionnement.
+     *
+     * @return L'identifiant de l'acte de cautionnement.
+     */
+    public int getId_acte_cautionnement() {
+        return id_acte_cautionnement;
+    }
+
+    /**
+     * Définit l'identifiant de l'acte de cautionnement.
+     *
+     * @param id_acte_cautionnement L'identifiant de l'acte de cautionnement à définir.
+     */
+    public void setId_acte_cautionnement(int id_acte_cautionnement) {
+        this.id_acte_cautionnement = id_acte_cautionnement;
+    }
 
     /**
      * Récupère le montant de la caution.
@@ -58,14 +86,15 @@ public class Acte_cautionnement {
     @Override
     public String toString() {
         return "Acte_Cautionnement{" +
-               "montant_caution=" + (montant_caution != null ? montant_caution : "N/A") +
+               "id_acte_cautionnement=" + id_acte_cautionnement +
+               ", montant_caution=" + (montant_caution != null ? montant_caution : "N/A") +
                ", id_locataire=" + id_locataire +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id_locataire, montant_caution);
+		return Objects.hash(id_acte_cautionnement, id_locataire, montant_caution);
 	}
 
 	@Override
@@ -77,6 +106,10 @@ public class Acte_cautionnement {
 		if (getClass() != obj.getClass())
 			return false;
 		Acte_cautionnement other = (Acte_cautionnement) obj;
-		return id_locataire == other.id_locataire && Objects.equals(montant_caution, other.montant_caution);
+		return id_acte_cautionnement == other.id_acte_cautionnement && id_locataire == other.id_locataire
+				&& Objects.equals(montant_caution, other.montant_caution);
 	}
+    
+    
+    
 }

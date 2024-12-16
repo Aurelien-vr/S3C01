@@ -1,16 +1,12 @@
 package application;
 import java.util.List;
+import java.sql.Date;
 
 import dao.BienDAO;
 import dao.DAOFactory;
 import dbConnection.DatabaseConnection;
 import view.Page_Coo;
 
-
-/**
- * Classe principale de l'application.
- * Permet de tester l'accès aux données via le DAO (Data Access Object) pour les contrats de location.
- */
 
 public class App {
     /**
@@ -37,5 +33,4 @@ public class App {
 		new App();
 		
 	}
-
 }
