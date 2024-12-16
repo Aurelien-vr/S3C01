@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Représente une facture d'eau.
@@ -14,7 +15,15 @@ public class Facture_eau {
     private BigDecimal consommation;  // Consommation d'eau facturée
     private String reference_facture;  // Référence unique de la facture
 
-    /**
+    public Facture_eau() {};
+    
+    public Facture_eau(BigDecimal partie_fixe, BigDecimal consommation) {
+		super();
+		this.partie_fixe = partie_fixe;
+		this.consommation = consommation;
+	}
+
+	/**
      * Récupère l'identifiant de la facture d'eau.
      *
      * @return L'identifiant de la facture d'eau.
@@ -101,4 +110,23 @@ public class Facture_eau {
                ", reference_facture='" + (reference_facture != null ? reference_facture : "N/A") + '\'' +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(consommation, id_facture_eau, partie_fixe, reference_facture);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Facture_eau other = (Facture_eau) obj;
+		return Objects.equals(consommation, other.consommation) && id_facture_eau == other.id_facture_eau
+				&& Objects.equals(partie_fixe, other.partie_fixe)
+				&& Objects.equals(reference_facture, other.reference_facture);
+	}
 }

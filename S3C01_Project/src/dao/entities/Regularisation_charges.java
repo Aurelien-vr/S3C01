@@ -2,6 +2,7 @@ package dao.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Représente une régularisation des charges d'un locataire.
@@ -20,7 +21,23 @@ public class Regularisation_charges {
     private String entretien;  // Informations sur l'entretien
     private int id_contrat_location;  // Identifiant du contrat de location associé
 
-    /**
+    
+    
+    public Regularisation_charges() {}
+
+	public Regularisation_charges(Date date_effet, BigDecimal charge_eau, BigDecimal charge_ordure_menagere,
+			BigDecimal charge_eclairage, BigDecimal provision_pour_charge, BigDecimal indice, String entretien) {
+		super();
+		this.date_effet = date_effet;
+		this.charge_eau = charge_eau;
+		this.charge_ordure_menagere = charge_ordure_menagere;
+		this.charge_eclairage = charge_eclairage;
+		this.provision_pour_charge = provision_pour_charge;
+		this.indice = indice;
+		this.entretien = entretien;
+	}
+
+	/**
      * Récupère l'identifiant unique de la régularisation des charges du locataire.
      *
      * @return L'identifiant de la régularisation des charges.
@@ -202,4 +219,27 @@ public class Regularisation_charges {
                ", id_contrat_location=" + id_contrat_location +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(charge_eau, charge_eclairage, charge_ordure_menagere, date_effet, entretien,
+				id_charge_locataire, id_contrat_location, indice, provision_pour_charge);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Regularisation_charges other = (Regularisation_charges) obj;
+		return Objects.equals(charge_eau, other.charge_eau) && Objects.equals(charge_eclairage, other.charge_eclairage)
+				&& Objects.equals(charge_ordure_menagere, other.charge_ordure_menagere)
+				&& Objects.equals(date_effet, other.date_effet) && Objects.equals(entretien, other.entretien)
+				&& id_charge_locataire == other.id_charge_locataire && id_contrat_location == other.id_contrat_location
+				&& Objects.equals(indice, other.indice)
+				&& Objects.equals(provision_pour_charge, other.provision_pour_charge);
+	}
 }

@@ -1,6 +1,6 @@
 package dao.implementation;
 
-import java.math.BigDecimal;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -110,7 +110,7 @@ public class TravauxImpl implements TravauxDAO {
      * @param numeroFacture Le numéro de la facture du travail à supprimer.
      */
     @Override
-    public void deleteById(Travaux entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 
@@ -125,7 +125,6 @@ public class TravauxImpl implements TravauxDAO {
     public Travaux createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Travaux à partir des données du ResultSet
         Travaux travaux = new Travaux();
-        travaux.setNumero_facture(result.getInt("numero_facture"));
         travaux.setDate_travaux(result.getDate("date_travaux"));
         travaux.setNature(result.getString("nature"));
         travaux.setIban(result.getString("iban"));
@@ -133,7 +132,6 @@ public class TravauxImpl implements TravauxDAO {
         travaux.setMontant(result.getBigDecimal("montant"));
         travaux.setMontant_non_deductible(result.getBigDecimal("montant_non_deductible"));
         travaux.setReduction_special(result.getBigDecimal("reduction_special"));
-        travaux.setReference_facture(result.getString("reference_facture"));
         return travaux; // Retourne l'entité Travaux construite
     }
 }

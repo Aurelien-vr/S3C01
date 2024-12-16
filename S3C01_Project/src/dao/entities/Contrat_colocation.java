@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Représente un contrat de colocation associé à un contrat de location.
@@ -15,7 +16,16 @@ public class Contrat_colocation {
     private BigDecimal part_des_charges;  // Part des charges à payer par le locataire
     private int id_contrat_location;  // Identifiant du contrat de location associé
 
-    /**
+    
+    public Contrat_colocation() {};
+    
+    public Contrat_colocation(boolean clause_solidarite, BigDecimal part_des_charges) {
+		super();
+		this.clause_solidarite = clause_solidarite;
+		this.part_des_charges = part_des_charges;
+	}
+
+	/**
      * Récupère l'identifiant du contrat de colocation.
      *
      * @return L'identifiant du contrat de colocation.
@@ -102,4 +112,23 @@ public class Contrat_colocation {
                ", id_contrat_location=" + id_contrat_location +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(clause_solidarite, id_contrat_colocation, id_contrat_location, part_des_charges);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Contrat_colocation other = (Contrat_colocation) obj;
+		return clause_solidarite == other.clause_solidarite && id_contrat_colocation == other.id_contrat_colocation
+				&& id_contrat_location == other.id_contrat_location
+				&& Objects.equals(part_des_charges, other.part_des_charges);
+	}
 }

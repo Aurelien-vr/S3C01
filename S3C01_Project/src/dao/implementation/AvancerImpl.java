@@ -109,7 +109,7 @@ public class AvancerImpl implements AvancerDAO {
      * @param id L'identifiant du locataire de l'avance à supprimer.
      */
     @Override
-    public void deleteById(Avancer entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 

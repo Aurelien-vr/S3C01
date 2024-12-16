@@ -2,6 +2,7 @@ package dao.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Représente une déclaration de revenu provenant d'un bien immobilier.
@@ -16,7 +17,16 @@ public class Declaration_revenu {
     private BigDecimal recette_immeuble;  // Montant des recettes générées par l'immeuble
     private int id_bien;  // Identifiant du bien immobilier lié à la déclaration
 
-    /**
+    public Declaration_revenu() {};
+    
+    public Declaration_revenu(Date date_acquisition, int locataires, BigDecimal recette_immeuble) {
+		super();
+		this.date_acquisition = date_acquisition;
+		this.locataires = locataires;
+		this.recette_immeuble = recette_immeuble;
+	}
+
+	/**
      * Récupère l'identifiant unique de la déclaration de revenu.
      *
      * @return L'identifiant de la déclaration de revenu.
@@ -122,4 +132,23 @@ public class Declaration_revenu {
                ", id_bien=" + id_bien +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(date_acquisition, id_bien, id_declaration_revenu, locataires, recette_immeuble);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Declaration_revenu other = (Declaration_revenu) obj;
+		return Objects.equals(date_acquisition, other.date_acquisition) && id_bien == other.id_bien
+				&& id_declaration_revenu == other.id_declaration_revenu && locataires == other.locataires
+				&& Objects.equals(recette_immeuble, other.recette_immeuble);
+	}
 }

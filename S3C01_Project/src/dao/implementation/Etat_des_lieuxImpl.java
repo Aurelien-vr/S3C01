@@ -109,7 +109,7 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
      * @param id L'identifiant de l'état des lieux à supprimer.
      */
     @Override
-    public void deleteById(Etat_des_lieux entity) {
+    public void deleteById(long id) {
         // Implémentation de la suppression de l'entité Etat_des_lieux par son identifiant
     }
 
@@ -124,11 +124,9 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
     public Etat_des_lieux createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Etat_des_lieux à partir des données du ResultSet
         Etat_des_lieux etatDesLieux = new Etat_des_lieux();
-        etatDesLieux.setId_etat_des_lieux(result.getInt("id_etat_des_lieux"));
         etatDesLieux.setDate_signature(result.getDate("date_signature"));
         etatDesLieux.setNombre_cles(result.getInt("nombre_cles"));
-        etatDesLieux.setEtat_des_elements(result.getString("etat_des_elements"));
-        etatDesLieux.setId_contrat_location(result.getInt("id_contrat_location"));
+        etatDesLieux.setEtat_des_elements(result.getString("etats_des_element"));
         etatDesLieux.setEst_entrer(result.getBoolean("est_entrer"));
         return etatDesLieux; // Retourne l'entité Etat_des_lieux construite
     }

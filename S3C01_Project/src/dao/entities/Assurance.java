@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Représente une assurance liée à un bien.
@@ -15,7 +16,16 @@ public class Assurance {
     private BigDecimal protection_juridique;  // Montant de la protection juridique incluse
     private int id_bien;  // Identifiant du bien assuré
 
-    /**
+    public Assurance() {};
+    
+    public Assurance(BigDecimal prime, BigDecimal taux_augmentation, BigDecimal protection_juridique) {
+		super();
+		this.prime = prime;
+		this.taux_augmentation = taux_augmentation;
+		this.protection_juridique = protection_juridique;
+	}
+
+	/**
      * Récupère le numéro du contrat d'assurance.
      *
      * @return Le numéro de contrat d'assurance.
@@ -121,4 +131,24 @@ public class Assurance {
                ", id_bien=" + id_bien +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id_bien, numero_contrat, prime, protection_juridique, taux_augmentation);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Assurance other = (Assurance) obj;
+		return id_bien == other.id_bien && numero_contrat == other.numero_contrat && Objects.equals(prime, other.prime)
+				&& Objects.equals(protection_juridique, other.protection_juridique)
+				&& Objects.equals(taux_augmentation, other.taux_augmentation);
+	}
+    
 }

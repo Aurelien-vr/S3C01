@@ -15,7 +15,7 @@ import exception.ExceptionStorageHandler;
 public class Contrat_locationImpl implements Contrat_locationDAO {
 
     private Connection connection; // Connexion à la base de données
-    
+
     /**
      * Constructeur de la classe Contrat_locationImpl.
      *
@@ -87,20 +87,16 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
         return null;
     }
 
-    /**
-     * Supprime un contrat de location par son identifiant (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Contrat_location à supprimer par ID.
-     */
 	@Override
-	public void deleteById(Contrat_location entity) {
-		// TODO Auto-generated method stub
+	public void deleteById(long id) {
+		
 		
 	}
 	
 	@Override
 	public Contrat_location createEntities(ResultSet result) throws SQLException {
-		Contrat_location contrat_location = new Contrat_location(result.getInt(1));
+
+		Contrat_location contrat_location = new Contrat_location();
 		
 		int montant_loyer = result.getInt(2);
 		contrat_location.setMontant_loyer(montant_loyer);
@@ -145,4 +141,3 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 
 
 }
-

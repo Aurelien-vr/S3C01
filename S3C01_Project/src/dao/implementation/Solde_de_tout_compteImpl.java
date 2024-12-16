@@ -1,6 +1,5 @@
 package dao.implementation;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -110,7 +109,7 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
      * @param id L'identifiant du locataire de la régularisation des charges à supprimer.
      */
     @Override
-    public void deleteById(Solde_de_tout_compte entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 
@@ -125,11 +124,9 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
     public Solde_de_tout_compte createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Solde_de_tout_compte à partir des données du ResultSet
         Solde_de_tout_compte solde = new Solde_de_tout_compte();
-        solde.setId_solde_de_tout_compte(result.getInt("id_solde_de_tout_compte"));
         solde.setReste_a_devoir(result.getBigDecimal("reste_a_devoir"));
         solde.setProvision_pour_charges(result.getBigDecimal("provision_pour_charges"));
         solde.setCaution(result.getBigDecimal("caution"));
-        solde.setId_contrat_location(result.getInt("id_contrat_location"));
         return solde; // Retourne l'entité Solde_de_tout_compte construite
     }
 }

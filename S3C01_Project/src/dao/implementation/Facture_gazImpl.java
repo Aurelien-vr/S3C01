@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.math.BigDecimal;
 import java.util.List;
 
 import dao.Facture_gazDAO;
@@ -110,7 +109,7 @@ public class Facture_gazImpl implements Facture_gazDAO {
      * @param id L'identifiant de la facture de gaz à supprimer.
      */
     @Override
-    public void deleteById(Facture_gaz entity) {
+    public void deleteById(long id) {
         // Implémentation de la suppression de l'entité Facture_gaz par son identifiant
     }
 
@@ -125,10 +124,8 @@ public class Facture_gazImpl implements Facture_gazDAO {
     public Facture_gaz createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture_gaz à partir des données du ResultSet
         Facture_gaz factureGaz = new Facture_gaz();
-        factureGaz.setId_facture_gaz(result.getInt("id_facture_gaz"));
         factureGaz.setConsommation_m3(result.getBigDecimal("consommation_m3"));
         factureGaz.setPrix_m3_gaz(result.getString("prix_m3_gaz"));
-        factureGaz.setReference_facture(result.getString("reference_facture"));
         return factureGaz; // Retourne l'entité Facture_electricite construite
     }
 }

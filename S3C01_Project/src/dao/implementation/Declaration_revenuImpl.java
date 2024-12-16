@@ -107,7 +107,7 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      * @param id L'identifiant de la déclaration de revenu à supprimer.
      */
     @Override
-    public void deleteById(Declaration_revenu entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 
@@ -121,11 +121,9 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
     @Override
     public Declaration_revenu createEntities(ResultSet result) throws SQLException {
         Declaration_revenu revenu = new Declaration_revenu();
-        revenu.setId_declaration_revenu(result.getInt("id_declaration_revenu"));
         revenu.setDate_acquisition(result.getDate("date_acquisition"));
         revenu.setLocataires(result.getInt("locataires"));
         revenu.setRecette_immeuble(result.getBigDecimal("recette_immeuble"));
-        revenu.setId_bien(result.getInt("id_bien"));
         return revenu;
     }
 }

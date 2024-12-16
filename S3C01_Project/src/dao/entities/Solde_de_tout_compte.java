@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Représente le solde de tout compte d'un locataire à la fin de son contrat de location.
@@ -15,7 +16,18 @@ public class Solde_de_tout_compte {
     private BigDecimal caution;  // Montant de la caution à restituer ou à déduire
     private int id_contrat_location;  // Identifiant du contrat de location associé au solde de tout compte
 
-    /**
+    
+    
+    public Solde_de_tout_compte() {}
+
+	public Solde_de_tout_compte(BigDecimal reste_a_devoir, BigDecimal provision_pour_charges, BigDecimal caution) {
+		super();
+		this.reste_a_devoir = reste_a_devoir;
+		this.provision_pour_charges = provision_pour_charges;
+		this.caution = caution;
+	}
+
+	/**
      * Récupère l'identifiant unique du solde de tout compte.
      *
      * @return L'identifiant du solde de tout compte.
@@ -121,4 +133,25 @@ public class Solde_de_tout_compte {
                ", id_contrat_location=" + id_contrat_location +
                '}';
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(caution, id_contrat_location, id_solde_de_tout_compte, provision_pour_charges,
+				reste_a_devoir);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Solde_de_tout_compte other = (Solde_de_tout_compte) obj;
+		return Objects.equals(caution, other.caution) && id_contrat_location == other.id_contrat_location
+				&& id_solde_de_tout_compte == other.id_solde_de_tout_compte
+				&& Objects.equals(provision_pour_charges, other.provision_pour_charges)
+				&& Objects.equals(reste_a_devoir, other.reste_a_devoir);
+	}
 }

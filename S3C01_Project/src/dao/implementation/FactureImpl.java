@@ -1,6 +1,5 @@
 package dao.implementation;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,8 +7,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import dao.FactureDAO;
-import dao.entities.Acte_cautionnement;
 import dao.entities.Facture;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link FactureDAO} pour gérer les opérations sur les entités "Facture".
@@ -47,19 +47,15 @@ public class FactureImpl implements FactureDAO {
             if (result.next()) {
                 return createEntities(result);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();  // Affichage de l'exception pour le débogage
-        } finally {
-            try {
-                // Fermeture des ressources
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        } catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}
+		
+		finally {
+			DatabaseConnection.closeStatement(statement);
+		}
 
-        return null; // Retourner null si aucune facture n'est trouvée
+        return null;
     }
 
     /**
@@ -104,7 +100,7 @@ public class FactureImpl implements FactureDAO {
     }
     
     @Override
-    public void deleteById(Facture entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 
@@ -119,12 +115,10 @@ public class FactureImpl implements FactureDAO {
     public Facture createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture à partir des données du ResultSet
         Facture facture = new Facture();
-        facture.setReference_facture(result.getString("Reference_facture"));
         facture.setType_facture(result.getString("Type_facture"));
         facture.setDate_facture(result.getDate("Date_facture"));
         facture.setMontant_facture(result.getBigDecimal("Montant_facture"));
         facture.setMoyen_paiement(result.getString("Moyen_paiement"));
-        facture.setId_bien(result.getInt("Id_bien"));
         return facture;
     }
 }

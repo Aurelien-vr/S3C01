@@ -109,7 +109,7 @@ public class EnumererImpl implements EnumererDAO {
      * @param reference La référence de facture de l'entité Enumerer à supprimer.
      */
     @Override
-    public void deleteById(Enumerer entity) {
+    public void deleteById(long id) {
         // Implémentation de la suppression de l'entité Enumerer par sa référence de facture
     }
 

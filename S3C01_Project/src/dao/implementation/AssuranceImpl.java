@@ -1,6 +1,5 @@
 package dao.implementation;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -110,7 +109,7 @@ public class AssuranceImpl implements AssuranceDAO {
      * @param id Le numéro de contrat de l'assurance à supprimer.
      */
     @Override
-    public void deleteById(Assurance entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 
@@ -125,11 +124,9 @@ public class AssuranceImpl implements AssuranceDAO {
     public Assurance createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Assurance à partir des données du ResultSet
         Assurance assurance = new Assurance();
-        assurance.setNumero_contrat(result.getInt("numero_contrat"));
-        assurance.setPrime(result.getBigDecimal("prime"));
-        assurance.setTaux_augmentation(result.getBigDecimal("taux_augmentation"));
-        assurance.setProtection_juridique(result.getBigDecimal("protection_juridique"));
-        assurance.setId_bien(result.getInt("id_bien"));
+        assurance.setPrime(result.getBigDecimal("Prime"));
+        assurance.setTaux_augmentation(result.getBigDecimal("Taux_augmentation"));
+        assurance.setProtection_juridique(result.getBigDecimal("Protection_juridique"));
         return assurance; // Retourne l'entité Assurance construite
     }
 }

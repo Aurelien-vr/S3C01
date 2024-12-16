@@ -8,6 +8,7 @@ import java.util.List;
 
 import dao.BienDAO;
 import dao.entities.Bien;
+import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
@@ -50,12 +51,13 @@ public class BienImpl implements BienDAO {
                 return bien;
             } 
         } catch (Exception e) {
-        	ExceptionStorageHandler.LogException(e, connection);
-        } finally {
-            // Le bloc finally est prévu pour fermer les ressources (mais actuellement vide)
-        }
-        
-        return null; // Si aucun bien n'est trouvé, retour de null
+			ExceptionStorageHandler.LogException(e, connection);
+		}
+		
+		finally {
+			DatabaseConnection.closeStatement(statement);
+		}
+		return null;
     }
 
     /**
@@ -69,16 +71,6 @@ public class BienImpl implements BienDAO {
         return null;
     }
 
-    /**
-     * Crée un nouveau bien dans la base de données (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Bien à créer.
-     */
-    @Override
-    public void insert(Bien entity) {
-        // TODO Auto-generated method stub
-    }
-    
 
     /**
      * Met à jour un bien existant dans la base de données (fonctionnalité à implémenter).
@@ -110,10 +102,10 @@ public class BienImpl implements BienDAO {
     /**
      * Supprime un bien par son identifiant (fonctionnalité à implémenter).
      * 
-     * @param entity L'entité Bien à supprimer par ID.
+     * @param id L'entité Bien à supprimer par ID.
      */
     @Override
-    public void deleteById(Bien entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 
@@ -127,18 +119,18 @@ public class BienImpl implements BienDAO {
     @Override
     public Bien createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Bien à partir des données du ResultSet
-        Bien bien = new Bien(result.getInt("Id_Bien"));
+        Bien bien = new Bien();
         
         bien.setEtage(result.getInt(2));
         bien.setAdresse(result.getString(3));
         bien.setVille(result.getString(4));
-        bien.setSuperficie(result.getBigDecimal(5));
-        bien.setNombre_de_piece(result.getInt(6));
-        bien.setMeuble(result.getBoolean(7));
-        bien.setAccesoire_prive(result.getString(8));
-        bien.setAccesoire_commun(result.getString(9));
-        bien.setId_contrat_location(result.getInt(10));
-        bien.setEst_garage(result.getBoolean(11));
+        bien.setCode_postal(result.getString(5));
+        bien.setSuperficie(result.getBigDecimal(6));
+        bien.setNombre_de_piece(result.getInt(7));
+        bien.setMeuble(result.getBoolean(8));
+        bien.setAccessoire_prive(result.getString(9));
+        bien.setAccessoire_commun(result.getString(10));
+        bien.setEst_garage(result.getBoolean(12));
         
         return bien;  // Retourne l'entité Bien construite
     }

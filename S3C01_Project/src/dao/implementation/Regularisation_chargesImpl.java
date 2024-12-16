@@ -1,6 +1,5 @@
 package dao.implementation;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -110,7 +109,7 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
      * @param id L'identifiant du locataire de la régularisation des charges à supprimer.
      */
     @Override
-    public void deleteById(Regularisation_charges entity) {
+    public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
 
@@ -125,7 +124,6 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
     public Regularisation_charges createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Regularisation_charges à partir des données du ResultSet
         Regularisation_charges regularisation = new Regularisation_charges();
-        regularisation.setId_charge_locataire(result.getInt("id_charge_locataire"));
         regularisation.setDate_effet(result.getDate("date_effet"));
         regularisation.setCharge_eau(result.getBigDecimal("charge_eau"));
         regularisation.setCharge_ordure_menagere(result.getBigDecimal("charge_ordure_menagere"));
@@ -133,7 +131,6 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
         regularisation.setProvision_pour_charge(result.getBigDecimal("provision_pour_charge"));
         regularisation.setIndice(result.getBigDecimal("indice"));
         regularisation.setEntretien(result.getString("entretien"));
-        regularisation.setId_contrat_location(result.getInt("id_contrat_location"));
         return regularisation; // Retourne l'entité Regularisation_charges construite
     }
 }
