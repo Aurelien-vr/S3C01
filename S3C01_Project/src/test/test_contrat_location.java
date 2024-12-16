@@ -33,7 +33,6 @@ public class test_contrat_location {
 			new App();
 			connection = DatabaseConnection.getInstance();
 		}
-		System.out.println(connection);
 		contrat_locationDAO = DAOFactory.createContrat_locationDAO();
 		connection.setAutoCommit(false);
 		query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut,Date_fin,Modalite_chauffage,Modalite_eau_chaude_sanitaire,Date_versement) "

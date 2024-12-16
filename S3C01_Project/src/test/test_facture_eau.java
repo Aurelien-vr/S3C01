@@ -2,6 +2,8 @@ package test;
 
 
 import org.junit.*;
+
+import application.App;
 import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
@@ -16,12 +18,17 @@ import exception.ExceptionStorageHandler;
 public class test_facture_eau {
 	
 	private Facture_eauDAO facture_eauDAO;
-	private Connection connection = DatabaseConnection.getInstance();
+	private Connection connection;
 	private Facture_eau facture_eau;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
+		connection = DatabaseConnection.getInstance();
+		if (connection == null) {
+			new App();
+			connection = DatabaseConnection.getInstance();
+		}
 		connection.setAutoCommit(false);
 		facture_eauDAO = DAOFactory.createFacture_eauDAO();
 		PreparedStatement statement = null;

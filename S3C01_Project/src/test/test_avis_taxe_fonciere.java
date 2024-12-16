@@ -2,6 +2,8 @@ package test;
 
 
 import org.junit.*;
+
+import application.App;
 import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
@@ -15,12 +17,17 @@ import exception.ExceptionStorageHandler;
 public class test_avis_taxe_fonciere {
 	
 	private Avis_Taxe_FonciereDAO avis_taxe_fonciereDAO;
-	private Connection connection = DatabaseConnection.getInstance();
+	private Connection connection;
 	private Avis_Taxe_Fonciere avis_taxe_fonciere;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
+		connection = DatabaseConnection.getInstance();
+		if (connection == null) {
+			new App();
+			connection = DatabaseConnection.getInstance();
+		}
 		connection.setAutoCommit(false);
 		avis_taxe_fonciereDAO = DAOFactory.createAvis_Taxe_FonciereDAO();
 		PreparedStatement statement = null;

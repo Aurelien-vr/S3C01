@@ -2,6 +2,8 @@ package test;
 
 
 import org.junit.*;
+
+import application.App;
 import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
@@ -16,12 +18,17 @@ import exception.ExceptionStorageHandler;
 public class test_solde_de_tout_compte {
 	
 	private Solde_de_tout_compteDAO solde_de_tout_compteDAO;
-	private Connection connection = DatabaseConnection.getInstance();
+	private Connection connection;
 	private Solde_de_tout_compte solde_de_tout_compte;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
+		connection = DatabaseConnection.getInstance();
+		if (connection == null) {
+			new App();
+			connection = DatabaseConnection.getInstance();
+		}
 		connection.setAutoCommit(false);
 		solde_de_tout_compteDAO = DAOFactory.createSolde_de_tout_compteDAO();
 		PreparedStatement statement = null;

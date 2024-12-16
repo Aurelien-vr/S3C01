@@ -2,6 +2,8 @@ package test;
 
 
 import org.junit.*;
+
+import application.App;
 import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
@@ -16,12 +18,17 @@ import exception.ExceptionStorageHandler;
 public class test_contrat_colocation {
 	
 	private Contrat_colocationDAO contrat_colocationDAO;
-	private Connection connection = DatabaseConnection.getInstance();
+	private Connection connection;
 	private Contrat_colocation contrat_colocation;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
+		connection = DatabaseConnection.getInstance();
+		if (connection == null) {
+			new App();
+			connection = DatabaseConnection.getInstance();
+		}
 		connection.setAutoCommit(false);
 		contrat_colocationDAO = DAOFactory.createContrat_colocationDAO();
 		PreparedStatement statement = null;

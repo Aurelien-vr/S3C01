@@ -2,6 +2,8 @@ package test;
 
 
 import org.junit.*;
+
+import application.App;
 import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
@@ -15,12 +17,17 @@ import exception.ExceptionStorageHandler;
 public class test_etat_des_lieux {
 	
 	private Etat_des_lieuxDAO etat_des_lieuxDAO;
-	private Connection connection = DatabaseConnection.getInstance();
+	private Connection connection;
 	private Etat_des_lieux etat_des_lieux;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
+		connection = DatabaseConnection.getInstance();
+		if (connection == null) {
+			new App();
+			connection = DatabaseConnection.getInstance();
+		}
 		connection.setAutoCommit(false);
 		etat_des_lieuxDAO = DAOFactory.createEtat_des_lieuxDAO();
 		PreparedStatement statement = null;

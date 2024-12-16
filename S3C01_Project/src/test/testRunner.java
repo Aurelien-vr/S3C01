@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
 	test_bien.class,
 	test_contrat_colocation.class,
 	test_contrat_location.class,
-    	test_declaration_revenu.class,
+    test_declaration_revenu.class,
 	test_etat_des_lieux.class,
 	test_facture_eau.class,
 	test_facture_electricite.class,

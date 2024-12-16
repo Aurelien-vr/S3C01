@@ -2,6 +2,8 @@ package test;
 
 
 import org.junit.*;
+
+import application.App;
 import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
@@ -15,12 +17,17 @@ import exception.ExceptionStorageHandler;
 public class test_locataire {
 	
 	private LocataireDAO locataireDAO;
-	private Connection connection = DatabaseConnection.getInstance();
+	private Connection connection;
 	private Locataire locataire;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
+		connection = DatabaseConnection.getInstance();
+		if (connection == null) {
+			new App();
+			connection = DatabaseConnection.getInstance();
+		}
 		connection.setAutoCommit(false);
 		locataireDAO = DAOFactory.createLocataireDAO();
 		PreparedStatement statement = null;

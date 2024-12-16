@@ -2,6 +2,8 @@ package test;
 
 
 import org.junit.*;
+
+import application.App;
 import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
@@ -16,12 +18,17 @@ import exception.ExceptionStorageHandler;
 public class test_declaration_revenu {
 	
 	private Declaration_revenuDAO declaration_revenuDAO;
-	private Connection connection = DatabaseConnection.getInstance();
+	private Connection connection;
 	private Declaration_revenu declaration_revenu;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
+		connection = DatabaseConnection.getInstance();
+		if (connection == null) {
+			new App();
+			connection = DatabaseConnection.getInstance();
+		}
 		connection.setAutoCommit(false);
 		declaration_revenuDAO = DAOFactory.createDeclaration_revenuDAO();
 		PreparedStatement statement = null;

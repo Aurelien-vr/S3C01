@@ -2,6 +2,8 @@ package test;
 
 
 import org.junit.*;
+
+import application.App;
 import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
@@ -16,12 +18,17 @@ import exception.ExceptionStorageHandler;
 public class test_regularisation_charges {
 	
 	private Regularisation_chargesDAO regularisation_chargesDAO;
-	private Connection connection = DatabaseConnection.getInstance();
+	private Connection connection;
 	private Regularisation_charges regularisation_charges;
 	int idInsertSetup;
 	
 	@Before
 	public void setUp() throws Exception {
+		connection = DatabaseConnection.getInstance();
+		if (connection == null) {
+			new App();
+			connection = DatabaseConnection.getInstance();
+		}
 		connection.setAutoCommit(false);
 		regularisation_chargesDAO = DAOFactory.createRegularisation_chargesDAO();
 		PreparedStatement statement = null;
