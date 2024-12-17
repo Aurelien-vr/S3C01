@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.Facture_eauDAO;
 import dao.entities.Facture_eau;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Facture_eauDAO} pour gérer les opérations sur les entités "Facture_eau".
@@ -93,15 +95,7 @@ public class Facture_eauImpl implements Facture_eauDAO {
         // Implémentation de la mise à jour de l'entité Facture_eau dans la base
     }
 
-    /**
-     * Supprime une entité Facture_eau de la base de données.
-     *
-     * @param entity L'entité Facture_eau à supprimer.
-     */
-    @Override
-    public void delete(Facture_eau entity) {
-        // Implémentation de la suppression de l'entité Facture_eau de la base
-    }
+    
 
     /**
      * Supprime une entité Facture_eau par son identifiant.
@@ -110,7 +104,19 @@ public class Facture_eauImpl implements Facture_eauDAO {
      */
     @Override
     public void deleteById(long id) {
-        // Implémentation de la suppression de l'entité Facture_eau par son identifiant
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Facture_eau WHERE id_facture_eau = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

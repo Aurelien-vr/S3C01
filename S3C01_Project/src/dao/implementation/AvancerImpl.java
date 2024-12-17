@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.AvancerDAO;
 import dao.entities.Avancer;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link AvancerDAO} pour gérer les opérations sur les entités "Avancer".
@@ -93,15 +95,6 @@ public class AvancerImpl implements AvancerDAO {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Supprime une avance de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Avancer à supprimer.
-     */
-    @Override
-    public void delete(Avancer entity) {
-        // TODO Auto-generated method stub
-    }
 
     /**
      * Supprime une avance par l'identifiant du locataire (fonctionnalité à implémenter).
@@ -110,7 +103,19 @@ public class AvancerImpl implements AvancerDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Avancer WHERE id_locataire = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

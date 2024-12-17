@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.EnumererDAO;
 import dao.entities.Enumerer;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link EnumererDAO} pour gérer les opérations sur les entités "Enumerer".
@@ -93,15 +95,6 @@ public class EnumererImpl implements EnumererDAO {
         // Implémentation de la mise à jour de l'entité Enumerer dans la base
     }
 
-    /**
-     * Supprime une entité Enumerer de la base de données.
-     *
-     * @param entity L'entité Enumerer à supprimer.
-     */
-    @Override
-    public void delete(Enumerer entity) {
-        // Implémentation de la suppression de l'entité Enumerer de la base
-    }
 
     /**
      * Supprime une entité Enumerer par sa référence de facture.
@@ -110,7 +103,19 @@ public class EnumererImpl implements EnumererDAO {
      */
     @Override
     public void deleteById(long id) {
-        // Implémentation de la suppression de l'entité Enumerer par sa référence de facture
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Enumerer WHERE reference_facture = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

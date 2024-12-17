@@ -89,7 +89,19 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 
 	@Override
 	public void deleteById(long id) {
-		
+		PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Contrat_location WHERE Id_Contrat_location = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
 		
 	}
 	
@@ -128,16 +140,5 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
     public void update(Contrat_location entity) {
         // TODO Auto-generated method stub
     }
-
-    /**
-     * Supprime un contrat de location de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Contrat_location à supprimer.
-     */
-    @Override
-    public void delete(Contrat_location entity) {
-        // TODO Auto-generated method stub
-    }
-
 
 }

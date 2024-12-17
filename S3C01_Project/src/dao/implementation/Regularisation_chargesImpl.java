@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.Regularisation_chargesDAO;
 import dao.entities.Regularisation_charges;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Regularisation_chargesDAO} pour gérer les opérations sur les entités "Regularisation_charges".
@@ -94,23 +96,25 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
     }
 
     /**
-     * Supprime une régularisation des charges de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Regularisation_charges à supprimer.
-     */
-    @Override
-    public void delete(Regularisation_charges entity) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
      * Supprime une régularisation des charges par l'identifiant du locataire (fonctionnalité à implémenter).
      *
      * @param id L'identifiant du locataire de la régularisation des charges à supprimer.
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Regularisation_charges WHERE id_charge_locataire = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

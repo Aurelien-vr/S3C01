@@ -8,7 +8,6 @@ import java.util.List;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 import dao.BienDAO;
 import dao.entities.Bien;
 import dbConnection.DatabaseConnection;
@@ -102,13 +101,20 @@ public class BienImpl implements BienDAO {
      */
     @Override
     public void deleteById(long id) {
-    	// TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Bien WHERE Id_Bien = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     	
-    }
-    
-    @Override
-    public void delete(Bien entity) {
-        // TODO Auto-generated method stub
     }
     
 	@Override

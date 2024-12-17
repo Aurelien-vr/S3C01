@@ -9,6 +9,8 @@ import java.util.List;
 
 import dao.Declaration_revenuDAO;
 import dao.entities.Declaration_revenu;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Declaration_revenuDAO} pour gérer les opérations sur les entités "Declaration_revenu".
@@ -91,15 +93,6 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Supprime une déclaration de revenu de la base de données (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Declaration_revenu à supprimer.
-     */
-    @Override
-    public void delete(Declaration_revenu entity) {
-        // TODO Auto-generated method stub
-    }
 
     /**
      * Supprime une déclaration de revenu par son identifiant (fonctionnalité à implémenter).
@@ -108,7 +101,19 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Declaration_revenu WHERE id_declaration_revenu = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

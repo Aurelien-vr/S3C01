@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.AssuranceDAO;
 import dao.entities.Assurance;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link AssuranceDAO} pour gérer les opérations sur les entités "Assurance".
@@ -94,23 +96,25 @@ public class AssuranceImpl implements AssuranceDAO {
     }
 
     /**
-     * Supprime une assurance de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Assurance à supprimer.
-     */
-    @Override
-    public void delete(Assurance entity) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
      * Supprime une assurance par son numéro de contrat (fonctionnalité à implémenter).
      *
      * @param id Le numéro de contrat de l'assurance à supprimer.
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Assurance WHERE numero_contrat = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

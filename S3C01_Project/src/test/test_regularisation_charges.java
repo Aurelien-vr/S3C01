@@ -33,7 +33,7 @@ public class test_regularisation_charges {
 		regularisation_chargesDAO = DAOFactory.createRegularisation_chargesDAO();
 		PreparedStatement statement = null;
 		String query = "INSERT INTO db1_sae.Regularisation_charges(date_effet, charge_eau, charge_ordure_menagere, charge_eclairage, provision_pour_charge, indice, entretien) "
-				+ " VALUES('2023-09-08', 33, 33,33,33,33, 'Bien')";
+				+ " VALUES('2023-09-08', 33, 33,33,333,33, 'Bien')";
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		if(statement.executeUpdate()>0) {
@@ -47,7 +47,7 @@ public class test_regularisation_charges {
 			ExceptionStorageHandler.LogException(e, connection);
 		}
 	
-	regularisation_charges = new Regularisation_charges(Date.valueOf("2023-09-08"), new BigDecimal(33).setScale(2, RoundingMode.DOWN), new BigDecimal(33).setScale(2, RoundingMode.DOWN),new BigDecimal(33).setScale(2, RoundingMode.DOWN),new BigDecimal(33).setScale(2, RoundingMode.DOWN),new BigDecimal(33).setScale(2, RoundingMode.DOWN), "Bien");
+	regularisation_charges = new Regularisation_charges(Date.valueOf("2023-09-08"), new BigDecimal(33).setScale(2, RoundingMode.DOWN), new BigDecimal(33).setScale(2, RoundingMode.DOWN),new BigDecimal(33).setScale(2, RoundingMode.DOWN),new BigDecimal(333).setScale(2, RoundingMode.DOWN),new BigDecimal(33).setScale(2, RoundingMode.DOWN), "Bien");
 	
 	}
 	

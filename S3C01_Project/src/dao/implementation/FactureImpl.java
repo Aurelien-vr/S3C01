@@ -88,20 +88,22 @@ public class FactureImpl implements FactureDAO {
     public void update(Facture entity) {
         // TODO Auto-generated method stub
     }
-
-    /**
-     * Supprime une facture de la base de données (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Facture à supprimer.
-     */
-    @Override
-    public void delete(Facture entity) {
-        // TODO Auto-generated method stub
-    }
     
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Facture WHERE Reference_facture = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

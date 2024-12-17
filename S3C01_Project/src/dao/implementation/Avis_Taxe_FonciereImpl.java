@@ -93,15 +93,6 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Supprime un avis de taxe foncière de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Avis_Taxe_Fonciere à supprimer.
-     */
-    @Override
-    public void delete(Avis_Taxe_Fonciere entity) {
-        // TODO Auto-generated method stub
-    }
 
     /**
      * Supprime un avis de taxe foncière par son numéro fiscal (fonctionnalité à implémenter).
@@ -110,7 +101,19 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Avis_Taxe_Fonciere WHERE numero_fiscal = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

@@ -9,6 +9,8 @@ import java.util.List;
 
 import dao.TravauxDAO;
 import dao.entities.Travaux;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link TravauxDAO} pour gérer les opérations sur les entités "Travaux".
@@ -95,23 +97,25 @@ public class TravauxImpl implements TravauxDAO {
     }
 
     /**
-     * Supprime un travail de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Travaux à supprimer.
-     */
-    @Override
-    public void delete(Travaux entity) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
      * Supprime un travail par le numéro de facture (fonctionnalité à implémenter).
      *
      * @param numeroFacture Le numéro de la facture du travail à supprimer.
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Travaux WHERE Numero_facture = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

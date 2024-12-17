@@ -46,13 +46,6 @@ public interface DAO<T> {
      *
      * @param entity L'entité à supprimer.
      */
-    void delete(T entity);
-
-    /**
-     * Supprime une entité en utilisant son identifiant unique.
-     *
-     * @param id L'entité à supprimer, identifié par son ID.
-     */
     void deleteById(long id);
 
     /**

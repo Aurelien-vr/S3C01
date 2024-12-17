@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.LocataireDAO;
 import dao.entities.Locataire;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link LocataireDAO} pour gérer les opérations sur les entités "Locataire".
@@ -94,23 +96,25 @@ public class LocataireImpl implements LocataireDAO {
     }
 
     /**
-     * Supprime un locataire de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Locataire à supprimer.
-     */
-    @Override
-    public void delete(Locataire entity) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
      * Supprime un locataire par son identifiant (fonctionnalité à implémenter).
      *
      * @param id L'identifiant du locataire à supprimer.
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Locataire WHERE Id_Locataire = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.Solde_de_tout_compteDAO;
 import dao.entities.Solde_de_tout_compte;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Solde_de_tout_compteDAO} pour gérer les opérations sur les entités "Solde_de_tout_compte".
@@ -94,23 +96,25 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
     }
 
     /**
-     * Supprime un solde de tout compte de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Solde_de_tout_compte à supprimer.
-     */
-    @Override
-    public void delete(Solde_de_tout_compte entity) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
      * Supprime un solde de tout compte par l'identifiant du locataire (fonctionnalité à implémenter).
      *
      * @param id L'identifiant du locataire de la régularisation des charges à supprimer.
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Solde_de_tout_compte WHERE Id_Solde_de_tout_compte = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

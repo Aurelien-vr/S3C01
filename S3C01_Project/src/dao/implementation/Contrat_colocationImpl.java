@@ -90,30 +90,6 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Supprime un contrat de colocation de la base de données.
-     *
-     * @param entity L'entité Contrat_colocation à supprimer.
-     */
-    @Override
-    public void delete(Contrat_colocation entity) {
-        PreparedStatement statement = null;
-        String query = "DELETE FROM db1_sae.Contrat_colocation WHERE id_contrat_colocation = ?";
-
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setInt(1, entity.getId_contrat_colocation());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     /**
      * Supprime un contrat de colocation par son entité.
@@ -122,7 +98,19 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
      */
     @Override
     public void deleteById(long id) {
-    	
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Contrat_colocation WHERE id_contrat_colocation = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

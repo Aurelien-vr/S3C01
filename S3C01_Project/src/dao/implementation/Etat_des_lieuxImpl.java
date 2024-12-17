@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.Etat_des_lieuxDAO;
 import dao.entities.Etat_des_lieux;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Etat_des_lieuxDAO} pour gérer les opérations sur les entités "Etat_des_lieux".
@@ -93,15 +95,6 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
         // Implémentation de la mise à jour de l'entité Etat_des_lieux dans la base
     }
 
-    /**
-     * Supprime une entité Etat_des_lieux de la base de données.
-     *
-     * @param entity L'entité Etat_des_lieux à supprimer.
-     */
-    @Override
-    public void delete(Etat_des_lieux entity) {
-        // Implémentation de la suppression de l'entité Etat_des_lieux de la base
-    }
 
     /**
      * Supprime une entité Etat_des_lieux par son identifiant.
@@ -110,7 +103,20 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
      */
     @Override
     public void deleteById(long id) {
-        // Implémentation de la suppression de l'entité Etat_des_lieux par son identifiant
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Etat_des_lieux WHERE id_etat_des_lieux = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
+        
     }
 
     /**

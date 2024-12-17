@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.Facture_electriciteDAO;
 import dao.entities.Facture_electricite;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Facture_electriciteDAO} pour gérer les opérations sur les entités "Facture_electricite".
@@ -93,15 +95,6 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
         // Implémentation de la mise à jour de l'entité Facture_electricite dans la base
     }
 
-    /**
-     * Supprime une entité Facture_electricite de la base de données.
-     *
-     * @param entity L'entité Facture_electricite à supprimer.
-     */
-    @Override
-    public void delete(Facture_electricite entity) {
-        // Implémentation de la suppression de l'entité Facture_electricite de la base
-    }
 
     /**
      * Supprime une entité Facture_electricite par son identifiant.
@@ -110,7 +103,19 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      */
     @Override
     public void deleteById(long id) {
-        // Implémentation de la suppression de l'entité Facture_electricite par son identifiant
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Facture_electricite WHERE id_facture_electricite = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

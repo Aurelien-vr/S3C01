@@ -8,6 +8,8 @@ import java.util.List;
 
 import dao.Acte_cautionnementDAO;
 import dao.entities.Acte_cautionnement;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link ActeCautionnementDAO} pour gérer les opérations sur les entités "Acte_cautionnement".
@@ -93,15 +95,6 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Supprime un acte de cautionnement de la base de données (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Acte_cautionnement à supprimer.
-     */
-    @Override
-    public void delete(Acte_cautionnement entity) {
-        // TODO Auto-generated method stub
-    }
 
     /**
      * Supprime un acte de cautionnement par son identifiant (fonctionnalité à implémenter).
@@ -110,7 +103,19 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Acte_cautionnement WHERE Id_Acte_cautionnement = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**
