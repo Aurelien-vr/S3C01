@@ -82,7 +82,28 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
      */
     @Override
     public void insert(Regularisation_charges entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Regularisation_charges(date_effet, charge_eau, charge_ordure_menagere, charge_eclairage, provision_pour_charge, indice, entretien) VALUES (?,?,?,?,?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+   			statement.setDate(1,entity.getDate_effet());
+    		statement.setBigDecimal(2, entity.getCharge_eau());
+    		statement.setBigDecimal(3, entity.getCharge_ordure_menagere());
+    		statement.setBigDecimal(4, entity.getCharge_eclairage());
+    		statement.setBigDecimal(5, entity.getProvision_pour_charge());
+    		statement.setBigDecimal(6, entity.getIndice());
+    		statement.setString(7, entity.getEntretien());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

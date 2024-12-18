@@ -67,8 +67,11 @@ public class test_assurance {
 
 	@Test
 	public void testInsert() {
-	    assuranceDAO.insert(assurance);
-	    assertEquals(assurance, assuranceDAO.findOne(idInsertSetup));
+		Assurance ass = new Assurance(new BigDecimal(20).setScale(2, RoundingMode.DOWN), 
+					                new BigDecimal(4.3).setScale(2, RoundingMode.DOWN), 
+					                new BigDecimal(1).setScale(2, RoundingMode.DOWN));
+	    assuranceDAO.insert(ass);
+	    assertEquals(ass, assuranceDAO.findOne(idInsertSetup+1));
 	}
 
 	@Test

@@ -82,7 +82,23 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      */
     @Override
     public void insert(Facture_electricite entity) {
-        // Implémentation de l'insertion de l'entité Facture_electricite dans la base
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Facture_electricite(compteur_electricite, prix_kw_electricite)  VALUES (?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setBigDecimal(1, entity.getCompteur_electricite());
+    		statement.setString(2, entity.getPrix_kw_electricite());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

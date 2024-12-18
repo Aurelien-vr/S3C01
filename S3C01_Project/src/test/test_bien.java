@@ -67,8 +67,9 @@ public class test_bien {
 	
 	@Test
 	public void testInsert() {
-		bienDAO.insert(bien);
-		assertEquals(bien, bienDAO.findOne(idInsertSetup));
+		Bien bi = new Bien(2, "13 rue du treize", "Toulouse", "31000", new BigDecimal(400).setScale(2, RoundingMode.DOWN), 7, false, "armoire, lit", "douche, cuisine", true);
+		bienDAO.insert(bi);
+		assertEquals(bi, bienDAO.findOne(idInsertSetup+1));
 
 	}
 	

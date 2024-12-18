@@ -65,8 +65,9 @@ public class test_facture_electricite {
 	
 	@Test
 	public void testInsert() {
-		facture_electriciteDAO.insert(facture_electricite);
-		assertEquals(facture_electricite, facture_electriciteDAO.findOne(idInsertSetup));
+		Facture_electricite elec = new Facture_electricite(new BigDecimal(50).setScale(2, RoundingMode.DOWN),"12/kw");
+		facture_electriciteDAO.insert(elec);
+		assertEquals(elec, facture_electriciteDAO.findOne(idInsertSetup+1));
 
 	}
 	

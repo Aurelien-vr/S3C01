@@ -66,8 +66,9 @@ public class test_avis_taxe_fonciere {
 	
 	@Test
 	public void testInsert() {
-		avis_taxe_fonciereDAO.insert(avis_taxe_fonciere);
-		assertEquals(avis_taxe_fonciere, avis_taxe_fonciereDAO.findOne(idInsertSetup));
+		Avis_Taxe_Fonciere taxe = new Avis_Taxe_Fonciere(Date.valueOf("2019-10-09"),"Coucou and co",15);
+		avis_taxe_fonciereDAO.insert(taxe);
+		assertEquals(taxe, avis_taxe_fonciereDAO.findOne(idInsertSetup+1));
 
 	}
 	

@@ -65,8 +65,9 @@ public class test_regularisation_charges {
 	
 	@Test
 	public void testInsert() {
-		regularisation_chargesDAO.insert(regularisation_charges);
-		assertEquals(regularisation_charges, regularisation_chargesDAO.findOne(idInsertSetup));
+		Regularisation_charges charge = new Regularisation_charges(Date.valueOf("2024-09-18"), new BigDecimal(50).setScale(2, RoundingMode.DOWN), new BigDecimal(50).setScale(2, RoundingMode.DOWN),new BigDecimal(50).setScale(2, RoundingMode.DOWN),new BigDecimal(900).setScale(2, RoundingMode.DOWN),new BigDecimal(50).setScale(2, RoundingMode.DOWN), "Nul");
+		regularisation_chargesDAO.insert(charge);
+		assertEquals(charge, regularisation_chargesDAO.findOne(idInsertSetup+1));
 
 	}
 	

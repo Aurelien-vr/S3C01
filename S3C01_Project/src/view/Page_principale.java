@@ -25,7 +25,7 @@ import java.util.List;
 import java.awt.Component;
 
 
-public class Page_principale extends windowSkeleton{
+public class Page_principale extends WindowSkeleton{
 
 	private static final long serialVersionUID = 1L;
 

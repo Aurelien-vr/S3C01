@@ -82,7 +82,23 @@ public class Facture_gazImpl implements Facture_gazDAO {
      */
     @Override
     public void insert(Facture_gaz entity) {
-        // Implémentation de l'insertion de l'entité Facture_gaz dans la base
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Facture_gaz(consommation_m3, prix_m3_gaz)  VALUES (?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setBigDecimal(1, entity.getConsommation_m3());
+    		statement.setString(2, entity.getPrix_m3_gaz());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

@@ -1,7 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 /**
@@ -22,8 +22,9 @@ public class Facture {
     
     public Facture() {}
 
-	public Facture(String type_facture, Date date_facture, BigDecimal montant_facture, String moyen_paiement) {
+	public Facture(String reference_facture, String type_facture, Date date_facture, BigDecimal montant_facture, String moyen_paiement) {
 		super();
+		this.reference_facture = reference_facture;
 		this.type_facture = type_facture;
 		this.date_facture = date_facture;
 		this.montant_facture = montant_facture;

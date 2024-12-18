@@ -77,7 +77,24 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
      */
     @Override
     public void insert(Contrat_colocation entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Contrat_colocation(clause_solidarite, part_des_charges)  VALUES (?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setBoolean(1, entity.isClause_solidarite());
+    		statement.setBigDecimal(2, entity.getPart_des_charges());
+    		
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

@@ -65,8 +65,9 @@ public class test_contrat_colocation {
 	
 	@Test
 	public void testInsert() {
-		contrat_colocationDAO.insert(contrat_colocation);
-		assertEquals(contrat_colocation, contrat_colocationDAO.findOne(idInsertSetup));
+		Contrat_colocation coloc = new Contrat_colocation(true,new BigDecimal(500).setScale(2, RoundingMode.DOWN));
+		contrat_colocationDAO.insert(coloc);
+		assertEquals(coloc, contrat_colocationDAO.findOne(idInsertSetup+1));
 
 	}
 	

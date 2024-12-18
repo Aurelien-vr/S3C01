@@ -82,7 +82,24 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
      */
     @Override
     public void insert(Solde_de_tout_compte entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Solde_de_tout_compte(reste_a_devoir, provision_pour_charges, caution) VALUES (?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+   			statement.setBigDecimal(1,entity.getReste_a_devoir());
+    		statement.setBigDecimal(2, entity.getProvision_pour_charges());
+    		statement.setBigDecimal(3, entity.getCaution());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

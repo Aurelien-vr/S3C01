@@ -82,7 +82,25 @@ public class LocataireImpl implements LocataireDAO {
      */
     @Override
     public void insert(Locataire entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Locataire(nom, prenom, date_de_naissance ,iban) VALUES (?,?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+   			statement.setString(1,entity.getNom());
+    		statement.setString(2, entity.getPrenom());
+    		statement.setDate(3, entity.getDate_de_naissance());
+    		statement.setString(4, entity.getIban());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

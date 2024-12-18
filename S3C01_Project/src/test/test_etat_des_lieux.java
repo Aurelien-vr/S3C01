@@ -9,7 +9,6 @@ import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-
 import java.sql.*;
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
@@ -64,8 +63,9 @@ public class test_etat_des_lieux {
 	
 	@Test
 	public void testInsert() {
-		etat_des_lieuxDAO.insert(etat_des_lieux);
-		assertEquals(etat_des_lieux, etat_des_lieuxDAO.findOne(idInsertSetup));
+		Etat_des_lieux edl = new Etat_des_lieux(Date.valueOf("2023-12-06"),4, "Bien",false);
+		etat_des_lieuxDAO.insert(edl);
+		assertEquals(edl, etat_des_lieuxDAO.findOne(idInsertSetup+1));
 
 	}
 	

@@ -80,7 +80,25 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
      */
     @Override
     public void insert(Avis_Taxe_Fonciere entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Avis_Taxe_Fonciere(date_etablissement, debiteur_legaux,total_cotisation) VALUES (?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setDate(1, entity.getDate_etablissement());
+    		statement.setString(2, entity.getDebiteur_legaux());
+    		statement.setDouble(3,  entity.getTotal_cotisation());
+    		
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

@@ -69,8 +69,10 @@ public class test_contrat_location {
 	
 	@Test
 	public void testInsert() {
-		contrat_locationDAO.insert(contrat_location);
-		assertEquals(contrat_location, contrat_locationDAO.findOne(idInsertSetup));
+		Contrat_location cont_loc = new Contrat_location(12,Date.valueOf("2023-4-7"), Date.valueOf("2024-4-7"),
+				"DPE=A, et autre truc", "chaudiere de 2024",Date.valueOf("1000-05-01"));
+		contrat_locationDAO.insert(cont_loc);
+		assertEquals(cont_loc, contrat_locationDAO.findOne(idInsertSetup+1));
 	}
 	
 	@Test

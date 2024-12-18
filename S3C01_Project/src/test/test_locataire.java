@@ -9,7 +9,6 @@ import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-
 import java.sql.*;
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
@@ -64,8 +63,9 @@ public class test_locataire {
 	
 	@Test
 	public void testInsert() {
-		locataireDAO.insert(locataire);
-		assertEquals(locataire, locataireDAO.findOne(idInsertSetup));
+		Locataire loc = new Locataire("Vincent-Randonnier", "Aurelien", Date.valueOf("2004-11-03"), "0987654321");
+		locataireDAO.insert(loc);
+		assertEquals(loc, locataireDAO.findOne(idInsertSetup+1));
 
 	}
 	

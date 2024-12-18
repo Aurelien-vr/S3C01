@@ -80,7 +80,25 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      */
     @Override
     public void insert(Declaration_revenu entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Declaration_revenu(date_acquisition, locataires, recette_immeuble)  VALUES (?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setDate(1, entity.getDate_acquisition());
+    		statement.setInt(2, entity.getLocataires());
+    		statement.setBigDecimal(3, entity.getRecette_immeuble());
+    		
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
     
     /**

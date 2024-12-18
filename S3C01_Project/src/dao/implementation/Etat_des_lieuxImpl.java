@@ -82,7 +82,26 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
      */
     @Override
     public void insert(Etat_des_lieux entity) {
-        // Implémentation de l'insertion de l'entité Etat_des_lieux dans la base
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Etat_des_lieux(date_signature, nombre_cles, etats_des_element, est_entrer)  VALUES (?,?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setDate(1, entity.getDate_signature());
+    		statement.setInt(2, entity.getNombre_cles());
+    		statement.setString(3, entity.getEtat_des_elements());
+    		statement.setBoolean(4, entity.isEst_entrer());
+    		
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

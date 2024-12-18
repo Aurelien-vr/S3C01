@@ -1,7 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 /**

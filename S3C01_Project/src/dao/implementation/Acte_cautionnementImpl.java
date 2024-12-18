@@ -82,7 +82,22 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      */
     @Override
     public void insert(Acte_cautionnement entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Acte_cautionnement(montant_caution) VALUES (?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setBigDecimal(1, entity.getMontant_caution());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
     
     /**

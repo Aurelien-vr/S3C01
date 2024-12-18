@@ -76,7 +76,26 @@ public class FactureImpl implements FactureDAO {
      */
     @Override
     public void insert(Facture entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Facture(reference_facture, type_facture , date_facture , montant_facture, moyen_paiement) VALUES (?,?,?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+   			statement.setString(1,entity.getReference_facture());
+    		statement.setString(2, entity.getType_facture());
+    		statement.setDate(3, entity.getDate_facture());
+    		statement.setBigDecimal(4, entity.getMontant_facture());
+    		statement.setString(5, entity.getMoyen_paiement());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**
@@ -117,6 +136,7 @@ public class FactureImpl implements FactureDAO {
     public Facture createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture à partir des données du ResultSet
         Facture facture = new Facture();
+        facture.setReference_facture(result.getString("Reference_facture"));
         facture.setType_facture(result.getString("Type_facture"));
         facture.setDate_facture(result.getDate("Date_facture"));
         facture.setMontant_facture(result.getBigDecimal("Montant_facture"));

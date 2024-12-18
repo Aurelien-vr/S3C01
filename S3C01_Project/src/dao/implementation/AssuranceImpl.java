@@ -82,7 +82,24 @@ public class AssuranceImpl implements AssuranceDAO {
      */
     @Override
     public void insert(Assurance entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+		String query = "INSERT INTO db1_sae.Assurance(prime, taux_augmentation, protection_juridique) VALUES (?,?,?)";
+		
+		try {
+			statement = connection.prepareStatement(query);
+			statement.setBigDecimal(1, entity.getPrime());
+			statement.setBigDecimal(2, entity.getTaux_augmentation());
+			statement.setBigDecimal(3,entity.getProtection_juridique());
+			
+			
+			if(statement.executeUpdate()>0) {
+				System.out.println("User inserted");
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeStatement(statement);
+		}
     }
 
     /**

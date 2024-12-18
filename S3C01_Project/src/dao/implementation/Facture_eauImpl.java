@@ -82,7 +82,23 @@ public class Facture_eauImpl implements Facture_eauDAO {
      */
     @Override
     public void insert(Facture_eau entity) {
-        // Implémentation de l'insertion de l'entité Facture_eau dans la base
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Facture_eau(partie_fixe, consommation)  VALUES (?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setBigDecimal(1, entity.getPartie_fixe());
+    		statement.setBigDecimal(2, entity.getConsommation());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

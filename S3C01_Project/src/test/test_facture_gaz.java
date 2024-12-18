@@ -65,8 +65,9 @@ public class test_facture_gaz {
 	
 	@Test
 	public void testInsert() {
-		facture_gazDAO.insert(facture_gaz);
-		assertEquals(facture_gaz, facture_gazDAO.findOne(idInsertSetup));
+		Facture_gaz gaz = new Facture_gaz(new BigDecimal(50).setScale(2, RoundingMode.DOWN),"12/m3");
+		facture_gazDAO.insert(gaz);
+		assertEquals(gaz, facture_gazDAO.findOne(idInsertSetup+1));
 
 	}
 	

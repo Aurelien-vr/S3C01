@@ -56,12 +56,17 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 	@Override
 	public void insert(Contrat_location entity) {
 		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut) VALUES (?,?);";
+		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut, Date_fin,Modalite_chauffage, Modalite_eau_chaude_sanitaire, Date_versement) VALUES (?,?,?,?,?,?)";
 		
 		try {
 			statement = connection.prepareStatement(query);
 			statement.setInt(1, entity.getMontant_loyer());
 			statement.setDate(2, entity.getDate_debut());
+			statement.setDate(3,entity.getDate_fin());
+			statement.setString(4, entity.getModalite_chauffage());
+			statement.setString(5, entity.getModalite_eau_chaude_saniatire());
+			statement.setDate(6, entity.getDate_versement());
+			
 			
 			if(statement.executeUpdate()>0) {
 				System.out.println("User inserted");

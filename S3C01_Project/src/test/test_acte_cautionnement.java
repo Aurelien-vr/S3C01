@@ -65,8 +65,9 @@ public class test_acte_cautionnement {
 	
 	@Test
 	public void testInsert() {
-		acte_cautionnementDAO.insert(acte_cautionnement);
-		assertEquals(acte_cautionnement, acte_cautionnementDAO.findOne(idInsertSetup));
+		Acte_cautionnement acte = new Acte_cautionnement(new BigDecimal(20).setScale(2, RoundingMode.DOWN));
+				acte_cautionnementDAO.insert(acte);
+				assertEquals(acte, acte_cautionnementDAO.findOne(idInsertSetup+1));
 
 	}
 	

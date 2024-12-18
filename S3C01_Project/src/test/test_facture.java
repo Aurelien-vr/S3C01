@@ -32,8 +32,8 @@ public class test_facture {
 		connection.setAutoCommit(false);
 		factureDAO = DAOFactory.createFactureDAO();
 		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Facture(type_facture , date_facture , montant_facture, moyen_paiement) "
-				+ " VALUES('Payante', '2024-12-12', 50, 'Cheque')";
+		String query = "INSERT INTO db1_sae.Facture(reference_facture, type_facture , date_facture , montant_facture, moyen_paiement) "
+				+ " VALUES('12345','Payante', '2024-12-12', 50, 'Cheque')";
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		if(statement.executeUpdate()>0) {
@@ -47,7 +47,7 @@ public class test_facture {
 			ExceptionStorageHandler.LogException(e, connection);
 		}
 	
-	facture = new Facture("Payante", Date.valueOf("2024-12-12"), new BigDecimal(50).setScale(2, RoundingMode.DOWN), "Cheque");
+	facture = new Facture("12345","Payante", Date.valueOf("2024-12-12"), new BigDecimal(50).setScale(2, RoundingMode.DOWN), "Cheque");
 	
 	}
 	
@@ -60,13 +60,14 @@ public class test_facture {
 	
 	@Test
 	public void testFindOne() {
-		assertEquals(factureDAO.findOne(idInsertSetup),facture); 
+		assertEquals(factureDAO.findOne(12345),facture); 
 	}
 	
 	@Test
 	public void testInsert() {
-		factureDAO.insert(facture);
-		assertEquals(facture, factureDAO.findOne(idInsertSetup));
+		Facture fact = new Facture("12346","Gratuite", Date.valueOf("2014-12-12"), new BigDecimal(500).setScale(2, RoundingMode.DOWN), "Espece");
+		factureDAO.insert(fact);
+		assertEquals(fact, factureDAO.findOne(12346));
 
 	}
 	

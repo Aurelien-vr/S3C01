@@ -67,8 +67,9 @@ public class test_travaux {
 	
 	@Test
 	public void testInsert() {
-		travauxDAO.insert(travaux);
-		assertEquals(travaux, travauxDAO.findOne(idInsertSetup));
+		Travaux tra = new Travaux(Date.valueOf("2024-09-09"), "Tres bien", "09456543210",new BigDecimal(73).setScale(2, RoundingMode.DOWN), new BigDecimal(55).setScale(2, RoundingMode.DOWN), new BigDecimal(50).setScale(2, RoundingMode.DOWN), new BigDecimal(7).setScale(2, RoundingMode.DOWN));
+		travauxDAO.insert(tra);
+		assertEquals(tra, travauxDAO.findOne(idInsertSetup+1));
 
 	}
 	

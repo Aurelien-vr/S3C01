@@ -65,8 +65,9 @@ public class test_declaration_revenu {
 	
 	@Test
 	public void testInsert() {
-		declaration_revenuDAO.insert(declaration_revenu);
-		assertEquals(declaration_revenu, declaration_revenuDAO.findOne(idInsertSetup));
+		Declaration_revenu decla = new Declaration_revenu(Date.valueOf("2018-07-14"),3,new BigDecimal(605).setScale(2, RoundingMode.DOWN));
+		declaration_revenuDAO.insert(decla);
+		assertEquals(decla, declaration_revenuDAO.findOne(idInsertSetup+1));
 
 	}
 	

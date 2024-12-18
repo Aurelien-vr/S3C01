@@ -65,8 +65,9 @@ public class test_facture_eau {
 	
 	@Test
 	public void testInsert() {
-		facture_eauDAO.insert(facture_eau);
-		assertEquals(facture_eau, facture_eauDAO.findOne(idInsertSetup));
+		Facture_eau eau = new Facture_eau(new BigDecimal(45).setScale(2, RoundingMode.DOWN),new BigDecimal(80).setScale(2, RoundingMode.DOWN));
+		facture_eauDAO.insert(eau);
+		assertEquals(eau, facture_eauDAO.findOne(idInsertSetup+1));
 
 	}
 	

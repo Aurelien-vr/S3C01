@@ -19,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import dbConnection.DatabaseConnection;
 
-public class windowSkeleton extends JFrame {
+public class WindowSkeleton extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -27,7 +27,7 @@ public class windowSkeleton extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public windowSkeleton() {
+	public WindowSkeleton() {
 		// Configuration de la fenêtre principale
         setTitle("Page principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

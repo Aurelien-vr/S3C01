@@ -67,8 +67,9 @@ public class test_solde_de_tout_compte {
 	
 	@Test
 	public void testInsert() {
-		solde_de_tout_compteDAO.insert(solde_de_tout_compte);
-		assertEquals(solde_de_tout_compte, solde_de_tout_compteDAO.findOne(idInsertSetup));
+		Solde_de_tout_compte solde = new Solde_de_tout_compte(new BigDecimal(200).setScale(2, RoundingMode.DOWN), new BigDecimal(300).setScale(2, RoundingMode.DOWN), new BigDecimal(500).setScale(2, RoundingMode.DOWN));
+		solde_de_tout_compteDAO.insert(solde);
+		assertEquals(solde, solde_de_tout_compteDAO.findOne(idInsertSetup+1));
 
 	}
 	

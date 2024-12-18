@@ -83,7 +83,28 @@ public class TravauxImpl implements TravauxDAO {
      */
     @Override
     public void insert(Travaux entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Travaux(date_travaux, nature, iban, reduction, montant, montant_non_deductible, reduction_special) VALUES (?,?,?,?,?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+   			statement.setDate(1,entity.getDate_travaux());
+    		statement.setString(2, entity.getNature());
+    		statement.setString(3, entity.getIban());
+    		statement.setBigDecimal(4,entity.getReduction());
+    		statement.setBigDecimal(5, entity.getMontant());
+    		statement.setBigDecimal(6, entity.getMontant_non_deductible());
+    		statement.setBigDecimal(7, entity.getReduction_special());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**

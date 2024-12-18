@@ -80,7 +80,32 @@ public class BienImpl implements BienDAO {
      */
     @Override
     public void insert(Bien entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Bien(etage, adresse, ville, code_postal, superficie, nombre_de_piece, meuble, accessoire_prive, accessoire_commun, est_garage) VALUES (?,?,?,?,?,?,?,?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setInt(1, entity.getEtage());
+    		statement.setString(2, entity.getAdresse());
+    		statement.setString(3,  entity.getVille());
+    		statement.setString(4,  entity.getCode_postal());
+    		statement.setBigDecimal(5,  entity.getSuperficie());
+    		statement.setInt(6,  entity.getNombre_de_piece());
+    		statement.setBoolean(7,  entity.isMeuble());
+    		statement.setString(8,  entity.getAccessoire_prive());
+    		statement.setString(9,  entity.getAccessoire_commun());
+    		statement.setBoolean(10,  entity.isEst_garage());
+    		
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
     
 
