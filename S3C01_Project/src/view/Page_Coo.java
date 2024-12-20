@@ -2,16 +2,19 @@ package view;
 
 import javax.swing.*;
 
+import application.Page_principaleController;
 import dbConnection.DatabaseConnection;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Page_Coo extends windowSkeleton {
+public class Page_Coo extends WindowSkeleton {
 	
-
-
+	public JButton connectButton;
+	public JTextField usernameField;
+	public JPasswordField passwordField;
+	
     public Page_Coo() {
     	super();
 
@@ -62,7 +65,7 @@ public class Page_Coo extends windowSkeleton {
         gbcUsernameField.gridy = 1;
         gbcUsernameField.fill = GridBagConstraints.HORIZONTAL; // Étend horizontalement
         gbcUsernameField.weightx = 1.0; // Étend en largeur
-        JTextField usernameField = new JTextField();
+        usernameField = new JTextField();
         loginPanel.add(usernameField, gbcUsernameField);
         
         // Label Mot de passe
@@ -82,7 +85,7 @@ public class Page_Coo extends windowSkeleton {
         gbcPasswordField.gridy = 2;
         gbcPasswordField.fill = GridBagConstraints.HORIZONTAL;
         gbcPasswordField.weightx = 1.0;
-        JPasswordField passwordField = new JPasswordField();
+        passwordField = new JPasswordField();
         loginPanel.add(passwordField, gbcPasswordField);
                                                         
         // Bouton Connecter
@@ -92,15 +95,9 @@ public class Page_Coo extends windowSkeleton {
         gbcConnectButton.gridy = 3;
         gbcConnectButton.weightx = 0.5;
         gbcConnectButton.anchor = GridBagConstraints.CENTER;
-        JButton connectButton = new JButton("Connecter");
+        connectButton = new JButton("Connecter");
         loginPanel.add(connectButton, gbcConnectButton);
-        connectButton.addActionListener(new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			buttonPressed(usernameField, passwordField);
-		}
-                                                            });
-                                                                
+                                                                      
         // Bouton Annuler
         GridBagConstraints gbcCancelButton = new GridBagConstraints();
         gbcCancelButton.insets = insets;
@@ -118,30 +115,21 @@ public class Page_Coo extends windowSkeleton {
         gbc_loginPanel.gridy = 0;
         centerPanel.add(loginPanel, gbc_loginPanel);
 
-        // Rendre la fenêtre visible
-        setVisible(true);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Page_Coo());
-    }
-    
-    private void buttonPressed(JTextField username, JPasswordField password){ 	
-    	if((username.getText().length() <= 1 || username.getText().length() > 30 ) || (password.getPassword().length <= 1 || password.getPassword().length > 40)) {
-    		ErrorMessage.errorDialog("La longueur du nom d'utilisateur ou du mot de passe est incorrecte");
-    		return;
-    	}
-    	DatabaseConnection.setUername(username.getText());
-    	DatabaseConnection.setPassword(password.getPassword());
-    	DatabaseConnection.getInstance();
-    	if(!DatabaseConnection.connected) {
-    		ErrorMessage.errorDialog("Nom d'utilisateur ou mot de passe incorrecte");
-    	}else {
-    		dispose();
-    		new Page_principale();
-      	}
-    	
-    }
-    
+	public JButton getConnectButton() {
+		return connectButton;
+	}
+
+	public JTextField getUsernameField() {
+		return usernameField;
+	}
+
+	public JPasswordField getPasswordField() {
+		return passwordField;
+	}
+	
+	
+
     
 }

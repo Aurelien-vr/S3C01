@@ -9,8 +9,9 @@ import java.awt.RenderingHints;
 
 import javax.swing.border.AbstractBorder;
 
-class RoundedBorder extends AbstractBorder {
-        private final int arcWidth;
+public class RoundedBorder extends AbstractBorder {
+	private static final long serialVersionUID = 1L;
+		private final int arcWidth;
         private final int arcHeight;
         private final Color borderColor;
 

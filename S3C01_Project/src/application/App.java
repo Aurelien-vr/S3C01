@@ -1,7 +1,7 @@
 package application;
 import java.util.List;
-import java.sql.Date;
 
+import controller.Page_CooController;
 import dao.BienDAO;
 import dao.DAOFactory;
 import dbConnection.DatabaseConnection;
@@ -13,7 +13,8 @@ public class App {
      * Point d'entrée principal de l'application.
      */
 	public App() {
-		new Page_Coo();
+		
+		new Page_CooController();
 		
 		 while (!DatabaseConnection.connected) {
            try {

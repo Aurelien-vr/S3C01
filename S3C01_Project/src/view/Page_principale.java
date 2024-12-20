@@ -1,6 +1,10 @@
 package view;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.TabExpander;
 
 import dao.BienDAO;
 import dao.DAOFactory;
@@ -11,7 +15,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,89 +27,85 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.ScrollPane;
+import java.awt.Scrollbar;
 import java.util.List;
 import java.awt.Component;
+import java.awt.GridLayout;
 
 
-public class Page_principale extends windowSkeleton{
+public class Page_principale extends WindowSkeleton{
 
 	private static final long serialVersionUID = 1L;
+	ScrollPane mainPanel = new ScrollPane();
+	JPanel headerRow = new JPanel();
+	JPanel container = new JPanel();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> new Page_Coo());
+		//SwingUtilities.invokeLater(() -> new Page_CooController());
+		SwingUtilities.invokeLater(() -> new Page_principale());
 	}
 
 	public Page_principale() {
-		super();
-		
-		BienDAO bienDAO = DAOFactory.createBienDAO();
-		List<List<String>> listOfListResult = bienDAO.BienStatus();
-		
-		
-		JPanel container = new JPanel();
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));	
-		JScrollPane scrollPane = new JScrollPane(container);
-		
-		
-		for(List<String> strings : listOfListResult) {
-			container.add(Box.createRigidArea(new Dimension(0, 50)));
-			cellContentCreation(container,strings);
-		}
-		
-		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		setVisible(true);
+	    super();
+	    
+	    
+	    
+	    JPanel rightFiller = new JPanel();
+	    JPanel leftFiller = new JPanel();
+	    rightFiller.setBackground(Color.WHITE);
+	    leftFiller.setBackground(Color.WHITE);
+	    leftFiller.add(Box.createHorizontalStrut(100));
+	    rightFiller.add(Box.createHorizontalStrut(100));
+	    getContentPane().add(mainPanel, BorderLayout.CENTER);
+	    getContentPane().add(leftFiller,BorderLayout.WEST);
+	    getContentPane().add(rightFiller,BorderLayout.EAST);
+
+	    String[] columns = {"Header 1", "Header 2", "Header 3"};
+
+	    Object[][] data = new Object[100][3];
+	    for (int i = 0; i < 100; i++) {
+	        data[i][0] = "Row " + (i + 1) + ", Col 1";
+	        data[i][1] = "Row " + (i + 1) + ", Col 2";
+	        data[i][2] = "Row " + (i + 1) + ", Col 3";
+	    }
+
+	    DefaultTableModel model = new DefaultTableModel(data, columns) {
+	    	@Override
+	    	public boolean isCellEditable(int row, int column) {return false;}
+	    };
+	    	
+	    JTable table = new JTable(model);
+	    setTableProperty(table);
+	    
+	    JScrollPane scrollPane = new JScrollPane(table);
+	    scrollPane.setEnabled(false);
+	    scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+	    scrollPane.setBorder(BorderFactory.createEmptyBorder());
+	    table.setBorder(BorderFactory.createEmptyBorder());
+	    
+
+	    
+	    mainPanel.add(scrollPane);
+	    setVisible(true);
 	}
 
-	private void cellContentCreation(JPanel container, List<String> cellContent) {
-		JPanel holderBienStatus = new JPanel();
-		holderBienStatus.setLayout(new BoxLayout(holderBienStatus, BoxLayout.X_AXIS));
-		holderBienStatus.setBorder(new RoundedBorder(20, 20, Color.BLACK));
-		
-		JPanel locationPanel = new JPanel();
-		JPanel datePanel = new JPanel();
-		JPanel versementPanel = new JPanel();
-		JPanel mois = new JPanel();
-		JPanel loyerRetard = new JPanel();
-		
-		String cityZipcode = cellContent.get(1) + " | " + cellContent.get(2) ;
-		String firstLastName = cellContent.get(3) + " " + cellContent.get(4);
-		
-		createJpanelWithLabel(locationPanel,
-				new JLabel(cellContent.get(0)),new JLabel(cityZipcode), new JLabel(firstLastName));
-		
-		createJpanelWithLabel(datePanel,
-				new JLabel(cellContent.get(5)),new JLabel(cellContent.get(6)));
-		
-		createJpanelWithLabel(versementPanel,
-				new JLabel(cellContent.get(7)));
-		
-		createJpanelWithLabel(mois,
-				new JLabel("Mois de loyer en retard"),new JLabel(cellContent.get(8)));
-		
-		createJpanelWithLabel(loyerRetard,
-				new JLabel("Loyer dû"),new JLabel(cellContent.get(9)));
-		
-		holderBienStatus.add(Box.createRigidArea(new Dimension(50, 0)));
-		holderBienStatus.add(locationPanel);
-		holderBienStatus.add(Box.createRigidArea(new Dimension(50, 0)));
-		holderBienStatus.add(datePanel);
-		holderBienStatus.add(Box.createRigidArea(new Dimension(50, 0)));
-		holderBienStatus.add(versementPanel);
-		holderBienStatus.add(Box.createRigidArea(new Dimension(50, 0)));
-		holderBienStatus.add(mois);
-		holderBienStatus.add(Box.createRigidArea(new Dimension(50, 0)));
-		holderBienStatus.add(loyerRetard);
-		holderBienStatus.add(Box.createRigidArea(new Dimension(50, 0)));
-
-		
-		container.add(holderBienStatus);
+	private void setTableProperty(JTable table) {
+		table.setSelectionBackground(null);
+	    table.setSelectionForeground(null);
+	    table.setCellSelectionEnabled(true);
+	    table.setFocusable(false);
+	    table.setBorder(BorderFactory.createEmptyBorder());
+	    table.setRowMargin(20);
+	    table.setRowHeight(80);
+	    table.getTableHeader().setPreferredSize(new Dimension(0,70));
 	}
 
-	private void createJpanelWithLabel(JPanel panel,JLabel...jLabels) {
+
+	public void createJpanelWithLabel(JPanel panel,JLabel...jLabels) {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		for(JLabel label: jLabels) {
 			label.setAlignmentX(CENTER_ALIGNMENT);
@@ -112,5 +114,7 @@ public class Page_principale extends windowSkeleton{
 		}
 	}
 	
-	
+	public JPanel getContainer() {
+		return container;
+	}
 }

@@ -1,33 +1,28 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
+import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
+import javax.swing.*;
+
 
 import dbConnection.DatabaseConnection;
 
-public class windowSkeleton extends JFrame {
+public class WindowSkeleton extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+	private JButton logoLabel;
 	
 	/**
 	 * Create the frame.
 	 */
-	public windowSkeleton() {
+	public WindowSkeleton() {
+		
+		FlatLightLaf.setup();
+		
+		
 		// Configuration de la fenêtre principale
         setTitle("Page principal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,15 +37,8 @@ public class windowSkeleton extends JFrame {
         headerPanel.setLayout(new BorderLayout()); // Layout pour gérer le logo
         headerPanel.setPreferredSize(new Dimension(700, 100)); // Hauteur fixe
 
-        JButton logoLabel = new JButton(new ImageIcon(getClass().getResource("/ressources/logoDBM.png")));
-        logoLabel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(DatabaseConnection.connected) {
-					new Page_principale();
-				}
-			}
-		});
+       logoLabel = new JButton(new ImageIcon(getClass().getResource("/ressources/logoDBM.png")));
+
         setTransparencyButton(logoLabel);
         logoLabel.setHorizontalAlignment(SwingConstants.LEFT);
         logoLabel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 10)); // Marge autour du logo
@@ -64,6 +52,10 @@ public class windowSkeleton extends JFrame {
         button.setFocusPainted(false);
         button.setPressedIcon(null);
         button.setOpaque(false);
+	}
+	
+	public JButton getLogoLabel() {
+		return logoLabel;
 	}
 
 }

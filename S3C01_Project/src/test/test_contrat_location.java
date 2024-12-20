@@ -2,8 +2,6 @@ package test;
 
 
 import org.junit.*;
-import dao.*;
-import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
