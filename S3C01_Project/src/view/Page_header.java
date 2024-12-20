@@ -28,10 +28,10 @@ public class Page_header extends windowSkeleton {
         buttonPanel.setOpaque(false); // Transparence pour s'intégrer dans la bannière
 
         // Création des boutons
-        btnBienLouable = new JButton("Bien louable");
-        btnLocataire = new JButton("Locataire");
-        btnImmeuble = new JButton("Immeuble");
-        btnDocument = new JButton("Document");
+        btnBienLouable = new JButton("Biens louables");
+        btnLocataire = new JButton("Locataires");
+        btnImmeuble = new JButton("Immeubles");
+        btnDocument = new JButton("Documents");
 
         // Utilisation de GridBagConstraints pour le positionnement
         GridBagConstraints gbc = new GridBagConstraints();
