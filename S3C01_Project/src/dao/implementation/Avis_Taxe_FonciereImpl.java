@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Avis_Taxe_FonciereDAO;
@@ -63,14 +64,37 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
     }
 
     /**
-     * Recherche tous les avis de taxe foncière (fonctionnalité à implémenter).
-     *
-     * @return Liste des avis ou {@code null} si non implémentée.
+     * Recherche tous les avis taxe fonciere
+     * 
+     * @return Liste des avis taxe fonciere
      */
     @Override
     public List<Avis_Taxe_Fonciere> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Avis_Taxe_Fonciere> avis = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Avis_Taxe_Fonciere";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Avis_Taxe_Fonciere acte = createEntities(result);
+                avis.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return avis;
     }
 
     /**

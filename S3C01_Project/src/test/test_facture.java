@@ -12,6 +12,8 @@ import static org.junit.Assert.assertNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
+import java.util.List;
+
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
@@ -76,5 +78,38 @@ public class test_facture {
 		factureDAO.deleteById(idInsertSetup);
 		assertNull(factureDAO.findOne(idInsertSetup));
 		}
+	
+	@Test
+	public void testFindAll() {
+	    List<Facture> facts = factureDAO.findAll();
+	    int nombreFactsDansLaBase = 0;
+
+	    // Récupérer le nombre total d'actes dans la base avec une requête SQL
+	    PreparedStatement statement = null;
+	    ResultSet result = null;
+	    String query = "SELECT COUNT(*) FROM db1_sae.Facture";
+	    try {
+	        statement = connection.prepareStatement(query);
+	        result = statement.executeQuery();
+	        if (result.next()) {
+	            nombreFactsDansLaBase = result.getInt(1); 
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        try {
+	            if (result != null) result.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	  //Vérifie que le nombre d'actes retournés par findAll() correspond au nombre réel d'actes dans la base
+	    assertEquals(nombreFactsDansLaBase, facts.size());
+	    
+	    //Vérifie que l'acte inséré au setUp() est bien dans la liste des actes
+	    assertEquals(true, facts.contains(facture));
+	}
+	
 
 }

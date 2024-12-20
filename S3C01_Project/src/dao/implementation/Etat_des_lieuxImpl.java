@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Etat_des_lieuxDAO;
@@ -65,14 +66,37 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
     }
 
     /**
-     * Recherche toutes les entités Etat_des_lieux.
-     *
-     * @return Liste des entités Etat_des_lieux.
+     * Recherche tous les etats des lieux
+     * 
+     * @return Liste des etats des lieux
      */
     @Override
     public List<Etat_des_lieux> findAll() {
-        // Implémentation à ajouter pour récupérer toutes les entités Etat_des_lieux
-        return null;
+    	List<Etat_des_lieux> edts = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Etat_des_lieux";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Etat_des_lieux acte = createEntities(result);
+                edts.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return edts;
     }
 
     /**

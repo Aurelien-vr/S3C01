@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Contrat_locationDAO;
@@ -64,7 +65,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 			statement.setDate(2, entity.getDate_debut());
 			statement.setDate(3,entity.getDate_fin());
 			statement.setString(4, entity.getModalite_chauffage());
-			statement.setString(5, entity.getModalite_eau_chaude_saniatire());
+			statement.setString(5, entity.getModalite_eau_chaude_sanitaire());
 			statement.setDate(6, entity.getDate_versement());
 			
 			
@@ -81,15 +82,38 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 
 
 
-    /**
-     * Recherche tous les contrats de location (fonctionnalité à implémenter).
-     *
-     * @return Liste des contrats de location.
+	/**
+     * Recherche tous les contrats locations
+     * 
+     * @return Liste des contrat de location
      */
     @Override
     public List<Contrat_location> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Contrat_location> contrats = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Contrat_location";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Contrat_location acte = createEntities(result);
+                contrats.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return contrats;
     }
 
 	@Override
@@ -128,7 +152,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 		contrat_location.setModalite_chauffage(modalite_chauffage);
 		
 		String modalite_eau_chaude_saniatire = result.getString(6);
-		contrat_location.setModalite_eau_chaude_saniatire(modalite_eau_chaude_saniatire);
+		contrat_location.setModalite_eau_chaude_sanitaire(modalite_eau_chaude_saniatire);
 		
 		Date date_versement = result.getDate(7);
 		contrat_location.setDate_versement(date_versement);

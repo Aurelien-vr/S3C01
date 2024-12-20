@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 import dao.Acte_cautionnementDAO;
 import dao.entities.Acte_cautionnement;
@@ -71,9 +72,33 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      */
     @Override
     public List<Acte_cautionnement> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Acte_cautionnement> actes = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Acte_cautionnement";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Acte_cautionnement acte = createEntities(result);
+                actes.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return actes;
     }
+
 
     /**
      * Crée un nouvel acte de cautionnement dans la base de données (fonctionnalité à implémenter).

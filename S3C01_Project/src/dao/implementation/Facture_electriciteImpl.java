@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Facture_electriciteDAO;
@@ -65,14 +66,37 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
     }
 
     /**
-     * Recherche toutes les entités Facture_electricite.
-     *
-     * @return Liste des entités Facture_electricite.
+     * Recherche tous les facture d'electricite
+     * 
+     * @return Liste des facture d'electricite
      */
     @Override
     public List<Facture_electricite> findAll() {
-        // Implémentation à ajouter pour récupérer toutes les entités Facture_electricite
-        return null;
+    	List<Facture_electricite> facts_elec = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Facture_electricite";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Facture_electricite acte = createEntities(result);
+                facts_elec.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return facts_elec;
     }
 
     /**

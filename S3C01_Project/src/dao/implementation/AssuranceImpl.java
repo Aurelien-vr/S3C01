@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.AssuranceDAO;
@@ -65,14 +66,37 @@ public class AssuranceImpl implements AssuranceDAO {
     }
 
     /**
-     * Recherche toutes les assurances (fonctionnalité à implémenter).
-     *
-     * @return Liste des assurances ou {@code null} si non implémentée.
+     * Recherche tous les assurances
+     * 
+     * @return Liste des assurance
      */
     @Override
     public List<Assurance> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Assurance> ass = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Assurance";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Assurance acte = createEntities(result);
+                ass.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return ass;
     }
 
     /**

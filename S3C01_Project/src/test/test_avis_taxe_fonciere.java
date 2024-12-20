@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.sql.*;
+import java.util.List;
 
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
@@ -77,5 +78,37 @@ public class test_avis_taxe_fonciere {
 		avis_taxe_fonciereDAO.deleteById(idInsertSetup);
 		assertNull(avis_taxe_fonciereDAO.findOne(idInsertSetup));
 		}
+	
+	@Test
+	public void testFindAll() {
+		    List<Avis_Taxe_Fonciere> avis = avis_taxe_fonciereDAO.findAll();
+		    int nombreAvisDansLaBase = 0;
+
+		    // Récupérer le nombre total d'actes dans la base avec une requête SQL
+		    PreparedStatement statement = null;
+		    ResultSet result = null;
+		    String query = "SELECT COUNT(*) FROM db1_sae.Avis_Taxe_Fonciere";
+		    try {
+		        statement = connection.prepareStatement(query);
+		        result = statement.executeQuery();
+		        if (result.next()) {
+		            nombreAvisDansLaBase = result.getInt(1); 
+		        }
+		    } catch (Exception e) {
+		        ExceptionStorageHandler.LogException(e, connection);
+		    } finally {
+		        try {
+		            if (result != null) result.close();
+		            if (statement != null) statement.close();
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+		        //Vérifie que le nombre d'actes retournés par findAll() correspond au nombre réel d'actes dans la base
+			    assertEquals(nombreAvisDansLaBase, avis.size());
+			    
+			    //Vérifie que l'acte inséré au setUp() est bien dans la liste des actes
+			    assertEquals(true, avis.contains(avis_taxe_fonciere));
+		    }
+		} 
 
 }

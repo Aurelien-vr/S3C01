@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Regularisation_chargesDAO;
@@ -65,14 +66,37 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
     }
 
     /**
-     * Recherche toutes les régularisations des charges (fonctionnalité à implémenter).
-     *
-     * @return Liste des régularisations des charges ou {@code null} si non implémentée.
+     * Recherche tous les regularisation de charges 
+     * 
+     * @return Liste des regularisation de charge 
      */
     @Override
     public List<Regularisation_charges> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Regularisation_charges> regus = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Regularisation_charges";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Regularisation_charges acte = createEntities(result);
+                regus.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return regus;
     }
 
     /**

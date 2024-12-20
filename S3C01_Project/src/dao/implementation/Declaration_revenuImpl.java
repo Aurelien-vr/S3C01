@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Declaration_revenuDAO;
@@ -63,14 +64,37 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
     }
 
     /**
-     * Recherche toutes les déclarations de revenus (fonctionnalité à implémenter).
+     * Recherche tous les declarations de revenus
      * 
-     * @return Liste des déclarations de revenus ou {@code null} si non implémentée.
+     * @return Liste des declaration de revenus
      */
     @Override
     public List<Declaration_revenu> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Declaration_revenu> declas = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Declaration_revenu";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Declaration_revenu acte = createEntities(result);
+                declas.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return declas;
     }
 
     /**

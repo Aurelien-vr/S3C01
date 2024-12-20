@@ -12,6 +12,8 @@ import static org.junit.Assert.assertNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
+import java.util.List;
+
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
@@ -21,6 +23,7 @@ public class test_solde_de_tout_compte {
 	private Connection connection;
 	private Solde_de_tout_compte solde_de_tout_compte;
 	int idInsertSetup;
+	private ResultSet result;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -38,7 +41,7 @@ public class test_solde_de_tout_compte {
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		if(statement.executeUpdate()>0) {
-			ResultSet result = statement.getGeneratedKeys();
+			result = statement.getGeneratedKeys();
 			if(result.next()) {
 				idInsertSetup = result.getInt(1);
 			}
@@ -78,5 +81,53 @@ public class test_solde_de_tout_compte {
 		solde_de_tout_compteDAO.deleteById(idInsertSetup);
 		assertNull(solde_de_tout_compteDAO.findOne(idInsertSetup));
 		}
+	
+	@Test
+	public void testFindAll() {
+	    List<Solde_de_tout_compte> soldes = solde_de_tout_compteDAO.findAll();
+	    int nombreSoldesDansLaBase = 0;
+
+	    // Récupérer le nombre total d'actes dans la base avec une requête SQL
+	    PreparedStatement statement = null;
+	    ResultSet result = null;
+	    String query = "SELECT COUNT(*) FROM db1_sae.Solde_de_tout_compte";
+	    try {
+	        statement = connection.prepareStatement(query);
+	        result = statement.executeQuery();
+	        if (result.next()) {
+	            nombreSoldesDansLaBase = result.getInt(1); 
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        try {
+	            if (result != null) result.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        //Vérifie que le nombre d'actes retournés par findAll() correspond au nombre réel d'actes dans la base
+		    assertEquals(nombreSoldesDansLaBase, soldes.size());
+		    
+		    //Vérifie que l'acte inséré au setUp() est bien dans la liste des actes
+		    assertEquals(true, soldes.contains(solde_de_tout_compte));
+		
+	    }
+	} 
+	
+	//@Test
+	//public void testCreateEntities() {
+		//try{
+			//BigDecimal reste_a_devoir = result.getBigDecimal("reste_a_devoir");
+			//BigDecimal provision_pour_charges = result.getBigDecimal("provision_pour_charges");
+			//BigDecimal caution = result.getBigDecimal("caution");
+			//Solde_de_tout_compte solde = solde_de_tout_compteDAO.createEntities(result);
+			//assertEquals(solde.getReste_a_devoir(), reste_a_devoir);
+			//assertEquals(solde.getProvision_pour_charges(), provision_pour_charges);
+			//assertEquals(solde.getCaution(), caution);
+		//}catch (Exception e) {
+			//ExceptionStorageHandler.LogException(e, connection);
+	//	} 
+	//}
 
 }

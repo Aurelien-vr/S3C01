@@ -12,6 +12,8 @@ import static org.junit.Assert.assertNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
+import java.util.List;
+
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
@@ -79,4 +81,36 @@ public class test_assurance {
 	    assuranceDAO.deleteById(idInsertSetup);
 	    assertNull(assuranceDAO.findOne(idInsertSetup));
 	}
+	
+	@Test
+	public void testFindAll() {
+	    List<Assurance> ass = assuranceDAO.findAll();
+	    int nombreAssDansLaBase = 0;
+
+	    // Récupérer le nombre total d'actes dans la base avec une requête SQL
+	    PreparedStatement statement = null;
+	    ResultSet result = null;
+	    String query = "SELECT COUNT(*) FROM db1_sae.Assurance";
+	    try {
+	        statement = connection.prepareStatement(query);
+	        result = statement.executeQuery();
+	        if (result.next()) {
+	            nombreAssDansLaBase = result.getInt(1); 
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        try {
+	            if (result != null) result.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        //Vérifie que le nombre d'actes retournés par findAll() correspond au nombre réel d'actes dans la base
+		    assertEquals(nombreAssDansLaBase, ass.size());
+		    
+		    //Vérifie que l'acte inséré au setUp() est bien dans la liste des actes
+		    assertEquals(true, ass.contains(assurance));
+	    }
+	} 
 }

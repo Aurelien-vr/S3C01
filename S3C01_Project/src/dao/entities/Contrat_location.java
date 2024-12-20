@@ -128,7 +128,7 @@ public class Contrat_location {
      *
      * @return Les modalités d'eau chaude sanitaire (ex : collective, individuelle).
      */
-    public String getModalite_eau_chaude_saniatire() {
+    public String getModalite_eau_chaude_sanitaire() {
         return modalite_eau_chaude_sanitaire;
     }
 
@@ -137,7 +137,7 @@ public class Contrat_location {
      *
      * @param modalite_eau_chaude_saniatire Les modalités d'eau chaude sanitaire à définir.
      */
-    public void setModalite_eau_chaude_saniatire(String modalite_eau_chaude_saniatire) {
+    public void setModalite_eau_chaude_sanitaire(String modalite_eau_chaude_saniatire) {
         this.modalite_eau_chaude_sanitaire = modalite_eau_chaude_saniatire;
     }
 

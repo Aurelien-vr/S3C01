@@ -12,6 +12,8 @@ import static org.junit.Assert.assertNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
+import java.util.List;
+
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
@@ -76,5 +78,38 @@ public class test_facture_electricite {
 		facture_electriciteDAO.deleteById(idInsertSetup);
 		assertNull(facture_electriciteDAO.findOne(idInsertSetup));
 		}
+	
+	@Test
+	public void testFindAll() {
+	    List<Facture_electricite> facts_elec = facture_electriciteDAO.findAll();
+	    int nombreFactsElecDansLaBase = 0;
+
+	    // Récupérer le nombre total d'actes dans la base avec une requête SQL
+	    PreparedStatement statement = null;
+	    ResultSet result = null;
+	    String query = "SELECT COUNT(*) FROM db1_sae.Facture_electricite";
+	    try {
+	        statement = connection.prepareStatement(query);
+	        result = statement.executeQuery();
+	        if (result.next()) {
+	            nombreFactsElecDansLaBase = result.getInt(1); 
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        try {
+	            if (result != null) result.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        //Vérifie que le nombre d'actes retournés par findAll() correspond au nombre réel d'actes dans la base
+		    assertEquals(nombreFactsElecDansLaBase, facts_elec.size());
+		    
+		    //Vérifie que l'acte inséré au setUp() est bien dans la liste des actes
+		    assertEquals(true, facts_elec.contains(facture_electricite));
+		
+	    }
+	} 
 
 }

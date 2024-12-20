@@ -63,14 +63,37 @@ public class BienImpl implements BienDAO {
     }
 
     /**
-     * Recherche tous les biens (fonctionnalité à implémenter).
+     * Recherche tous les bien
      * 
-     * @return Liste des biens ou {@code null} si non implémentée.
+     * @return Liste des bien
      */
     @Override
     public List<Bien> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Bien> biens = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Bien";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Bien acte = createEntities(result);
+                biens.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return biens;
     }
 
     /**

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.TravauxDAO;
@@ -66,14 +67,37 @@ public class TravauxImpl implements TravauxDAO {
     }
 
     /**
-     * Recherche toutes les entités Travaux (fonctionnalité à implémenter).
-     *
-     * @return Liste des travaux ou {@code null} si non implémentée.
+     * Recherche tous les travaux
+     * 
+     * @return Liste des travaux
      */
     @Override
     public List<Travaux> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Travaux> tras = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Travaux";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Travaux acte = createEntities(result);
+                tras.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return tras;
     }
 
     /**

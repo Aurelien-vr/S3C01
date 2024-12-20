@@ -12,6 +12,8 @@ import static org.junit.Assert.assertNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
+import java.util.List;
+
 import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
@@ -76,5 +78,32 @@ public class test_facture_gaz {
 		facture_gazDAO.deleteById(idInsertSetup);
 		assertNull(facture_gazDAO.findOne(idInsertSetup));
 		}
+	
+	@Test
+	public void testFindAll() {
+	    List<Facture_gaz> factsgaz = facture_gazDAO.findAll();
+	    int nombreFactsGazDansLaBase = 0;
+
+	    // Récupérer le nombre total d'actes dans la base avec une requête SQL
+	    PreparedStatement statement = null;
+	    ResultSet result = null;
+	    String query = "SELECT COUNT(*) FROM db1_sae.Facture_gaz";
+	    try {
+	        statement = connection.prepareStatement(query);
+	        result = statement.executeQuery();
+	        if (result.next()) {
+	            nombreFactsGazDansLaBase = result.getInt(1); 
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        try {
+	            if (result != null) result.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	} 
 
 }

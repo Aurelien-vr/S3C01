@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Solde_de_tout_compteDAO;
@@ -65,14 +66,37 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
     }
 
     /**
-     * Recherche toutes les soldes de tout compte (fonctionnalité à implémenter).
-     *
-     * @return Liste des soldes de tout compte ou {@code null} si non implémentée.
+     * Recherche tous les soldes de tout compte 
+     * 
+     * @return Liste des soldes de tout compte
      */
     @Override
     public List<Solde_de_tout_compte> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Solde_de_tout_compte> soldes = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Solde_de_tout_compte";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Solde_de_tout_compte acte = createEntities(result);
+                soldes.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return soldes;
     }
 
     /**
