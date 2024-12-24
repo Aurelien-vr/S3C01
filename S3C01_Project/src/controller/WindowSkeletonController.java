@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import dbConnection.DatabaseConnection;
-import view.Page_principale;
+import view.TableSkeleton;
 import view.WindowSkeleton;
 
 public class WindowSkeletonController {
@@ -18,7 +18,7 @@ public class WindowSkeletonController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(DatabaseConnection.connected) {
-					new Page_principale();
+					new TableSkeleton();
 				}
 			}
 		});

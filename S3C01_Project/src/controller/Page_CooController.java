@@ -7,7 +7,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import application.Page_principaleController;
 import dbConnection.DatabaseConnection;
 import view.ErrorMessage;
 import view.Page_Coo;
@@ -39,7 +38,7 @@ public class Page_CooController {
     	if(!DatabaseConnection.connected) {
     		ErrorMessage.errorDialog("Nom d'utilisateur ou mot de passe incorrecte");
     	}else {
-    		new Page_principaleController();
+    		new Page_PrincipaleController();
     		view.dispose();
       	}
     	

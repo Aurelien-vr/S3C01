@@ -2,7 +2,7 @@ package view;
 
 import javax.swing.*;
 
-import application.Page_principaleController;
+import controller.TableSkeletonController;
 import dbConnection.DatabaseConnection;
 
 import java.awt.*;
@@ -36,7 +36,25 @@ public class Page_Coo extends WindowSkeleton {
 	    loginPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Bordure grise
 	    loginPanel.setBackground(new Color(245, 245, 245)); // Gris clair
 	    
-        // Titre "Connexion"
+        titleUi(insets, loginPanel);
+	            
+        usernameUi(insets, loginPanel);
+        
+        passwordUi(insets, loginPanel);
+                                                        
+        buttonUi(insets, loginPanel);
+                                                                        
+        // Ajout du panneau de connexion au centre
+        GridBagConstraints gbc_loginPanel = new GridBagConstraints();
+        gbc_loginPanel.insets = new Insets(0, 0, 5, 5);
+        gbc_loginPanel.gridx = 0;
+        gbc_loginPanel.gridy = 0;
+        centerPanel.add(loginPanel, gbc_loginPanel);
+
+    }
+
+	private void titleUi(Insets insets, JPanel loginPanel) {
+		// Titre "Connexion"
         GridBagConstraints gbcTitle = new GridBagConstraints();
         gbcTitle.insets = insets;
         gbcTitle.gridx = 0;
@@ -47,48 +65,10 @@ public class Page_Coo extends WindowSkeleton {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         loginPanel.add(titleLabel, gbcTitle);
-	            
-        // Label Identifiant
-        GridBagConstraints gbcUsernameLabel = new GridBagConstraints();
-        gbcUsernameLabel.insets = insets;
-        gbcUsernameLabel.gridx = 0;
-        gbcUsernameLabel.gridy = 1;
-        gbcUsernameLabel.anchor = GridBagConstraints.WEST; // Aligné à gauche
-        JLabel usernameLabel = new JLabel("Identifiant :");
-        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        loginPanel.add(usernameLabel, gbcUsernameLabel);
-        
-        // Champ Identifiant
-        GridBagConstraints gbcUsernameField = new GridBagConstraints();
-        gbcUsernameField.insets = insets;
-        gbcUsernameField.gridx = 1;
-        gbcUsernameField.gridy = 1;
-        gbcUsernameField.fill = GridBagConstraints.HORIZONTAL; // Étend horizontalement
-        gbcUsernameField.weightx = 1.0; // Étend en largeur
-        usernameField = new JTextField();
-        loginPanel.add(usernameField, gbcUsernameField);
-        
-        // Label Mot de passe
-        GridBagConstraints gbcPasswordLabel = new GridBagConstraints();
-        gbcPasswordLabel.insets = insets;
-        gbcPasswordLabel.gridx = 0;
-        gbcPasswordLabel.gridy = 2;
-        gbcPasswordLabel.anchor = GridBagConstraints.WEST; // Aligné à gauche
-        JLabel passwordLabel = new JLabel("Mot de passe :");
-        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        loginPanel.add(passwordLabel, gbcPasswordLabel);
-        
-        // Champ Mot de passe
-        GridBagConstraints gbcPasswordField = new GridBagConstraints();
-        gbcPasswordField.insets = insets;
-        gbcPasswordField.gridx = 1;
-        gbcPasswordField.gridy = 2;
-        gbcPasswordField.fill = GridBagConstraints.HORIZONTAL;
-        gbcPasswordField.weightx = 1.0;
-        passwordField = new JPasswordField();
-        loginPanel.add(passwordField, gbcPasswordField);
-                                                        
-        // Bouton Connecter
+	}
+
+	private void buttonUi(Insets insets, JPanel loginPanel) {
+		// Bouton Connecter
         GridBagConstraints gbcConnectButton = new GridBagConstraints();
         gbcConnectButton.insets = insets;
         gbcConnectButton.gridx = 0;
@@ -107,15 +87,51 @@ public class Page_Coo extends WindowSkeleton {
         gbcCancelButton.anchor = GridBagConstraints.CENTER;
         JButton cancelButton = new JButton("Annuler");
         loginPanel.add(cancelButton, gbcCancelButton);
-                                                                        
-        // Ajout du panneau de connexion au centre
-        GridBagConstraints gbc_loginPanel = new GridBagConstraints();
-        gbc_loginPanel.insets = new Insets(0, 0, 5, 5);
-        gbc_loginPanel.gridx = 0;
-        gbc_loginPanel.gridy = 0;
-        centerPanel.add(loginPanel, gbc_loginPanel);
+	}
 
-    }
+	private void usernameUi(Insets insets, JPanel loginPanel) {
+		// Label Identifiant
+        GridBagConstraints gbcUsernameLabel = new GridBagConstraints();
+        gbcUsernameLabel.insets = insets;
+        gbcUsernameLabel.gridx = 0;
+        gbcUsernameLabel.gridy = 1;
+        gbcUsernameLabel.anchor = GridBagConstraints.WEST; // Aligné à gauche
+        JLabel usernameLabel = new JLabel("Identifiant :");
+        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        loginPanel.add(usernameLabel, gbcUsernameLabel);
+        
+        // Champ Identifiant
+        GridBagConstraints gbcUsernameField = new GridBagConstraints();
+        gbcUsernameField.insets = insets;
+        gbcUsernameField.gridx = 1;
+        gbcUsernameField.gridy = 1;
+        gbcUsernameField.fill = GridBagConstraints.HORIZONTAL; // Étend horizontalement
+        gbcUsernameField.weightx = 1.0; // Étend en largeur
+        usernameField = new JTextField();
+        loginPanel.add(usernameField, gbcUsernameField);
+	}
+
+	private void passwordUi(Insets insets, JPanel loginPanel) {
+		// Label Mot de passe
+        GridBagConstraints gbcPasswordLabel = new GridBagConstraints();
+        gbcPasswordLabel.insets = insets;
+        gbcPasswordLabel.gridx = 0;
+        gbcPasswordLabel.gridy = 2;
+        gbcPasswordLabel.anchor = GridBagConstraints.WEST; // Aligné à gauche
+        JLabel passwordLabel = new JLabel("Mot de passe :");
+        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        loginPanel.add(passwordLabel, gbcPasswordLabel);
+        
+        // Champ Mot de passe
+        GridBagConstraints gbcPasswordField = new GridBagConstraints();
+        gbcPasswordField.insets = insets;
+        gbcPasswordField.gridx = 1;
+        gbcPasswordField.gridy = 2;
+        gbcPasswordField.fill = GridBagConstraints.HORIZONTAL;
+        gbcPasswordField.weightx = 1.0;
+        passwordField = new JPasswordField();
+        loginPanel.add(passwordField, gbcPasswordField);
+	}
 
 	public JButton getConnectButton() {
 		return connectButton;

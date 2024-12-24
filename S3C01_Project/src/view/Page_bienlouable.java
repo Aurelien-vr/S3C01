@@ -35,7 +35,7 @@ public class Page_bienlouable extends JFrame {
         JButton addPropertyButton = new JButton("Ajout de bien");
         addPropertyButton.addActionListener(e -> showAddPropertyDialog());
         addPropertyButton.setContentAreaFilled(false);
-        addPropertyButton.setBorder(new RoundedBorder(30,30, Color.BLACK));
+        addPropertyButton.setBorder(new RoundedBorder(30,30, Color.BLACK), getBackground());
         headerPanel.add(addPropertyButton);
 
         getContentPane().add(headerPanel, BorderLayout.NORTH);
@@ -82,7 +82,7 @@ public class Page_bienlouable extends JFrame {
     private void addPropertyPanel(JPanel mainPanel, String department, String address) {
         JPanel propertyPanel = new JPanel();
         propertyPanel.setLayout(new BorderLayout(10, 10));
-        propertyPanel.setBorder(new RoundedBorder(20, 20, Color.BLACK));
+        propertyPanel.setBorder(new RoundedBorder(20, 20, Color.BLACK, getBackground()));
         propertyPanel.setBackground(Color.WHITE);
 
         propertyPanel.setPreferredSize(new Dimension(700, 120));
