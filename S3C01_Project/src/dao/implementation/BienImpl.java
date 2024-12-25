@@ -8,7 +8,6 @@ import java.util.List;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 import dao.BienDAO;
 import dao.entities.Bien;
 import dbConnection.DatabaseConnection;
@@ -124,16 +123,10 @@ public class BienImpl implements BienDAO {
 				result = statement.getResultSet();
 				while(result.next()) {
 					ArrayList<String> cell = new ArrayList<String>();
-					cell.add(result.getString(2));
-					cell.add(result.getString(3));
-					cell.add(result.getString(4));
-					cell.add(result.getString(5));
-					cell.add(result.getString(6));
-					cell.add(result.getString(7));
-					cell.add(result.getString(8));
-					cell.add(result.getString(9));
-					cell.add(result.getString(10));
-					cell.add(result.getString(11));	
+					for(int i = 2; i <= 11; i++) {
+						 String value = result.getString(i);
+		                    cell.add(value != null ? value : "Unknown");
+					}
 					arrayRes.add(cell);
 				}
 			}

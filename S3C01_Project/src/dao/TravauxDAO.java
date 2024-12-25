@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import dao.entities.Travaux;
 
 /**
@@ -7,5 +9,5 @@ import dao.entities.Travaux;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface TravauxDAO extends DAO<Travaux> {
-    // Les méthodes spécifiques à l'entité Travaux peuvent être ajoutées ici si nécessaire
+	public List<List<String>> procPageTravaux();
 }

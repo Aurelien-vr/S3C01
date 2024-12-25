@@ -1,11 +1,6 @@
 package application;
-import java.util.List;
-
 import controller.Page_CooController;
-import dao.BienDAO;
-import dao.DAOFactory;
 import dbConnection.DatabaseConnection;
-import view.Page_Coo;
 
 
 public class App {
@@ -24,10 +19,6 @@ public class App {
            }
        }
 		 
-		BienDAO bienDAO = DAOFactory.createBienDAO();
-		List<List<String>> res = bienDAO.BienStatus();
-		System.out.println(res);
-				
 
 	}
 	public static void main(String[] args) {
