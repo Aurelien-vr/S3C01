@@ -16,7 +16,7 @@ public class Page_PrincipaleController extends TableSkeletonController{
 	public Page_PrincipaleController() {
 		super();
         fillTable(); 
-        view.setTableModel(modelTable);
+        view.setTableModel(modelTable, 0);
         view.setVisible(true);
 	}
 	

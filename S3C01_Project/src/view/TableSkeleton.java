@@ -13,17 +13,19 @@ import java.awt.*;
 public class TableSkeleton extends WindowSkeleton {
 
     private static final long serialVersionUID = 1L;
-    private JPanel canvas = new JPanel();
+    protected JLayeredPane layeredPane = new JLayeredPane();
+    protected JPanel canvas = new JPanel();
     private JPanel mainPanel = new JPanel();
     private JPanel container = new JPanel();
-    private JPanel rightFiller = new JPanel();
-    private JPanel leftFiller = new JPanel();
-    private JPanel topFiller = new JPanel();
+    protected JPanel rightFiller = new JPanel();
+    protected JPanel leftFiller = new JPanel();
+    protected JPanel topFiller = new JPanel();
     private JTable table = new JTable();
 
     public TableSkeleton() {
         super();
         
+        layeredPane.setLayout(null);
         canvas.setLayout(new BorderLayout());
         
         mainPanel.setBackground(Color.WHITE);
@@ -41,11 +43,16 @@ public class TableSkeleton extends WindowSkeleton {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         mainPanel.add(scrollPane);
-        getContentPane().add(canvas, BorderLayout.CENTER);
+        getContentPane().add(layeredPane.add(canvas), BorderLayout.CENTER);
         canvas.add(mainPanel, BorderLayout.CENTER);	
         canvas.add(topFiller, BorderLayout.NORTH);
         canvas.add(leftFiller, BorderLayout.WEST);
         canvas.add(rightFiller, BorderLayout.EAST);
+        
+        canvas.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        layeredPane.add(canvas, JLayeredPane.DEFAULT_LAYER);
+        
+        getContentPane().add(layeredPane, BorderLayout.CENTER);
 
     }
 
@@ -95,7 +102,7 @@ public class TableSkeleton extends WindowSkeleton {
         return table;
     }
 
-    public void setTableModel(TableModel model) {
+    public void setTableModel(TableModel model, int ...multiLineCol) {
         table.setModel(model);
         
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -104,7 +111,9 @@ public class TableSkeleton extends WindowSkeleton {
         	table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
         
-        table.getColumnModel().getColumn(0).setCellRenderer(new MultiLineTableCellRenderer());
+        for(int i : multiLineCol) {        	
+        	table.getColumnModel().getColumn(i).setCellRenderer(new MultiLineTableCellRenderer());
+        }
         
     }
 

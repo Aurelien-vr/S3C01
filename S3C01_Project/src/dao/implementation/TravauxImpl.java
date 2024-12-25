@@ -1,14 +1,18 @@
 package dao.implementation;
 
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.TravauxDAO;
 import dao.entities.Travaux;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link TravauxDAO} pour gérer les opérations sur les entités "Travaux".
@@ -134,4 +138,34 @@ public class TravauxImpl implements TravauxDAO {
         travaux.setReduction_special(result.getBigDecimal("reduction_special"));
         return travaux; // Retourne l'entité Travaux construite
     }
+
+	@Override
+	public List<List<String>> procPageTravaux() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_travaux_page_travaux()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<String>();
+					for(int i = 1; i <= 10; i++) {
+						 String value = result.getString(i);
+		                    cell.add(value != null ? value : "Unknown");
+					}
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+		
+	}
 }

@@ -38,7 +38,8 @@ public class Page_CooController {
     	if(!DatabaseConnection.connected) {
     		ErrorMessage.errorDialog("Nom d'utilisateur ou mot de passe incorrecte");
     	}else {
-    		new Page_PrincipaleController();
+    		//new Page_PrincipaleController();
+    		new Page_TravauxController();
     		view.dispose();
       	}
     	
