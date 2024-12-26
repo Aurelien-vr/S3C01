@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 public class windowSkeleton extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    protected JPanel mainPanel; // Ajout du panneau central en tant que variable globale
+    protected JPanel mainPanel;
     protected JPanel headerPanel;
 
     public windowSkeleton() {
@@ -23,11 +23,9 @@ public class windowSkeleton extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setMinimumSize(new Dimension(800, 600));
 
-        // Utilisation de BorderLayout pour structurer l'interface
         getContentPane().setLayout(new BorderLayout());
 
-        // Initialisation correcte de la variable membre `headerPanel`
-        headerPanel = new JPanel(); // Utilisation de la variable membre
+        headerPanel = new JPanel();
         headerPanel.setBackground(new Color(135, 206, 250));
         headerPanel.setLayout(new BorderLayout());
         headerPanel.setPreferredSize(new Dimension(700, 100));

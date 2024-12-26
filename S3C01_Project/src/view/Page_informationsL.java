@@ -3,26 +3,16 @@ package view;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 
-public class Page_informationsGB extends Page_header{
+public class Page_informationsL {
 
 	private JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Page_informationsGB window = new Page_informationsGB();
+					Page_informationsL window = new Page_informationsL();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -34,9 +24,7 @@ public class Page_informationsGB extends Page_header{
 	/**
 	 * Create the application.
 	 */
-	public Page_informationsGB() {
-		super();
-		
+	public Page_informationsL() {
 		initialize();
 	}
 
