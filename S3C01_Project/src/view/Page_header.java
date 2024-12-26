@@ -50,7 +50,7 @@ public class Page_header extends windowSkeleton {
 
     // Méthode pour styliser les boutons
     private void stylizeButton(JButton button) {
-        button.setPreferredSize(new Dimension(150, 50)); // Taille boutton
+        button.setPreferredSize(new Dimension(200, 50)); // Taille boutton
         button.setFont(new Font("Arial", Font.PLAIN, 20)); // Taille du texte du bouton
     }
 
