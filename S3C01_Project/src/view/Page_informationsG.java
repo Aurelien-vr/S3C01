@@ -14,19 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.JCheckBox;
 
-public class Page_informationsA{
+public class Page_informationsG{
 
 	private JFrame frame;
-	private JTextField textField;
 	private JTextField textField_loyer;
-	private JTextField textField_superficie;
-	private JTextField textField_etage;
 	private JTextField textField_numero;
-	private JTextField textField_codeP;
-	private JTextField textField_ville;
 	private JTextField textField_adresse;
+	private JTextField textField_superficie;
 
 	/**
 	 * Launch the application.
@@ -36,7 +31,7 @@ public class Page_informationsA{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Page_informationsA window = new Page_informationsA();
+					Page_informationsG window = new Page_informationsG();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +43,7 @@ public class Page_informationsA{
 	/**
 	 * Create the application.
 	 */
-	public Page_informationsA() {
+	public Page_informationsG() {
 		initialize();
 	}
 
@@ -73,7 +68,7 @@ public class Page_informationsA{
 		});
 		header.add(btn_retour, BorderLayout.EAST);
 		
-		JLabel lbl_SpecificationAppartement = new JLabel("Spécification Appartement");
+		JLabel lbl_SpecificationAppartement = new JLabel("Spécification Garage");
 		lbl_SpecificationAppartement.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_SpecificationAppartement.setFont(new Font("Tahoma", Font.BOLD, 30));
 		header.add(lbl_SpecificationAppartement, BorderLayout.CENTER);
@@ -92,26 +87,6 @@ public class Page_informationsA{
 		textField_adresse.setColumns(10);
 		corps.add(textField_adresse);
 		
-		JLabel lbl_ville = new JLabel("Ville : ");
-		lbl_ville.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_ville.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		corps.add(lbl_ville);
-		
-		textField_ville = new JTextField();
-		textField_ville.setEditable(false);
-		textField_ville.setColumns(10);
-		corps.add(textField_ville);
-		
-		JLabel lbl_codeP = new JLabel("Code postal : ");
-		lbl_codeP.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_codeP.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		corps.add(lbl_codeP);
-		
-		textField_codeP = new JTextField();
-		textField_codeP.setEditable(false);
-		textField_codeP.setColumns(10);
-		corps.add(textField_codeP);
-		
 		JLabel lbl_numero = new JLabel("Numéro : ");
 		lbl_numero.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_numero.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -122,16 +97,6 @@ public class Page_informationsA{
 		textField_numero.setColumns(10);
 		corps.add(textField_numero);
 		
-		JLabel lbl_etage = new JLabel("Etage : ");
-		lbl_etage.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_etage.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		corps.add(lbl_etage);
-		
-		textField_etage = new JTextField();
-		textField_etage.setEditable(false);
-		textField_etage.setColumns(10);
-		corps.add(textField_etage);
-		
 		JLabel lbl_superficie = new JLabel("Superficie : ");
 		lbl_superficie.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_superficie.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -141,33 +106,6 @@ public class Page_informationsA{
 		textField_superficie.setEditable(false);
 		textField_superficie.setColumns(10);
 		corps.add(textField_superficie);
-		
-		JLabel lbl_meuble = new JLabel("Meublé :");
-		lbl_meuble.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_meuble.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		corps.add(lbl_meuble);
-		
-		JCheckBox chkBx_meuble = new JCheckBox("");
-		chkBx_meuble.setHorizontalAlignment(SwingConstants.CENTER);
-		chkBx_meuble.setEnabled(false);
-		corps.add(chkBx_meuble);
-		
-		JButton btn_ListeMeubles = new JButton("Voir liste des meubles");
-		btn_ListeMeubles.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		corps.add(btn_ListeMeubles);
-		
-		JPanel panel_vide = new JPanel();
-		corps.add(panel_vide);
-		
-		JLabel lbl_garage = new JLabel("Garage associé : ");
-		lbl_garage.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_garage.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		corps.add(lbl_garage);
-		
-		JCheckBox chkBx_Garage = new JCheckBox("");
-		chkBx_Garage.setHorizontalAlignment(SwingConstants.CENTER);
-		chkBx_Garage.setEnabled(false);
-		corps.add(chkBx_Garage);
 		
 		JLabel lbl_loyer = new JLabel("Loyer :");
 		lbl_loyer.setHorizontalAlignment(SwingConstants.CENTER);

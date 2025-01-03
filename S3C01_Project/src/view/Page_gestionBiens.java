@@ -24,6 +24,7 @@ public class Page_gestionBiens extends Page_sousHeader{
 	/**
 	 * Create the application.
 	 */
+	
 	public Page_gestionBiens() {
 		super();
 		
@@ -35,6 +36,9 @@ public class Page_gestionBiens extends Page_sousHeader{
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Garage");
 		mnNewMenu.add(mntmNewMenuItem_1);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Immeuble");
+		mnNewMenu.add(mntmNewMenuItem_2);
 		
 		initialize();
 	}
