@@ -1,17 +1,23 @@
 package controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import dao.AvancerDAO;
 import dao.DAOFactory;
 import dao.TravauxDAO;
+import view.ErrorMessage;
 import view.Page_Travaux;
 
+@SuppressWarnings("serial")
 public class Page_TravauxController extends TableSkeletonController{
 	
 	private Page_Travaux view = new Page_Travaux();
+	private AvancerDAO modelAvancer = DAOFactory.createAvancerDAO();
 	private TravauxDAO model = DAOFactory.createTravauxDAO();
 	private List<List<String>> listData;
 	
@@ -19,22 +25,65 @@ public class Page_TravauxController extends TableSkeletonController{
 		super();
         fillTable(); 
         view.setTableModel(modelTable, 1);
+        actionDeleteButton();
+        openAjoutTravauxPage();
+        
+        logoLabel();
+        
         view.setVisible(true);
-       
+	}
+
+	private void logoLabel() {
+		view.getLogoLabel().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Page_PrincipaleController();
+				view.dispose();
+			}
+		});
+	}
+
+	private void actionDeleteButton() {
+		view.getDeleteButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = view.getTable().getSelectedRow();
+				int idTravaux = Integer.parseInt(listData.get(selectedRow).get(listData.get(selectedRow).size() - 1));
+				int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la supression du travaux: " + idTravaux);
+				if (response == JOptionPane.YES_OPTION) {
+					modelAvancer.deleteById(idTravaux);
+				    model.deleteById(idTravaux);
+				    modelTable.setRowCount(0);
+				    fillTable();
+				    view.setTableModel(modelTable, 1);
+				} else if (response == JOptionPane.NO_OPTION) {
+				    return;
+				}
+			}
+		});
+		
+	}
+
+	private void openAjoutTravauxPage() {
+		view.getButtonAjoutTravaux().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Page_AjoutTravauxController();
+				view.dispose();
+			}
+		});
 	}
 	
-	@SuppressWarnings("serial")
 	@Override
 	void fillTable() {
-		 modelTable = new DefaultTableModel(new String[]{"Référence facture", "Adresse", "Logement", "Montant", "Montant non déductible", "Réduction", "Date", "Nature"}, 0) {
+		 modelTable = new DefaultTableModel(new String[]{"Référence facture", "Adresse", "Logement", "Montant", "Montant non déductible", "Réduction", "Date", "Nature", "SUPPRIMER"}, 0) {
 	            @Override
 	            public boolean isCellEditable(int row, int column) {
-	                return false;
+	            	 return column == 8;
 	            }
 	        };
 		
 	        listData = model.procPageTravaux();
-	        System.out.println(listData);
 	        
 	        for (int i = 0; i < listData.size(); i++) {
 	        	List<String> rowResult = listData.get(i);
@@ -48,16 +97,10 @@ public class Page_TravauxController extends TableSkeletonController{
 	        	String date = TableSkeletonController.transformDate(rowResult.get(8));
 	        	String nature = rowResult.get(9);
 	        	
-	        	Object[] row = {refFacture, adresse, logement, montant, montantNonDeductible, reduction, date, nature};
+	        	Object[] row = {refFacture, adresse, logement, montant, montantNonDeductible, reduction, date, nature, "Delete"};
 	        	modelTable.addRow(row);
 	        	
 	        }
 	}
 	
-	
-	
-	 public static void main(String[] args) {
-	        SwingUtilities.invokeLater(() -> new Page_TravauxController());
-	    }
-
 }

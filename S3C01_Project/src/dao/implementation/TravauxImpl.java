@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +87,32 @@ public class TravauxImpl implements TravauxDAO {
      */
     @Override
     public void insert(Travaux entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Travaux(date_travaux, nature, iban, reduction, montant, montant_non_deductible, reduction_special) VALUES (?,?,?,?,?,?,?)";
+   		
+   		try {
+   	        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+   			statement.setDate(1,entity.getDate_travaux());
+    		statement.setString(2, entity.getNature());
+    		statement.setString(3, entity.getIban());
+    		statement.setBigDecimal(4,entity.getReduction());
+    		statement.setBigDecimal(5, entity.getMontant());
+    		statement.setBigDecimal(6, entity.getMontant_non_deductible());
+    		statement.setBigDecimal(7, entity.getReduction_special());
+    			   		
+    		 if (statement.executeUpdate() > 0) {
+    	            ResultSet result = statement.getGeneratedKeys();
+    	            if (result.next()) {
+    	                int id = result.getInt(1);
+    	                entity.setNumero_facture(id);
+    	            }
+    	            System.out.println("User inserted");
+    	        }
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**
@@ -115,7 +142,19 @@ public class TravauxImpl implements TravauxDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Travaux WHERE Numero_facture = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**
@@ -152,7 +191,7 @@ public class TravauxImpl implements TravauxDAO {
 				result = statement.getResultSet();
 				while(result.next()) {
 					ArrayList<String> cell = new ArrayList<String>();
-					for(int i = 1; i <= 10; i++) {
+					for(int i = 1; i <= 11; i++) {
 						 String value = result.getString(i);
 		                    cell.add(value != null ? value : "Unknown");
 					}
@@ -166,6 +205,28 @@ public class TravauxImpl implements TravauxDAO {
 			DatabaseConnection.closeStatement(statement);
 		}
 		return arrayRes;
-		
+	}
+
+	@Override
+	public void insertFK(int id, String facture) {
+	    PreparedStatement statement = null;
+	    String query = "UPDATE db1_sae.Travaux SET Reference_facture = ? WHERE Numero_facture = ?";
+	    
+	    try {
+	        statement = connection.prepareStatement(query);
+	        statement.setString(1, facture);
+	        statement.setInt(2, id);
+	        
+	        if (statement.executeUpdate() > 0) {
+	            System.out.println("FK inserted");
+	        }
+	    } catch (SQLIntegrityConstraintViolationException e) {
+	        System.out.println("Integrity constraint violation: " + e.getMessage());
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeStatement(statement);
+	    }
 	}
 }

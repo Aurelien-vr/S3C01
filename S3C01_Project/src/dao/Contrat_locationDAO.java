@@ -1,7 +1,5 @@
 package dao;
 
-import java.util.List;
-
 import dao.entities.Contrat_location;
 /**
  * Interface spécifique pour les opérations liées à l'entité {@link Contrat_location}.

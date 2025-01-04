@@ -1,6 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.Objects;
 
 /**
@@ -11,17 +12,17 @@ import java.util.Objects;
 public class Assurance {
 
     private int numero_contrat;  // Numéro de contrat d'assurance
+    private Date date_assurance;
     private BigDecimal prime;  // Montant de la prime d'assurance
-    private BigDecimal taux_augmentation;  // Taux d'augmentation de la prime
     private BigDecimal protection_juridique;  // Montant de la protection juridique incluse
     private int id_bien;  // Identifiant du bien assuré
 
     public Assurance() {};
     
-    public Assurance(BigDecimal prime, BigDecimal taux_augmentation, BigDecimal protection_juridique) {
+    public Assurance(Date date_assurance, BigDecimal prime, BigDecimal protection_juridique) {
 		super();
+		this.date_assurance = date_assurance;
 		this.prime = prime;
-		this.taux_augmentation = taux_augmentation;
 		this.protection_juridique = protection_juridique;
 	}
 
@@ -61,23 +62,7 @@ public class Assurance {
         this.prime = prime;
     }
 
-    /**
-     * Récupère le taux d'augmentation de la prime d'assurance.
-     *
-     * @return Le taux d'augmentation de la prime.
-     */
-    public BigDecimal getTaux_augmentation() {
-        return taux_augmentation;
-    }
-
-    /**
-     * Définit le taux d'augmentation de la prime d'assurance.
-     *
-     * @param taux_augmentation Le taux d'augmentation à définir.
-     */
-    public void setTaux_augmentation(BigDecimal taux_augmentation) {
-        this.taux_augmentation = taux_augmentation;
-    }
+   
 
     /**
      * Récupère le montant de la protection juridique.
@@ -114,27 +99,19 @@ public class Assurance {
     public void setId_bien(int id_bien) {
         this.id_bien = id_bien;
     }
+    
+    
+	public Date getDate_assurance() {
+		return date_assurance;
+	}
 
-    /**
-     * Retourne une représentation textuelle de l'objet {@link Assurance}.
-     * Utilisé pour un affichage ou un débogage rapide.
-     *
-     * @return Une chaîne de caractères représentant l'assurance.
-     */
-    @Override
-    public String toString() {
-        return "Assurance{" +
-               "numero_contrat=" + numero_contrat +
-               ", prime=" + (prime != null ? prime : "N/A") +
-               ", taux_augmentation=" + (taux_augmentation != null ? taux_augmentation : "N/A") +
-               ", protection_juridique=" + (protection_juridique != null ? protection_juridique : "N/A") +
-               ", id_bien=" + id_bien +
-               '}';
-    }
+	public void setDate_assurance(Date date_assurance) {
+		this.date_assurance = date_assurance;
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id_bien, numero_contrat, prime, protection_juridique, taux_augmentation);
+		return Objects.hash(date_assurance, id_bien, numero_contrat, prime, protection_juridique);
 	}
 
 	@Override
@@ -146,9 +123,11 @@ public class Assurance {
 		if (getClass() != obj.getClass())
 			return false;
 		Assurance other = (Assurance) obj;
-		return id_bien == other.id_bien && numero_contrat == other.numero_contrat && Objects.equals(prime, other.prime)
-				&& Objects.equals(protection_juridique, other.protection_juridique)
-				&& Objects.equals(taux_augmentation, other.taux_augmentation);
+		return Objects.equals(date_assurance, other.date_assurance) && id_bien == other.id_bien
+				&& numero_contrat == other.numero_contrat && Objects.equals(prime, other.prime)
+				&& Objects.equals(protection_juridique, other.protection_juridique);
 	}
+
+
     
 }

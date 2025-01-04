@@ -10,4 +10,6 @@ import dao.entities.Travaux;
  */
 public interface TravauxDAO extends DAO<Travaux> {
 	public List<List<String>> procPageTravaux();
+	
+	public void insertFK(int id, String facture);
 }

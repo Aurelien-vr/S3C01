@@ -1,9 +1,12 @@
 package dao.implementation;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.FactureDAO;
@@ -76,7 +79,26 @@ public class FactureImpl implements FactureDAO {
      */
     @Override
     public void insert(Facture entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Facture(reference_facture, type_facture , date_facture , montant_facture, moyen_paiement) VALUES (?,?,?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+   			statement.setString(1,entity.getReference_facture());
+    		statement.setString(2, entity.getType_facture());
+    		statement.setDate(3, entity.getDate_facture());
+    		statement.setBigDecimal(4, entity.getMontant_facture());
+    		statement.setString(5, entity.getMoyen_paiement());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**
@@ -103,6 +125,24 @@ public class FactureImpl implements FactureDAO {
     public void deleteById(long id) {
         // TODO Auto-generated method stub
     }
+    
+    
+    @Override
+    public void deleteByRef(String ref) {
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Facture WHERE Reference_facture = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, ref);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
+    }
 
     /**
      * Crée une entité {@link Facture} à partir des résultats d'une requête SQL.
@@ -121,4 +161,82 @@ public class FactureImpl implements FactureDAO {
         facture.setMoyen_paiement(result.getString("Moyen_paiement"));
         return facture;
     }
+
+	@Override
+	public String[] get_numFacture() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_numFacture()}";
+		String[] factureNumbers = null;
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				ArrayList<String> factureList = new ArrayList<>();
+	            while (result.next()) {
+	                factureList.add(result.getString("Reference_facture"));}
+	            factureNumbers = factureList.toArray(new String[0]);
+			}
+		}catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}
+		
+		return factureNumbers;
+	}
+	
+	@Override
+	public void insertFK(int idBien, String refFacture) {
+	    PreparedStatement statement = null;
+	    String query = "UPDATE db1_sae.Facture SET Id_Bien = ? WHERE Reference_facture = ?";
+	    
+	    try {
+	        statement = connection.prepareStatement(query);
+	        statement.setString(2, refFacture);
+	        statement.setInt(1, idBien);
+	        
+	        if (statement.executeUpdate() > 0) {
+	            System.out.println("FK inserted");
+	        }
+
+	    } catch (SQLIntegrityConstraintViolationException e) {
+	        System.out.println("Integrity constraint violation: " + e.getMessage());
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeStatement(statement);
+	    }
+	}
+	
+	
+	@Override
+	public List<List<String>> procGet_factures() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_factures()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<String>();
+					for(int i = 1; i <= 6; i++) {
+						 String value = result.getString(i);
+		                    cell.add(value != null ? value : "Unknown");
+					}
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
+	
 }

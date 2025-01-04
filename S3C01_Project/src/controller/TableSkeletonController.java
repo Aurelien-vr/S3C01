@@ -3,15 +3,16 @@ package controller;
 import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
 import com.formdev.flatlaf.json.ParseException;
-import exception.ExceptionStorageHandler;
 import view.TableSkeleton;
 
-public abstract class TableSkeletonController {
+public abstract class TableSkeletonController extends PageHeaderSkeletonController{
 
     protected TableSkeleton view = new TableSkeleton();
     protected DefaultTableModel modelTable;
 
-    public TableSkeletonController() {}
+    public TableSkeletonController() {
+    	super();
+    }
 
     abstract void fillTable();
     
@@ -22,7 +23,6 @@ public abstract class TableSkeletonController {
             java.util.Date date = inputFormat.parse(inputDate);
             return outputFormat.format(date);
         } catch (ParseException | java.text.ParseException e) {
-            //ExceptionStorageHandler.LogException(e, null);
         	e.printStackTrace();
             return null;
         }

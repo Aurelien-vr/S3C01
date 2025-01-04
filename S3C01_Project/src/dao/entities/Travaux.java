@@ -1,7 +1,7 @@
 package dao.entities;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 
 /**
@@ -48,7 +48,7 @@ public class Travaux {
     /**
      * Définit le numéro de la facture.
      *
-     * @param numero_facture Le numéro de la facture à définir.
+     * @param string Le numéro de la facture à définir.
      */
     public void setNumero_facture(int numero_facture) {
         this.numero_facture = numero_facture;

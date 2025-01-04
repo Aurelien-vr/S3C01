@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import dao.entities.Facture;
 
 /**
@@ -7,6 +9,9 @@ import dao.entities.Facture;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface FactureDAO extends DAO<Facture> {
-    // Les méthodes spécifiques à l'entité Facture peuvent être ajoutées ici si nécessaire
+    public String[] get_numFacture();
+    public void insertFK(int id, String facture); 
+    public List<List<String>> procGet_factures();
+	void deleteByRef(String ref);
 }
 

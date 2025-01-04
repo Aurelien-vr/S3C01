@@ -1,9 +1,5 @@
 package dao.implementation;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import java.sql.*;
@@ -69,8 +65,30 @@ public class BienImpl implements BienDAO {
      */
     @Override
     public List<Bien> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Bien> biens = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Bien";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Bien acte = createEntities(result);
+                biens.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return biens;
     }
 
     /**
@@ -151,6 +169,7 @@ public class BienImpl implements BienDAO {
         // Création de l'entité Bien à partir des données du ResultSet
         Bien bien = new Bien();
         
+        bien.setId_bien(result.getInt(1));
         bien.setEtage(result.getInt(2));
         bien.setAdresse(result.getString(3));
         bien.setVille(result.getString(4));
@@ -164,4 +183,31 @@ public class BienImpl implements BienDAO {
         
         return bien;  // Retourne l'entité Bien construite
     }
+    
+    @Override
+	public String[] get_AllAdresses() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_AllAdresses()}";
+		String[] factureNumbers = null;
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				ArrayList<String> factureList = new ArrayList<>();
+	            while (result.next()) {
+	            	 String address = result.getString(1);
+	            	 String ville = result.getString(2);	            	 
+	            	 factureList.add(address + " | " + ville);
+	            }
+	            factureNumbers = factureList.toArray(new String[0]);
+			}
+		}catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}
+		
+		return factureNumbers;
+	}
+    
 }

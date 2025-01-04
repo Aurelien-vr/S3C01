@@ -1,13 +1,19 @@
 package dao.implementation;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.AssuranceDAO;
 import dao.entities.Assurance;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link AssuranceDAO} pour gérer les opérations sur les entités "Assurance".
@@ -80,7 +86,29 @@ public class AssuranceImpl implements AssuranceDAO {
      */
     @Override
     public void insert(Assurance entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+		String query = "INSERT INTO db1_sae.Assurance(date_assurance ,prime, Protection_juridique) VALUES (?,?,?)";
+		
+		try {
+   	        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			statement.setDate(1, entity.getDate_assurance());
+			statement.setBigDecimal(2, entity.getPrime());
+			statement.setBigDecimal(3,entity.getProtection_juridique());
+			
+			
+   		 if (statement.executeUpdate() > 0) {
+	            ResultSet result = statement.getGeneratedKeys();
+	            if (result.next()) {
+	                int id = result.getInt(1);
+	                entity.setId_bien(id);
+	            }
+	            System.out.println("User inserted");
+	        }
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeStatement(statement);
+		}
     }
 
     /**
@@ -124,9 +152,60 @@ public class AssuranceImpl implements AssuranceDAO {
     public Assurance createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Assurance à partir des données du ResultSet
         Assurance assurance = new Assurance();
+        assurance.setDate_assurance(result.getDate("Date_assurance"));
         assurance.setPrime(result.getBigDecimal("Prime"));
-        assurance.setTaux_augmentation(result.getBigDecimal("Taux_augmentation"));
-        assurance.setProtection_juridique(result.getBigDecimal("Protection_juridique"));
         return assurance; // Retourne l'entité Assurance construite
     }
+
+	@Override
+	public List<List<String>> procGet_assurances() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_assurances()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<String>();
+					for(int i = 1; i <= 4; i++) {
+						 String value = result.getString(i);
+		                    cell.add(value != null ? value : "Unknown");
+					}
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
+
+	@Override
+	public void insertFK(int selectedIdBien, int numeroContrat) {
+	  PreparedStatement statement = null;
+	    String query = "UPDATE db1_sae.Assurance SET Id_Bien = ? WHERE Numero_contrat = ?";
+	    
+	    try {
+	        statement = connection.prepareStatement(query);
+	        statement.setInt(1, selectedIdBien);
+	        statement.setInt(2, numeroContrat);
+	        if (statement.executeUpdate() > 0) {
+	            System.out.println("FK inserted");
+	        }
+	    } catch (SQLIntegrityConstraintViolationException e) {
+	        System.out.println("Integrity constraint violation: " + e.getMessage());
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeStatement(statement);
+	    }
+	}		
+	
 }

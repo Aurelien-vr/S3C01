@@ -1,14 +1,9 @@
 package view;
 
 import javax.swing.*;
-
-import controller.TableSkeletonController;
-import dbConnection.DatabaseConnection;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+@SuppressWarnings("serial")
 public class Page_Coo extends WindowSkeleton {
 	
 	public JButton connectButton;

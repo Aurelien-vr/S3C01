@@ -11,4 +11,6 @@ import dao.entities.Bien;
 public interface BienDAO extends DAO<Bien> {
     // Les méthodes spécifiques à l'entité Bien peuvent être ajoutées ici si nécessaire
 	public List<List<String>> BienStatus();
+	
+	String[] get_AllAdresses();
 }

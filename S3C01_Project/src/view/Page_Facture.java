@@ -6,20 +6,16 @@ import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 
 @SuppressWarnings("serial")
-public class Page_Travaux extends TableSkeleton{
+public class Page_Facture extends TableSkeleton{
 	
-	JButton ajoutTravaux = new JButton();
-	
-	public Page_Travaux() {
-		super();
-		
-	    ajoutTravaux = addButtonTravaux();
+	private JButton ajoutFacture = new JButton();
+
+	public Page_Facture() {
+		ajoutFacture = addButtonTravaux();
         
-        layeredPane.add(ajoutTravaux, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(ajoutFacture, JLayeredPane.PALETTE_LAYER);
         layeredPane.revalidate();
         layeredPane.repaint();
-        
-        
 	}
 
 	private JButton addButtonTravaux() {
@@ -32,8 +28,8 @@ public class Page_Travaux extends TableSkeleton{
 	}
 	
 	
-
-	public JButton getButtonAjoutTravaux() {
-		return ajoutTravaux;
+	public JButton getAjoutFacture() {
+		return ajoutFacture;
 	}
+
 }

@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import dao.entities.Assurance;
 
 /**
@@ -7,5 +9,7 @@ import dao.entities.Assurance;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface AssuranceDAO extends DAO<Assurance> {
-    // Les méthodes spécifiques à l'entité Assurance peuvent être ajoutées ici si nécessaire
+
+	List<List<String>> procGet_assurances();
+	void insertFK(int selectedIdBien, int numeroContrat);
 }

@@ -11,12 +11,13 @@ import dbConnection.DatabaseConnection;
 import view.ErrorMessage;
 import view.Page_Coo;
 
-public class Page_CooController {
+public class Page_CooController extends WindowSkeletonController {
 	
 	private Page_Coo view = new Page_Coo();
 	
 	public Page_CooController() {
-		
+		super();
+			
 		view.getConnectButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -38,15 +39,13 @@ public class Page_CooController {
     	if(!DatabaseConnection.connected) {
     		ErrorMessage.errorDialog("Nom d'utilisateur ou mot de passe incorrecte");
     	}else {
-    		//new Page_PrincipaleController();
-    		new Page_TravauxController();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new Page_PrincipaleController();
+                }
+            }); 
     		view.dispose();
       	}
-    	
     }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Page_CooController());
-    }
-	
 }
