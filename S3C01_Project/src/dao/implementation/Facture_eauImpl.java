@@ -132,8 +132,23 @@ public class Facture_eauImpl implements Facture_eauDAO {
      */
     @Override
     public void update(Facture_eau entity) {
-        // Implémentation de la mise à jour de l'entité Facture_eau dans la base
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture_eau SET partie_fixe = ?, consommation = ? WHERE id_facture_eau = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBigDecimal(1, entity.getPartie_fixe());
+            statement.setBigDecimal(2, entity.getConsommation());
+            statement.setLong(3, entity.getId_facture_eau());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     
 

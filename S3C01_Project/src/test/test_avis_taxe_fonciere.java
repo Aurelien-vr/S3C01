@@ -110,5 +110,20 @@ public class test_avis_taxe_fonciere {
 			    assertEquals(true, avis.contains(avis_taxe_fonciere));
 		    }
 		} 
+	
+	@Test
+	public void testUpdate() {
+	    Date nouvelDate = Date.valueOf("2019-10-10");
+	    String nouveauDeb = "IUT";
+	    
+	    avis_taxe_fonciere.setNumero_fiscal(idInsertSetup);
+	    avis_taxe_fonciere.setDate_etablissement(nouvelDate);
+	    avis_taxe_fonciere.setDebiteur_legaux(nouveauDeb);
+	    
+	    avis_taxe_fonciereDAO.update(avis_taxe_fonciere);
+	    
+	    assertEquals(nouvelDate, avis_taxe_fonciere.getDate_etablissement());
+	    assertEquals(nouveauDeb, avis_taxe_fonciere.getDebiteur_legaux());
+	}
 
 }

@@ -133,8 +133,24 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
      */
     @Override
     public void update(Solde_de_tout_compte entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Solde_de_tout_compte SET reste_a_devoir = ?, provision_pour_charges = ?, caution = ? WHERE id_solde_de_tout_compte = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBigDecimal(1, entity.getReste_a_devoir());
+            statement.setBigDecimal(2, entity.getProvision_pour_charges());
+            statement.setBigDecimal(3, entity.getCaution());
+            statement.setLong(4, entity.getId_solde_de_tout_compte());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Supprime un solde de tout compte par l'identifiant du locataire (fonctionnalité à implémenter).

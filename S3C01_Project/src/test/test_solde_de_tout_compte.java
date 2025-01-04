@@ -113,21 +113,24 @@ public class test_solde_de_tout_compte {
 		    assertEquals(true, soldes.contains(solde_de_tout_compte));
 		
 	    }
-	} 
+	}
 	
-	//@Test
-	//public void testCreateEntities() {
-		//try{
-			//BigDecimal reste_a_devoir = result.getBigDecimal("reste_a_devoir");
-			//BigDecimal provision_pour_charges = result.getBigDecimal("provision_pour_charges");
-			//BigDecimal caution = result.getBigDecimal("caution");
-			//Solde_de_tout_compte solde = solde_de_tout_compteDAO.createEntities(result);
-			//assertEquals(solde.getReste_a_devoir(), reste_a_devoir);
-			//assertEquals(solde.getProvision_pour_charges(), provision_pour_charges);
-			//assertEquals(solde.getCaution(), caution);
-		//}catch (Exception e) {
-			//ExceptionStorageHandler.LogException(e, connection);
-	//	} 
-	//}
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouveauResteADoive = new BigDecimal(25).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouvelleProvisionPourCharges = new BigDecimal(35).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouvelleCaution = new BigDecimal(55).setScale(2, RoundingMode.DOWN);
+
+	    solde_de_tout_compte.setReste_a_devoir(nouveauResteADoive);
+	    solde_de_tout_compte.setProvision_pour_charges(nouvelleProvisionPourCharges);
+	    solde_de_tout_compte.setCaution(nouvelleCaution);
+
+	    solde_de_tout_compteDAO.update(solde_de_tout_compte);
+
+	    assertEquals(nouveauResteADoive, solde_de_tout_compte.getReste_a_devoir());
+	    assertEquals(nouvelleProvisionPourCharges, solde_de_tout_compte.getProvision_pour_charges());
+	    assertEquals(nouvelleCaution, solde_de_tout_compte.getCaution());
+	}
+
 
 }

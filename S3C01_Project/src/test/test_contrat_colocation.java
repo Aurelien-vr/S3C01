@@ -111,5 +111,22 @@ public class test_contrat_colocation {
 		
 	    }
 	} 
+	
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouvellePartDesCharges = new BigDecimal(500).setScale(2, RoundingMode.DOWN);
+	    boolean nouvelleClauseSolidarite = false;
+
+	    contrat_colocation.setClause_solidarite(nouvelleClauseSolidarite);
+	    contrat_colocation.setPart_des_charges(nouvellePartDesCharges);
+
+	    contrat_colocationDAO.update(contrat_colocation);
+
+	    assertEquals(nouvelleClauseSolidarite, contrat_colocation.isClause_solidarite());
+	    assertEquals(nouvellePartDesCharges, contrat_colocation.getPart_des_charges());
+	}
+
+
+
 
 }

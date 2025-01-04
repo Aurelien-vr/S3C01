@@ -137,8 +137,28 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
      */
     @Override
     public void update(Regularisation_charges entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Regularisation_charges SET date_effet = ?, charge_eau = ?, charge_ordure_menagere = ?, charge_eclairage = ?, provision_pour_charge = ?, indice = ?, entretien = ? WHERE id_charge_locataire = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setDate(1, entity.getDate_effet());
+            statement.setBigDecimal(2, entity.getCharge_eau());
+            statement.setBigDecimal(3, entity.getCharge_ordure_menagere());
+            statement.setBigDecimal(4, entity.getCharge_eclairage());
+            statement.setBigDecimal(5, entity.getProvision_pour_charge());
+            statement.setBigDecimal(6, entity.getIndice());
+            statement.setString(7, entity.getEntretien());
+            statement.setLong(8, entity.getId_charge_locataire());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Supprime une régularisation des charges par l'identifiant du locataire (fonctionnalité à implémenter).

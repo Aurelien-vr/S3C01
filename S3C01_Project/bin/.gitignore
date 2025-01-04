@@ -1,3 +1,5 @@
-/test/
 /dao/
+/dbConnection/
 /exception/
+/test/
+/view/

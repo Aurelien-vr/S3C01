@@ -66,7 +66,7 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
     }
 
     /**
-     * Recherche tous les actes de cautionnement (fonctionnalité à implémenter).
+     * Recherche tous les actes de cautionnement .
      * 
      * @return Liste des actes de cautionnement ou {@code null} si non implémentée.
      */
@@ -101,7 +101,7 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
 
 
     /**
-     * Crée un nouvel acte de cautionnement dans la base de données (fonctionnalité à implémenter).
+     * Crée un nouvel acte de cautionnement dans la base de données .
      * 
      * @param entity L'entité Acte_cautionnement à créer.
      */
@@ -126,18 +126,33 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
     }
     
     /**
-     * Met à jour un acte de cautionnement existant dans la base de données (fonctionnalité à implémenter).
+     * Met à jour un acte de cautionnement existant dans la base de données.
      * 
      * @param entity L'entité Acte_cautionnement à mettre à jour.
      */
     @Override
     public void update(Acte_cautionnement entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Acte_cautionnement SET Montant_caution = ? WHERE Id_Acte_cautionnement = ?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBigDecimal(1, entity.getMontant_caution());
+            statement.setLong(2, entity.getId_acte_cautionnement()); // Ajoute l'ID ici
+
+            int rowsUpdated = statement.executeUpdate();
+            System.out.println("Nombre de lignes mises à jour : " + rowsUpdated);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
 
+
+
     /**
-     * Supprime un acte de cautionnement par son identifiant (fonctionnalité à implémenter).
+     * Supprime un acte de cautionnement par son identifiant .
      * 
      * @param id L'identifiant de l'acte de cautionnement à supprimer.
      */

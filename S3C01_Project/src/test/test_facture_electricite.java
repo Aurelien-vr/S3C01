@@ -111,5 +111,21 @@ public class test_facture_electricite {
 		
 	    }
 	} 
+	
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouveauCompteurElectricite = new BigDecimal(60).setScale(2, RoundingMode.DOWN);
+	    String nouveauPrixKwElectricite = "15/kw";
+
+	    facture_electricite.setCompteur_electricite(nouveauCompteurElectricite);
+	    facture_electricite.setPrix_kw_electricite(nouveauPrixKwElectricite);
+
+	    facture_electriciteDAO.update(facture_electricite);
+	    
+	    
+	    assertEquals(nouveauCompteurElectricite, facture_electricite.getCompteur_electricite());
+	    assertEquals(nouveauPrixKwElectricite, facture_electricite.getPrix_kw_electricite());
+	}
+
 
 }

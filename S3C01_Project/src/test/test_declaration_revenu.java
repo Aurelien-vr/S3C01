@@ -111,5 +111,23 @@ public class test_declaration_revenu {
 		}
 	    
 	} 
+	
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouvelleRecetteImmeuble = new BigDecimal(700).setScale(2, RoundingMode.DOWN);
+	    Date nouvelleDateAcquisition = Date.valueOf("2019-08-20");
+	    int nouveauxLocataires = 8;
+
+	    declaration_revenu.setRecette_immeuble(nouvelleRecetteImmeuble);
+	    declaration_revenu.setDate_acquisition(nouvelleDateAcquisition);
+	    declaration_revenu.setLocataires(nouveauxLocataires);
+
+	    declaration_revenuDAO.update(declaration_revenu);
+
+	    assertEquals(nouvelleRecetteImmeuble, declaration_revenu.getRecette_immeuble());
+	    assertEquals(nouvelleDateAcquisition, declaration_revenu.getDate_acquisition());
+	    assertEquals(nouveauxLocataires, declaration_revenu.getLocataires());
+	}
+
 
 }

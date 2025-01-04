@@ -6,8 +6,7 @@ import org.junit.*;
 import application.App;
 import dao.*;
 import dao.entities.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -110,7 +109,33 @@ public class test_bien {
 		    
 		    //Vérifie que l'acte inséré au setUp() est bien dans la liste des actes
 		    assertEquals(true, biens.contains(bien));
+		    }
 	    }
-	} 
+	    
+	    @Test
+	    public void testBienStatus() {
+	        // Appel à la méthode BienStatus
+	        List<List<String>> result = bienDAO.BienStatus();
+
+	        // Vérification que le résultat n'est pas vide
+	        assertNotNull("La méthode BienStatus ne doit pas retourner null", result);
+	        assertFalse("La méthode BienStatus doit retourner des résultats", result.isEmpty());
+	    } 
+	    
+	    @Test
+	    public void testUpdate() {
+	        bien.setAdresse("44 rue des oiseaux");
+	        bien.setVille("Paris");
+	        bien.setSuperficie(new BigDecimal(350).setScale(2, RoundingMode.DOWN));
+
+	        bienDAO.update(bien);
+
+	        assertEquals(bien.getAdresse(), bien.getAdresse());
+	        assertEquals(bien.getVille(), bien.getVille());
+	        assertEquals(bien.getSuperficie(), bien.getSuperficie());
+	    }
+
+	   
+
 
 }

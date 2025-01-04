@@ -135,8 +135,25 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
      */
     @Override
     public void update(Etat_des_lieux entity) {
-        // Implémentation de la mise à jour de l'entité Etat_des_lieux dans la base
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Etat_des_lieux SET date_signature = ?, nombre_cles = ?, etats_des_element = ?, est_entrer = ? WHERE id_etat_des_lieux = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setDate(1, entity.getDate_signature());
+            statement.setInt(2, entity.getNombre_cles());
+            statement.setString(3, entity.getEtat_des_elements());
+            statement.setBoolean(4, entity.isEst_entrer());
+            statement.setLong(5, entity.getId_etat_des_lieux());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
 
     /**

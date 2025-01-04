@@ -103,7 +103,28 @@ public class test_facture_gaz {
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
+	        
+	      //Vérifie que le nombre d'actes retournés par findAll() correspond au nombre réel d'actes dans la base
+		    assertEquals(nombreFactsGazDansLaBase, factsgaz.size());
+		    
+		    //Vérifie que l'acte inséré au setUp() est bien dans la liste des actes
+		    assertEquals(true, factsgaz.contains(facture_gaz));
 	    }
 	} 
+	
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouvelleConsommation = new BigDecimal(50).setScale(2, RoundingMode.DOWN);
+	    String nouveauPrixM3Gaz = "12/m3";
+
+	    facture_gaz.setConsommation_m3(nouvelleConsommation);
+	    facture_gaz.setPrix_m3_gaz(nouveauPrixM3Gaz);
+
+	    facture_gazDAO.update(facture_gaz);
+
+	    assertEquals(nouvelleConsommation, facture_gaz.getConsommation_m3());
+	    assertEquals(nouveauPrixM3Gaz, facture_gaz.getPrix_m3_gaz());
+	}
+
 
 }

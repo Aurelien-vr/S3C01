@@ -113,4 +113,22 @@ public class test_assurance {
 		    assertEquals(true, ass.contains(assurance));
 	    }
 	} 
+	
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouvelPrime = new BigDecimal(7).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouveauTaux = new BigDecimal(7).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouvelPro = new BigDecimal(7).setScale(2, RoundingMode.DOWN);
+	    
+	    assurance.setNumero_contrat(idInsertSetup);
+	    assurance.setPrime(nouvelPrime);
+	    assurance.setTaux_augmentation(nouveauTaux);
+	    assurance.setProtection_juridique(nouvelPro);
+	    
+	    assuranceDAO.update(assurance);
+	    
+	    assertEquals(nouvelPrime, assurance.getPrime());
+	    assertEquals(nouveauTaux, assurance.getTaux_augmentation());
+	    assertEquals(nouvelPro, assurance.getProtection_juridique());
+	}
 }

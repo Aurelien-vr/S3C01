@@ -110,5 +110,26 @@ public class test_etat_des_lieux {
 	    }
 	    
 	} 
+	
+	@Test
+	public void testUpdate() {
+	    Date nouvelleDateSignature = Date.valueOf("2024-12-10");
+	    int nouveauNombreCles = 6;
+	    String nouvelEtatDesElements = "Bien";
+	    boolean nouvelleEstEntrer = false;
+
+	    etat_des_lieux.setDate_signature(nouvelleDateSignature);
+	    etat_des_lieux.setNombre_cles(nouveauNombreCles);
+	    etat_des_lieux.setEtat_des_elements(nouvelEtatDesElements);
+	    etat_des_lieux.setEst_entrer(nouvelleEstEntrer);
+
+	    etat_des_lieuxDAO.update(etat_des_lieux);
+
+	    assertEquals(nouvelleDateSignature, etat_des_lieux.getDate_signature());
+	    assertEquals(nouveauNombreCles, etat_des_lieux.getNombre_cles());
+	    assertEquals(nouvelEtatDesElements, etat_des_lieux.getEtat_des_elements());
+	    assertEquals(nouvelleEstEntrer, etat_des_lieux.isEst_entrer());
+	}
+
 
 }

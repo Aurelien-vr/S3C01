@@ -115,28 +115,24 @@ public class test_travaux {
 	    }
 	} 
 	
-	//@Test
-	//public void testCreateEntities() {
-		//try{
-			//Date date_travaux = result.getDate("date_travaux");
-			//String nature = result.getString("nature");
-			//String iban = result.getString("iban");
-			//BigDecimal reduction = result.getBigDecimal("reduction");
-			//BigDecimal montant = result.getBigDecimal("montant");
-			//BigDecimal montant_non_deductible = result.getBigDecimal("montant_non_deductible");
-			//BigDecimal reduction_special = result.getBigDecimal("reduction_special");
-			
-			//Travaux tr = travauxDAO.createEntities(result);
-			//assertEquals(tr.getDate_travaux(), date_travaux);
-			//assertEquals(tr.getNature(), nature);
-			//assertEquals(tr.getIban(), iban);
-			//assertEquals(tr.getReduction(), reduction);
-			//assertEquals(tr.getMontant(), montant);
-			//assertEquals(tr.getMontant_non_deductible(), montant_non_deductible);
-			//assertEquals(tr.getReduction_special(), reduction_special);
-		//}catch (Exception e) {
-			//ExceptionStorageHandler.LogException(e, connection);
-		//} 
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouvelleReduction = new BigDecimal(40).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouveauMontant = new BigDecimal(60).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouveauMontantNonDeductible = new BigDecimal(30).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouvelleReductionSpeciale = new BigDecimal(5).setScale(2, RoundingMode.DOWN);
 
-	//}
+	    travaux.setReduction(nouvelleReduction);
+	    travaux.setMontant(nouveauMontant);
+	    travaux.setMontant_non_deductible(nouveauMontantNonDeductible);
+	    travaux.setReduction_special(nouvelleReductionSpeciale);
+
+	    travauxDAO.update(travaux);
+
+	    assertEquals(nouvelleReduction, travaux.getReduction());
+	    assertEquals(nouveauMontant, travaux.getMontant());
+	    assertEquals(nouveauMontantNonDeductible, travaux.getMontant_non_deductible());
+	    assertEquals(nouvelleReductionSpeciale, travaux.getReduction_special());
+	}
+
 }

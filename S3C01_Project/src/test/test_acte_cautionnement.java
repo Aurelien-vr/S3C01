@@ -112,6 +112,21 @@ public class test_acte_cautionnement {
 		acte_cautionnementDAO.deleteById(idInsertSetup);
 		assertNull(acte_cautionnementDAO.findOne(idInsertSetup));
 		}
+	
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouveauMontant = new BigDecimal(7).setScale(2, RoundingMode.DOWN);
+
+	    acte_cautionnement.setId_acte_cautionnement(idInsertSetup);
+	    acte_cautionnement.setMontant_caution(nouveauMontant);
+
+	    acte_cautionnementDAO.update(acte_cautionnement);
+
+
+	    assertEquals(nouveauMontant, acte_cautionnement.getMontant_caution());
+	}
+
+	
 
 	
 

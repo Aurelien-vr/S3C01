@@ -9,6 +9,9 @@ import application.App;
 import dao.Contrat_locationDAO;
 import dao.DAOFactory;
 import dao.entities.Contrat_location;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 import java.util.List;
 
@@ -115,23 +118,33 @@ public class test_contrat_location {
 		contrat_locationDAO.deleteById(idInsertSetup);
 		assertNull(contrat_locationDAO.findOne(idInsertSetup));
 		}
+	
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouveauMontantLoyer = new BigDecimal(850).setScale(2, RoundingMode.DOWN);
+	    Date nouvelleDateDebut = Date.valueOf("2024-5-1");
+	    Date nouvelleDateFin = Date.valueOf("2025-6-1");
+	    String nouvelleModaliteChauffage = "DPE=B, et autre truc";
+	    String nouvelleModaliteEauChaudeSanitaire = "chaudière de 2025";
+	    Date nouvelleDateVersement = Date.valueOf("1000-06-01");
+	    
+	    contrat_location.setMontant_loyer(nouveauMontantLoyer.intValue());
+	    contrat_location.setDate_debut(nouvelleDateDebut);
+	    contrat_location.setDate_fin(nouvelleDateFin);
+	    contrat_location.setModalite_chauffage(nouvelleModaliteChauffage);
+	    contrat_location.setModalite_eau_chaude_sanitaire(nouvelleModaliteEauChaudeSanitaire);
+	    contrat_location.setDate_versement(nouvelleDateVersement);
+	    
+	    contrat_locationDAO.update(contrat_location);
+	    
+	    assertEquals(nouveauMontantLoyer.intValue(), contrat_location.getMontant_loyer());
+	    assertEquals(nouvelleDateDebut, contrat_location.getDate_debut());
+	    assertEquals(nouvelleDateFin, contrat_location.getDate_fin());
+	    assertEquals(nouvelleModaliteChauffage, contrat_location.getModalite_chauffage());
+	    assertEquals(nouvelleModaliteEauChaudeSanitaire, contrat_location.getModalite_eau_chaude_sanitaire());
+	    assertEquals(nouvelleDateVersement, contrat_location.getDate_versement());
+	}
 
-	//@Test
-	//public void testCreateEntities() throws SQLException {
-		//int Montant = result.getInt(2);
-		//Date Date_debut = result.getDate("date_debut");
-		//Date Date_fin = result.getDate("date_fin");
-		//String Modalite_chauffage = result.getString("modalite_chauffage");
-		//String Modalite_eau_chaude_sanitaire = result.getString("modalite_eau_chaude_sanitaire");
-		//Date Date_versement = result.getDate("date_versement");
-		//Contrat_location cl = contrat_locationDAO.createEntities(result);
-		//System.out.println(cl);
-		//assertEquals(cl.getMontant_loyer(), Montant);
-		//assertEquals(cl.getDate_debut(), Date_debut);
-		//assertEquals(cl.getDate_fin(), Date_fin);
-		//assertEquals(cl.getModalite_chauffage(), Modalite_chauffage);
-		//assertEquals(cl.getModalite_eau_chaude_sanitaire(), Modalite_eau_chaude_sanitaire);
-		//assertEquals(cl.getDate_versement(), Date_versement);
 
-	//}
+	
 }

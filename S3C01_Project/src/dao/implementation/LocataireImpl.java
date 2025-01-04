@@ -134,8 +134,25 @@ public class LocataireImpl implements LocataireDAO {
      */
     @Override
     public void update(Locataire entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Locataire SET nom = ?, prenom = ?, date_de_naissance = ?, iban = ? WHERE id_locataire = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, entity.getNom());
+            statement.setString(2, entity.getPrenom());
+            statement.setDate(3, entity.getDate_de_naissance());
+            statement.setString(4, entity.getIban());
+            statement.setLong(5, entity.getId_locataire());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Supprime un locataire par son identifiant (fonctionnalité à implémenter).

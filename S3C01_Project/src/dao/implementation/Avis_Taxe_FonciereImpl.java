@@ -132,7 +132,23 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
      */
     @Override
     public void update(Avis_Taxe_Fonciere entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Avis_Taxe_Fonciere SET Date_etablissement = ? AND Debiteur_legaux = ? AND Total_cotisation = ? WHERE Numero_fiscal = ?";
+		
+		try {
+			statement = connection.prepareStatement(query);
+			statement.setDate(1, entity.getDate_etablissement());
+			statement.setString(2, entity.getDebiteur_legaux());
+			statement.setDouble(3,entity.getTotal_cotisation());
+			statement.setInt(4,entity.getNumero_fiscal());
+
+            int rowsUpdated = statement.executeUpdate();
+            System.out.println("Nombre de lignes mises à jour : " + rowsUpdated);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
 

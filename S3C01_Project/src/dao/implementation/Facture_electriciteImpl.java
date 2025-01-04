@@ -132,8 +132,23 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      */
     @Override
     public void update(Facture_electricite entity) {
-        // Implémentation de la mise à jour de l'entité Facture_electricite dans la base
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture_electricite SET compteur_electricite = ?, prix_kw_electricite = ? WHERE id_facture_electricite = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBigDecimal(1, entity.getCompteur_electricite());
+            statement.setString(2, entity.getPrix_kw_electricite());
+            statement.setLong(3, entity.getId_facture_electricite());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
 
     /**

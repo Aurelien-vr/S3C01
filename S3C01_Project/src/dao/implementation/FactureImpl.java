@@ -101,7 +101,7 @@ public class FactureImpl implements FactureDAO {
     @Override
     public void insert(Facture entity) {
     	PreparedStatement statement = null;
-    	String query = "INSERT INTO db1_sae.Facture(reference_facture, type_facture , date_facture , montant_facture, moyen_paiement) VALUES (?,?,?,?,?)";
+    	String query = "INSERT INTO db1_sae.Facture(reference_facture, type_facture , date_facture , montant_facture, moyen_paiement, montantNonDeductible, Reduction) VALUES (?,?,?,?,?)";
    		
    		try {
    			statement = connection.prepareStatement(query);
@@ -110,6 +110,8 @@ public class FactureImpl implements FactureDAO {
     		statement.setDate(3, entity.getDate_facture());
     		statement.setBigDecimal(4, entity.getMontant_facture());
     		statement.setString(5, entity.getMoyen_paiement());
+    		statement.setBigDecimal(6, entity.getMontantNonDeductible());
+    		statement.setBigDecimal(7, entity.getReduction());
     			
     			
     		if(statement.executeUpdate()>0) {
@@ -129,24 +131,43 @@ public class FactureImpl implements FactureDAO {
      */
     @Override
     public void update(Facture entity) {
-        // TODO Auto-generated method stub
-    }
-    
-    @Override
-    public void deleteById(long id) {
-    	PreparedStatement statement = null;
-        String query = "DELETE FROM db1_sae.Facture WHERE Reference_facture = ?";
-        
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture SET type_facture = ?, date_facture = ?, montant_facture = ?, moyen_paiement = ?, montantNonDeductible = ?, Reduction = ? WHERE reference_facture = ?";
+
         try {
             statement = connection.prepareStatement(query);
-            statement.setLong(1, id);
+            statement.setString(1, entity.getType_facture());
+            statement.setDate(2, entity.getDate_facture());
+            statement.setBigDecimal(3, entity.getMontant_facture());
+            statement.setString(4, entity.getMoyen_paiement());
+            statement.setBigDecimal(5, entity.getMontantNonDeductible());
+            statement.setBigDecimal(6, entity.getReduction());
+            statement.setString(7, entity.getReference_facture());
+
             statement.executeUpdate();
-            
         } catch (Exception e) {
             ExceptionStorageHandler.LogException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
+    }
+
+    
+    @Override
+    public void deleteById(long id) {
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Facture WHERE Reference_facture = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+        } catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}
+		
+		finally {
+			DatabaseConnection.closeStatement(statement);
+		}
     }
 
     /**
@@ -165,6 +186,8 @@ public class FactureImpl implements FactureDAO {
         facture.setDate_facture(result.getDate("Date_facture"));
         facture.setMontant_facture(result.getBigDecimal("Montant_facture"));
         facture.setMoyen_paiement(result.getString("Moyen_paiement"));
+        facture.setMontantNonDeductible(result.getBigDecimal("montantNonDeductible"));
+        facture.setReduction(result.getBigDecimal("Reduction"));
         return facture;
     }
 }

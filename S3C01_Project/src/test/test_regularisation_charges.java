@@ -114,27 +114,34 @@ public class test_regularisation_charges {
 	    
 	} 
 	
-	//@Test
-	//public void testCreateEntities() {
-		//try{
-			//Date date_effet = result.getDate("date_effet");
-			//BigDecimal charge_eau = result.getBigDecimal("charge_eau");
-			//BigDecimal charge_ordure_menagere = result.getBigDecimal("charge_ordure_menagere");
-			//BigDecimal charge_eclairage = result.getBigDecimal("charge_eclairage");
-			//BigDecimal provision_pour_charge = result.getBigDecimal("provision_pour_charge");
-			//BigDecimal indice = result.getBigDecimal("indice");
-			//String entretien = result.getString("entretien");
-			//Regularisation_charges regu = regularisation_chargesDAO.createEntities(result);
-			//assertEquals(regu.getDate_effet(), date_effet);
-			//assertEquals(regu.getCharge_eau(), charge_eau);
-			//assertEquals(regu.getCharge_ordure_menagere(), charge_ordure_menagere);
-			//assertEquals(regu.getCharge_eclairage(), charge_eclairage);
-			//assertEquals(regu.getProvision_pour_charge(), provision_pour_charge);
-			//assertEquals(regu.getIndice(), indice);
-			//assertEquals(regu.getEntretien(), entretien);
-		//}catch (Exception e) {
-			//ExceptionStorageHandler.LogException(e, connection);
-		//} 
-	//}
+
+	@Test
+	public void testUpdate() {
+	    Date nouvelleDateEffet = Date.valueOf("2024-09-18");
+	    BigDecimal nouvelleChargeEau = new BigDecimal(55).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouvelleChargeOrdures = new BigDecimal(55).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouvelleChargeEclairage = new BigDecimal(55).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouvelleProvisionPourCharge = new BigDecimal(1000).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouvelIndice = new BigDecimal(55).setScale(2, RoundingMode.DOWN);
+	    String nouvelEntretien = "Mauvais";
+
+	    regularisation_charges.setDate_effet(nouvelleDateEffet);
+	    regularisation_charges.setCharge_eau(nouvelleChargeEau);
+	    regularisation_charges.setCharge_ordure_menagere(nouvelleChargeOrdures);
+	    regularisation_charges.setCharge_eclairage(nouvelleChargeEclairage);
+	    regularisation_charges.setProvision_pour_charge(nouvelleProvisionPourCharge);
+	    regularisation_charges.setIndice(nouvelIndice);
+	    regularisation_charges.setEntretien(nouvelEntretien);
+
+	    regularisation_chargesDAO.update(regularisation_charges);
+
+	    assertEquals(nouvelleDateEffet, regularisation_charges.getDate_effet());
+	    assertEquals(nouvelleChargeEau, regularisation_charges.getCharge_eau());
+	    assertEquals(nouvelleChargeOrdures, regularisation_charges.getCharge_ordure_menagere());
+	    assertEquals(nouvelleChargeEclairage, regularisation_charges.getCharge_eclairage());
+	    assertEquals(nouvelleProvisionPourCharge, regularisation_charges.getProvision_pour_charge());
+	    assertEquals(nouvelIndice, regularisation_charges.getIndice());
+	    assertEquals(nouvelEntretien, regularisation_charges.getEntretien());
+	}
 
 }

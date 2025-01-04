@@ -133,7 +133,23 @@ public class AssuranceImpl implements AssuranceDAO {
      */
     @Override
     public void update(Assurance entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Assurance SET prime = ? AND taux_augmentation = ? AND protection_juridique = ? WHERE Numero_contrat = ?";
+		
+		try {
+			statement = connection.prepareStatement(query);
+			statement.setBigDecimal(1, entity.getPrime());
+			statement.setBigDecimal(2, entity.getTaux_augmentation());
+			statement.setBigDecimal(3,entity.getProtection_juridique());
+			statement.setInt(4,entity.getNumero_contrat());
+
+            int rowsUpdated = statement.executeUpdate();
+            System.out.println("Nombre de lignes mises à jour : " + rowsUpdated);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

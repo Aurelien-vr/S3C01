@@ -110,6 +110,21 @@ public class test_facture_eau {
 		    assertEquals(true, facts_eau.contains(facture_eau));
 		
 	    }
-	} 
+	}
+	
+	@Test
+	public void testUpdate() {
+	    BigDecimal nouvellePartieFixe = new BigDecimal(45).setScale(2, RoundingMode.DOWN);
+	    BigDecimal nouvelleConsommation = new BigDecimal(80).setScale(2, RoundingMode.DOWN);
+
+	    facture_eau.setPartie_fixe(nouvellePartieFixe);
+	    facture_eau.setConsommation(nouvelleConsommation);
+
+	    facture_eauDAO.update(facture_eau);
+
+	    assertEquals(nouvellePartieFixe, facture_eau.getPartie_fixe());
+	    assertEquals(nouvelleConsommation, facture_eau.getConsommation());
+	}
+
 
 }

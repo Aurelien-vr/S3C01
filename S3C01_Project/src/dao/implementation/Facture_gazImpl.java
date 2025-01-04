@@ -132,8 +132,23 @@ public class Facture_gazImpl implements Facture_gazDAO {
      */
     @Override
     public void update(Facture_gaz entity) {
-        // Implémentation de la mise à jour de l'entité Facture_gaz dans la base
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture_gaz SET consommation_m3 = ?, prix_m3_gaz = ? WHERE id_facture_gaz = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBigDecimal(1, entity.getConsommation_m3());
+            statement.setString(2, entity.getPrix_m3_gaz());
+            statement.setLong(3, entity.getId_facture_gaz());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Supprime une entité Facture_gaz par son identifiant.

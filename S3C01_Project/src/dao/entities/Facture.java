@@ -16,19 +16,23 @@ public class Facture {
     private Date date_facture;  // Date à laquelle la facture a été émise
     private BigDecimal montant_facture;  // Montant total de la facture
     private String moyen_paiement;  // Moyen de paiement utilisé pour régler la facture
+    private BigDecimal montantNonDeductible;  // Montant des travaux non déductible
+    private BigDecimal reduction;  
     private int id_bien;  // Identifiant du bien associé à cette facture
     
     
     
     public Facture() {}
 
-	public Facture(String reference_facture, String type_facture, Date date_facture, BigDecimal montant_facture, String moyen_paiement) {
+	public Facture(String reference_facture, String type_facture, Date date_facture, BigDecimal montant_facture, String moyen_paiement, BigDecimal montant_non_deductible, BigDecimal reduction) {
 		super();
 		this.reference_facture = reference_facture;
 		this.type_facture = type_facture;
 		this.date_facture = date_facture;
 		this.montant_facture = montant_facture;
 		this.moyen_paiement = moyen_paiement;
+		this.montantNonDeductible = montant_non_deductible;
+		this.reduction = reduction;
 	}
 
 	/**
@@ -138,6 +142,42 @@ public class Facture {
     public void setId_bien(int id_bien) {
         this.id_bien = id_bien;
     }
+    
+    /**
+     * Récupère le montant des factures non déductibles.
+     *
+     * @return Le montant des factures non déductibles.
+     */
+    public BigDecimal getMontantNonDeductible() {
+        return montantNonDeductible;
+    }
+
+    /**
+     * Définit le montant des factures non déductibles.
+     *
+     * @param montant_non_deductible Le montant des factures non déductibles à définir.
+     */
+    public void setMontantNonDeductible(BigDecimal montantNonDeductible) {
+        this.montantNonDeductible = montantNonDeductible;
+    }
+
+    /**
+     * Récupère le montant de la réduction 
+     *
+     * @return Le montant de la réduction .
+     */
+    public BigDecimal getReduction() {
+        return reduction;
+    }
+
+    /**
+     * Définit le montant de la réduction
+     *
+     * @param reduction_special Le montant de la réduction a definir.
+     */
+    public void setReduction(BigDecimal reduction) {
+        this.reduction = reduction;
+    }
 
     /**
      * Retourne une représentation textuelle de l'objet {@link Facture}.
@@ -153,6 +193,8 @@ public class Facture {
                ", date_facture=" + (date_facture != null ? date_facture : "N/A") +
                ", montant_facture=" + (montant_facture != null ? montant_facture : "N/A") +
                ", moyen_paiement='" + (moyen_paiement != null ? moyen_paiement : "N/A") + '\'' +
+               ", montant_non_deductible='" + (montantNonDeductible != null ? montantNonDeductible : "N/A") + '\'' +
+               ", reduction='" + (reduction != null ? reduction : "N/A") + '\'' +
                ", id_bien=" + id_bien +
                '}';
     }
@@ -175,7 +217,9 @@ public class Facture {
 				&& Objects.equals(montant_facture, other.montant_facture)
 				&& Objects.equals(moyen_paiement, other.moyen_paiement)
 				&& Objects.equals(reference_facture, other.reference_facture)
-				&& Objects.equals(type_facture, other.type_facture);
+				&& Objects.equals(type_facture, other.type_facture)
+				&& Objects.equals(montantNonDeductible, other.montantNonDeductible)
+				&& Objects.equals(reduction, other.reduction);
 	}
 
 	

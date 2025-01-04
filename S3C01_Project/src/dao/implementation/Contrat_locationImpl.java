@@ -165,9 +165,27 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
      *
      * @param entity L'entité Contrat_location à mettre à jour.
      */
-    @Override
-    public void update(Contrat_location entity) {
-        // TODO Auto-generated method stub
-    }
+	@Override
+	public void update(Contrat_location entity) {
+	    PreparedStatement statement = null;
+	    String query = "UPDATE db1_sae.Contrat_location SET Montant_loyer = ?, Date_debut = ?, Date_fin = ?, Modalite_chauffage = ?, Modalite_eau_chaude_sanitaire = ?, Date_versement = ? WHERE Id_Contrat_location = ?";
+	    
+	    try {
+	        statement = connection.prepareStatement(query);
+	        statement.setInt(1, entity.getMontant_loyer());
+	        statement.setDate(2, entity.getDate_debut());
+	        statement.setDate(3, entity.getDate_fin());
+	        statement.setString(4, entity.getModalite_chauffage());
+	        statement.setString(5, entity.getModalite_eau_chaude_sanitaire());
+	        statement.setDate(6, entity.getDate_versement());
+	        statement.setLong(7, entity.getNumero_location());
+	        statement.executeUpdate();
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeStatement(statement);
+	    }
+	}
+
 
 }

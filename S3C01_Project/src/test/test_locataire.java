@@ -113,23 +113,27 @@ public class test_locataire {
 	    
 	} 
 	
-	//@Test
-	//public void testCreateEntities() throws SQLException {
-	  //  if (result != null && result.next()) { 
-	    //    String nom = result.getString("Nom");
-	      //  String prenom = result.getString("Prenom");
-	        //Date date_de_naissance = result.getDate("Date_de_naissance");
-	        //String iban = result.getString("IBAN");
-	        
-	        //Locataire loc = locataireDAO.createEntities(result);
-	        //assertEquals(loc.getNom(), nom);
-	        //assertEquals(loc.getPrenom(), prenom);
-	        //assertEquals(loc.getDate_de_naissance(), date_de_naissance);
-	        //assertEquals(loc.getIban(), iban);
-	    //} else {
-	      //  Assert.fail("ResultSet is empty or null");
-	    //}
-	//}
+	@Test
+	public void testUpdate() {
+	    String nouveauNom = "Durand";
+	    String nouveauPrenom = "Pierre";
+	    Date nouvelleDateDeNaissance = Date.valueOf("1990-05-21");
+	    String nouveauIban = "1122334455";
+
+	    locataire.setNom(nouveauNom);
+	    locataire.setPrenom(nouveauPrenom);
+	    locataire.setDate_de_naissance(nouvelleDateDeNaissance);
+	    locataire.setIban(nouveauIban);
+
+	    locataireDAO.update(locataire);
+
+	    assertEquals(nouveauNom, locataire.getNom());
+	    assertEquals(nouveauPrenom, locataire.getPrenom());
+	    assertEquals(nouvelleDateDeNaissance, locataire.getDate_de_naissance());
+	    assertEquals(nouveauIban, locataire.getIban());
+	}
+
+	
 
 
 }

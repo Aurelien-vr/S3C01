@@ -128,8 +128,25 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
      */
     @Override
     public void update(Contrat_colocation entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Contrat_colocation SET clause_solidarite = ?, part_des_charges = ? WHERE id_contrat_colocation = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBoolean(1, entity.isClause_solidarite());
+            statement.setBigDecimal(2, entity.getPart_des_charges());
+            statement.setLong(3, entity.getId_contrat_colocation());  // Assurez-vous que l'entité a un ID défini
+
+            if (statement.executeUpdate() > 0) {
+                System.out.println("User updated");
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
 
     /**

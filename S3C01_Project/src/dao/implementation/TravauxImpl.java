@@ -138,8 +138,28 @@ public class TravauxImpl implements TravauxDAO {
      */
     @Override
     public void update(Travaux entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Travaux SET date_travaux = ?, nature = ?, iban = ?, reduction = ?, montant = ?, montant_non_deductible = ?, reduction_special = ? WHERE numero_facture = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setDate(1, entity.getDate_travaux());
+            statement.setString(2, entity.getNature());
+            statement.setString(3, entity.getIban());
+            statement.setBigDecimal(4, entity.getReduction());
+            statement.setBigDecimal(5, entity.getMontant());
+            statement.setBigDecimal(6, entity.getMontant_non_deductible());
+            statement.setBigDecimal(7, entity.getReduction_special());
+            statement.setLong(8, entity.getNumero_facture());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Supprime un travail par le numéro de facture (fonctionnalité à implémenter).
