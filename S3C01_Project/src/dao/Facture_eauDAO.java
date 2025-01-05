@@ -8,4 +8,6 @@ import dao.entities.Facture_eau;
  */
 public interface Facture_eauDAO extends DAO<Facture_eau> {
     // Les méthodes spécifiques à l'entité Facture_eau peuvent être ajoutées ici si nécessaire
+
+	void insertFK(int id, int referenceFacture);
 }

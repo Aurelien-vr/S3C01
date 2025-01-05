@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,28 +57,33 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 
 	@Override
 	public void insert(Contrat_location entity) {
-		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut, Date_fin,Modalite_chauffage, Modalite_eau_chaude_sanitaire, Date_versement) VALUES (?,?,?,?,?,?)";
-		
-		try {
-			statement = connection.prepareStatement(query);
-			statement.setInt(1, entity.getMontant_loyer());
-			statement.setDate(2, entity.getDate_debut());
-			statement.setDate(3,entity.getDate_fin());
-			statement.setString(4, entity.getModalite_chauffage());
-			statement.setString(5, entity.getModalite_eau_chaude_sanitaire());
-			statement.setDate(6, entity.getDate_versement());
-			
-			
-			if(statement.executeUpdate()>0) {
-				System.out.println("User inserted");
-			}
-		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
-		}finally {
-			DatabaseConnection.closeStatement(statement);
-		}
+	    PreparedStatement statement = null;
+	    String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer, Date_debut, Date_fin, Modalite_chauffage, Modalite_eau_chaude_sanitaire, Date_versement) VALUES (?,?,?,?,?,?)";
+
+	    try {
+	        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+	        statement.setInt(1, entity.getMontant_loyer());
+	        statement.setDate(2, entity.getDate_debut());
+	        statement.setDate(3, entity.getDate_fin());
+	        statement.setString(4, entity.getModalite_chauffage());
+	        statement.setString(5, entity.getModalite_eau_chaude_sanitaire());
+	        statement.setDate(6, entity.getDate_versement());
+
+	        if (statement.executeUpdate() > 0) {
+	            ResultSet result = statement.getGeneratedKeys();
+	            if (result.next()) {
+	                int id = result.getInt(1);
+	                entity.setNumero_location(id);
+	            }
+	            System.out.println("Contrat_location inserted");
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeStatement(statement);
+	    }
 	}
+
 
 
 
@@ -187,5 +193,6 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 	    }
 	}
 
+	
 
 }

@@ -7,5 +7,7 @@ import dao.entities.Locataire;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface LocataireDAO extends DAO<Locataire> {
+
+	void insertFK(int idLocataire, int idContratLocation);
     // Les méthodes spécifiques à l'entité Facture peuvent être ajoutées ici si nécessaire
 }

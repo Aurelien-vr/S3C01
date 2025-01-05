@@ -7,6 +7,8 @@ import dao.entities.Facture_electricite;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface Facture_electriciteDAO extends DAO<Facture_electricite> {
+
+	void insertFK(int id, int referenceFacture);
     // Les méthodes spécifiques à l'entité Facture_electricite peuvent être ajoutées ici si nécessaire
 }
 

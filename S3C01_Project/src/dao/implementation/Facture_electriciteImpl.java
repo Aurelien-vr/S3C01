@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,24 +108,30 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      */
     @Override
     public void insert(Facture_electricite entity) {
-    	PreparedStatement statement = null;
-    	String query = "INSERT INTO db1_sae.Facture_electricite(compteur_electricite, prix_kw_electricite)  VALUES (?,?)";
-   		
-   		try {
-   			statement = connection.prepareStatement(query);
-    		statement.setBigDecimal(1, entity.getCompteur_electricite());
-    		statement.setString(2, entity.getPrix_kw_electricite());
-    			
-    			
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
-   		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
-   		}finally {
-   			DatabaseConnection.closeStatement(statement);
-   		}
+        PreparedStatement statement = null;
+        String query = "INSERT INTO db1_sae.Facture_electricite(compteur_electricite, prix_kw_electricite) VALUES (?, ?)";
+
+        try {
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            
+            statement.setBigDecimal(1, entity.getCompteur_electricite());
+            statement.setString(2, entity.getPrix_kw_electricite());
+
+            if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1); 
+                    entity.setId_facture_electricite(id); 
+                    }
+                System.out.println("Facture_electricite inserted");
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Met à jour une entité Facture_electricite existante dans la base de données.
@@ -188,4 +196,28 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
         factureElectricite.setPrix_kw_electricite(result.getString("prix_kw_electricite"));
         return factureElectricite; // Retourne l'entité Facture_electricite construite
     }
+    
+    @Override
+    public void insertFK(int id, int referenceFacture) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture_electricite SET reference_facture = ? WHERE Id_Facture_Electricite = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, referenceFacture); 
+            statement.setInt(2, id); 
+
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK reference_facture inserted into Facture_electricite");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
+    }
+
 }

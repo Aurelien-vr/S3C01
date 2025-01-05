@@ -103,33 +103,37 @@ public class BienImpl implements BienDAO {
      */
     @Override
     public void insert(Bien entity) {
-    	PreparedStatement statement = null;
-    	String query = "INSERT INTO db1_sae.Bien(etage, adresse, ville, code_postal, superficie, nombre_de_piece, meuble, accessoire_prive, accessoire_commun, est_garage) VALUES (?,?,?,?,?,?,?,?,?,?)";
-   		
-   		try {
-   			statement = connection.prepareStatement(query);
-    		statement.setInt(1, entity.getEtage());
-    		statement.setString(2, entity.getAdresse());
-    		statement.setString(3,  entity.getVille());
-    		statement.setString(4,  entity.getCode_postal());
-    		statement.setBigDecimal(5,  entity.getSuperficie());
-    		statement.setInt(6,  entity.getNombre_de_piece());
-    		statement.setBoolean(7,  entity.isMeuble());
-    		statement.setString(8,  entity.getAccessoire_prive());
-    		statement.setString(9,  entity.getAccessoire_commun());
-    		statement.setBoolean(10,  entity.isEst_garage());
-    		
-    			
-    			
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
-   		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
-   		}finally {
-   			DatabaseConnection.closeStatement(statement);
-   		}
+        PreparedStatement statement = null;
+        String query = "INSERT INTO db1_sae.Bien(etage, adresse, ville, code_postal, superficie, nombre_de_piece, meuble, accessoire_prive, accessoire_commun, est_garage) VALUES (?,?,?,?,?,?,?,?,?,?)";
+
+        try {
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, entity.getEtage());
+            statement.setString(2, entity.getAdresse());
+            statement.setString(3, entity.getVille());
+            statement.setString(4, entity.getCode_postal());
+            statement.setBigDecimal(5, entity.getSuperficie());
+            statement.setInt(6, entity.getNombre_de_piece());
+            statement.setBoolean(7, entity.isMeuble());
+            statement.setString(8, entity.getAccessoire_prive());
+            statement.setString(9, entity.getAccessoire_commun());
+            statement.setBoolean(10, entity.isEst_garage());
+
+            if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setId_bien(id);
+                }
+                System.out.println("Bien inserted");
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
     
 
     /**
@@ -248,4 +252,28 @@ public class BienImpl implements BienDAO {
         
         return bien;  // Retourne l'entité Bien construite
     }
+    
+    @Override
+    public void insertFK(int id, int idContratLocation) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Bien SET Id_Contrat_Location = ? WHERE Id_Bien = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idContratLocation);
+            statement.setInt(2, id);
+
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK inserted");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
+    }
+
 }

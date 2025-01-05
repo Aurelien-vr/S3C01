@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,24 +108,29 @@ public class Facture_eauImpl implements Facture_eauDAO {
      */
     @Override
     public void insert(Facture_eau entity) {
-    	PreparedStatement statement = null;
-    	String query = "INSERT INTO db1_sae.Facture_eau(partie_fixe, consommation)  VALUES (?,?)";
-   		
-   		try {
-   			statement = connection.prepareStatement(query);
-    		statement.setBigDecimal(1, entity.getPartie_fixe());
-    		statement.setBigDecimal(2, entity.getConsommation());
-    			
-    			
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
-   		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
-   		}finally {
-   			DatabaseConnection.closeStatement(statement);
-   		}
+        PreparedStatement statement = null;
+        String query = "INSERT INTO db1_sae.Facture_eau(partie_fixe, consommation) VALUES (?,?)";
+
+        try {
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setBigDecimal(1, entity.getPartie_fixe());
+            statement.setBigDecimal(2, entity.getConsommation());
+
+            if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1); 
+                    entity.setId_facture_eau(id); 
+                }
+                System.out.println("Facture_eau inserted");
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Met à jour une entité Facture_eau existante dans la base de données.
@@ -189,4 +196,30 @@ public class Facture_eauImpl implements Facture_eauDAO {
         factureEau.setConsommation(result.getBigDecimal("consommation"));
         return factureEau; // Retourne l'entité Facture_eau construite
     }
+    
+    @Override
+    public void insertFK(int id, int referenceFacture) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture_eau SET reference_facture = ? WHERE Id_Facture_Eau = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, referenceFacture); 
+            statement.setInt(2, id); 
+
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK reference_facture inserted into Facture_eau");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
+    }
+
+
+
 }

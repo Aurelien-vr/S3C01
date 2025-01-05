@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,26 +108,31 @@ public class LocataireImpl implements LocataireDAO {
      */
     @Override
     public void insert(Locataire entity) {
-    	PreparedStatement statement = null;
-    	String query = "INSERT INTO db1_sae.Locataire(nom, prenom, date_de_naissance ,iban) VALUES (?,?,?,?)";
-   		
-   		try {
-   			statement = connection.prepareStatement(query);
-   			statement.setString(1,entity.getNom());
-    		statement.setString(2, entity.getPrenom());
-    		statement.setDate(3, entity.getDate_de_naissance());
-    		statement.setString(4, entity.getIban());
-    			
-    			
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
-   		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
-   		}finally {
-   			DatabaseConnection.closeStatement(statement);
-   		}
+        PreparedStatement statement = null;
+        String query = "INSERT INTO db1_sae.Locataire(nom, prenom, date_de_naissance, iban) VALUES (?,?,?,?)";
+
+        try {
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, entity.getNom());
+            statement.setString(2, entity.getPrenom());
+            statement.setDate(3, entity.getDate_de_naissance());
+            statement.setString(4, entity.getIban());
+
+            if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setId_locataire(id);
+                }
+                System.out.println("Locataire inserted");
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Met à jour un locataire existant dans la base de données (fonctionnalité à implémenter).
@@ -193,4 +200,28 @@ public class LocataireImpl implements LocataireDAO {
         locataire.setIban(result.getString("iban"));
         return locataire; // Retourne l'entité Locataire construite
     }
+    
+    @Override
+    public void insertFK(int idLocataire, int idContratLocation) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Locataire SET Id_Contrat_Location = ? WHERE Id_Locataire = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idContratLocation);
+            statement.setInt(2, idLocataire);
+
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK inserted");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
+    }
+
 }
