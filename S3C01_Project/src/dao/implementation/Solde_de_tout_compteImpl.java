@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Solde_de_tout_compteDAO;
 import dao.entities.Solde_de_tout_compte;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Solde_de_tout_compteDAO} pour gérer les opérations sur les entités "Solde_de_tout_compte".
@@ -54,9 +57,12 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
             try {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            }catch (Exception e) {
+    			ExceptionStorageHandler.LogException(e, connection);
+    		}finally {
+    			DatabaseConnection.closeResult(result);
+    			DatabaseConnection.closeStatement(statement);
+    		}
         }
 
         return null; // Si aucun solde de tout compte n'est trouvé, retour de null
@@ -69,8 +75,34 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
      */
     @Override
     public List<Solde_de_tout_compte> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Solde_de_tout_compte> soldes = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Solde_de_tout_compte";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Solde_de_tout_compte acte = createEntities(result);
+                soldes.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            }catch (Exception e) {
+    			ExceptionStorageHandler.LogException(e, connection);
+    		}finally {
+    			DatabaseConnection.closeResult(result);
+    			DatabaseConnection.closeStatement(statement);
+    		}
+        }
+        
+        return soldes;
     }
 
     /**
@@ -80,7 +112,24 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
      */
     @Override
     public void insert(Solde_de_tout_compte entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Solde_de_tout_compte(reste_a_devoir, provision_pour_charges, caution) VALUES (?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+   			statement.setBigDecimal(1,entity.getReste_a_devoir());
+    		statement.setBigDecimal(2, entity.getProvision_pour_charges());
+    		statement.setBigDecimal(3, entity.getCaution());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**
@@ -90,18 +139,24 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
      */
     @Override
     public void update(Solde_de_tout_compte entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Solde_de_tout_compte SET reste_a_devoir = ?, provision_pour_charges = ?, caution = ? WHERE id_solde_de_tout_compte = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBigDecimal(1, entity.getReste_a_devoir());
+            statement.setBigDecimal(2, entity.getProvision_pour_charges());
+            statement.setBigDecimal(3, entity.getCaution());
+            statement.setLong(4, entity.getId_solde_de_tout_compte());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
-    /**
-     * Supprime un solde de tout compte de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Solde_de_tout_compte à supprimer.
-     */
-    @Override
-    public void delete(Solde_de_tout_compte entity) {
-        // TODO Auto-generated method stub
-    }
 
     /**
      * Supprime un solde de tout compte par l'identifiant du locataire (fonctionnalité à implémenter).
@@ -110,7 +165,19 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Solde_de_tout_compte WHERE Id_Solde_de_tout_compte = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

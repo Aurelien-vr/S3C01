@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Etat_des_lieuxDAO;
 import dao.entities.Etat_des_lieux;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Etat_des_lieuxDAO} pour gérer les opérations sur les entités "Etat_des_lieux".
@@ -54,9 +57,11 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
             try {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            }catch (Exception e) {
+       			ExceptionStorageHandler.LogException(e, connection);
+       		}finally {
+       			DatabaseConnection.closeStatement(statement);
+       		}
         }
 
         return null; // Si aucune entité Etat_des_lieux n'est trouvée, retour de null
@@ -69,8 +74,33 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
      */
     @Override
     public List<Etat_des_lieux> findAll() {
-        // Implémentation à ajouter pour récupérer toutes les entités Etat_des_lieux
-        return null;
+    	List<Etat_des_lieux> edts = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Etat_des_lieux";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Etat_des_lieux acte = createEntities(result);
+                edts.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            }catch (Exception e) {
+       			ExceptionStorageHandler.LogException(e, connection);
+       		}finally {
+       			DatabaseConnection.closeStatement(statement);
+       		}
+        }
+        
+        return edts;
     }
 
     /**
@@ -80,7 +110,26 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
      */
     @Override
     public void insert(Etat_des_lieux entity) {
-        // Implémentation de l'insertion de l'entité Etat_des_lieux dans la base
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Etat_des_lieux(date_signature, nombre_cles, etats_des_element, est_entrer)  VALUES (?,?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setDate(1, entity.getDate_signature());
+    		statement.setInt(2, entity.getNombre_cles());
+    		statement.setString(3, entity.getEtat_des_elements());
+    		statement.setBoolean(4, entity.isEst_entrer());
+    		
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**
@@ -90,18 +139,25 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
      */
     @Override
     public void update(Etat_des_lieux entity) {
-        // Implémentation de la mise à jour de l'entité Etat_des_lieux dans la base
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Etat_des_lieux SET date_signature = ?, nombre_cles = ?, etats_des_element = ?, est_entrer = ? WHERE id_etat_des_lieux = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setDate(1, entity.getDate_signature());
+            statement.setInt(2, entity.getNombre_cles());
+            statement.setString(3, entity.getEtat_des_elements());
+            statement.setBoolean(4, entity.isEst_entrer());
+            statement.setLong(5, entity.getId_etat_des_lieux());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
-    /**
-     * Supprime une entité Etat_des_lieux de la base de données.
-     *
-     * @param entity L'entité Etat_des_lieux à supprimer.
-     */
-    @Override
-    public void delete(Etat_des_lieux entity) {
-        // Implémentation de la suppression de l'entité Etat_des_lieux de la base
-    }
 
     /**
      * Supprime une entité Etat_des_lieux par son identifiant.
@@ -110,8 +166,22 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
      */
     @Override
     public void deleteById(long id) {
-        // Implémentation de la suppression de l'entité Etat_des_lieux par son identifiant
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Etat_des_lieux WHERE id_etat_des_lieux = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
+        
     }
+
 
     /**
      * Crée une entité {@link Etat_des_lieux} à partir des résultats d'une requête SQL.

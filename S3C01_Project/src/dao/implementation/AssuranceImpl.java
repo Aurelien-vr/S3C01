@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import dao.AssuranceDAO;
@@ -60,9 +61,11 @@ public class AssuranceImpl implements AssuranceDAO {
             try {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            }catch (Exception e) {
+    			ExceptionStorageHandler.LogException(e, connection);
+    		}finally {
+    			DatabaseConnection.closeStatement(statement);
+    		}
         }
 
         return null; // Si aucune assurance n'est trouvée, retour de null
@@ -75,8 +78,33 @@ public class AssuranceImpl implements AssuranceDAO {
      */
     @Override
     public List<Assurance> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Assurance> ass = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Assurance";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Assurance acte = createEntities(result);
+                ass.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            }catch (Exception e) {
+    			ExceptionStorageHandler.LogException(e, connection);
+    		}finally {
+    			DatabaseConnection.closeStatement(statement);
+    		}
+        }
+        
+        return ass;
     }
 
     /**
@@ -102,7 +130,6 @@ public class AssuranceImpl implements AssuranceDAO {
 	                int id = result.getInt(1);
 	                entity.setId_bien(id);
 	            }
-	            System.out.println("User inserted");
 	        }
 		} catch (Exception e) {
 			ExceptionStorageHandler.LogException(e, connection);
@@ -118,17 +145,22 @@ public class AssuranceImpl implements AssuranceDAO {
      */
     @Override
     public void update(Assurance entity) {
-        // TODO Auto-generated method stub
-    }
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Assurance SET prime = ? AND protection_juridique = ? WHERE Numero_contrat = ?";
+		
+		try {
+			statement = connection.prepareStatement(query);
+			statement.setBigDecimal(1, entity.getPrime());
+			statement.setBigDecimal(3,entity.getProtection_juridique());
+			statement.setInt(3,entity.getNumero_contrat());
 
-    /**
-     * Supprime une assurance de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Assurance à supprimer.
-     */
-    @Override
-    public void delete(Assurance entity) {
-        // TODO Auto-generated method stub
+            int rowsUpdated = statement.executeUpdate();
+            System.out.println("Nombre de lignes mises à jour : " + rowsUpdated);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**
@@ -138,7 +170,19 @@ public class AssuranceImpl implements AssuranceDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Assurance WHERE numero_contrat = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**
@@ -169,7 +213,7 @@ public class AssuranceImpl implements AssuranceDAO {
 			if(statement.execute()) {
 				result = statement.getResultSet();
 				while(result.next()) {
-					ArrayList<String> cell = new ArrayList<String>();
+					ArrayList<String> cell = new ArrayList<>();
 					for(int i = 1; i <= 4; i++) {
 						 String value = result.getString(i);
 		                    cell.add(value != null ? value : "Unknown");

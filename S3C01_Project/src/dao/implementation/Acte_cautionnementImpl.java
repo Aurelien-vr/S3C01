@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Acte_cautionnementDAO;
 import dao.entities.Acte_cautionnement;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link ActeCautionnementDAO} pour gérer les opérations sur les entités "Acte_cautionnement".
@@ -54,9 +57,11 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
             try {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) {
+       			ExceptionStorageHandler.LogException(e, connection);
+       		}finally {
+       			DatabaseConnection.closeStatement(statement);
+       		}
         }
         
         return null; // Si aucun acte n'est trouvé, retour de null
@@ -69,8 +74,33 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      */
     @Override
     public List<Acte_cautionnement> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Acte_cautionnement> actes = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Acte_cautionnement";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Acte_cautionnement acte = createEntities(result);
+                actes.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (Exception e) {
+       			ExceptionStorageHandler.LogException(e, connection);
+       		}finally {
+       			DatabaseConnection.closeStatement(statement);
+       		}
+        }
+        
+        return actes;
     }
 
     /**
@@ -80,7 +110,22 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      */
     @Override
     public void insert(Acte_cautionnement entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Acte_cautionnement(montant_caution) VALUES (?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setBigDecimal(1, entity.getMontant_caution());
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
     
     /**
@@ -90,18 +135,23 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      */
     @Override
     public void update(Acte_cautionnement entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Acte_cautionnement SET Montant_caution = ? WHERE Id_Acte_cautionnement = ?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBigDecimal(1, entity.getMontant_caution());
+            statement.setLong(2, entity.getId_acte_cautionnement()); // Ajoute l'ID ici
+
+            int rowsUpdated = statement.executeUpdate();
+            System.out.println("Nombre de lignes mises à jour : " + rowsUpdated);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
-    /**
-     * Supprime un acte de cautionnement de la base de données (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Acte_cautionnement à supprimer.
-     */
-    @Override
-    public void delete(Acte_cautionnement entity) {
-        // TODO Auto-generated method stub
-    }
+
 
     /**
      * Supprime un acte de cautionnement par son identifiant (fonctionnalité à implémenter).
@@ -110,7 +160,19 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Acte_cautionnement WHERE Id_Acte_cautionnement = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

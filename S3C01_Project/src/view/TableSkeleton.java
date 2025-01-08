@@ -11,10 +11,10 @@ import controller.ScallingDimension;
 import javax.swing.border.Border;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class TableSkeleton extends PageHeaderSkeleton {
+public class TableSkeleton extends PageHeaderSkeleton implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     protected JLayeredPane layeredPane = new JLayeredPane();
     protected JPanel canvas = new JPanel();
     private JPanel mainPanel = new JPanel();
@@ -24,22 +24,21 @@ public class TableSkeleton extends PageHeaderSkeleton {
     protected JPanel topFiller = new JPanel();
     private JTable table = new JTable();
     private JButton deleteButton = new JButton();
-    private JLabel footerLabel = new JLabel();
-	private JPanel footerPanel = new JPanel();
+    private JButton editIdContratBien = new JButton();
+    private JPanel footerPanel = new JPanel();
 
-	Border border =  BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0),new RoundedBorder(10,10, Color.black, new Color(125,125,125,125)));
+    Border border = BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0), new RoundedBorder(10, 10, Color.black, new Color(125, 125, 125, 125)));
 
     public TableSkeleton() {
         super();
         layeredPane.setLayout(null);
         canvas.setLocation(6, 0);
         canvas.setLayout(new BorderLayout());
-        
+
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder());
         mainPanel.setLayout(new BorderLayout());
         createFiller(rightFiller, leftFiller, topFiller);
-
 
         setTableProperty(table);
 
@@ -50,29 +49,28 @@ public class TableSkeleton extends PageHeaderSkeleton {
 
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        footerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        footerPanel.add(footerLabel);
+        footerPanel.setLayout(new GridBagLayout());
         mainPanel.add(footerPanel, BorderLayout.SOUTH);
 
         getContentPane().add(layeredPane.add(canvas), BorderLayout.CENTER);
-        canvas.add(mainPanel, BorderLayout.CENTER);	
+        canvas.add(mainPanel, BorderLayout.CENTER);
         canvas.add(topFiller, BorderLayout.NORTH);
         canvas.add(leftFiller, BorderLayout.WEST);
         canvas.add(rightFiller, BorderLayout.EAST);
-        
+
         layeredPane.add(canvas, JLayeredPane.DEFAULT_LAYER);
-        
+
         getContentPane().add(layeredPane, BorderLayout.CENTER);
         canvas.setSize(new Dimension(1434, 900 - ScallingDimension.scaleValue(200)));
         setFooterProperty();
     }
 
-	private void setFooterProperty() {
-		footerPanel.setBackground(Color.WHITE);
+    private void setFooterProperty() {
+        footerPanel.setBackground(Color.WHITE);
         footerPanel.setBorder(border);
         getContentPane().setBackground(Color.WHITE);
-        footerLabel.setFont(footerLabel.getFont().deriveFont((float) ScallingDimension.scaleValue(24)));
-	}
+        
+    }
 
     private void createFiller(JPanel rightFiller, JPanel leftFiller, JPanel topFiller) {
         rightFiller.setBackground(Color.WHITE);
@@ -92,15 +90,15 @@ public class TableSkeleton extends PageHeaderSkeleton {
         table.setRowHeight(80);
         table.getTableHeader().setPreferredSize(new Dimension(0, 70));
         table.setBorder(BorderFactory.createEmptyBorder());
-        table.setBorder(new RoundedBorder(10,10, Color.black, new Color(0,0,0,0)));
+        table.setBorder(new RoundedBorder(10, 10, Color.black, new Color(0, 0, 0, 0)));
         table.setBackground(Color.WHITE);
-        
+
         table.getTableHeader().setOpaque(false);
-        
+
         table.getTableHeader().setBorder(border);
     }
 
-    public void createJpanelWithLabel(JPanel panel, JLabel... jLabels) {
+    public void createJPanelWithLabel(JPanel panel, JLabel... jLabels) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         for (JLabel label : jLabels) {
             label.setAlignmentX(CENTER_ALIGNMENT);
@@ -117,45 +115,67 @@ public class TableSkeleton extends PageHeaderSkeleton {
         return table;
     }
 
-    public void setTableModel(TableModel model, int ...multiLineCol) {
+    public void setTableModel(TableModel model, int... multiLineCol) {
         table.setModel(model);
-        
+
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         for (int i = 1; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-        
-        for(int i : multiLineCol) {        	
+
+        for (int i : multiLineCol) {
             table.getColumnModel().getColumn(i).setCellRenderer(new MultiLineTableCellRenderer());
         }
-        
+
         int lastColumnIndex = table.getColumnCount() - 1;
         if ("SUPPRIMER".equals(table.getColumnName(lastColumnIndex))) {
             table.getColumnModel().getColumn(lastColumnIndex).setCellRenderer(new ButtonRenderer());
             table.getColumnModel().getColumn(lastColumnIndex).setCellEditor(new ButtonEditor(new JCheckBox(), deleteButton));
         }
+
+        if ("EDIT".equals(table.getColumnName(lastColumnIndex - 1))) {
+            table.getColumnModel().getColumn(lastColumnIndex - 1).setCellRenderer(new ButtonRenderer());
+            table.getColumnModel().getColumn(lastColumnIndex - 1).setCellEditor(new ButtonEditor(new JCheckBox(), editIdContratBien));
+        }
     }
 
-    public void updateFooter(String text) {
-        footerLabel.setText(text);
+    public void updateFooter(JLabel... labels) {
+        footerPanel.removeAll();
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0; 
+
+        for (int i = 0; i < labels.length; i++) {
+            gbc.gridx = i;
+            footerPanel.add(labels[i], gbc);
+        }
+
+        footerPanel.revalidate();
+        footerPanel.repaint();
     }
-    
+
     public JButton getDeleteButton() {
         return deleteButton;
     }
-    
+
+    public JButton getEditIdContratBien() {
+        return editIdContratBien;
+    }
+
     public void setMultiLineRenderer(int columnIndex) {
         table.getColumnModel().getColumn(columnIndex).setCellRenderer(new MultiLineTableCellRenderer());
     }
-    
+
     public JPanel getCanvas() {
-		return canvas;
-	}
+        return canvas;
+    }
 
-	public JPanel getFooterPanel() {
-		return footerPanel;
-	}
-
-
+    public JPanel getFooterPanel() {
+        return footerPanel;
+    }
 }

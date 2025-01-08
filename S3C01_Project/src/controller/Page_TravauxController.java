@@ -1,7 +1,5 @@
 package controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -23,30 +21,46 @@ public class Page_TravauxController extends TableSkeletonController{
 	
 	public Page_TravauxController() {
 		super();
+		view.setTitleHeader("Travaux");
         fillTable(); 
         view.setTableModel(modelTable, 1);
         actionDeleteButton();
         openAjoutTravauxPage();
-        
+        addEventHandlers();
         logoLabel();
         
         view.setVisible(true);
 	}
 
 	private void logoLabel() {
-		view.getLogoLabel().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		view.getLogoLabel().addActionListener(e-> {
 				new Page_PrincipaleController();
 				view.dispose();
-			}
 		});
 	}
+	
+	 private void addEventHandlers() {
+	        view.getBtnBienLouable().addActionListener(e -> {
+	        	new Page_BienController();
+	        	view.dispose();
+	        });
+
+	        view.getBtnLocataire().addActionListener(e -> {
+	                System.out.println("Locataire clicked");
+	        });
+	        
+	        view.getBtnContratLocation().addActionListener(e -> {
+	        	new Page_ContratLocationController();
+	        	view.dispose();
+	        });
+
+	        view.getBtnDocument().addActionListener(e ->{
+	                System.out.println("Doc cliqué");
+	        });
+	    }
 
 	private void actionDeleteButton() {
-		view.getDeleteButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		view.getDeleteButton().addActionListener(e -> {
 				int selectedRow = view.getTable().getSelectedRow();
 				int idTravaux = Integer.parseInt(listData.get(selectedRow).get(listData.get(selectedRow).size() - 1));
 				int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la supression du travaux: " + idTravaux);
@@ -56,21 +70,15 @@ public class Page_TravauxController extends TableSkeletonController{
 				    modelTable.setRowCount(0);
 				    fillTable();
 				    view.setTableModel(modelTable, 1);
-				} else if (response == JOptionPane.NO_OPTION) {
-				    return;
-				}
-			}
+				   	}
 		});
 		
 	}
 
 	private void openAjoutTravauxPage() {
-		view.getButtonAjoutTravaux().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		view.getButtonAjoutTravaux().addActionListener(e-> {
 				new Page_AjoutTravauxController();
 				view.dispose();
-			}
 		});
 	}
 	
@@ -101,6 +109,12 @@ public class Page_TravauxController extends TableSkeletonController{
 	        	modelTable.addRow(row);
 	        	
 	        }
+	}
+
+	@Override
+	void updateFooter() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

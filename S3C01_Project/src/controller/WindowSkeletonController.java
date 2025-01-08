@@ -4,6 +4,7 @@ import view.WindowSkeleton;
 public class WindowSkeletonController{
 	WindowSkeleton view = new WindowSkeleton();
 
-    public WindowSkeletonController() { 
+    public WindowSkeletonController() {
+      // TODO document why this constructor is empty
     }
 }

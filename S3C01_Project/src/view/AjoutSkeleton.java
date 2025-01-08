@@ -10,12 +10,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import controller.ScallingDimension;
 
 @SuppressWarnings("serial")
-public class AjoutSkeleton extends WindowSkeleton{
+public class AjoutSkeleton extends PageHeaderSkeleton{
 	
 	private JPanel contentPanel = new JPanel();
 	private JPanel topFiller = new JPanel();
@@ -73,9 +72,5 @@ public class AjoutSkeleton extends WindowSkeleton{
 	
 	protected void changeLabel(String text) {
 		titleLabel.setText(text);
-	}
-	
-	public static void main(String[] args) {
-		  SwingUtilities.invokeLater(() -> new AjoutSkeleton());
 	}
 }

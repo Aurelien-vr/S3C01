@@ -1,13 +1,18 @@
 package dao.implementation;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.LocataireDAO;
 import dao.entities.Locataire;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link LocataireDAO} pour gérer les opérations sur les entités "Locataire".
@@ -54,8 +59,11 @@ public class LocataireImpl implements LocataireDAO {
             try {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                ExceptionStorageHandler.LogException(e, connection);
+            } finally {
+                DatabaseConnection.closeStatement(statement);
+                DatabaseConnection.closeResult(result);
             }
         }
 
@@ -69,9 +77,36 @@ public class LocataireImpl implements LocataireDAO {
      */
     @Override
     public List<Locataire> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Locataire> locs = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Locataire";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Locataire acte = createEntities(result);
+                locs.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (Exception e) {
+                ExceptionStorageHandler.LogException(e, connection);
+            } finally {
+                DatabaseConnection.closeStatement(statement);
+                DatabaseConnection.closeResult(result);
+            }
+        }
+        
+        return locs;
     }
+
 
     /**
      * Crée un nouveau locataire dans la base de données (fonctionnalité à implémenter).
@@ -80,7 +115,29 @@ public class LocataireImpl implements LocataireDAO {
      */
     @Override
     public void insert(Locataire entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "INSERT INTO db1_sae.Locataire(nom, prenom, date_de_naissance, iban) VALUES (?,?,?,?)";
+
+        try {
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, entity.getNom());
+            statement.setString(2, entity.getPrenom());
+            statement.setDate(3, entity.getDate_de_naissance());
+            statement.setString(4, entity.getIban());
+
+            if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setId_locataire(id);
+                }
+                System.out.println("Locataire inserted");
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**
@@ -90,18 +147,25 @@ public class LocataireImpl implements LocataireDAO {
      */
     @Override
     public void update(Locataire entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Locataire SET nom = ?, prenom = ?, date_de_naissance = ?, iban = ? WHERE id_locataire = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, entity.getNom());
+            statement.setString(2, entity.getPrenom());
+            statement.setDate(3, entity.getDate_de_naissance());
+            statement.setString(4, entity.getIban());
+            statement.setLong(5, entity.getId_locataire());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
-    /**
-     * Supprime un locataire de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Locataire à supprimer.
-     */
-    @Override
-    public void delete(Locataire entity) {
-        // TODO Auto-generated method stub
-    }
 
     /**
      * Supprime un locataire par son identifiant (fonctionnalité à implémenter).
@@ -110,7 +174,19 @@ public class LocataireImpl implements LocataireDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Locataire WHERE Id_Locataire = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**
@@ -130,4 +206,85 @@ public class LocataireImpl implements LocataireDAO {
         locataire.setIban(result.getString("iban"));
         return locataire; // Retourne l'entité Locataire construite
     }
+    
+    @Override
+    public void insertFK(int idLocataire, int idContratLocation) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Locataire SET Id_Contrat_Location = ? WHERE Id_Locataire = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idContratLocation);
+            statement.setInt(2, idLocataire);
+
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK inserted");
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
+    }
+
+	@Override
+	public List<List<String>> procGetLocataires() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_locataires()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					insertCell(result, arrayRes);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
+	
+	
+	@Override
+	public List<List<String>> procGetLocatairesActifs() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_locatairesActif()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					insertCell(result, arrayRes);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
+
+	private void insertCell(ResultSet result, List<List<String>> arrayRes) throws SQLException {
+		String unknownString = "Unknown";
+		ArrayList<String> cell = new ArrayList<>();
+		cell.add(result.getString(1) != null ? result.getString(1) : unknownString);
+		cell.add(result.getString(2) + result.getString(3) != null ? result.getString(2) + result.getString(3) : unknownString);
+		cell.add(result.getString(4) != null ? result.getString(4) : "Actuellement locataires d'aucun bien");
+		cell.add(result.getString(5) != null ? result.getString(5) : unknownString);
+		cell.add(result.getString(6) != null ? result.getString(6) : unknownString);
+
+		arrayRes.add(cell);
+	}
+
+
 }

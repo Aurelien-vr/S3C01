@@ -49,7 +49,7 @@ public class test_assurance {
 
 	    // Met à jour l'objet assurance avec le bon id
 	    assurance = new Assurance(
-	                              new BigDecimal(80).setScale(2, RoundingMode.DOWN), 
+	    							Date.valueOf("2024-4-7") , 
 	                              new BigDecimal(5).setScale(2, RoundingMode.DOWN), 
 	                              new BigDecimal(2).setScale(2, RoundingMode.DOWN));
 	}

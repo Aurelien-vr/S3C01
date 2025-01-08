@@ -61,9 +61,12 @@ public class TravauxImpl implements TravauxDAO {
             try {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) {
+    			ExceptionStorageHandler.LogException(e, connection);
+    		}finally {
+    			DatabaseConnection.closeResult(result);
+    			DatabaseConnection.closeStatement(statement);
+    		}
         }
 
         return null; // Si aucun travail n'est trouvé, retour de null
@@ -76,8 +79,34 @@ public class TravauxImpl implements TravauxDAO {
      */
     @Override
     public List<Travaux> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Travaux> tras = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Travaux";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Travaux acte = createEntities(result);
+                tras.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            }  catch (Exception e) {
+    			ExceptionStorageHandler.LogException(e, connection);
+    		}finally {
+    			DatabaseConnection.closeResult(result);
+    			DatabaseConnection.closeStatement(statement);
+    		}
+        }
+        
+        return tras;
     }
 
     /**
@@ -122,17 +151,26 @@ public class TravauxImpl implements TravauxDAO {
      */
     @Override
     public void update(Travaux entity) {
-        // TODO Auto-generated method stub
-    }
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Travaux SET date_travaux = ?, nature = ?, iban = ?, reduction = ?, montant = ?, montant_non_deductible = ?, reduction_special = ? WHERE numero_facture = ?";
 
-    /**
-     * Supprime un travail de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Travaux à supprimer.
-     */
-    @Override
-    public void delete(Travaux entity) {
-        // TODO Auto-generated method stub
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setDate(1, entity.getDate_travaux());
+            statement.setString(2, entity.getNature());
+            statement.setString(3, entity.getIban());
+            statement.setBigDecimal(4, entity.getReduction());
+            statement.setBigDecimal(5, entity.getMontant());
+            statement.setBigDecimal(6, entity.getMontant_non_deductible());
+            statement.setBigDecimal(7, entity.getReduction_special());
+            statement.setLong(8, entity.getNumero_facture());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

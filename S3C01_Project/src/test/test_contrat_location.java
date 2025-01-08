@@ -19,9 +19,7 @@ public class test_contrat_location {
 	private Contrat_location contrat_location;
 	Connection connection = null;
 	int idInsertSetup;
-	
-	public test_contrat_location() {}
-	
+		
 	@Before
 	public void setUp() throws Exception {
 		PreparedStatement statement;

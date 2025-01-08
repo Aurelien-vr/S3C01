@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import dao.entities.Locataire;
 
 /**
@@ -7,5 +9,8 @@ import dao.entities.Locataire;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface LocataireDAO extends DAO<Locataire> {
-    // Les méthodes spécifiques à l'entité Facture peuvent être ajoutées ici si nécessaire
+
+	public void insertFK(int idLocataire, int idContratLocation);
+	public List<List<String>> procGetLocataires();
+	public List<List<String>> procGetLocatairesActifs();
 }

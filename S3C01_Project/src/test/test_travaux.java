@@ -26,7 +26,6 @@ public class test_travaux {
 	public void setUp() throws Exception {
 		connection = DatabaseConnection.getInstance();
 		if (connection == null) {
-			new App();
 			connection = DatabaseConnection.getInstance();
 		}
 		connection.setAutoCommit(false);

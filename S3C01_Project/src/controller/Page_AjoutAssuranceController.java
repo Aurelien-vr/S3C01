@@ -28,9 +28,12 @@ public class Page_AjoutAssuranceController extends AjoutSkeletonController {
 
     public Page_AjoutAssuranceController() {
         super();
+        view.setTitleHeader("Assurance");
         populateIdBienComboBox();
         pressedValider();
         pressedAnnuler();
+        logoLabel();
+        addEventHandlers();
         view.setVisible(true);
     }
 
@@ -43,9 +46,7 @@ public class Page_AjoutAssuranceController extends AjoutSkeletonController {
     }
 
     private void pressedValider() {
-        view.getValiderButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        view.getValiderButton().addActionListener(e-> {
                 errorRaise = false;
                 checkPrime();
                 checkProtectionJuridique();
@@ -56,17 +57,13 @@ public class Page_AjoutAssuranceController extends AjoutSkeletonController {
                     new Page_AssuranceController();
                     view.dispose();
                 }
-            }
         });
     }
 
     private void pressedAnnuler() {
-        view.getAnnulerButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        view.getAnnulerButton().addActionListener(e->{
                 new Page_AssuranceController();
                 view.dispose();
-            }
         });
     }
 
@@ -131,6 +128,34 @@ public class Page_AjoutAssuranceController extends AjoutSkeletonController {
             ErrorMessage.errorDialog("Erreur lors de l'insertion des données dans la base de données");
         }
     }
+    
+	private void logoLabel() {
+		view.getLogoLabel().addActionListener(e -> {
+				new Page_PrincipaleController();
+				view.dispose();
+		});
+	}
+	
+	
+	 private void addEventHandlers() {
+	        view.getBtnBienLouable().addActionListener(e -> {
+	        	new Page_BienController();
+	        	view.dispose();
+	        });
+
+	        view.getBtnLocataire().addActionListener(e -> {
+	                System.out.println("Locataire clicked");
+	        });
+	        
+	        view.getBtnContratLocation().addActionListener(e -> {
+	        	new Page_ContratLocationController();
+	        	view.dispose();
+	        });
+
+	        view.getBtnDocument().addActionListener(e ->{
+	                System.out.println("Doc cliqué");
+	        });
+	    }
 
     public static void main(String[] args) {
         new Page_AjoutAssuranceController();

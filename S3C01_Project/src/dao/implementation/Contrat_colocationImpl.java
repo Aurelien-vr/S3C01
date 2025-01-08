@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Contrat_colocationDAO;
@@ -51,9 +52,7 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
             }
         } catch (Exception e) {
 			ExceptionStorageHandler.LogException(e, connection);
-		}
-		
-		finally {
+		}finally {
 			DatabaseConnection.closeStatement(statement);
 		}
 		return null;
@@ -66,10 +65,34 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
      */
     @Override
     public List<Contrat_colocation> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Contrat_colocation> contrats_co = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Contrat_colocation";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Contrat_colocation acte = createEntities(result);
+                contrats_co.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            }catch (Exception e) {
+       			ExceptionStorageHandler.LogException(e, connection);
+       		}finally {
+       			DatabaseConnection.closeStatement(statement);
+       		}
+        }
+        
+        return contrats_co;
     }
-
     /**
      * Crée un nouveau contrat de colocation dans la base de données (fonctionnalité à implémenter).
      *
@@ -77,7 +100,24 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
      */
     @Override
     public void insert(Contrat_colocation entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Contrat_colocation(clause_solidarite, part_des_charges)  VALUES (?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setBoolean(1, entity.isClause_solidarite());
+    		statement.setBigDecimal(2, entity.getPart_des_charges());
+    		
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
 
     /**
@@ -85,35 +125,26 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
      *
      * @param entity L'entité Contrat_colocation à mettre à jour.
      */
-    @Override
     public void update(Contrat_colocation entity) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * Supprime un contrat de colocation de la base de données.
-     *
-     * @param entity L'entité Contrat_colocation à supprimer.
-     */
-    @Override
-    public void delete(Contrat_colocation entity) {
         PreparedStatement statement = null;
-        String query = "DELETE FROM db1_sae.Contrat_colocation WHERE id_contrat_colocation = ?";
-
+        String query = "UPDATE db1_sae.Contrat_colocation SET clause_solidarite = ?, part_des_charges = ? WHERE id_contrat_colocation = ?";
+        
         try {
             statement = connection.prepareStatement(query);
-            statement.setInt(1, entity.getId_contrat_colocation());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            statement.setBoolean(1, entity.isClause_solidarite());
+            statement.setBigDecimal(2, entity.getPart_des_charges());
+            statement.setLong(3, entity.getId_contrat_colocation());  // Assurez-vous que l'entité a un ID défini
+
+            if (statement.executeUpdate() > 0) {
+                System.out.println("User updated");
             }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
         }
     }
+
 
     /**
      * Supprime un contrat de colocation par son entité.
@@ -122,9 +153,20 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
      */
     @Override
     public void deleteById(long id) {
-    	
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Contrat_colocation WHERE id_contrat_colocation = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
-
     /**
      * Crée une entité {@link Contrat_colocation} à partir des résultats d'une requête SQL.
      *

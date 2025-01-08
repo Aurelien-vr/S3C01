@@ -4,10 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Facture_gazDAO;
 import dao.entities.Facture_gaz;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Facture_electriciteDAO} pour gérer les opérations sur les entités "Facture_electricite".
@@ -54,8 +59,11 @@ public class Facture_gazImpl implements Facture_gazDAO {
             try {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            }catch (Exception e) {
+                ExceptionStorageHandler.LogException(e, connection);
+            } finally {
+                DatabaseConnection.closeStatement(statement);
+                DatabaseConnection.closeResult(result);
             }
         }
 
@@ -63,14 +71,40 @@ public class Facture_gazImpl implements Facture_gazDAO {
     }
 
     /**
-     * Recherche toutes les entités Facture_gaz.
-     *
-     * @return Liste des entités Facture_gaz.
+     * Recherche tous les facture de gaz
+     * 
+     * @return Liste des facture de gaz
      */
     @Override
     public List<Facture_gaz> findAll() {
-        // Implémentation à ajouter pour récupérer toutes les entités Facture_gaz
-        return null;
+    	List<Facture_gaz> facts_gaz = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Facture_gaz";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Facture_gaz acte = createEntities(result);
+                facts_gaz.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            }catch (Exception e) {
+                ExceptionStorageHandler.LogException(e, connection);
+            } finally {
+                DatabaseConnection.closeStatement(statement);
+                DatabaseConnection.closeResult(result);
+            }
+        }
+        
+        return facts_gaz;
     }
 
     /**
@@ -80,8 +114,29 @@ public class Facture_gazImpl implements Facture_gazDAO {
      */
     @Override
     public void insert(Facture_gaz entity) {
-        // Implémentation de l'insertion de l'entité Facture_gaz dans la base
+        PreparedStatement statement = null;
+        String query = "INSERT INTO db1_sae.Facture_gaz(consommation_m3, prix_m3_gaz) VALUES (?, ?)";
+
+        try {
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setBigDecimal(1, entity.getConsommation_m3());
+            statement.setString(2, entity.getPrix_m3_gaz());
+
+            if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setId_facture_gaz(id);
+                }
+                System.out.println("Facture_gaz inserted");
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Met à jour une entité Facture_gaz existante dans la base de données.
@@ -90,18 +145,23 @@ public class Facture_gazImpl implements Facture_gazDAO {
      */
     @Override
     public void update(Facture_gaz entity) {
-        // Implémentation de la mise à jour de l'entité Facture_gaz dans la base
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture_gaz SET consommation_m3 = ?, prix_m3_gaz = ? WHERE id_facture_gaz = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBigDecimal(1, entity.getConsommation_m3());
+            statement.setString(2, entity.getPrix_m3_gaz());
+            statement.setLong(3, entity.getId_facture_gaz());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
-    /**
-     * Supprime une entité Facture_gaz de la base de données.
-     *
-     * @param entity L'entité Facture_gaz à supprimer.
-     */
-    @Override
-    public void delete(Facture_gaz entity) {
-        // Implémentation de la suppression de l'entité Facture_gaz de la base
-    }
 
     /**
      * Supprime une entité Facture_gaz par son identifiant.
@@ -110,7 +170,19 @@ public class Facture_gazImpl implements Facture_gazDAO {
      */
     @Override
     public void deleteById(long id) {
-        // Implémentation de la suppression de l'entité Facture_gaz par son identifiant
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Facture_gaz WHERE id_facture_gaz = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**
@@ -127,5 +199,28 @@ public class Facture_gazImpl implements Facture_gazDAO {
         factureGaz.setConsommation_m3(result.getBigDecimal("consommation_m3"));
         factureGaz.setPrix_m3_gaz(result.getString("prix_m3_gaz"));
         return factureGaz; // Retourne l'entité Facture_electricite construite
+    }
+    
+    @Override
+    public void insertFK(int id, String referenceFacture) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture_gaz SET reference_facture = ? WHERE Id_Facture_Gaz = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, referenceFacture); 
+            statement.setInt(2, id); 
+
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK reference_facture inserted into Facture_gaz");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 }

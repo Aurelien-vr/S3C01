@@ -93,15 +93,6 @@ public class EnumererImpl implements EnumererDAO {
         // Implémentation de la mise à jour de l'entité Enumerer dans la base
     }
 
-    /**
-     * Supprime une entité Enumerer de la base de données.
-     *
-     * @param entity L'entité Enumerer à supprimer.
-     */
-    @Override
-    public void delete(Enumerer entity) {
-        // Implémentation de la suppression de l'entité Enumerer de la base
-    }
 
     /**
      * Supprime une entité Enumerer par sa référence de facture.

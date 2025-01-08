@@ -42,13 +42,6 @@ public interface DAO<T> {
     void update(T entity);
 
     /**
-     * Supprime une entité existante de la base de données.
-     *
-     * @param entity L'entité à supprimer.
-     */
-    void delete(T entity);
-
-    /**
      * Supprime une entité en utilisant son identifiant unique.
      *
      * @param id L'entité à supprimer, identifié par son ID.

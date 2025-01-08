@@ -11,8 +11,8 @@ public class WindowSkeleton extends JFrame {
 	
 	public WindowSkeleton() {
 		FlatLightLaf.setup();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setExtendedState(Frame.MAXIMIZED_BOTH);
         setMinimumSize(new Dimension(800, 600));
 
         getContentPane().setLayout(new BorderLayout());

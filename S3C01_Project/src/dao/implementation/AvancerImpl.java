@@ -95,15 +95,6 @@ public class AvancerImpl implements AvancerDAO {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Supprime une avance de la base de données (fonctionnalité à implémenter).
-     *
-     * @param entity L'entité Avancer à supprimer.
-     */
-    @Override
-    public void delete(Avancer entity) {
-        // TODO Auto-generated method stub
-    }
 
     /**
      * Supprime une avance par l'identifiant du locataire (fonctionnalité à implémenter).

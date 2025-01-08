@@ -15,6 +15,7 @@ public abstract class TableSkeletonController extends PageHeaderSkeletonControll
     }
 
     abstract void fillTable();
+    abstract void updateFooter();
     
     public static String transformDate(String inputDate) {
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");

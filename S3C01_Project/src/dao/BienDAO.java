@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.List;
+import java.util.Map;
 
 import dao.entities.Bien;
 
@@ -9,8 +10,9 @@ import dao.entities.Bien;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface BienDAO extends DAO<Bien> {
-    // Les méthodes spécifiques à l'entité Bien peuvent être ajoutées ici si nécessaire
 	public List<List<String>> BienStatus();
-	
 	String[] get_AllAdresses();
+	public List<List<String>> procPageBien();
+	public String[] procGetClNotInBien();
+	void insertFK(int id, int idContratLocation);
 }

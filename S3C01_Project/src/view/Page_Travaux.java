@@ -8,7 +8,7 @@ import javax.swing.JLayeredPane;
 @SuppressWarnings("serial")
 public class Page_Travaux extends TableSkeleton{
 	
-	JButton ajoutTravaux = new JButton();
+	JButton ajoutTravaux;
 	
 	public Page_Travaux() {
 		super();
@@ -23,7 +23,7 @@ public class Page_Travaux extends TableSkeleton{
 	}
 
 	private JButton addButtonTravaux() {
-		JButton ajoutTravaux = new JButton("Ajouter");
+		ajoutTravaux = new JButton("Ajouter");
 	    ajoutTravaux.setBackground(new Color(135, 206, 250));
 	    ajoutTravaux.setBounds(canvas.getX() + canvas.getWidth() - 220,
                 canvas.getY() + canvas.getHeight() - 90, // Adjust the y coordinate to lower the button

@@ -5,10 +5,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.Declaration_revenuDAO;
 import dao.entities.Declaration_revenu;
+import dbConnection.DatabaseConnection;
+import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link Declaration_revenuDAO} pour gérer les opérations sur les entités "Declaration_revenu".
@@ -67,8 +70,33 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      */
     @Override
     public List<Declaration_revenu> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Declaration_revenu> declas = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Declaration_revenu";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Declaration_revenu acte = createEntities(result);
+                declas.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            } catch (Exception e) {
+       			ExceptionStorageHandler.LogException(e, connection);
+       		}finally {
+       			DatabaseConnection.closeStatement(statement);
+       		}
+        }
+        
+        return declas;
     }
 
     /**
@@ -78,7 +106,25 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      */
     @Override
     public void insert(Declaration_revenu entity) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+    	String query = "INSERT INTO db1_sae.Declaration_revenu(date_acquisition, locataires, recette_immeuble)  VALUES (?,?,?)";
+   		
+   		try {
+   			statement = connection.prepareStatement(query);
+    		statement.setDate(1, entity.getDate_acquisition());
+    		statement.setInt(2, entity.getLocataires());
+    		statement.setBigDecimal(3, entity.getRecette_immeuble());
+    		
+    			
+    			
+    		if(statement.executeUpdate()>0) {
+    			System.out.println("User inserted");
+    		}
+   		} catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   		}
     }
     
     /**
@@ -88,17 +134,22 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      */
     @Override
     public void update(Declaration_revenu entity) {
-        // TODO Auto-generated method stub
-    }
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Declaration_revenu SET date_acquisition = ?, locataires = ?, recette_immeuble = ? WHERE id_declaration_revenu = ?";
 
-    /**
-     * Supprime une déclaration de revenu de la base de données (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Declaration_revenu à supprimer.
-     */
-    @Override
-    public void delete(Declaration_revenu entity) {
-        // TODO Auto-generated method stub
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setDate(1, entity.getDate_acquisition());
+            statement.setInt(2, entity.getLocataires());
+            statement.setBigDecimal(3, entity.getRecette_immeuble());
+            statement.setLong(4, entity.getId_declaration_revenu());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**
@@ -108,7 +159,19 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      */
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Declaration_revenu WHERE id_declaration_revenu = ?";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
     /**

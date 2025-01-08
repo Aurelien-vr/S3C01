@@ -1,7 +1,5 @@
 package controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -31,16 +29,14 @@ public class Page_AjoutTravauxController extends AjoutSkeletonController {
 
     public Page_AjoutTravauxController() {
         super();
-        
-        
+        view.setTitleHeader("Travaux");
         view.setCbFacture(model.get_numFacture());
         view.setCbAdress(modelBien.get_AllAdresses());
-
         addAutoResultListener(new JTextField[]{view.getFieldMontant(), view.getFieldMontantNonDeductible(), view.getFielReduction()});
-
         pressedValider();
         pressedAnnuler();
         pressedAjouterTravauxButton();
+        addEventHandlers();
         logoLabel();
 
         view.setVisible(true);
@@ -93,9 +89,7 @@ public class Page_AjoutTravauxController extends AjoutSkeletonController {
     }
 
     private void pressedValider() {
-        view.getValiderButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        view.getValiderButton().addActionListener(e -> {
                 errorRaise = false;
                 checkMontant();
                 checkMontantNonDeductible();
@@ -106,7 +100,6 @@ public class Page_AjoutTravauxController extends AjoutSkeletonController {
                     new Page_TravauxController();
                     view.dispose();
                 }
-            }
         });
     }
 
@@ -203,34 +196,44 @@ public class Page_AjoutTravauxController extends AjoutSkeletonController {
     }
 
     private void pressedAnnuler() {
-        view.getAnnulerButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        view.getAnnulerButton().addActionListener(e ->{
                 new Page_TravauxController();
                 view.dispose();
-            }
         });
     }
     
     
     private void pressedAjouterTravauxButton() {
-    	view.getAjouterFactureButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+    	view.getAjouterFactureButton().addActionListener(e -> {
 				new Page_AjoutFactureController();
 				view.dispose();		
-			}
 		});
 	}
     
 	private void logoLabel() {
-		view.getLogoLabel().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		view.getLogoLabel().addActionListener(e -> {
 				new Page_PrincipaleController();
 				view.dispose();
-			}
 		});
 	}
-    
+	
+	 private void addEventHandlers() {
+	        view.getBtnBienLouable().addActionListener(e -> {
+	        	new Page_BienController();
+	        	view.dispose();
+	        });
+
+	        view.getBtnLocataire().addActionListener(e -> {
+	                System.out.println("Locataire clicked");
+	        });
+	        
+	        view.getBtnContratLocation().addActionListener(e -> {
+	        	new Page_ContratLocationController();
+	        	view.dispose();
+	        });
+
+	        view.getBtnDocument().addActionListener(e ->{
+	                System.out.println("Doc cliqué");
+	        });
+	    }
 }

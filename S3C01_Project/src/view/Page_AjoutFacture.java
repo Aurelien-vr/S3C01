@@ -31,7 +31,6 @@ public class Page_AjoutFacture extends AjoutSkeleton {
     private JComboBox<String> cbAdress = new JComboBox<>();
     private JLabel labFactureName = new JLabel("Nom de la facture:");
     private JTextField fieldFactureName = new JTextField(10);
-    private JTextField fieldWaterFixedPart = new JTextField(10);
     private JTextField fieldWaterConsumption = new JTextField(10);
     private JTextField fieldGasPrice = new JTextField(10);
     private JTextField fieldGasConsumption = new JTextField(10);
@@ -149,10 +148,6 @@ public class Page_AjoutFacture extends AjoutSkeleton {
 
     public GridBagConstraints getGbc() {
         return gbc;
-    }
-
-    public JTextField getFieldWaterFixedPart() {
-        return fieldWaterFixedPart;
     }
 
     public JTextField getFieldWaterConsumption() {

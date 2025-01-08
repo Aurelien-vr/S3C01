@@ -1,7 +1,5 @@
 package controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,9 +13,13 @@ import dao.BienDAO;
 import dao.DAOFactory;
 import dao.FactureDAO;
 import dao.Facture_eauDAO;
+import dao.Facture_electriciteDAO;
+import dao.Facture_gazDAO;
 import dao.entities.Bien;
 import dao.entities.Facture;
 import dao.entities.Facture_eau;
+import dao.entities.Facture_electricite;
+import dao.entities.Facture_gaz;
 import view.Page_AjoutFacture;
 import view.ErrorMessage;
 
@@ -27,6 +29,8 @@ public class Page_AjoutFactureController extends AjoutSkeletonController {
     private BienDAO modelBien = DAOFactory.createBienDAO();
     private FactureDAO modelFacture = DAOFactory.createFactureDAO();
     private Facture_eauDAO modelEau = DAOFactory.createFacture_eauDAO();
+    private Facture_electriciteDAO modelElectricite = DAOFactory.createFacture_electriciteDAO();
+    private Facture_gazDAO modelGaz = DAOFactory.createFacture_gazDAO();
     
     private boolean errorRaise;
     private java.sql.Date sqlDate;
@@ -34,18 +38,21 @@ public class Page_AjoutFactureController extends AjoutSkeletonController {
 
     public Page_AjoutFactureController() {
         super();
+        view.setTitleHeader("Facture");
         askForWaterDetails();
         addTypeFactureListener();
         populateAddressComboBox();
         pressedValider();
         pressedAnnuler();
+        logoLabel();
+        addEventHandlers();
         view.setVisible(true);
     }
+    
+    
 
     private void addTypeFactureListener() {
-        view.getCbTypeFacture().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        view.getCbTypeFacture().addActionListener(e -> {
                 clearPreviousDetails();
                 String selectedType = (String) view.getCbTypeFacture().getSelectedItem();
                 switch (selectedType) {
@@ -64,7 +71,6 @@ public class Page_AjoutFactureController extends AjoutSkeletonController {
                     default:
                         break;
                 }
-            }
         });
     }
 
@@ -86,12 +92,8 @@ public class Page_AjoutFactureController extends AjoutSkeletonController {
     private void askForWaterDetails() {
         view.getGbc().gridy = 1;
         view.getGbc().gridx = 0;
-        view.getForm().add(new JLabel("Le prix du M3"), view.getGbc());
-        view.getGbc().gridx = 1;
-        view.getForm().add(view.getFieldWaterFixedPart(), view.getGbc());
-        view.getGbc().gridx = 2;
         view.getForm().add(new JLabel("Consommation en m3"), view.getGbc());
-        view.getGbc().gridx = 3;
+        view.getGbc().gridx = 1;
         view.getForm().add(view.getFieldWaterConsumption(), view.getGbc());
         view.getForm().revalidate();
         view.getForm().repaint();
@@ -126,9 +128,7 @@ public class Page_AjoutFactureController extends AjoutSkeletonController {
     }
 
     private void pressedValider() {
-        view.getValiderButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        view.getValiderButton().addActionListener(e -> {
                 errorRaise = false;
                 checkFactureName();
                 checkDateFacture();
@@ -141,17 +141,13 @@ public class Page_AjoutFactureController extends AjoutSkeletonController {
                     new Page_FactureController();
                     view.dispose();
                 }
-            }
         });
     }
 
     private void pressedAnnuler() {
-        view.getAnnulerButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        view.getAnnulerButton().addActionListener(e -> {
                 new Page_FactureController();
                 view.dispose();
-            }
         });
     }
 
@@ -231,9 +227,8 @@ public class Page_AjoutFactureController extends AjoutSkeletonController {
     private void checkWaterDetails() {
         if (errorRaise) { return; }
         try {
-            double fixedPart = Double.parseDouble(view.getFieldWaterFixedPart().getText().replace(',', '.'));
             double consumption = Double.parseDouble(view.getFieldWaterConsumption().getText().replace(',', '.'));
-            if (fixedPart < 0 || consumption < 0) {
+            if (consumption < 0) {
                 ErrorMessage.errorDialog("Le prix et la consommation d'eau doivent être des nombres positifs");
                 errorRaise = true;
             }
@@ -290,34 +285,70 @@ public class Page_AjoutFactureController extends AjoutSkeletonController {
     		Facture facture = new Facture(factureType, sqlDate, montantFacture, moyenPaiement);
     		facture.setReference_facture(factureName);
     		modelFacture.insert(facture);
+    		if("ERROR CODE 1062".equals(facture.getReference_facture())) {
+    			ErrorMessage.errorDialog("La facture n'a pas pu être inserer car l'ID de la facture est déjà utilisé");
+    			return;
+    		}
+    		
     		modelFacture.insertFK(idBien, factureName);
     		
-    		/*
-    		 * 
+
             String selectedTypeInsert = (String) view.getCbTypeFacture().getSelectedItem();
     		switch (selectedTypeInsert) {
 	            case "Eau":
-	            	BigDecimal partieFix = new BigDecimal(view.getFieldWaterFixedPart().getText().replace(',', '.'));
 	            	BigDecimal consomation = new BigDecimal(view.getFieldWaterConsumption().getText().replace(',', '.'));
-	            	Facture_eau eau = new Facture_eau(partieFix, consomation);
+	            	Facture_eau eau = new Facture_eau(null, consomation);
 	            	modelEau.insert(eau);
+	            	modelEau.insertFK(eau.getId_facture_eau(),factureName);
 	                break;
 	            case "Gaz":
+	                BigDecimal prixGaz = new BigDecimal(view.getFieldGasPrice().getText().replace(',', '.'));
+	                String consommationGaz = view.getFieldGasConsumption().getText();
+	                // Create and insert the Facture_gaz object
+	                Facture_gaz gaz = new Facture_gaz(prixGaz, consommationGaz);
+	                modelGaz.insert(gaz);
+	                modelGaz.insertFK(gaz.getId_facture_gaz(), factureName);
 	                break;
 	            case "Electricité":
+	                BigDecimal prixElectricite = new BigDecimal(view.getFieldElectricityPrice().getText().replace(',', '.'));
+	                String consommationElectricite = view.getFieldElectricityConsumption().getText();
+	                // Create and insert the Facture_electricite object
+	                Facture_electricite electricite = new Facture_electricite(prixElectricite, consommationElectricite);
+	                modelElectricite.insert(electricite);
+	                modelElectricite.insertFK(electricite.getId_facture_electricite(), factureName);
 	                break;
 	            case "Custom":
 	                break;
 	            default:
 	                break;
-    		}
-    		 */
+	        }
     		
 		} catch (Exception e) {
 			ErrorMessage.errorDialog("Erreur lors de l'insertion dans la base de données");
 		}
         
         
+    }
+    
+    
+    private void addEventHandlers() {
+        view.getBtnBienLouable().addActionListener(e -> {
+        	new Page_BienController();
+        	view.dispose();
+        });
+
+        view.getBtnLocataire().addActionListener(e -> {
+                System.out.println("Locataire clicked");
+        });
+        
+        view.getBtnContratLocation().addActionListener(e -> {
+        	new Page_ContratLocationController();
+        	view.dispose();
+        });
+
+        view.getBtnDocument().addActionListener(e ->{
+                System.out.println("Doc cliqué");
+        });
     }
 
 
@@ -328,6 +359,14 @@ public class Page_AjoutFactureController extends AjoutSkeletonController {
             addressToIdMap.put(bien.getAdresse(), bien.getId_bien());
         }
     }
+    
+    
+	private void logoLabel() {
+		view.getLogoLabel().addActionListener(e->{
+				new Page_PrincipaleController();
+				view.dispose();
+		});
+	}
 
     public static void main(String[] args) {
         new Page_AjoutFactureController();

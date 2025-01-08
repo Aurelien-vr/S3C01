@@ -21,12 +21,42 @@ public class Page_FactureController extends TableSkeletonController{
 			
 	public Page_FactureController() {
 		super();
+		view.setTitleHeader("Facture");
 		fillTable();
 		view.setTableModel(modelTable);
 		deleteActionButton();
 		openAjoutFactuePage();
+		logoLabel();
+		addEventHandlers();
 		view.setVisible(true);
 	}
+	
+	private void logoLabel() {
+		view.getLogoLabel().addActionListener(e -> {
+				new Page_PrincipaleController();
+				view.dispose();
+		});
+	}
+	
+	 private void addEventHandlers() {
+	        view.getBtnBienLouable().addActionListener(e -> {
+	        	new Page_BienController();
+	        	view.dispose();
+	        });
+
+	        view.getBtnLocataire().addActionListener(e -> {
+	                System.out.println("Locataire clicked");
+	        });
+	        
+	        view.getBtnContratLocation().addActionListener(e -> {
+	        	new Page_ContratLocationController();
+	        	view.dispose();
+	        });
+
+	        view.getBtnDocument().addActionListener(e ->{
+	                System.out.println("Doc cliqué");
+	        });
+	    }
 	
 	@SuppressWarnings("serial")
 	@Override
@@ -56,20 +86,15 @@ public class Page_FactureController extends TableSkeletonController{
 	}
 	
 	private void openAjoutFactuePage() {
-		view.getAjoutFacture().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		view.getAjoutFacture().addActionListener(e -> {
 				new Page_AjoutFactureController();
 				view.dispose();
-			}
 		});
 	}
 	
 	
 	private void deleteActionButton() {
-		view.getDeleteButton().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		view.getDeleteButton().addActionListener(e -> {
 				int selectedRow = view.getTable().getSelectedRow();
 				String refFacture = (String) view.getTable().getValueAt(selectedRow, 0);
 				int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la supression du travaux: " + refFacture);
@@ -81,7 +106,12 @@ public class Page_FactureController extends TableSkeletonController{
 				} else if (response == JOptionPane.NO_OPTION) {
 				    return;
 				}
-			}
 		});
+	}
+
+	@Override
+	void updateFooter() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -14,12 +14,12 @@ public class Acte_cautionnement {
     private int id_locataire;  // Identifiant du locataire concerné par l'acte de cautionnement
 
     
-    public Acte_cautionnement() {};
+    public Acte_cautionnement() {}
     
     public Acte_cautionnement(BigDecimal montant_caution) {
     	super();
 		this.montant_caution = montant_caution;
-    };
+    }
     
     
     

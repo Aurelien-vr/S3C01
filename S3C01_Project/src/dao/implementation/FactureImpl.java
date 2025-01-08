@@ -50,13 +50,12 @@ public class FactureImpl implements FactureDAO {
             if (result.next()) {
                 return createEntities(result);
             }
-        } catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
-		}
-		
-		finally {
-			DatabaseConnection.closeStatement(statement);
-		}
+        }   catch (Exception e) {
+   			ExceptionStorageHandler.LogException(e, connection);
+   		}finally {
+   			DatabaseConnection.closeStatement(statement);
+   			DatabaseConnection.closeResult(result);
+   		}
 
         return null;
     }
@@ -68,10 +67,37 @@ public class FactureImpl implements FactureDAO {
      */
     @Override
     public List<Facture> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Facture> facts = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Facture";
+        
+        try {
+            statement = connection.prepareStatement(query);
+            result = statement.executeQuery();
+            
+            while (result.next()) {
+                Facture acte = createEntities(result);
+                facts.add(acte);
+            } 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (result != null) result.close();
+                if (statement != null) statement.close();
+            }catch (Exception e) {
+       			ExceptionStorageHandler.LogException(e, connection);
+       		}finally {
+       			DatabaseConnection.closeStatement(statement);
+       			DatabaseConnection.closeResult(result);
+       		}
+        }
+        
+        return facts;
     }
-
+    
+    
     /**
      * Insère une nouvelle facture dans la base de données (fonctionnalité à implémenter).
      * 
@@ -94,7 +120,11 @@ public class FactureImpl implements FactureDAO {
     		if(statement.executeUpdate()>0) {
     			System.out.println("User inserted");
     		}
-   		} catch (Exception e) {
+   		}catch (java.sql.SQLIntegrityConstraintViolationException e) {
+            if ("23000".equals(e.getSQLState()) && e.getErrorCode() == 1062) {
+                entity.setReference_facture("ERROR CODE 1062");
+             }
+         }  catch (Exception e) {
    			ExceptionStorageHandler.LogException(e, connection);
    		}finally {
    			DatabaseConnection.closeStatement(statement);
@@ -108,22 +138,41 @@ public class FactureImpl implements FactureDAO {
      */
     @Override
     public void update(Facture entity) {
-        // TODO Auto-generated method stub
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture SET type_facture = ?, date_facture = ?, montant_facture = ?, moyen_paiement = ?  WHERE reference_facture = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, entity.getType_facture());
+            statement.setDate(2, entity.getDate_facture());
+            statement.setBigDecimal(3, entity.getMontant_facture());
+            statement.setString(4, entity.getMoyen_paiement());
+            statement.setString(5, entity.getReference_facture());
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 
-    /**
-     * Supprime une facture de la base de données (fonctionnalité à implémenter).
-     * 
-     * @param entity L'entité Facture à supprimer.
-     */
-    @Override
-    public void delete(Facture entity) {
-        // TODO Auto-generated method stub
-    }
     
     @Override
     public void deleteById(long id) {
-        // TODO Auto-generated method stub
+    	PreparedStatement statement = null;
+        String query = "DELETE FROM db1_sae.Facture WHERE Reference_facture = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, id);
+        } catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}
+		
+		finally {
+			DatabaseConnection.closeStatement(statement);
+		}
     }
     
     
@@ -222,7 +271,7 @@ public class FactureImpl implements FactureDAO {
 			if(statement.execute()) {
 				result = statement.getResultSet();
 				while(result.next()) {
-					ArrayList<String> cell = new ArrayList<String>();
+					ArrayList<String> cell = new ArrayList<>();
 					for(int i = 1; i <= 6; i++) {
 						 String value = result.getString(i);
 		                    cell.add(value != null ? value : "Unknown");
