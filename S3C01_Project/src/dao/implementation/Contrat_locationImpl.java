@@ -258,16 +258,18 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 	    }
 
 	@Override
-	public void procUpdateFkBienLocation(int fkToUpdate, int newFk) {
+	public void procUpdateFkBienLocation(int fkToUpdate, int newFk, int locataireKey) {
 		 CallableStatement statement = null;
 		    try {
 		        // Prepare the callable statement
-		        String sql = "{CALL db1_sae.update_fkBienLocataire(?, ?)}";
+		        String sql = "{CALL db1_sae.update_fkBienLocataire(?, ?, ?)}";
 		        statement = connection.prepareCall(sql);
 		        
 		        // Set the parameters
 		        statement.setInt(1, fkToUpdate);
 		        statement.setInt(2, newFk);
+		        statement.setInt(3, locataireKey);
+
 		        
 		        // Execute the callable statement
 		        statement.execute();
@@ -279,5 +281,31 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 			}finally {
 				DatabaseConnection.closeStatement(statement);
 			}
+	}
+
+	@Override
+	public List<List<String>> procContratLocationDisponible() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_ContratLocNotFkInBien()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<>();
+					cell.add(result.getString(1));
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
 	}
 }

@@ -2,7 +2,7 @@ package application;
 
 import javax.swing.SwingUtilities;
 
-import controller.Page_CooController;
+import controller.ConnectionController;
 import dbConnection.DatabaseConnection;
 
 public class App {
@@ -10,7 +10,7 @@ public class App {
      * Point d'entrée principal de l'application.
      */
     public App() {
-        SwingUtilities.invokeLater(Page_CooController::new); 
+        SwingUtilities.invokeLater(ConnectionController::new); 
 
         while (!DatabaseConnection.connected) {
             try {

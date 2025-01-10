@@ -1,8 +1,6 @@
 package dao;
 
 import java.util.List;
-import java.util.Map;
-
 import dao.entities.Bien;
 
 /**
@@ -15,4 +13,5 @@ public interface BienDAO extends DAO<Bien> {
 	public List<List<String>> procPageBien();
 	public String[] procGetClNotInBien();
 	void insertFK(int id, int idContratLocation);
+	public List<List<String>> procBienSansContrat();
 }

@@ -11,6 +11,7 @@ public interface Contrat_locationDAO extends DAO<Contrat_location> {
 
 	List<List<String>> procPageContratLocation();
 	List<List<String>> procPageContratLocationActif();
+	List<List<String>> procContratLocationDisponible();
 	void procRemoveFkBienLocation(int fkToRm);
-	void procUpdateFkBienLocation(int fkToUpdate, int newFk);
+	void procUpdateFkBienLocation(int fkToUpdate, int newFk, int locataireKey);
 }

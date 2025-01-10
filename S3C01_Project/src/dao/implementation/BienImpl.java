@@ -300,7 +300,7 @@ public class BienImpl implements BienDAO {
 	public String[] procGetClNotInBien() {
 		CallableStatement statement = null;
 		ResultSet result = null;
-		String query = "{CALL db1_sae.get_idCLNotInBien()}";
+		String query = "{CALL db1_sae.get_ContratLocNotFkInBien()}";
 		String[] bienList = null;
 		
 		try {
@@ -311,6 +311,7 @@ public class BienImpl implements BienDAO {
 	            while (result.next()) {
 	            	factureList.add(result.getString(1));
 	            }
+	            System.out.println(factureList);
 	            bienList = factureList.toArray(new String[0]);
 			}
 		}catch (Exception e) {
@@ -346,4 +347,32 @@ public class BienImpl implements BienDAO {
             DatabaseConnection.closeStatement(statement);
         }
     }
+
+	@Override
+	public List<List<String>> procBienSansContrat() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_bienSansContrat()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<>();
+					cell.add(result.getString(1) != null ? result.getString(1) : "Unknown");
+					cell.add(result.getString(2) != null ? result.getString(2): "Unknown");
+					arrayRes.add(cell);
+					System.out.println(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
 }

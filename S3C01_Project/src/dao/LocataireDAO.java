@@ -13,4 +13,5 @@ public interface LocataireDAO extends DAO<Locataire> {
 	public void insertFK(int idLocataire, int idContratLocation);
 	public List<List<String>> procGetLocataires();
 	public List<List<String>> procGetLocatairesActifs();
+	public List<List<String>> procLocataireSansContrat();
 }

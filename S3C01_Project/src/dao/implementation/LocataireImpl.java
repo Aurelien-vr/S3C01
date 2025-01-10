@@ -286,5 +286,33 @@ public class LocataireImpl implements LocataireDAO {
 		arrayRes.add(cell);
 	}
 
+	@Override
+	public List<List<String>> procLocataireSansContrat() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_locataireSansContrat()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<>();
+					String value = result.getString(1) +" "+ result.getString(2);
+					cell.add(value != null ? value : "Unknown");
+					cell.add(result.getString(3) != null ? result.getString(3): "Unknown");
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
+
 
 }
