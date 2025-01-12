@@ -70,7 +70,7 @@ public class test_bien {
 	public void testInsert() {
 		Bien bi = new Bien(2, "13 rue du treize", "Toulouse", "31000", new BigDecimal(400).setScale(2, RoundingMode.DOWN), 7, false, "armoire, lit", "douche, cuisine", true);
 		bienDAO.insert(bi);
-		assertEquals(bi, bienDAO.findOne(idInsertSetup+1));
+		assertEquals(bi, bienDAO.findOne(bi.getId_bien()));
 
 	}
 	
@@ -116,7 +116,7 @@ public class test_bien {
 	    public void testBienStatus() {
 	        // Appel à la méthode BienStatus
 	        List<List<String>> result = bienDAO.BienStatus();
-
+	        
 	        // Vérification que le résultat n'est pas vide
 	        assertNotNull("La méthode BienStatus ne doit pas retourner null", result);
 	        assertFalse("La méthode BienStatus doit retourner des résultats", result.isEmpty());
@@ -134,8 +134,120 @@ public class test_bien {
 	        assertEquals(bien.getVille(), bien.getVille());
 	        assertEquals(bien.getSuperficie(), bien.getSuperficie());
 	    }
+	    
+	    @Test
+	    public void testFKBien() throws Exception {
+	        String sql = "{ CALL db1_sae.TestFK_Bien(?) }";
 
-	   
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setInt(1, 1);
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+
+	    public void testProcedureGetAllAdresses() {
+	        String sql = "{ CALL db1_sae.get_AllAdresses() }";
+	        String sqlVerif = "SELECT Adresse, Ville, Etage FROM db1_sae.Bien LIMIT 1"; // Récupère la première ligne
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            try (ResultSet resultSet = callableStatement.executeQuery()) {
+	                // Vérifie si le ResultSet contient des résultats
+	                assertTrue(resultSet.next());
+
+	                // Récupère les valeurs réelles de la base pour la première ligne
+	                try (Statement stmt = connection.createStatement();
+	                        ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+	                    assertTrue(expectedResultSet.next());
+
+	                    String adresseAttendue = expectedResultSet.getString("Adresse");
+	                    String villeAttendue = expectedResultSet.getString("Ville");
+	                    Integer etageAttendu = expectedResultSet.getInt("Etage");
+
+	                    // Récupère les valeurs de la procédure et les compare avec les valeurs attendues
+	                    String adresse = resultSet.getString("Adresse");
+	                    String ville = resultSet.getString("Ville");
+	                    Integer etage = resultSet.getInt("Etage");
+
+	                    assertEquals(adresseAttendue, adresse);
+	                    assertEquals(villeAttendue, ville);
+	                    assertEquals(etageAttendu, etage);
+	                }
+	            }
+	        } catch (Exception e) {
+	            ExceptionStorageHandler.LogException(e, connection);
+	            fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+	        }
+	    }
+	    
+	    public void testProcedureGetBiens() {
+	        String sql = "{ CALL db1_sae.get_biens() }";
+	        String sqlVerif = "SELECT * FROM db1_sae.Bien LIMIT 1"; // Récupère la première ligne
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            try (ResultSet resultSet = callableStatement.executeQuery()) {
+	                // Vérifie si le ResultSet contient des résultats
+	                assertTrue(resultSet.next());
+
+	                // Récupère les valeurs réelles de la base pour la première ligne
+	                try (Statement stmt = connection.createStatement();
+	                        ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+	                    assertTrue(expectedResultSet.next());
+
+	                    // Boucle sur les colonnes du ResultSet pour une vérification générique
+	                    ResultSetMetaData metaData = expectedResultSet.getMetaData();
+	                    int columnCount = metaData.getColumnCount();
+
+	                    for (int i = 1; i <= columnCount; i++) {
+	                        String columnName = metaData.getColumnName(i);
+	                        Object expectedValue = expectedResultSet.getObject(columnName);
+	                        Object actualValue = resultSet.getObject(columnName);
+
+	                        assertEquals("Incompatibilité dans la colonne: " + columnName, expectedValue, actualValue);
+	                    }
+	                }
+	            }
+	        } catch (Exception e) {
+	            ExceptionStorageHandler.LogException(e, connection);
+	            fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+	        }
+	    }
+	    
+	    public void testProcedureGetBienSansContrat() {
+	        String sql = "{ CALL db1_sae.get_bienSansContrat() }";
+	        String sqlVerif = "SELECT Adresse, Id_Bien FROM db1_sae.Bien WHERE Id_Contrat_location IS NULL LIMIT 1"; // Récupère la première ligne
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            try (ResultSet resultSet = callableStatement.executeQuery()) {
+	                // Vérifie si le ResultSet contient des résultats
+	                assertTrue(resultSet.next());
+
+	                // Récupère les valeurs réelles de la base pour la première ligne
+	                try (Statement stmt = connection.createStatement();
+	                        ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+	                    assertTrue(expectedResultSet.next());
+
+	                    String adresseAttendue = expectedResultSet.getString("Adresse");
+	                    Integer idBienAttendu = expectedResultSet.getInt("Id_Bien");
+
+	                    // Récupère les valeurs de la procédure et les compare avec les valeurs attendues
+	                    String adresse = resultSet.getString("Adresse");
+	                    Integer idBien = resultSet.getInt("Id_Bien");
+
+	                    assertEquals(adresseAttendue, adresse);
+	                    assertEquals(idBienAttendu, idBien);
+	                }
+	            }
+	        } catch (Exception e) {
+	            ExceptionStorageHandler.LogException(e, connection);
+	            fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+	        }
+	    }
 
 
 }

@@ -131,6 +131,22 @@ public class test_solde_de_tout_compte {
 	    assertEquals(nouvelleProvisionPourCharges, solde_de_tout_compte.getProvision_pour_charges());
 	    assertEquals(nouvelleCaution, solde_de_tout_compte.getCaution());
 	}
+	
+	@Test
+    public void TestFKSoldeDeToutCompte() throws Exception {
+        String sql = "{ CALL db1_sae.TestFK_SoldeDeToutCompte(?) }";
+
+        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+            
+            callableStatement.setInt(1, 1);
+
+            callableStatement.execute();
+
+        } catch (Exception e) {
+            
+            assertEquals("Success", e.getMessage());
+        }
+    }
 
 
 }

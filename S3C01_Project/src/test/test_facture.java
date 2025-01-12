@@ -9,6 +9,8 @@ import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -68,7 +70,7 @@ public class test_facture {
 	
 	@Test
 	public void testInsert() throws SQLException {
-	    Facture newFacture = new Facture("54321", "Payante", Date.valueOf("2024-12-12"), new BigDecimal(100), "Carte", new BigDecimal(20), new BigDecimal(5));
+	    Facture newFacture = new Facture("54321", "Payante", Date.valueOf("2024-12-12"), new BigDecimal(100).setScale(2, RoundingMode.DOWN), "Carte", new BigDecimal(20).setScale(2, RoundingMode.DOWN), new BigDecimal(5).setScale(2, RoundingMode.DOWN));
 	    factureDAO.insert(newFacture);
 	    
 	    Long id = Long.parseLong(newFacture.getReference_facture());
@@ -84,16 +86,23 @@ public class test_facture {
 	@Test
 	public void testDelete() throws SQLException {
 	    // Insérer une facture pour être supprimée
-	    Facture factureToDelete = new Facture("12345", "Payante", Date.valueOf("2024-12-12"), new BigDecimal(50), "Cheque", new BigDecimal(20), new BigDecimal(3));
+	    Facture factureToDelete = new Facture("12345", "Payante", Date.valueOf("2024-12-12"), new BigDecimal(50).setScale(2, RoundingMode.DOWN), "Cheque", new BigDecimal(20).setScale(2, RoundingMode.DOWN), new BigDecimal(3).setScale(2, RoundingMode.DOWN));
 	    factureDAO.insert(factureToDelete);
 	    
-	    Long id = Long.parseLong(factureToDelete.getReference_facture());
-	    factureDAO.deleteById(id);
+	    // Convertir le String 'Reference_facture' en long
+	    String referenceFacture = factureToDelete.getReference_facture();
+	    long id = Long.parseLong(referenceFacture);  // Conversion du String en long
 
+	    factureDAO.deleteById(id);  // Passer le long à deleteById
+
+	   
 	    // Vérifier que la facture a bien été supprimée
 	    Facture deletedFacture = factureDAO.findOne(id);
+	    System.out.println(deletedFacture);
 	    assertNull(deletedFacture);
 	}
+
+
 
 	
 	@Test
@@ -141,6 +150,171 @@ public class test_facture {
 	    assertEquals(nouveauMontantFacture, facture.getMontant_facture());
 	    assertEquals(nouveauMoyenPaiement, facture.getMoyen_paiement());
 	}
+
+	@Test
+	public void testCKFacture() throws Exception {
+	    String sql = "{ CALL db1_sae.TestCK_Facture(?, ?, ?) }";
+
+	    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        callableStatement.setBigDecimal(1, new BigDecimal("50.00"));
+	        callableStatement.setBigDecimal(2, new BigDecimal("20.00"));
+	        callableStatement.setDate(3, Date.valueOf("2024-02-02"));
+	        
+	        callableStatement.execute();
+	    } catch (Exception e) {
+	        assertEquals("Success", e.getMessage());
+	    }
+	}
+	
+	   @Test
+	    public void testFKFacture() throws Exception {
+	        String sql = "{ CALL db1_sae.TestFK_Facture(?) }";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setInt(1, 1);
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+	   
+	   public void testProcedureGetFactures() {
+		    String sql = "{ CALL db1_sae.get_factures() }";
+		    String sqlVerif = "SELECT Reference_facture, b.Adresse, Type_facture, Date_facture, Montant_facture, Moyen_paiement FROM db1_sae.Facture f JOIN db1_sae.Bien b ON f.Id_Bien = b.Id_Bien LIMIT 1"; // Récupère la première ligne
+		    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+		        try (ResultSet resultSet = callableStatement.executeQuery()) {
+		            // Vérifie si le ResultSet contient des résultats
+		            assertTrue(resultSet.next());
+
+		            // Récupère les valeurs réelles de la base pour la première ligne
+		            try (Statement stmt = connection.createStatement();
+		                    ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+		                assertTrue(expectedResultSet.next());
+
+		                String referenceFactureAttendue = expectedResultSet.getString("Reference_facture");
+		                String adresseAttendue = expectedResultSet.getString("Adresse");
+		                String typeFactureAttendue = expectedResultSet.getString("Type_facture");
+		                Date dateFactureAttendue = expectedResultSet.getDate("Date_facture");
+		                BigDecimal montantFactureAttendu = expectedResultSet.getBigDecimal("Montant_facture");
+		                String moyenPaiementAttendu = expectedResultSet.getString("Moyen_paiement");
+
+		                // Récupère les valeurs de la procédure et les compare avec les valeurs attendues
+		                String referenceFacture = resultSet.getString("Reference_facture");
+		                String adresse = resultSet.getString("Adresse");
+		                String typeFacture = resultSet.getString("Type_facture");
+		                Date dateFacture = resultSet.getDate("Date_facture");
+		                BigDecimal montantFacture = resultSet.getBigDecimal("Montant_facture");
+		                String moyenPaiement = resultSet.getString("Moyen_paiement");
+
+		                assertEquals(referenceFactureAttendue, referenceFacture);
+		                assertEquals(adresseAttendue, adresse);
+		                assertEquals(typeFactureAttendue, typeFacture);
+		                assertEquals(dateFactureAttendue, dateFacture);
+		                assertEquals(montantFactureAttendu, montantFacture);
+		                assertEquals(moyenPaiementAttendu, moyenPaiement);
+		            }
+		        }
+		    } catch (Exception e) {
+		        ExceptionStorageHandler.LogException(e, connection);
+		        fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+		    }
+		}
+	   
+	   public void testProcedureGetNumFacture() {
+		    String sql = "{ CALL db1_sae.get_numFacture() }";
+		    String sqlVerif = "SELECT f.Reference_facture, f.Type_facture FROM db1_sae.Facture f LEFT JOIN db1_sae.Travaux t ON f.Reference_facture = t.Reference_facture WHERE t.Reference_facture IS NULL LIMIT 1"; // Retrieve the first row for verification
+		    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+		        try (ResultSet resultSet = callableStatement.executeQuery()) {
+		            // Verify the ResultSet contains results
+		            assertTrue(resultSet.next());
+
+		            // Retrieve expected values from the database for comparison
+		            try (Statement stmt = connection.createStatement();
+		                    ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+		                assertTrue(expectedResultSet.next());
+
+		                String referenceFactureAttendue = expectedResultSet.getString("Reference_facture");
+		                String typeFactureAttendu = expectedResultSet.getString("Type_facture");
+
+		                // Retrieve the actual values from the procedure
+		                String referenceFacture = resultSet.getString("Reference_facture");
+		                String typeFacture = resultSet.getString("Type_facture");
+
+		                // Compare expected and actual values
+		                assertEquals(referenceFactureAttendue, referenceFacture);
+		                assertEquals(typeFactureAttendu, typeFacture);
+		            }
+		        }
+		    } catch (Exception e) {
+		        ExceptionStorageHandler.LogException(e, connection);
+		        fail("Erreur lors de l'appel de la procÃ©dure : " + e.getMessage());
+		    }
+		}
+	   
+	   public void testProcedureGetTravauxPageTravaux() {
+		    String sql = "{ CALL db1_sae.get_travaux_page_travaux() }";
+		    String sqlVerif = "SELECT t.Reference_facture, b.Adresse, b.Code_postal, b.Ville, b.Etage, t.Montant, t.Montant_non_deductible, t.Reduction_special, t.Date_travaux, t.Nature, t.Numero_facture FROM db1_sae.Travaux t JOIN db1_sae.Facture f ON t.Reference_facture = f.Reference_facture LEFT JOIN db1_sae.Bien b ON f.Id_Bien = b.Id_Bien LIMIT 1"; // Retrieve the first row for verification
+		    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+		        try (ResultSet resultSet = callableStatement.executeQuery()) {
+		            // Verify the ResultSet contains results
+		            assertTrue(resultSet.next());
+
+		            // Retrieve expected values from the database for comparison
+		            try (Statement stmt = connection.createStatement();
+		                    ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+		                assertTrue(expectedResultSet.next());
+
+		                String referenceFactureAttendue = expectedResultSet.getString("Reference_facture");
+		                String adresseAttendue = expectedResultSet.getString("Adresse");
+		                String codePostalAttendu = expectedResultSet.getString("Code_postal");
+		                String villeAttendue = expectedResultSet.getString("Ville");
+		                String etageAttendu = expectedResultSet.getString("Etage");
+		                BigDecimal montantAttendu = expectedResultSet.getBigDecimal("Montant");
+		                BigDecimal montantNonDeductibleAttendu = expectedResultSet.getBigDecimal("Montant_non_deductible");
+		                BigDecimal reductionSpecialAttendue = expectedResultSet.getBigDecimal("Reduction_special");
+		                Date dateTravauxAttendue = expectedResultSet.getDate("Date_travaux");
+		                String natureAttendue = expectedResultSet.getString("Nature");
+		                String numeroFactureAttendu = expectedResultSet.getString("Numero_facture");
+
+		                // Retrieve the actual values from the procedure
+		                String referenceFacture = resultSet.getString("Reference_facture");
+		                String adresse = resultSet.getString("Adresse");
+		                String codePostal = resultSet.getString("Code_postal");
+		                String ville = resultSet.getString("Ville");
+		                String etage = resultSet.getString("Etage");
+		                BigDecimal montant = resultSet.getBigDecimal("Montant");
+		                BigDecimal montantNonDeductible = resultSet.getBigDecimal("Montant_non_deductible");
+		                BigDecimal reductionSpecial = resultSet.getBigDecimal("Reduction_special");
+		                Date dateTravaux = resultSet.getDate("Date_travaux");
+		                String nature = resultSet.getString("Nature");
+		                String numeroFacture = resultSet.getString("Numero_facture");
+
+		                // Compare expected and actual values
+		                assertEquals(referenceFactureAttendue, referenceFacture);
+		                assertEquals(adresseAttendue, adresse);
+		                assertEquals(codePostalAttendu, codePostal);
+		                assertEquals(villeAttendue, ville);
+		                assertEquals(etageAttendu, etage);
+		                assertEquals(montantAttendu, montant);
+		                assertEquals(montantNonDeductibleAttendu, montantNonDeductible);
+		                assertEquals(reductionSpecialAttendue, reductionSpecial);
+		                assertEquals(dateTravauxAttendue, dateTravaux);
+		                assertEquals(natureAttendue, nature);
+		                assertEquals(numeroFactureAttendu, numeroFacture);
+		            }
+		        }
+		    } catch (Exception e) {
+		        ExceptionStorageHandler.LogException(e, connection);
+		        fail("Erreur lors de l'appel de la procÃ©dure : " + e.getMessage());
+		    }
+		}
 
 	
 

@@ -125,5 +125,37 @@ public class test_avis_taxe_fonciere {
 	    assertEquals(nouvelDate, avis_taxe_fonciere.getDate_etablissement());
 	    assertEquals(nouveauDeb, avis_taxe_fonciere.getDebiteur_legaux());
 	}
+	
+	@Test
+    public void testCKAvisTaxeFonciere() throws Exception {
+        String sql = "{ CALL db1_sae.TestCK_TaxeFonciere(?,?)}";
+
+        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+        	callableStatement.setInt(1, 248);
+            callableStatement.setDate(2, Date.valueOf("2010-10-10")); 
+            
+
+            callableStatement.execute();
+
+        } catch (Exception e) {
+            assertEquals("Success", e.getMessage());
+        }
+    }
+	
+	@Test
+    public void TestFKTaxeFonciere() throws Exception {
+        String sql = "{ CALL db1_sae.TestFK_TaxeFonciere(?) }";
+
+        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+            
+            callableStatement.setInt(1, 1);
+
+            callableStatement.execute();
+
+        } catch (Exception e) {
+            
+            assertEquals("Success", e.getMessage());
+        }
+    }
 
 }

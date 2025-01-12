@@ -194,6 +194,7 @@ public class LocataireImpl implements LocataireDAO {
     public Locataire createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Locataire à partir des données du ResultSet
         Locataire locataire = new Locataire();
+        locataire.setId_locataire(result.getInt("id_locataire"));
         locataire.setNom(result.getString("nom"));
         locataire.setPrenom(result.getString("prenom"));
         locataire.setDate_de_naissance(result.getDate("date_de_naissance"));

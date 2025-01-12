@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,5 +190,34 @@ public class Solde_de_tout_compteImpl implements Solde_de_tout_compteDAO {
         solde.setProvision_pour_charges(result.getBigDecimal("provision_pour_charges"));
         solde.setCaution(result.getBigDecimal("caution"));
         return solde; // Retourne l'entité Solde_de_tout_compte construite
+    }
+    
+    @Override
+    public void insertFK(int idSolde, int idContratLocation) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Solde_de_tout_compte SET Id_Contrat_location = ? WHERE Id_Solde_de_tout_compte = ?";
+
+        try {
+            // Préparation de la requête SQL pour mettre à jour la clé étrangère
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idContratLocation); // Clé étrangère (id_Bien)
+            statement.setInt(2, idSolde); // Clé primaire (Reference_facture)
+
+            // Exécution de la mise à jour
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK inserted");
+            } else {
+                System.out.println("Aucun trouvé");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (SQLException e) {
+            // Gestion des exceptions SQL
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            // Fermeture des ressources
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 }

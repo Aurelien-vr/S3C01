@@ -128,6 +128,39 @@ public class test_declaration_revenu {
 	    assertEquals(nouvelleDateAcquisition, declaration_revenu.getDate_acquisition());
 	    assertEquals(nouveauxLocataires, declaration_revenu.getLocataires());
 	}
+	
+	   @Test
+	    public void testFKDeclarationRevenu() throws Exception {
+	        String sql = "{ CALL db1_sae.TestFK_DeclarationRevenu(?) }";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setInt(1, 1);
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+	   
+	   @Test
+	    public void testCKDeclarationRevenu() throws Exception {
+	        String sql = "{ CALL db1_sae.TestCK_DeclarationRevenu(?,?,?)}";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            callableStatement.setDate(1, Date.valueOf("2010-10-10")); 
+	            callableStatement.setInt(2, 248);
+	            callableStatement.setBigDecimal(3, new BigDecimal(120).setScale(2, RoundingMode.DOWN));
+	            
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
 
 
 }

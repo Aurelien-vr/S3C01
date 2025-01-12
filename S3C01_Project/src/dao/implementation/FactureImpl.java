@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,26 +40,24 @@ public class FactureImpl implements FactureDAO {
     public Facture findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture WHERE Reference_facture = ?";
-
+        String query = "SELECT * FROM db1_sae.Facture WHERE reference_facture = ?";
+        
         try {
             statement = connection.prepareStatement(query);
             statement.setLong(1, id);
             result = statement.executeQuery();
-
+            
             if (result.next()) {
                 return createEntities(result);
             }
-        } catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
-		}
-		
-		finally {
-			DatabaseConnection.closeStatement(statement);
-		}
-
+        } catch (SQLException e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
         return null;
     }
+
 
     /**
      * Recherche tous les factures
@@ -99,30 +99,34 @@ public class FactureImpl implements FactureDAO {
      * @param entity L'entité Facture à insérer.
      */
     @Override
-    public void insert(Facture entity) {
-    	PreparedStatement statement = null;
-    	String query = "INSERT INTO db1_sae.Facture(reference_facture, type_facture , date_facture , montant_facture, moyen_paiement, montantNonDeductible, Reduction) VALUES (?,?,?,?,?)";
-   		
-   		try {
-   			statement = connection.prepareStatement(query);
-   			statement.setString(1,entity.getReference_facture());
-    		statement.setString(2, entity.getType_facture());
-    		statement.setDate(3, entity.getDate_facture());
-    		statement.setBigDecimal(4, entity.getMontant_facture());
-    		statement.setString(5, entity.getMoyen_paiement());
-    		statement.setBigDecimal(6, entity.getMontantNonDeductible());
-    		statement.setBigDecimal(7, entity.getReduction());
-    			
-    			
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
-   		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
-   		}finally {
-   			DatabaseConnection.closeStatement(statement);
-   		}
+    public void insert(Facture facture) {
+        PreparedStatement statement = null;
+        String query = "INSERT INTO db1_sae.Facture (reference_facture, type_facture, date_facture, montant_facture, moyen_paiement, montantNonDeductible, reduction) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        try {
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, facture.getReference_facture());
+            statement.setString(2, facture.getType_facture());
+            statement.setDate(3, facture.getDate_facture());
+            statement.setBigDecimal(4, facture.getMontant_facture());
+            statement.setString(5, facture.getMoyen_paiement());
+            statement.setBigDecimal(6, facture.getMontantNonDeductible());
+            statement.setBigDecimal(7, facture.getReduction());
+            
+            statement.executeUpdate();
+            
+            // Récupérer la clé générée (si l'ID est auto-incrémenté)
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                facture.setReference_facture(generatedKeys.getString(1));  // ou autre champ ID
+            }
+        } catch (SQLException e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
 
     /**
      * Met à jour une facture existante dans la base de données (fonctionnalité à implémenter).
@@ -155,20 +159,24 @@ public class FactureImpl implements FactureDAO {
     
     @Override
     public void deleteById(long id) {
-    	PreparedStatement statement = null;
+        PreparedStatement statement = null;
         String query = "DELETE FROM db1_sae.Facture WHERE Reference_facture = ?";
 
         try {
             statement = connection.prepareStatement(query);
-            statement.setLong(1, id);
+            statement.setLong(1, id);  // Ici on passe un long
+            statement.executeUpdate();
         } catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
-		}
-		
-		finally {
-			DatabaseConnection.closeStatement(statement);
-		}
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
+
+
+
+
 
     /**
      * Crée une entité {@link Facture} à partir des résultats d'une requête SQL.
@@ -189,5 +197,40 @@ public class FactureImpl implements FactureDAO {
         facture.setMontantNonDeductible(result.getBigDecimal("montantNonDeductible"));
         facture.setReduction(result.getBigDecimal("Reduction"));
         return facture;
+    }
+    
+    /**
+     * Associe un id_Bien à une facture existante.
+     *
+     * @param referenceFacture La référence de la facture à laquelle associer le bien.
+     * @param idBien La clé étrangère à associer (id_Bien).
+     */
+    @Override
+    public void insertFK(String referenceFacture, int idBien) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Facture SET Id_Bien = ? WHERE Reference_facture = ?";
+
+        try {
+            // Préparation de la requête SQL pour mettre à jour la clé étrangère
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, idBien); // Clé étrangère (id_Bien)
+            statement.setString(2, referenceFacture); // Clé primaire (Reference_facture)
+
+            // Exécution de la mise à jour
+            if (statement.executeUpdate() > 0) {
+                System.out.println("id_Bien associé avec succès à la facture : " + referenceFacture);
+            } else {
+                System.out.println("Aucune facture trouvée avec la référence : " + referenceFacture);
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (SQLException e) {
+            // Gestion des exceptions SQL
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            // Fermeture des ressources
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 }

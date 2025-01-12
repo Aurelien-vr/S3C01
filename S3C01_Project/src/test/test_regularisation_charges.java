@@ -143,5 +143,37 @@ public class test_regularisation_charges {
 	    assertEquals(nouvelIndice, regularisation_charges.getIndice());
 	    assertEquals(nouvelEntretien, regularisation_charges.getEntretien());
 	}
+	
+
+	   @Test
+	    public void testFKRegularisation() throws Exception {
+	        String sql = "{ CALL db1_sae.TestFK_RegularisationCharges(?) }";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setInt(1, 1);
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+	   
+	   @Test
+	    public void testCKRegularisation() throws Exception {
+	        String sql = "{ CALL db1_sae.TestCK_RegularisationCharges(?)}";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        	callableStatement.setDate(1, Date.valueOf("2015-07-09"));
+	            
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
 
 }

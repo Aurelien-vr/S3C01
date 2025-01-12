@@ -7,6 +7,8 @@ import dao.entities.Avis_Taxe_Fonciere;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface Avis_Taxe_FonciereDAO extends DAO<Avis_Taxe_Fonciere> {
+
+	void insertFK(int numeroFiscal, int idBien);
     // Les méthodes spécifiques à l'entité Avis_Taxe_Fonciere peuvent être ajoutées ici si nécessaire
 }
 

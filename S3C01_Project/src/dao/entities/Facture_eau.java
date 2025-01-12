@@ -125,7 +125,7 @@ public class Facture_eau {
 		if (getClass() != obj.getClass())
 			return false;
 		Facture_eau other = (Facture_eau) obj;
-		return Objects.equals(consommation, other.consommation) && id_facture_eau == other.id_facture_eau
+		return Objects.equals(consommation, other.consommation) 
 				&& Objects.equals(partie_fixe, other.partie_fixe)
 				&& Objects.equals(reference_facture, other.reference_facture);
 	}

@@ -7,5 +7,7 @@ import dao.entities.Solde_de_tout_compte;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface Solde_de_tout_compteDAO extends DAO<Solde_de_tout_compte> {
+
+	void insertFK(int idSolde, int idContratLocation);
     // Les méthodes spécifiques à l'entité Solde_de_tout_compte peuvent être ajoutées ici si nécessaire
 }

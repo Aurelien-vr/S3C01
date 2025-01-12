@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class Contrat_location {
 
-    private int id_numero_location;  // Identifiant unique du contrat de location
+    private int id_contrat_location;  // Identifiant unique du contrat de location
     private int montant_loyer;  // Montant du loyer mensuel
     private Date date_debut;  // Date de début du contrat
     private Date date_fin;  // Date de fin du contrat
@@ -39,7 +39,7 @@ public class Contrat_location {
      * @return Le numéro de location.
      */
     public int getNumero_location() {
-        return id_numero_location;
+        return id_contrat_location;
     }
 
     /**
@@ -48,7 +48,7 @@ public class Contrat_location {
      * @param numero_location Le numéro de location à définir.
      */
     public void setNumero_location(int numero_location) {
-        this.id_numero_location = numero_location;
+        this.id_contrat_location = numero_location;
     }
 
     /**
@@ -168,7 +168,7 @@ public class Contrat_location {
     @Override
     public String toString() {
         return "ContratLocation{" +
-               "numero_location=" + id_numero_location +
+               "numero_location=" + id_contrat_location +
                ", montant_loyer=" + montant_loyer +
                ", date_debut=" + (date_debut != null ? date_debut : "N/A") +
                ", date_fin=" + (date_fin != null ? date_fin : "N/A") +
@@ -181,26 +181,24 @@ public class Contrat_location {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_debut, date_fin, date_versement, id_numero_location, modalite_chauffage,
+		return Objects.hash(date_debut, date_fin, date_versement, id_contrat_location, modalite_chauffage,
 				modalite_eau_chaude_sanitaire, montant_loyer);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Contrat_location other = (Contrat_location) obj;
-		return Objects.equals(date_debut, other.date_debut) && Objects.equals(date_fin, other.date_fin)
-				&& Objects.equals(date_versement, other.date_versement)
-				&& id_numero_location == other.id_numero_location
-				&& Objects.equals(modalite_chauffage, other.modalite_chauffage)
-				&& Objects.equals(modalite_eau_chaude_sanitaire, other.modalite_eau_chaude_sanitaire)
-				&& montant_loyer == other.montant_loyer;
+	    if (this == obj) return true;
+	    if (obj == null) return false;
+	    if (getClass() != obj.getClass()) return false;
+	    Contrat_location other = (Contrat_location) obj;
+	    return Objects.equals(date_debut, other.date_debut) && 
+	           Objects.equals(date_fin, other.date_fin) &&
+	           Objects.equals(date_versement, other.date_versement) &&
+	           Objects.equals(modalite_chauffage, other.modalite_chauffage) &&
+	           Objects.equals(modalite_eau_chaude_sanitaire, other.modalite_eau_chaude_sanitaire) &&
+	           montant_loyer == other.montant_loyer;
 	}
+
     
     
 

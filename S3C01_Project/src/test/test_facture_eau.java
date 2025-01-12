@@ -69,7 +69,7 @@ public class test_facture_eau {
 	public void testInsert() {
 		Facture_eau eau = new Facture_eau(new BigDecimal(45).setScale(2, RoundingMode.DOWN),new BigDecimal(80).setScale(2, RoundingMode.DOWN));
 		facture_eauDAO.insert(eau);
-		assertEquals(eau, facture_eauDAO.findOne(idInsertSetup+1));
+		assertEquals(eau, facture_eauDAO.findOne(eau.getId_facture_eau()));
 
 	}
 	
@@ -125,6 +125,38 @@ public class test_facture_eau {
 	    assertEquals(nouvellePartieFixe, facture_eau.getPartie_fixe());
 	    assertEquals(nouvelleConsommation, facture_eau.getConsommation());
 	}
+	
+	   @Test
+	    public void testUNFactureEau() throws Exception {
+	        String sql = "{ CALL db1_sae.TestUN_FactureEau(?) }";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setInt(1, 1);
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+	   
+	   @Test
+	    public void testCKFactureEau() throws Exception {
+	        String sql = "{ CALL db1_sae.TestCK_FactureEau(?,?)}";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        	callableStatement.setBigDecimal(1, new BigDecimal(25).setScale(2, RoundingMode.DOWN));
+	            callableStatement.setBigDecimal(2, new BigDecimal(40).setScale(2, RoundingMode.DOWN)); 
+	            
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
 
 
 }

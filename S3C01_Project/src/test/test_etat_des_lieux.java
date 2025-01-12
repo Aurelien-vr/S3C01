@@ -130,6 +130,38 @@ public class test_etat_des_lieux {
 	    assertEquals(nouvelEtatDesElements, etat_des_lieux.getEtat_des_elements());
 	    assertEquals(nouvelleEstEntrer, etat_des_lieux.isEst_entrer());
 	}
+	
+	   @Test
+	    public void testFKEdt() throws Exception {
+	        String sql = "{ CALL db1_sae.TestFK_EtatDesLieux(?) }";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setInt(1, 1);
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+	   
+	   @Test
+	    public void testCKAvisEdt() throws Exception {
+	        String sql = "{ CALL db1_sae.TestCK_EtatDesLieux(?,?)}";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            callableStatement.setDate(1, Date.valueOf("2010-10-10")); 
+	            callableStatement.setInt(2, 248);
+	            
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
 
 
 }

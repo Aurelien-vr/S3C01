@@ -8,6 +8,8 @@ import dao.entities.Acte_cautionnement;
  */
 public interface Acte_cautionnementDAO extends DAO<Acte_cautionnement> {
 
+	void insertFK(int id, int idLocataire);
+
 	/**
 	 * Supprime un acte de cautionnement par son identifiant (fonctionnalité à implémenter).
 	 * 

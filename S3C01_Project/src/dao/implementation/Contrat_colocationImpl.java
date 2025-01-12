@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,5 +186,33 @@ public class Contrat_colocationImpl implements Contrat_colocationDAO {
         contrat.setClause_solidarite(result.getBoolean("clause_solidarite"));
         contrat.setPart_des_charges(result.getBigDecimal("part_des_charges"));
         return contrat; // Retourne l'entité Contrat_colocation construite
+    }
+    
+    @Override
+    public void insertFK(int idContratColocation, int idContratLocation) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Contrat_colocation SET Id_Contrat_location = ? WHERE Id_Contrat_colocation = ?";
+
+        try {
+            // Préparation de la requête SQL avec les paramètres
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idContratLocation); // Clé étrangère
+            statement.setInt(2, idContratColocation); // Clé primaire
+
+            // Exécution de la requête
+            if (statement.executeUpdate() > 0) {
+                System.out.println("Foreign key inserted successfully");
+            } else {
+                System.out.println("No rows updated. Check if the Id_Contrat_colocation exists.");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            // Fermeture de la déclaration SQL
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 }

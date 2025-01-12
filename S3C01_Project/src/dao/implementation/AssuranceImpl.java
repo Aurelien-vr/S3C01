@@ -1,9 +1,13 @@
 package dao.implementation;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +42,7 @@ public class AssuranceImpl implements AssuranceDAO {
     public Assurance findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Assurance WHERE numero_contrat = ?";
+        String query = "SELECT * FROM db1_sae.Assurance WHERE Numero_contrat = ?";
 
         try {
             // Préparation de la requête SQL avec le numéro de contrat
@@ -57,47 +61,53 @@ public class AssuranceImpl implements AssuranceDAO {
             try {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            }catch (Exception e) {
+    			ExceptionStorageHandler.LogException(e, connection);
+    		}finally {
+    			DatabaseConnection.closeStatement(statement);
+    		}
         }
 
         return null; // Si aucune assurance n'est trouvée, retour de null
     }
 
     /**
-     * Recherche tous les assurances
-     * 
-     * @return Liste des assurance
+     * Recherche toutes les assurances (fonctionnalité à implémenter).
+     *
+     * @return Liste des assurances ou {@code null} si non implémentée.
      */
     @Override
     public List<Assurance> findAll() {
-    	List<Assurance> ass = new ArrayList<>();
+        List<Assurance> assurances = new ArrayList<>();
         PreparedStatement statement = null;
-        ResultSet result = null;
+        ResultSet resultSet = null;
         String query = "SELECT * FROM db1_sae.Assurance";
-        
+
         try {
             statement = connection.prepareStatement(query);
-            result = statement.executeQuery();
-            
-            while (result.next()) {
-                Assurance acte = createEntities(result);
-                ass.add(acte);
-            } 
-        } catch (Exception e) {
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Assurance assurance = createEntities(resultSet);
+                assurances.add(assurance);
+                System.out.println("Assurance récupérée: " + assurance);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            DatabaseConnection.closeStatement(statement);
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        
-        return ass;
+        return assurances;
     }
+
+
 
     /**
      * Crée une nouvelle assurance dans la base de données (fonctionnalité à implémenter).
@@ -105,26 +115,34 @@ public class AssuranceImpl implements AssuranceDAO {
      * @param entity L'entité Assurance à créer.
      */
     @Override
-    public void insert(Assurance entity) {
-    	PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Assurance(prime, taux_augmentation, protection_juridique) VALUES (?,?,?)";
-		
-		try {
-			statement = connection.prepareStatement(query);
-			statement.setBigDecimal(1, entity.getPrime());
-			statement.setBigDecimal(2, entity.getTaux_augmentation());
-			statement.setBigDecimal(3,entity.getProtection_juridique());
-			
-			
-			if(statement.executeUpdate()>0) {
-				System.out.println("User inserted");
-			}
-		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
-		}finally {
-			DatabaseConnection.closeStatement(statement);
-		}
+    public void insert(Assurance assurance) {
+        PreparedStatement statement = null;
+        String query = "INSERT INTO db1_sae.Assurance (Date_assurance, Prime, Protection_juridique) VALUES (?, ?, ?)";
+
+        try {
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setDate(1, assurance.getDateAssurance());
+            statement.setBigDecimal(2, assurance.getPrime());
+            statement.setBigDecimal(3, assurance.getProtection_juridique());
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        assurance.setNumero_contrat(generatedKeys.getInt(1)); // Récupère l'ID auto-généré
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
+
+
+
+
 
     /**
      * Met à jour une assurance existante dans la base de données (fonctionnalité à implémenter).
@@ -134,14 +152,13 @@ public class AssuranceImpl implements AssuranceDAO {
     @Override
     public void update(Assurance entity) {
         PreparedStatement statement = null;
-        String query = "UPDATE db1_sae.Assurance SET prime = ? AND taux_augmentation = ? AND protection_juridique = ? WHERE Numero_contrat = ?";
+        String query = "UPDATE db1_sae.Assurance SET prime = ? AND protection_juridique = ? WHERE Numero_contrat = ?";
 		
 		try {
 			statement = connection.prepareStatement(query);
 			statement.setBigDecimal(1, entity.getPrime());
-			statement.setBigDecimal(2, entity.getTaux_augmentation());
 			statement.setBigDecimal(3,entity.getProtection_juridique());
-			statement.setInt(4,entity.getNumero_contrat());
+			statement.setInt(3,entity.getNumero_contrat());
 
             int rowsUpdated = statement.executeUpdate();
             System.out.println("Nombre de lignes mises à jour : " + rowsUpdated);
@@ -185,9 +202,61 @@ public class AssuranceImpl implements AssuranceDAO {
     public Assurance createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Assurance à partir des données du ResultSet
         Assurance assurance = new Assurance();
+        assurance.setNumero_contrat(result.getInt("numero_contrat"));
+        assurance.setDateAssurance(result.getDate("Date_assurance"));
         assurance.setPrime(result.getBigDecimal("Prime"));
-        assurance.setTaux_augmentation(result.getBigDecimal("Taux_augmentation"));
-        assurance.setProtection_juridique(result.getBigDecimal("Protection_juridique"));
         return assurance; // Retourne l'entité Assurance construite
     }
+
+	@Override
+	public List<List<String>> procGet_assurances() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_assurances()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<>();
+					for(int i = 1; i <= 4; i++) {
+						 String value = result.getString(i);
+		                    cell.add(value != null ? value : "Unknown");
+					}
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
+
+	@Override
+	public void insertFK(int selectedIdBien, int numeroContrat) {
+	  PreparedStatement statement = null;
+	    String query = "UPDATE db1_sae.Assurance SET Id_Bien = ? WHERE Numero_contrat = ?";
+	    
+	    try {
+	        statement = connection.prepareStatement(query);
+	        statement.setInt(1, selectedIdBien);
+	        statement.setInt(2, numeroContrat);
+	        if (statement.executeUpdate() > 0) {
+	            System.out.println("FK inserted");
+	        }
+	    } catch (SQLIntegrityConstraintViolationException e) {
+	        System.out.println("Integrity constraint violation: " + e.getMessage());
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeStatement(statement);
+	    }
+	}		
+	
 }

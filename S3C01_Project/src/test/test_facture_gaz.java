@@ -8,6 +8,7 @@ import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -69,7 +70,7 @@ public class test_facture_gaz {
 	public void testInsert() {
 		Facture_gaz gaz = new Facture_gaz(new BigDecimal(50).setScale(2, RoundingMode.DOWN),"12/m3");
 		facture_gazDAO.insert(gaz);
-		assertEquals(gaz, facture_gazDAO.findOne(idInsertSetup+1));
+		assertEquals(gaz, facture_gazDAO.findOne(gaz.getId_facture_gaz()));
 
 	}
 	
@@ -125,6 +126,38 @@ public class test_facture_gaz {
 	    assertEquals(nouvelleConsommation, facture_gaz.getConsommation_m3());
 	    assertEquals(nouveauPrixM3Gaz, facture_gaz.getPrix_m3_gaz());
 	}
+	
+	@Test
+	public void testUNFactureGaz() throws Exception {
+	    String sql = "{ CALL db1_sae.TestUN_FactureGaz(?) }";
+	    String existingReference = "5"; 
+
+	    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        callableStatement.setString(1, existingReference);
+	        callableStatement.execute();
+	        
+	        fail("Exception attendue, mais non lancée");
+	    } catch (SQLException e) {
+	        assertEquals("Erreur : Reference_facture déjà utilisée (viol de contrainte UNIQUE).", e.getMessage());
+	    }
+	}
+
+	   
+	   @Test
+	    public void testCKFactureGaz() throws Exception {
+	        String sql = "{ CALL db1_sae.TestCK_FactureGaz(?,?)}";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        	callableStatement.setBigDecimal(1, new BigDecimal(25).setScale(2, RoundingMode.DOWN));
+	            callableStatement.setBigDecimal(2, new BigDecimal(40).setScale(2, RoundingMode.DOWN)); 
+	            
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
 
 
 }

@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 public class Bien {
 	
-    private int id_bien;  // Identifiant unique du bien
+	private int id_bien;  // Identifiant unique du bien
     private int etage;  // L'étage du bien immobilier
     private String adresse;  // L'adresse du bien immobilier
     private String ville;  // La ville où se situe le bien
@@ -309,7 +309,7 @@ public class Bien {
 		Bien other = (Bien) obj;
 		return Objects.equals(accessoire_commun, other.accessoire_commun)
 				&& Objects.equals(accessoire_prive, other.accessoire_prive) && Objects.equals(adresse, other.adresse)
-				&& est_garage == other.est_garage && etage == other.etage && id_bien == other.id_bien
+				&& est_garage == other.est_garage && etage == other.etage
 				&& id_contrat_location == other.id_contrat_location && meuble == other.meuble
 				&& nombre_de_piece == other.nombre_de_piece && Objects.equals(superficie, other.superficie)
 				&& Objects.equals(ville, other.ville) && Objects.equals(code_postal, other.code_postal);

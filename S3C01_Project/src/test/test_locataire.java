@@ -8,6 +8,8 @@ import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.sql.*;
 import java.util.List;
@@ -69,7 +71,7 @@ public class test_locataire {
 	public void testInsert() {
 		Locataire loc = new Locataire("Vincent-Randonnier", "Aurelien", Date.valueOf("2004-11-03"), "0987654321");
 		locataireDAO.insert(loc);
-		assertEquals(loc, locataireDAO.findOne(idInsertSetup+1));
+		assertEquals(loc, locataireDAO.findOne(loc.getId_locataire()));
 
 	}
 	
@@ -133,6 +135,158 @@ public class test_locataire {
 	    assertEquals(nouveauIban, locataire.getIban());
 	}
 
+	   @Test
+	    public void testFKLocataire() throws Exception {
+	        String sql = "{ CALL db1_sae.TestFK_Locataire(?) }";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setInt(1, 1);
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+	   
+	   @Test
+	    public void testCKLocataire() throws Exception {
+	        String sql = "{ CALL db1_sae.TestCK_Locataire(?)}";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        	callableStatement.setDate(1, Date.valueOf("2012-12-12"));
+	            
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+	   
+	   public void testProcedureGetLocataires() {
+		    String sql = "{ CALL db1_sae.get_locataires() }";
+		    String sqlVerif = "SELECT l.Id_Locataire, l.Nom, l.Prenom, b.Adresse, l.Date_de_naissance, l.IBAN FROM db1_sae.Locataire l LEFT JOIN db1_sae.Contrat_location cl ON cl.Id_Contrat_location = l.Id_Contrat_location LEFT JOIN db1_sae.Bien b ON b.Id_Contrat_location = cl.Id_Contrat_location LIMIT 1"; // Récupère la première ligne
+		    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+		        try (ResultSet resultSet = callableStatement.executeQuery()) {
+		            // Vérifie si le ResultSet contient des résultats
+		            assertTrue(resultSet.next());
+
+		            // Récupère les valeurs réelles de la base pour la première ligne
+		            try (Statement stmt = connection.createStatement();
+		                    ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+		                assertTrue(expectedResultSet.next());
+
+		                Integer idLocataireAttendu = expectedResultSet.getInt("Id_Locataire");
+		                String nomAttendu = expectedResultSet.getString("Nom");
+		                String prenomAttendu = expectedResultSet.getString("Prenom");
+		                String adresseAttendue = expectedResultSet.getString("Adresse");
+		                Date dateDeNaissanceAttendue = expectedResultSet.getDate("Date_de_naissance");
+		                String ibanAttendu = expectedResultSet.getString("IBAN");
+
+		                // Récupère les valeurs de la procédure et les compare avec les valeurs attendues
+		                Integer idLocataire = resultSet.getInt("Id_Locataire");
+		                String nom = resultSet.getString("Nom");
+		                String prenom = resultSet.getString("Prenom");
+		                String adresse = resultSet.getString("Adresse");
+		                Date dateDeNaissance = resultSet.getDate("Date_de_naissance");
+		                String iban = resultSet.getString("IBAN");
+
+		                assertEquals(idLocataireAttendu, idLocataire);
+		                assertEquals(nomAttendu, nom);
+		                assertEquals(prenomAttendu, prenom);
+		                assertEquals(adresseAttendue, adresse);
+		                assertEquals(dateDeNaissanceAttendue, dateDeNaissance);
+		                assertEquals(ibanAttendu, iban);
+		            }
+		        }
+		    } catch (Exception e) {
+		        ExceptionStorageHandler.LogException(e, connection);
+		        fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+		    }
+		}
+	   
+	   public void testProcedureGetLocatairesActif() {
+		    String sql = "{ CALL db1_sae.get_locatairesActif() }";
+		    String sqlVerif = "SELECT l.Id_Locataire, l.Nom, l.Prenom, b.Adresse, l.Date_de_naissance, l.IBAN FROM db1_sae.Locataire l LEFT JOIN db1_sae.Contrat_location cl ON cl.Id_Contrat_location = l.Id_Contrat_location LEFT JOIN db1_sae.Bien b ON b.Id_Contrat_location = cl.Id_Contrat_location WHERE b.Id_Contrat_location IS NOT NULL LIMIT 1"; // Récupère la première ligne
+		    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+		        try (ResultSet resultSet = callableStatement.executeQuery()) {
+		            // Vérifie si le ResultSet contient des résultats
+		            assertTrue(resultSet.next());
+
+		            // Récupère les valeurs réelles de la base pour la première ligne
+		            try (Statement stmt = connection.createStatement();
+		                    ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+		                assertTrue(expectedResultSet.next());
+
+		                Integer idLocataireAttendu = expectedResultSet.getInt("Id_Locataire");
+		                String nomAttendu = expectedResultSet.getString("Nom");
+		                String prenomAttendu = expectedResultSet.getString("Prenom");
+		                String adresseAttendue = expectedResultSet.getString("Adresse");
+		                Date dateDeNaissanceAttendue = expectedResultSet.getDate("Date_de_naissance");
+		                String ibanAttendu = expectedResultSet.getString("IBAN");
+
+		                // Récupère les valeurs de la procédure et les compare avec les valeurs attendues
+		                Integer idLocataire = resultSet.getInt("Id_Locataire");
+		                String nom = resultSet.getString("Nom");
+		                String prenom = resultSet.getString("Prenom");
+		                String adresse = resultSet.getString("Adresse");
+		                Date dateDeNaissance = resultSet.getDate("Date_de_naissance");
+		                String iban = resultSet.getString("IBAN");
+
+		                assertEquals(idLocataireAttendu, idLocataire);
+		                assertEquals(nomAttendu, nom);
+		                assertEquals(prenomAttendu, prenom);
+		                assertEquals(adresseAttendue, adresse);
+		                assertEquals(dateDeNaissanceAttendue, dateDeNaissance);
+		                assertEquals(ibanAttendu, iban);
+		            }
+		        }
+		    } catch (Exception e) {
+		        ExceptionStorageHandler.LogException(e, connection);
+		        fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+		    }
+		}
+	   
+	   public void testProcedureGetLocataireSansContrat() {
+		    String sql = "{ CALL db1_sae.get_locataireSansContrat() }";
+		    String sqlVerif = "SELECT Nom, Prenom, Id_Locataire FROM db1_sae.Locataire l WHERE Id_Contrat_location IS NULL LIMIT 1"; // Récupère la première ligne
+		    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+		        try (ResultSet resultSet = callableStatement.executeQuery()) {
+		            // Vérifie si le ResultSet contient des résultats
+		            assertTrue(resultSet.next());
+
+		            // Récupère les valeurs réelles de la base pour la première ligne
+		            try (Statement stmt = connection.createStatement();
+		                    ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+		                assertTrue(expectedResultSet.next());
+
+		                String nomAttendu = expectedResultSet.getString("Nom");
+		                String prenomAttendu = expectedResultSet.getString("Prenom");
+		                Integer idLocataireAttendu = expectedResultSet.getInt("Id_Locataire");
+
+		                // Récupère les valeurs de la procédure et les compare avec les valeurs attendues
+		                String nom = resultSet.getString("Nom");
+		                String prenom = resultSet.getString("Prenom");
+		                Integer idLocataire = resultSet.getInt("Id_Locataire");
+
+		                assertEquals(nomAttendu, nom);
+		                assertEquals(prenomAttendu, prenom);
+		                assertEquals(idLocataireAttendu, idLocataire);
+		            }
+		        }
+		    } catch (Exception e) {
+		        ExceptionStorageHandler.LogException(e, connection);
+		        fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+		    }
+		}
+	   
+	   
 	
 
 

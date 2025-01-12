@@ -192,6 +192,7 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
     public Facture_electricite createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture_electricite à partir des données du ResultSet
         Facture_electricite factureElectricite = new Facture_electricite();
+        factureElectricite.setId_facture_electricite(result.getInt("id_facture_electricite"));
         factureElectricite.setCompteur_electricite(result.getBigDecimal("compteur_electricite"));
         factureElectricite.setPrix_kw_electricite(result.getString("prix_kw_electricite"));
         return factureElectricite; // Retourne l'entité Facture_electricite construite

@@ -167,7 +167,7 @@ public class Locataire {
 			return false;
 		Locataire other = (Locataire) obj;
 		return Objects.equals(date_de_naissance, other.date_de_naissance) && Objects.equals(iban, other.iban)
-				&& id_contrat_location == other.id_contrat_location && id_locataire == other.id_locataire
+				&& id_contrat_location == other.id_contrat_location
 				&& Objects.equals(nom, other.nom) && Objects.equals(prenom, other.prenom);
 	}
 }

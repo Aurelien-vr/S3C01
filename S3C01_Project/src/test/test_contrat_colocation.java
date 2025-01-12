@@ -125,6 +125,37 @@ public class test_contrat_colocation {
 	    assertEquals(nouvelleClauseSolidarite, contrat_colocation.isClause_solidarite());
 	    assertEquals(nouvellePartDesCharges, contrat_colocation.getPart_des_charges());
 	}
+	
+	   @Test
+	    public void testFKContrat_colocation() throws Exception {
+	        String sql = "{ CALL db1_sae.TestFK_ContratColocation(?) }";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setInt(1, 1);
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+	   
+	   @Test
+	    public void testCKContratColocation() throws Exception {
+	        String sql = "{ CALL db1_sae.TestCK_ContratColocation(?)}";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        	callableStatement.setBigDecimal(1, new BigDecimal(50).setScale(2, RoundingMode.DOWN));
+	            
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
 
 
 

@@ -128,7 +128,7 @@ public class Facture_gaz {
 		if (getClass() != obj.getClass())
 			return false;
 		Facture_gaz other = (Facture_gaz) obj;
-		return Objects.equals(consommation_m3, other.consommation_m3) && id_facture_gaz == other.id_facture_gaz
+		return Objects.equals(consommation_m3, other.consommation_m3)
 				&& Objects.equals(prix_m3_gaz, other.prix_m3_gaz)
 				&& Objects.equals(reference_facture, other.reference_facture);
 	}

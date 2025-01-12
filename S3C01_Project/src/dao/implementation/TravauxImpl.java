@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,5 +203,34 @@ public class TravauxImpl implements TravauxDAO {
         travaux.setMontant_non_deductible(result.getBigDecimal("montant_non_deductible"));
         travaux.setReduction_special(result.getBigDecimal("reduction_special"));
         return travaux; // Retourne l'entité Travaux construite
+    }
+    
+    @Override
+    public void insertFK(int NumeroFacture, String ReferenceFacture) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Travaux SET Reference_facture = ? WHERE Numero_facture = ?";
+
+        try {
+            // Préparation de la requête SQL pour mettre à jour la clé étrangère
+            statement = connection.prepareStatement(query);
+            statement.setString(1, ReferenceFacture); // Clé étrangère (id_Bien)
+            statement.setInt(2, NumeroFacture); // Clé primaire (Reference_facture)
+
+            // Exécution de la mise à jour
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK inserted");
+            } else {
+                System.out.println("Aucun trouvé");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (SQLException e) {
+            // Gestion des exceptions SQL
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            // Fermeture des ressources
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 }

@@ -125,9 +125,39 @@ public class test_acte_cautionnement {
 
 	    assertEquals(nouveauMontant, acte_cautionnement.getMontant_caution());
 	}
-
 	
+	@Test
+	public void testCKActeCautionnement() throws Exception {
+	    String sql = "{ CALL db1_sae.TestCK_ActeCautionnement(?) }";
 
+	    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	    	
+	        callableStatement.setBigDecimal(1, new BigDecimal("1500.00"));
+
+	        callableStatement.execute();
+
+	    } catch (Exception e) {
+	    	
+	        assertEquals("Success", e.getMessage());
+	    }
+	}
+	
+	@Test
+	public void testFKActeCautionnement() throws Exception {
+	    String sql = "{ CALL db1_sae.TestFK_ActeCautionnement(?) }";
+
+	    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	    	
+	        callableStatement.setInt(1, 2);
+
+	        callableStatement.execute();
+
+	    } catch (Exception e) {
+	    	
+	        assertEquals("Success", e.getMessage());
+	    }
+	}
+	
 	
 
 }

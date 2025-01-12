@@ -8,6 +8,7 @@ import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -69,7 +70,7 @@ public class test_facture_electricite {
 	public void testInsert() {
 		Facture_electricite elec = new Facture_electricite(new BigDecimal(50).setScale(2, RoundingMode.DOWN),"12/kw");
 		facture_electriciteDAO.insert(elec);
-		assertEquals(elec, facture_electriciteDAO.findOne(idInsertSetup+1));
+		assertEquals(elec, facture_electriciteDAO.findOne(elec.getId_facture_electricite()));
 
 	}
 	
@@ -126,6 +127,39 @@ public class test_facture_electricite {
 	    assertEquals(nouveauCompteurElectricite, facture_electricite.getCompteur_electricite());
 	    assertEquals(nouveauPrixKwElectricite, facture_electricite.getPrix_kw_electricite());
 	}
+	
+	   @Test
+	    public void testUNFactureElec() throws Exception {
+	        String sql = "{ CALL db1_sae.TestUN_FactureElectricite(?) }";
+	        String existingReference = "5"; 
+	        
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setString(1, existingReference);
+	            callableStatement.execute();
+	            fail("Exception attendue, mais non lancée");
+
+	        } catch (Exception e) {
+	            
+	        	assertEquals("Erreur : Reference_facture déjà utilisée (viol de contrainte UNIQUE).", e.getMessage());
+	        }
+	    }
+	   
+	   @Test
+	    public void testCKFactureElec() throws Exception {
+	        String sql = "{ CALL db1_sae.TestCK_FactureElectricite(?,?)}";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        	callableStatement.setBigDecimal(1, new BigDecimal(25).setScale(2, RoundingMode.DOWN));
+	            callableStatement.setBigDecimal(2, new BigDecimal(40).setScale(2, RoundingMode.DOWN)); 
+	            
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
 
 
 }

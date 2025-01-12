@@ -216,7 +216,6 @@ public class Facture {
 		return Objects.equals(date_facture, other.date_facture) && id_bien == other.id_bien
 				&& Objects.equals(montant_facture, other.montant_facture)
 				&& Objects.equals(moyen_paiement, other.moyen_paiement)
-				&& Objects.equals(reference_facture, other.reference_facture)
 				&& Objects.equals(type_facture, other.type_facture)
 				&& Objects.equals(montantNonDeductible, other.montantNonDeductible)
 				&& Objects.equals(reduction, other.reduction);

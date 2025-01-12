@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -201,5 +202,40 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
         regularisation.setIndice(result.getBigDecimal("indice"));
         regularisation.setEntretien(result.getString("entretien"));
         return regularisation; // Retourne l'entité Regularisation_charges construite
+    }
+    
+    /**
+     * Associe un Id_Contrat_location à une régularisation des charges existante.
+     *
+     * @param idChargeLocataire L'identifiant de la régularisation des charges (Id_Charge_locataire).
+     * @param idContratLocation L'identifiant du contrat de location à associer (Id_Contrat_location).
+     */
+    @Override
+    public void insertFK(int idChargeLocataire, int idContratLocation) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Regularisation_charges SET Id_Contrat_location = ? WHERE Id_Charge_locataire = ?";
+
+        try {
+            // Préparation de la requête SQL
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, idContratLocation); // Clé étrangère (Id_Contrat_location)
+            statement.setLong(2, idChargeLocataire); // Clé primaire (Id_Charge_locataire)
+
+            // Exécution de la mise à jour
+            if (statement.executeUpdate() > 0) {
+                System.out.println("Id_Contrat_location associé avec succès à Id_Charge_locataire : " + idChargeLocataire);
+            } else {
+                System.out.println("Aucune régularisation des charges trouvée avec Id_Charge_locataire : " + idChargeLocataire);
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (SQLException e) {
+            // Gestion des exceptions SQL
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            // Fermeture des ressources
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 }

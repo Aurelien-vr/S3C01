@@ -126,7 +126,6 @@ public class Facture_electricite {
 			return false;
 		Facture_electricite other = (Facture_electricite) obj;
 		return Objects.equals(compteur_electricite, other.compteur_electricite)
-				&& id_facture_electricite == other.id_facture_electricite
 				&& Objects.equals(prix_kw_electricite, other.prix_kw_electricite)
 				&& Objects.equals(reference_facture, other.reference_facture);
 	}

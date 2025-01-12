@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,5 +196,40 @@ public class Etat_des_lieuxImpl implements Etat_des_lieuxDAO {
         etatDesLieux.setEtat_des_elements(result.getString("etats_des_element"));
         etatDesLieux.setEst_entrer(result.getBoolean("est_entrer"));
         return etatDesLieux; // Retourne l'entité Etat_des_lieux construite
+    }
+    
+    /**
+     * Associe un Id_Contrat_location à une entité Etat_des_lieux existante.
+     *
+     * @param idEtatDesLieux L'identifiant de l'état des lieux (Id_Etat_des_lieux).
+     * @param idContratLocation La clé étrangère à associer (Id_Contrat_location).
+     */
+    @Override
+    public void insertFKContratLocation(int idEtatDesLieux, int idContratLocation) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Etat_des_lieux SET Id_Contrat_location = ? WHERE Id_Etat_des_lieux = ?";
+
+        try {
+            // Préparation de la requête SQL pour mettre à jour la clé étrangère
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, idContratLocation); // Clé étrangère
+            statement.setLong(2, idEtatDesLieux); // Clé primaire
+
+            // Exécution de la mise à jour
+            if (statement.executeUpdate() > 0) {
+                System.out.println("Id_Contrat_location associé avec succès à Id_Etat_des_lieux.");
+            } else {
+                System.out.println("Aucun enregistrement trouvé pour Id_Etat_des_lieux : " + idEtatDesLieux);
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (SQLException e) {
+            // Gestion des exceptions SQL
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            // Fermeture des ressources
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 }

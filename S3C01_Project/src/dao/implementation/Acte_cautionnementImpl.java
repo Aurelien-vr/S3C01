@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -187,6 +188,28 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
         acte.setMontant_caution((result.getBigDecimal("Montant_caution")));
         return acte;  // Retourne l'entité Acte_cautionnement construite
     }
+    
+    @Override
+    public void insertFK(int id, int idLocataire) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Acte_cautionnement SET Id_Locataire = ? WHERE Id_Acte_cautionnement = ?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idLocataire);
+            statement.setInt(2, id);
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK inserted");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
+    }
+
 
 	
 

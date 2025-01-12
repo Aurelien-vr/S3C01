@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -188,5 +189,39 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
         revenu.setLocataires(result.getInt("locataires"));
         revenu.setRecette_immeuble(result.getBigDecimal("recette_immeuble"));
         return revenu;
+    }
+    
+    /**
+     * Insère ou met à jour la clé étrangère id_Bien pour une déclaration de revenu existante.
+     * 
+     * @param idDeclarationRevenu L'identifiant de la déclaration de revenu (Id_Declaration_revenu).
+     * @param idBien La clé étrangère à associer (id_Bien).
+     */
+    @Override
+    public void insertFK(int idDeclarationRevenu, int idBien) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Declaration_revenu SET Id_Bien = ? WHERE Id_Declaration_revenu = ?";
+
+        try {
+            // Préparation de la requête SQL avec les paramètres
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, idBien); // Clé étrangère
+            statement.setLong(2, idDeclarationRevenu); // Clé primaire
+
+            // Exécution de la requête
+            if (statement.executeUpdate() > 0) {
+                System.out.println("Foreign key id_Bien inserted/updated successfully.");
+            } else {
+                System.out.println("No rows updated. Check if the id_declaration_revenu exists.");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            // Fermeture de la déclaration SQL
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 }

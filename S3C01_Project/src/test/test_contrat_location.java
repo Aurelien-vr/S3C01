@@ -3,7 +3,10 @@ package test;
 
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import application.App;
 import dao.Contrat_locationDAO;
@@ -75,9 +78,10 @@ public class test_contrat_location {
 	public void testInsert() {
 		Contrat_location cont_loc = new Contrat_location(12,Date.valueOf("2023-4-7"), Date.valueOf("2024-4-7"),
 				"DPE=A, et autre truc", "chaudiere de 2024",Date.valueOf("1000-05-01"));
-		contrat_locationDAO.insert(cont_loc);
-		assertEquals(cont_loc, contrat_locationDAO.findOne(idInsertSetup+1));
+			contrat_locationDAO.insert(cont_loc);
+			assertEquals(cont_loc, contrat_locationDAO.findOne(cont_loc.getNumero_location()));
 	}
+
 	
 	@Test
 	public void testFindAll() {
@@ -144,6 +148,156 @@ public class test_contrat_location {
 	    assertEquals(nouvelleModaliteEauChaudeSanitaire, contrat_location.getModalite_eau_chaude_sanitaire());
 	    assertEquals(nouvelleDateVersement, contrat_location.getDate_versement());
 	}
+
+	@Test
+	public void testCKContratLocation() throws Exception {
+	    String sql = "{ CALL db1_sae.TestCK_ContratLocation(?, ?, ?) }";
+
+	    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        callableStatement.setBigDecimal(1, new BigDecimal("850.00"));
+	        callableStatement.setDate(2, Date.valueOf("2024-05-01"));
+	        callableStatement.setDate(3, Date.valueOf("2025-06-01"));
+
+	        callableStatement.execute();
+	    } catch (Exception e) {
+	        assertEquals("Success", e.getMessage());
+	    }
+	}
+	
+	@Test
+	public void testGetContratLocations() {
+	    String sql = "{ CALL db1_sae.get_contratLocations() }"; // Appel de la procédure
+	    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        try (ResultSet resultSet = callableStatement.executeQuery()) {
+	            // Vérifier que le ResultSet contient des résultats
+	            assertTrue(resultSet.next());
+
+	            // Récupère les valeurs attendues de la base de données pour la première ligne
+	            String query = "SELECT DISTINCT cl.Montant_loyer AS Montant, cl.Date_debut AS `Date Début`, cl.Date_fin AS `Date Fin`, "
+	                    + "cl.Modalite_chauffage AS Modalite, cl.Modalite_eau_chaude_sanitaire AS ModaliteEau, "
+	                    + "b.Adresse AS `Adresse`, CONCAT(l.Prenom, ' ', l.Nom) AS `Nom Locataire`, "
+	                    + "CASE WHEN cc.Clause_solidarite IS NOT NULL THEN TRUE ELSE FALSE END AS `Colocation`, "
+	                    + "CASE WHEN edl.Est_entrer IS NOT NULL THEN TRUE ELSE FALSE END AS `État des lieux`, "
+	                    + "CASE WHEN sdc.Reste_a_devoir IS NOT NULL THEN TRUE ELSE FALSE END AS `Solde de tout compte`, "
+	                    + "CASE WHEN rc.Charge_eau IS NOT NULL THEN TRUE ELSE FALSE END AS `Régularisation des charges` "
+	                    + "FROM db1_sae.Contrat_location cl LEFT JOIN db1_sae.Bien b ON cl.Id_Contrat_location = b.Id_Contrat_location "
+	                    + "LEFT JOIN db1_sae.Locataire l ON cl.Id_Contrat_location = l.Id_Contrat_location "
+	                    + "LEFT JOIN db1_sae.Contrat_colocation cc ON cl.Id_Contrat_location = cc.Id_Contrat_location "
+	                    + "LEFT JOIN db1_sae.Etat_des_lieux edl ON cl.Id_Contrat_location = edl.Id_Contrat_location "
+	                    + "LEFT JOIN db1_sae.Solde_de_tout_compte sdc ON cl.Id_Contrat_location = sdc.Id_Contrat_location "
+	                    + "LEFT JOIN db1_sae.Regularisation_charges rc ON cl.Id_Contrat_location = rc.Id_Contrat_location "
+	                    + "ORDER BY cl.Date_fin DESC LIMIT 1"; // Pour obtenir la première ligne à des fins de comparaison
+
+	            try (Statement stmt = connection.createStatement(); ResultSet expectedResultSet = stmt.executeQuery(query)) {
+	                assertTrue(expectedResultSet.next());
+	                
+	                // Récupération des valeurs attendues de la base de données
+	                String adresseAttendue = expectedResultSet.getString("Adresse");
+	                Date dateDebutAttendue = expectedResultSet.getDate("Date Début");
+	                Date dateFinAttendue = expectedResultSet.getDate("Date Fin");
+	                String modaliteAttendue = expectedResultSet.getString("Modalite");
+	                String modaliteEauAttendue = expectedResultSet.getString("ModaliteEau");
+	                String nomLocataireAttendu = expectedResultSet.getString("Nom Locataire");
+	                boolean colocationAttendue = expectedResultSet.getBoolean("Colocation");
+	                boolean etatDesLieuxAttendu = expectedResultSet.getBoolean("État des lieux");
+	                boolean soldeDeToutCompteAttendu = expectedResultSet.getBoolean("Solde de tout compte");
+	                boolean regularisationChargesAttendue = expectedResultSet.getBoolean("Régularisation des charges");
+
+	                // Récupère les valeurs retournées par la procédure et les compare
+	                String adresse = resultSet.getString("Adresse Bien");
+	                Date dateDebut = resultSet.getDate("Date Début");
+	                Date dateFin = resultSet.getDate("Date Fin");
+	                String modalite = resultSet.getString("Modalite");
+	                String modaliteEau = resultSet.getString("ModaliteEau");
+	                String nomLocataire = resultSet.getString("Nom Locataire");
+	                boolean colocation = resultSet.getBoolean("Colocation");
+	                boolean etatDesLieux = resultSet.getBoolean("État des lieux");
+	                boolean soldeDeToutCompte = resultSet.getBoolean("Solde de tout compte");
+	                boolean regularisationCharges = resultSet.getBoolean("Régularisation des charges");
+
+	                // Comparaison des valeurs récupérées avec celles attendues
+	                assertEquals(adresseAttendue, adresse);
+	                assertEquals(dateDebutAttendue, dateDebut);
+	                assertEquals(dateFinAttendue, dateFin);
+	                assertEquals(modaliteAttendue, modalite);
+	                assertEquals(modaliteEauAttendue, modaliteEau);
+	                assertEquals(nomLocataireAttendu, nomLocataire);
+	                assertEquals(colocationAttendue, colocation);
+	                assertEquals(etatDesLieuxAttendu, etatDesLieux);
+	                assertEquals(soldeDeToutCompteAttendu, soldeDeToutCompte);
+	                assertEquals(regularisationChargesAttendue, regularisationCharges);
+	            }
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	        fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+	    }
+	}
+
+	@Test
+	public void testGetContratLocationsActif() {
+	    // Appel à la procédure 'get_contratLocationsActif'
+	    ResultSet resultSet = null;
+	    String query = "{ CALL db1_sae.get_contratLocationsActif() }";
+	    try (CallableStatement stmt = connection.prepareCall(query)) {
+	        resultSet = stmt.executeQuery();
+
+	        // Vérifier que les résultats sont bien retournés
+	        assertTrue(resultSet.next()); // On vérifie qu'au moins une ligne existe
+
+	        // Vérifier le contenu des colonnes
+	        do {
+	            assertNotNull(resultSet.getBigDecimal("Montant"));
+	            assertNotNull(resultSet.getDate("Date Début"));
+	            assertNotNull(resultSet.getDate("Date Fin"));
+	            assertNotNull(resultSet.getString("Modalite"));
+	            assertNotNull(resultSet.getString("ModaliteEau"));
+	            assertNotNull(resultSet.getString("Adresse Bien"));
+	            assertNotNull(resultSet.getString("Nom Locataire"));
+	            assertNotNull(resultSet.getBoolean("Colocation"));
+	            assertNotNull(resultSet.getBoolean("État des lieux"));
+	            assertNotNull(resultSet.getBoolean("Solde de tout compte"));
+	            assertNotNull(resultSet.getBoolean("Régularisation des charges"));
+	        } while (resultSet.next());
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+	    } finally {
+	        // Fermer le résultat et la connexion
+	        DatabaseConnection.closeResult(resultSet);
+	    }
+	}
+
+	
+	public void testProcedureGetContratLocNotFkInBien() {
+	    String sql = "{ CALL db1_sae.get_ContratLocNotFkInBien() }";
+	    String sqlVerif = "SELECT cl.Id_Contrat_location FROM db1_sae.Contrat_location cl WHERE NOT EXISTS (SELECT b.Id_Bien FROM db1_sae.Bien b WHERE b.Id_Contrat_location = cl.Id_Contrat_location) LIMIT 1"; // Récupère la première ligne
+	    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        try (ResultSet resultSet = callableStatement.executeQuery()) {
+	            // Vérifie si le ResultSet contient des résultats
+	            assertTrue(resultSet.next());
+
+	            // Récupère les valeurs réelles de la base pour la première ligne
+	            try (Statement stmt = connection.createStatement();
+	                    ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+	                assertTrue(expectedResultSet.next());
+
+	                Integer idContratLocationAttendu = expectedResultSet.getInt("Id_Contrat_location");
+
+	                // Récupère les valeurs de la procédure et les compare avec les valeurs attendues
+	                Integer idContratLocation = resultSet.getInt("Id_Contrat_location");
+
+	                assertEquals(idContratLocationAttendu, idContratLocation);
+	            }
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	        fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
+	    }
+	}
+
 
 
 	

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,5 +190,28 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
         avis.setDebiteur_legaux(result.getString("debiteur_legaux"));
         avis.setTotal_cotisation(result.getDouble("total_cotisation"));
         return avis; // Retourne l'entité Avis_Taxe_Fonciere construite
+    }
+    
+    @Override
+    public void insertFK(int numeroFiscal, int idBien) {
+        PreparedStatement statement = null;
+        String query = "UPDATE db1_sae.Avis_Taxe_Fonciere SET Id_Bien = ? WHERE Numero_fiscal = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idBien);
+            statement.setInt(2, numeroFiscal);
+
+            if (statement.executeUpdate() > 0) {
+                System.out.println("FK inserted successfully");
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("Integrity constraint violation: " + e.getMessage());
+            ExceptionStorageHandler.LogException(e, connection);
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+        }
     }
 }

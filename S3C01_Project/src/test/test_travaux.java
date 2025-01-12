@@ -134,5 +134,23 @@ public class test_travaux {
 	    assertEquals(nouveauMontantNonDeductible, travaux.getMontant_non_deductible());
 	    assertEquals(nouvelleReductionSpeciale, travaux.getReduction_special());
 	}
+	
+	
+	@Test
+	public void testUNTravaux() throws Exception {
+	    String sql = "{ CALL db1_sae.TestUN_Travaux(?) }";
+	    String nonExistingReference = "999";
+
+	    try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	        callableStatement.setString(1, nonExistingReference);
+	        callableStatement.execute();
+	        // On attend une exception avec le message "Success"
+	    } catch (SQLException e) {
+	    	assertEquals("Erreur : La Reference_facture n'existe pas dans la table Facture.", e.getMessage());
+	    }
+	}
+
+
+	
 
 }

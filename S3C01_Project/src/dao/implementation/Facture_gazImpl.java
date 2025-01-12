@@ -190,6 +190,7 @@ public class Facture_gazImpl implements Facture_gazDAO {
     public Facture_gaz createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture_gaz à partir des données du ResultSet
         Facture_gaz factureGaz = new Facture_gaz();
+        factureGaz.setId_facture_gaz(result.getInt("id_facture_gaz"));
         factureGaz.setConsommation_m3(result.getBigDecimal("consommation_m3"));
         factureGaz.setPrix_m3_gaz(result.getString("prix_m3_gaz"));
         return factureGaz; // Retourne l'entité Facture_electricite construite

@@ -82,6 +82,15 @@ public class DAOFactory {
     }
     
     /**
+     * Crée une instance de EnumererDAO.
+     *
+     * @return Une instance de {@link EnumererDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static EnumererDAO createEnumererDAO() {
+        return new EnumererImpl(DatabaseConnection.getInstance());
+    }
+    
+    /**
      * Crée une instance de Etat_des_lieuxDAO.
      *
      * @return Une instance de {@link Etat_des_lieuxDAO} utilisant la connexion à la base de données partagée.

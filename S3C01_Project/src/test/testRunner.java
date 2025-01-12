@@ -20,6 +20,8 @@ import org.junit.runners.Suite;
 	test_locataire.class,
 	test_regularisation_charges.class,
 	test_solde_de_tout_compte.class,
-	test_travaux.class
+	test_travaux.class,
+	test_avancer.class,
+	test_enumerer.class
 })
 public class testRunner {}
