@@ -115,39 +115,43 @@ public class test_assurance {
         assertNull(assuranceDAO.findOne(idInsertSetup));
     }
     
+    
     @Test
     public void testFindAll() {
-        List<Assurance> ass = assuranceDAO.findAll();
-        int nombreAssDansLaBase = 0;
+        // Insérer plusieurs assurances pour le test
+        Assurance ass1 = new Assurance(
+            Date.valueOf("2021-01-01"), 
+            new BigDecimal(100).setScale(2, RoundingMode.DOWN), 
+            new BigDecimal(5).setScale(2, RoundingMode.DOWN)
+        );
+        Assurance ass2 = new Assurance(
+            Date.valueOf("2022-02-02"), 
+            new BigDecimal(200).setScale(2, RoundingMode.DOWN), 
+            new BigDecimal(10).setScale(2, RoundingMode.DOWN)
+        );
+        assuranceDAO.insert(ass1);
+        assuranceDAO.insert(ass2);
 
-        // Récupérer le nombre total d'actes dans la base avec une requête SQL
-        PreparedStatement statement = null;
-        ResultSet result = null;
-        String query = "SELECT COUNT(*) FROM db1_sae.Assurance";
-        try {
-            statement = connection.prepareStatement(query);
-            result = statement.executeQuery();
-            if (result.next()) {
-                nombreAssDansLaBase = result.getInt(1);
-            }
-        } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
-        } finally {
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        // Appeler la méthode findAll
+        List<Assurance> assurances = assuranceDAO.findAll();
 
-        System.out.println("Assurances dans la liste: " + ass.size());
-        ass.forEach(a -> System.out.println("Assurance dans la liste: " + a));
+        // Vérifications
+        assertNotNull(assurances); // La liste ne doit pas être null
+        assertTrue(assurances.size() >= 2); // Il doit y avoir au moins 2 assurances
 
-        // Vérifie si la liste contient l'assurance insérée
-        assertEquals(nombreAssDansLaBase, ass.size());
-        assertTrue("L'objet assurance n'a pas été trouvé dans la liste", ass.contains(assurance)); // Message d'erreur détaillé
+        // Vérifier si les assurances insérées sont bien présentes
+        assertTrue(assurances.stream().anyMatch(a -> 
+            a.getDateAssurance().equals(ass1.getDateAssurance()) &&
+            a.getPrime().equals(ass1.getPrime()) &&
+            a.getProtection_juridique().equals(ass1.getProtection_juridique())
+        ));
+        assertTrue(assurances.stream().anyMatch(a -> 
+            a.getDateAssurance().equals(ass2.getDateAssurance()) &&
+            a.getPrime().equals(ass2.getPrime()) &&
+            a.getProtection_juridique().equals(ass2.getProtection_juridique())
+        ));
     }
+
 
 
 

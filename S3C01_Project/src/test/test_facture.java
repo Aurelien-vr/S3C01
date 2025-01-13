@@ -38,7 +38,7 @@ public class test_facture {
 		factureDAO = DAOFactory.createFactureDAO();
 		PreparedStatement statement = null;
 		String query = "INSERT INTO db1_sae.Facture(reference_facture, type_facture , date_facture , montant_facture, moyen_paiement, montantNonDeductible, Reduction) "
-				+ " VALUES('12345','Payante', '2024-12-12', 50, 'Cheque', 20, 3)";
+				+ " VALUES('F010','Payante', '2024-12-12', 50, 'Cheque', 20, 3)";
 	try {
 		statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
 		if(statement.executeUpdate()>0) {
@@ -52,7 +52,7 @@ public class test_facture {
 			ExceptionStorageHandler.LogException(e, connection);
 		}
 	
-	facture = new Facture("12345","Payante", Date.valueOf("2024-12-12"), new BigDecimal(50).setScale(2, RoundingMode.DOWN), "Cheque", new BigDecimal(20).setScale(2, RoundingMode.DOWN), new BigDecimal(3).setScale(2, RoundingMode.DOWN));
+	facture = new Facture("F010","Payante", Date.valueOf("2024-12-12"), new BigDecimal(50).setScale(2, RoundingMode.DOWN), "Cheque", new BigDecimal(20).setScale(2, RoundingMode.DOWN), new BigDecimal(3).setScale(2, RoundingMode.DOWN));
 	
 	}
 	
@@ -65,12 +65,12 @@ public class test_facture {
 	
 	@Test
 	public void testFindOne() {
-		assertEquals(factureDAO.findOne(12345),facture); 
+		assertEquals(factureDAO.findOne(Long.parseLong(facture.getReference_facture())),facture); 
 	}
 	
 	@Test
 	public void testInsert() throws SQLException {
-	    Facture newFacture = new Facture("54321", "Payante", Date.valueOf("2024-12-12"), new BigDecimal(100).setScale(2, RoundingMode.DOWN), "Carte", new BigDecimal(20).setScale(2, RoundingMode.DOWN), new BigDecimal(5).setScale(2, RoundingMode.DOWN));
+	    Facture newFacture = new Facture("F011", "Payante", Date.valueOf("2024-12-12"), new BigDecimal(100).setScale(2, RoundingMode.DOWN), "Carte", new BigDecimal(20).setScale(2, RoundingMode.DOWN), new BigDecimal(5).setScale(2, RoundingMode.DOWN));
 	    factureDAO.insert(newFacture);
 	    
 	    Long id = Long.parseLong(newFacture.getReference_facture());
@@ -86,7 +86,7 @@ public class test_facture {
 	@Test
 	public void testDelete() throws SQLException {
 	    // Insérer une facture pour être supprimée
-	    Facture factureToDelete = new Facture("12345", "Payante", Date.valueOf("2024-12-12"), new BigDecimal(50).setScale(2, RoundingMode.DOWN), "Cheque", new BigDecimal(20).setScale(2, RoundingMode.DOWN), new BigDecimal(3).setScale(2, RoundingMode.DOWN));
+	    Facture factureToDelete = new Facture("F012", "Payante", Date.valueOf("2024-12-12"), new BigDecimal(50).setScale(2, RoundingMode.DOWN), "Cheque", new BigDecimal(20).setScale(2, RoundingMode.DOWN), new BigDecimal(3).setScale(2, RoundingMode.DOWN));
 	    factureDAO.insert(factureToDelete);
 	    
 	    // Convertir le String 'Reference_facture' en long
@@ -182,6 +182,7 @@ public class test_facture {
 	        }
 	    }
 	   
+	   @Test
 	   public void testProcedureGetFactures() {
 		    String sql = "{ CALL db1_sae.get_factures() }";
 		    String sqlVerif = "SELECT Reference_facture, b.Adresse, Type_facture, Date_facture, Montant_facture, Moyen_paiement FROM db1_sae.Facture f JOIN db1_sae.Bien b ON f.Id_Bien = b.Id_Bien LIMIT 1"; // Récupère la première ligne
@@ -225,6 +226,7 @@ public class test_facture {
 		    }
 		}
 	   
+	   @Test
 	   public void testProcedureGetNumFacture() {
 		    String sql = "{ CALL db1_sae.get_numFacture() }";
 		    String sqlVerif = "SELECT f.Reference_facture, f.Type_facture FROM db1_sae.Facture f LEFT JOIN db1_sae.Travaux t ON f.Reference_facture = t.Reference_facture WHERE t.Reference_facture IS NULL LIMIT 1"; // Retrieve the first row for verification
@@ -257,6 +259,7 @@ public class test_facture {
 		    }
 		}
 	   
+	   @Test
 	   public void testProcedureGetTravauxPageTravaux() {
 		    String sql = "{ CALL db1_sae.get_travaux_page_travaux() }";
 		    String sqlVerif = "SELECT t.Reference_facture, b.Adresse, b.Code_postal, b.Ville, b.Etage, t.Montant, t.Montant_non_deductible, t.Reduction_special, t.Date_travaux, t.Nature, t.Numero_facture FROM db1_sae.Travaux t JOIN db1_sae.Facture f ON t.Reference_facture = f.Reference_facture LEFT JOIN db1_sae.Bien b ON f.Id_Bien = b.Id_Bien LIMIT 1"; // Retrieve the first row for verification
@@ -312,7 +315,7 @@ public class test_facture {
 		        }
 		    } catch (Exception e) {
 		        ExceptionStorageHandler.LogException(e, connection);
-		        fail("Erreur lors de l'appel de la procÃ©dure : " + e.getMessage());
+		        fail("Erreur lors de l'appel de la procédure : " + e.getMessage());
 		    }
 		}
 

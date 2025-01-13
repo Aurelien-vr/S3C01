@@ -2,7 +2,6 @@ package dao.implementation;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -204,6 +203,7 @@ public class AssuranceImpl implements AssuranceDAO {
         Assurance assurance = new Assurance();
         assurance.setNumero_contrat(result.getInt("numero_contrat"));
         assurance.setDateAssurance(result.getDate("Date_assurance"));
+        assurance.setProtection_juridique(result.getBigDecimal("Protection_juridique"));
         assurance.setPrime(result.getBigDecimal("Prime"));
         return assurance; // Retourne l'entité Assurance construite
     }
