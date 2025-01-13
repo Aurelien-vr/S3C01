@@ -16,7 +16,7 @@ import java.awt.*;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class TemplateTable extends TemplateMenu implements Serializable {
+public class TemplateTableView extends TemplateMenuView implements Serializable {
 
     protected JLayeredPane layeredPane = new JLayeredPane();
     protected JPanel canvas = new JPanel();
@@ -32,7 +32,7 @@ public class TemplateTable extends TemplateMenu implements Serializable {
 
     Border border = BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0), new RoundedBorder(10, 10, Color.black, new Color(125, 125, 125, 125)));
 
-    public TemplateTable() {
+    public TemplateTableView() {
         super();
         layeredPane.setLayout(null);
         canvas.setLocation(6, 0);
@@ -72,6 +72,9 @@ public class TemplateTable extends TemplateMenu implements Serializable {
         footerPanel.setBackground(Color.WHITE);
         footerPanel.setBorder(border);
         getContentPane().setBackground(Color.WHITE);
+        Dimension preferredSize = footerPanel.getPreferredSize();
+        int preferredHeight = ScallingDimension.scaleValue(100); // Desired height
+        footerPanel.setPreferredSize(new Dimension(preferredSize.width, preferredHeight));
         
     }
 
@@ -123,7 +126,7 @@ public class TemplateTable extends TemplateMenu implements Serializable {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i = 1; i < table.getColumnCount(); i++) {
+        for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
 

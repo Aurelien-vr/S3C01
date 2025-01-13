@@ -17,11 +17,11 @@ import utilities.ErrorMessage;
 import utilities.FontComponent;
 import utilities.ScallingDimension;
 import dao.AssuranceDAO;
-import view.Assurance;
+import view.AssuranceView;
 
 public class AssuranceController extends TemplateTableController {
     
-    private Assurance view = new Assurance();
+    private AssuranceView view = new AssuranceView();
     private AssuranceDAO model = DAOFactory.createAssuranceDAO();
     private List<List<String>> listData;
     
@@ -198,6 +198,11 @@ public class AssuranceController extends TemplateTableController {
         
         view.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
+        	view.dispose();
+        });
+        
+        view.getItemCharge().addActionListener(e -> {
+        	new ChargeController();
         	view.dispose();
         });
     }

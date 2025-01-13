@@ -8,11 +8,12 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 
 @SuppressWarnings("serial")
-public class Bien extends TemplateTable{
+public class BienView extends TemplateTableView{
 	    
 	JButton ajoutBien;
 	JDialog editClDialog;
@@ -23,7 +24,7 @@ public class Bien extends TemplateTable{
 	private JButton modifierButton;
 	private JButton deleteButton;
 	
-	public Bien() {
+	public BienView() {
 		super();
 		
 		ajoutBien = addButtonBien();
@@ -58,7 +59,7 @@ public class Bien extends TemplateTable{
 		// First Column: Delete button
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridheight = 3;
+        gbc.gridheight = 4;
         gbc.fill = GridBagConstraints.BOTH;
         deleteButton = new JButton("Delete");
         editClDialog.add(deleteButton, gbc);
@@ -66,29 +67,38 @@ public class Bien extends TemplateTable{
         
         // Second Column: Two combo boxes and a modifier button
         gbc.gridx = 1;
-        gbc.gridy = 0;
         gbc.gridheight = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        gbc.gridy = 0;
+        editClDialog.add(new JLabel("Contrat de location disponible"),gbc);
+        
+        gbc.gridy = 1;
         editClDialog.add(contratLocationComboBox, gbc);
 
-        gbc.gridy = 1;
+        gbc.gridy = 2;
+        editClDialog.add(new JLabel("Locataire disponible"),gbc);
+        
+        gbc.gridy = 3;
         editClDialog.add(locataireComboBox, gbc);
 
-        gbc.gridy = 2;
+        gbc.gridy = 4;
         modifierButton = new JButton("Modifier");
         editClDialog.add(modifierButton, gbc);
 
+        
+        
         // Third Column: Two buttons
         gbc.gridx = 2;
         gbc.gridy = 0;
-        gbc.gridheight = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        ajouterLocataireButton = new JButton("Ajouter Locataire");
-        editClDialog.add(ajouterLocataireButton, gbc);
-
-        gbc.gridy = 1;
-        ajouterContratLocationButton = new JButton("Ajouter Contrat de Location");
+        gbc.gridheight = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        ajouterContratLocationButton = new JButton("Ajouter Contrat de Location:");
         editClDialog.add(ajouterContratLocationButton, gbc);
+
+        gbc.gridy = 2;
+        ajouterLocataireButton = new JButton("Ajouter Locataire:");
+        editClDialog.add(ajouterLocataireButton, gbc);
 		
         if(idCl == -1) {
         	deleteButton.setEnabled(false);

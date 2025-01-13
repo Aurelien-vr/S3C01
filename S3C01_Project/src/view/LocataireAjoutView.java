@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import utilities.FontComponent;
+import utilities.PlaceHolderText;
 import utilities.ScallingDimension;
 
 import java.awt.BorderLayout;
@@ -18,7 +19,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 @SuppressWarnings("serial")
-public class LocataireAjout extends TemplateAjout {
+public class LocataireAjoutView extends TemplateAjoutView {
 
     private JLabel labNom = new JLabel("Nom:");
     private JTextField fieldNom = new JTextField(10);
@@ -40,7 +41,7 @@ public class LocataireAjout extends TemplateAjout {
 
     int fontSize = ScallingDimension.scaleValue(14);
 
-    public LocataireAjout() {
+    public LocataireAjoutView() {
         super();
         changeLabel("Ajout de Locataire");
         FontComponent.setFontForAllComponents(form, fontSize);
@@ -71,6 +72,7 @@ public class LocataireAjout extends TemplateAjout {
         form.add(labDateNaissance, gbc);
 
         gbc.gridx = 1;
+        PlaceHolderText.addPlaceholderText(fieldDateNaissance, "dd/mm/yyyy");
         form.add(fieldDateNaissance, gbc);
 
         gbc.gridx = 2;

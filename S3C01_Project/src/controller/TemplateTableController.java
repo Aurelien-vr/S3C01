@@ -3,11 +3,11 @@ package controller;
 import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
 import com.formdev.flatlaf.json.ParseException;
-import view.TemplateTable;
+import view.TemplateTableView;
 
 public abstract class TemplateTableController extends TemplateMenuController{
 
-    protected TemplateTable view = new TemplateTable();
+    protected TemplateTableView view = new TemplateTableView();
     protected DefaultTableModel modelTable;
 
     public TemplateTableController() {

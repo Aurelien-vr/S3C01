@@ -3,7 +3,6 @@ package test;
 
 import org.junit.*;
 
-import application.App;
 import dao.*;
 import dao.entities.*;
 import static org.junit.Assert.assertEquals;

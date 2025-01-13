@@ -223,6 +223,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 		cell.add(result.getString(9) != null ? result.getString(9) : unknownValue);
 		cell.add(result.getString(10) != null ? result.getString(10) : unknownValue);
 		cell.add(result.getString(11) != null ? result.getString(11) : unknownValue);
+		cell.add(result.getString(12) != null ? result.getString(12) : unknownValue);
 	}
 
 	@Override
@@ -308,4 +309,28 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 		}
 		return arrayRes;
 	}
+
+	@Override
+	public void procCascadeDelete(int idCL) {
+		CallableStatement statement = null;
+		try {
+	        // Prepare the callable statement
+	        String sql = "{CALL db1_sae.del_ContratLocationCascade(?)}";
+	        statement = connection.prepareCall(sql);
+	        
+	        statement.setInt(1, idCL);
+
+	        statement.execute();
+	        
+	        System.out.println("Sucessfully delete in cascade.");
+	
+	    }catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeStatement(statement);
+		}
+	}
+	
+	
+	
 }

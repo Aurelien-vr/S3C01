@@ -31,12 +31,13 @@ public class TravauxAjoutController extends TemplateAjoutController {
         super();
         view.setTitleHeader("Travaux");
         view.setCbFacture(model.get_numFacture());
-        view.setCbAdress(modelBien.get_AllAdresses());
+        view.getLabResAdress().setText(modelBien.procAdressOfFacture((String) view.getCbFacture().getSelectedItem()));
         addAutoResultListener(new JTextField[]{view.getFieldMontant(), view.getFieldMontantNonDeductible(), view.getFielReduction()});
         pressedValider();
         pressedAnnuler();
         pressedAjouterTravauxButton();
         addEventHandlers();
+        addComboBoxListener();
         logoLabel();
 
         view.setVisible(true);
@@ -78,6 +79,7 @@ public class TravauxAjoutController extends TemplateAjoutController {
                         result = (mont - montND) * (1 - reduc / 100);
                         DecimalFormat df = new DecimalFormat("#.##");
                         view.getResultField().setText(df.format(result));
+                        
                     } catch (NumberFormatException e) {
                         view.getResultField().setText("");
                     } catch (Exception e) {
@@ -86,6 +88,18 @@ public class TravauxAjoutController extends TemplateAjoutController {
                 }
             });
         }
+    }
+	
+    private void addComboBoxListener() {
+        view.getCbFacture().addActionListener(e -> {
+            String selectedFacture = (String) view.getCbFacture().getSelectedItem();
+            if (selectedFacture != null) {
+                String address = modelBien.procAdressOfFacture(selectedFacture);
+                view.getLabResAdress().setText(address);
+            }else {
+            	 view.getLabResAdress().setText("Aucune adresse liée");
+            }
+        });
     }
 
     private void pressedValider() {
@@ -178,14 +192,11 @@ public class TravauxAjoutController extends TemplateAjoutController {
             BigDecimal reduction = new BigDecimal(view.getFielReduction().getText().replace(',', '.'));
             BigDecimal montant = new BigDecimal(view.getFieldMontant().getText().replace(',', '.'));
             BigDecimal montantNonDeductible = new BigDecimal(view.getFieldMontantNonDeductible().getText().replace(',', '.'));
-
+            
             Travaux travaux = new Travaux(dateTravaux, nature, null, reduction, montant, montantNonDeductible, null);
             
             modelTravaux.insert(travaux);
             modelTravaux.insertFK(travaux.getNumero_facture(), view.getCbFacture().getSelectedItem().toString());
-            
-            ErrorMessage.confirmationDialog(nature);
-            
         } catch (Exception e) {
             ErrorMessage.errorDialog("Erreur lors de la création de l'objet Travaux: " + e.getMessage());
         }
@@ -244,6 +255,11 @@ public class TravauxAjoutController extends TemplateAjoutController {
 	        
 	        view.getItemTravaux().addActionListener(e -> {
 	        	new TravauxController();
+	        	view.dispose();
+	        });
+	        
+	        view.getItemCharge().addActionListener(e -> {
+	        	new ChargeController();
 	        	view.dispose();
 	        });
 	    }

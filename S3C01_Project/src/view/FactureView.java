@@ -6,11 +6,18 @@ import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 
 @SuppressWarnings("serial")
-public class Facture extends TemplateTable{
+public class FactureView extends TemplateTableView{
+	
+	public static final String TYPE_EAU = "Eau";
+	public static final String TYPE_GAZ = "Gaz";
+	public static final String TYPE_ELECTRICITE = "Electricité";
+	public static final String TYPE_ORDURE_MENAGERE = "Ordure Menagère";
+	public static final String TYPE_ENTRETIENT = "Entretien";
+	public static final String TYPE_AUTRE = "Autre";
 	
 	private JButton ajoutFacture = new JButton();
 
-	public Facture() {
+	public FactureView() {
 		ajoutFacture = addButtonTravaux();
         
         layeredPane.add(ajoutFacture, JLayeredPane.PALETTE_LAYER);

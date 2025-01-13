@@ -7,11 +7,11 @@ import javax.swing.JLayeredPane;
 import javax.swing.JToggleButton;
 
 @SuppressWarnings("serial")
-public class ContratLocation extends TemplateTable {
+public class ContratLocationView extends TemplateTableView {
     
     private JButton ajoutContratLocation;
     private JToggleButton toggleButton = new JToggleButton("Afficher uniquement les contrats de locations actifs");
-	public ContratLocation() {
+	public ContratLocationView() {
         super();
         ajoutContratLocation = addButtonContratLocation();
         layeredPane.add(ajoutContratLocation, JLayeredPane.PALETTE_LAYER);

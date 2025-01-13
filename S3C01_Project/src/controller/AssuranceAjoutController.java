@@ -13,11 +13,11 @@ import dao.DAOFactory;
 import dao.entities.Assurance;
 import dao.entities.Bien;
 import utilities.ErrorMessage;
-import view.AssuranceAjout;
+import view.AssuranceAjoutView;
 
 public class AssuranceAjoutController extends TemplateAjoutController {
 
-	private AssuranceAjout view = new AssuranceAjout();
+	private AssuranceAjoutView view = new AssuranceAjoutView();
 	private BienDAO modelBien = DAOFactory.createBienDAO();
 	private AssuranceDAO modelAssurance = DAOFactory.createAssuranceDAO();
 	private boolean errorRaise;
@@ -171,5 +171,10 @@ public class AssuranceAjoutController extends TemplateAjoutController {
 			new TravauxController();
 			view.dispose();
 		});
+		
+        view.getItemCharge().addActionListener(e -> {
+        	new ChargeController();
+        	view.dispose();
+        });
 	}
 }

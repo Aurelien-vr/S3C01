@@ -1,6 +1,8 @@
 package controller;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JComboBox;
 import dao.BienDAO;
@@ -8,11 +10,11 @@ import dao.DAOFactory;
 import dao.LocataireDAO;
 import dao.entities.Locataire;
 import utilities.ErrorMessage;
-import view.LocataireAjout;
+import view.LocataireAjoutView;
 
 public class LocataireAjoutController extends TemplateAjoutController {
 
-    private LocataireAjout view = new LocataireAjout();
+    private LocataireAjoutView view = new LocataireAjoutView();
     private LocataireDAO modelLocataire = DAOFactory.createLocataireDAO();
     private BienDAO modelBien = DAOFactory.createBienDAO();
     private boolean errorRaise;
@@ -92,6 +94,16 @@ public class LocataireAjoutController extends TemplateAjoutController {
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("La date de naissance ne peut pas être vide");
             errorRaise = true;
+            return;
+        }
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat.setLenient(false); // Strict parsing to ensure the format is correct
+        try {
+            dateFormat.parse(input);
+        } catch (ParseException e) {
+            ErrorMessage.errorDialog("La date de naissance doit être au format jj/mm/aaaa");
+            errorRaise = true;
         }
     }
 
@@ -112,6 +124,7 @@ public class LocataireAjoutController extends TemplateAjoutController {
 
         view.getBtnLocataire().addActionListener(e -> {
         	new LocataireController();
+        	view.dispose();
         });
         
         view.getBtnContratLocation().addActionListener(e -> {
@@ -131,6 +144,11 @@ public class LocataireAjoutController extends TemplateAjoutController {
         
         view.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
+        	view.dispose();
+        });
+        
+        view.getItemCharge().addActionListener(e -> {
+        	new ChargeController();
         	view.dispose();
         });
     }

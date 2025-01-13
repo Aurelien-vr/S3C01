@@ -17,16 +17,17 @@ import javax.swing.JTextField;
 import javax.swing.text.DateFormatter;
 
 import utilities.FontComponent;
+import utilities.PlaceHolderText;
 import utilities.ScallingDimension;
 
 @SuppressWarnings("serial")
-public class TravauxAjout extends TemplateAjout {
+public class TravauxAjout extends TemplateAjoutView {
 
     private JPanel form = new JPanel();
     private JLabel labFacture = new JLabel("Facture :");
     private JLabel labAdress = new JLabel("Adresse:");
     private JComboBox<String> cbFacture;
-    private JComboBox<String> cbAdress;
+    private JTextField labResAdress = new JTextField(20);
     private JLabel labMontant = new JLabel("Montant:");
     private JLabel labMmontantNonDeductible = new JLabel("Montant non déductible:");
     private JTextField fieldMontant = new JTextField(10);
@@ -44,21 +45,18 @@ public class TravauxAjout extends TemplateAjout {
     private JButton annulerButton;
     private JButton ajouterFactureButton;
     
-	int scalePadding;
+    int scalePadding;
     int fontSize;
 
     public TravauxAjout() {
         super();
 
         cbFacture = new JComboBox<>();
-        cbAdress = new JComboBox<>();
 
         scalePadding = ScallingDimension.scaleValue(15);
         fontSize = ScallingDimension.scaleValue(14);
 
         changeLabel("Ajout de travaux");
-
-        cbAdress = new JComboBox<>(new String[]{"Option A", "Option B", "Option C"});
 
         // Initialize the date field with a date formatter
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -90,7 +88,7 @@ public class TravauxAjout extends TemplateAjout {
         form.add(labAdress, gbc);
 
         gbc.gridx = 3;
-        form.add(cbAdress, gbc);
+        form.add(labResAdress, gbc); // Add labResAdress to the form
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -110,12 +108,14 @@ public class TravauxAjout extends TemplateAjout {
         form.add(labReduction, gbc);
 
         gbc.gridx = 1;
+        PlaceHolderText.addPlaceholderText(fielReduction, "%");
         form.add(fielReduction, gbc);
 
         gbc.gridx = 2;
         form.add(labDate, gbc);
 
         gbc.gridx = 3;
+        PlaceHolderText.addPlaceholderText(dateField, "dd/mm/yyyy");
         form.add(dateField, gbc);
 
         gbc.gridx = 0;
@@ -133,6 +133,7 @@ public class TravauxAjout extends TemplateAjout {
         form.add(resultField, gbc);
 
         resultField.setEditable(false);
+        labResAdress.setEditable(false);
     }
 
     private JPanel addButtonPanel() {
@@ -141,7 +142,7 @@ public class TravauxAjout extends TemplateAjout {
 
         // Create buttons
         annulerButton = new JButton("Annuler");
-        ajouterFactureButton = new JButton("Ajouter une nouvel facture");
+        ajouterFactureButton = new JButton("Ajouter une nouvelle facture");
         validerButton = new JButton("Valider");
 
         panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 70, 30));
@@ -159,7 +160,7 @@ public class TravauxAjout extends TemplateAjout {
         return panel;
     }
 
-
+    // Getters and setters for the components
 
     public JPanel getForm() {
         return form;
@@ -169,7 +170,7 @@ public class TravauxAjout extends TemplateAjout {
         return labFacture;
     }
 
-    public JLabel getlabAdresse() {
+    public JLabel getLabAdress() {
         return labAdress;
     }
 
@@ -184,15 +185,8 @@ public class TravauxAjout extends TemplateAjout {
         }
     }
 
-    public JComboBox<String> getCbAdress() {
-        return cbAdress;
-    }
-
-    public void setCbAdress(String[] items) {
-        cbAdress.removeAllItems();
-        for (String item : items) {
-            cbAdress.addItem(item);
-        }
+    public JTextField getLabResAdress() {
+        return labResAdress;
     }
 
     public JLabel getLabMontant() {
@@ -227,10 +221,6 @@ public class TravauxAjout extends TemplateAjout {
         return resultField;
     }
 
-    public void setResultField(String string) {
-        this.resultField.setText(string);
-    }
-
     public JButton getValiderButton() {
         return validerButton;
     }
@@ -240,10 +230,9 @@ public class TravauxAjout extends TemplateAjout {
     }
 
     public JButton getAjouterFactureButton() {
-		return ajouterFactureButton;
-	}
+        return ajouterFactureButton;
+    }
 
-    
     public JFormattedTextField getDateField() {
         return dateField;
     }

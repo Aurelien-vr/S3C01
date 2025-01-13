@@ -10,7 +10,8 @@ import dao.entities.Facture;
  */
 public interface FactureDAO extends DAO<Facture> {
     public String[] get_numFacture();
-    public void insertFK(int id, String facture); 
+    public void insertFK(int id, String facture);
+    public void insertFKCharges(int idCharge, String refFacture);
     public List<List<String>> procGet_factures();
 	void deleteByRef(String ref);
 }

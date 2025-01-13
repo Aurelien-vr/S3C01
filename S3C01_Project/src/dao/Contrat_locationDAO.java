@@ -14,4 +14,5 @@ public interface Contrat_locationDAO extends DAO<Contrat_location> {
 	List<List<String>> procContratLocationDisponible();
 	void procRemoveFkBienLocation(int fkToRm);
 	void procUpdateFkBienLocation(int fkToUpdate, int newFk, int locataireKey);
+	void procCascadeDelete(int idCL);
 }

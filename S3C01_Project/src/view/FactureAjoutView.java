@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import utilities.FontComponent;
+import utilities.PlaceHolderText;
 import utilities.ScallingDimension;
 
 import java.awt.BorderLayout;
@@ -18,10 +19,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 @SuppressWarnings("serial")
-public class FactureAjout extends TemplateAjout {
+public class FactureAjoutView extends TemplateAjoutView {
 
     private JLabel labTypeFacture = new JLabel("Type de facture:");
-    private JComboBox<String> cbTypeFacture = new JComboBox<>(new String[]{"Eau", "Gaz", "Electricité", "Custom"});
+    private JComboBox<String> cbTypeFacture = new JComboBox<>(new String[]{FactureView.TYPE_EAU, FactureView.TYPE_GAZ, FactureView.TYPE_ELECTRICITE,FactureView.TYPE_ORDURE_MENAGERE ,FactureView.TYPE_ENTRETIENT, FactureView.TYPE_AUTRE});
     private JLabel labDateFacture = new JLabel("Date de facture:");
     private JTextField fieldDateFacture = new JTextField(10);
     private JLabel labMontantFacture = new JLabel("Montant de facture:");
@@ -46,7 +47,7 @@ public class FactureAjout extends TemplateAjout {
 
     int fontSize = ScallingDimension.scaleValue(14);
 
-    public FactureAjout() {
+    public FactureAjoutView() {
         super();
         changeLabel("Ajout de facture");
         FontComponent.setFontForAllComponents(form, fontSize);
@@ -77,6 +78,7 @@ public class FactureAjout extends TemplateAjout {
         form.add(labDateFacture, gbc);
 
         gbc.gridx = 1;
+        PlaceHolderText.addPlaceholderText(fieldDateFacture, "dd/mm/yyyy");
         form.add(fieldDateFacture, gbc);
 
         gbc.gridx = 0;

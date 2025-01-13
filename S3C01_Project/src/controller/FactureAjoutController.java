@@ -1,5 +1,7 @@
 package controller;
 
+import view.FactureView;
+import dao.entities.Facture;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,16 +18,15 @@ import dao.Facture_eauDAO;
 import dao.Facture_electriciteDAO;
 import dao.Facture_gazDAO;
 import dao.entities.Bien;
-import dao.entities.Facture;
 import dao.entities.Facture_eau;
 import dao.entities.Facture_electricite;
 import dao.entities.Facture_gaz;
 import utilities.ErrorMessage;
-import view.FactureAjout;
+import view.FactureAjoutView;
 
 public class FactureAjoutController extends TemplateAjoutController {
 
-    private FactureAjout view = new FactureAjout();
+    private FactureAjoutView view = new FactureAjoutView();
     private BienDAO modelBien = DAOFactory.createBienDAO();
     private FactureDAO modelFacture = DAOFactory.createFactureDAO();
     private Facture_eauDAO modelEau = DAOFactory.createFacture_eauDAO();
@@ -56,16 +57,22 @@ public class FactureAjoutController extends TemplateAjoutController {
                 clearPreviousDetails();
                 String selectedType = (String) view.getCbTypeFacture().getSelectedItem();
                 switch (selectedType) {
-                    case "Eau":
+                    case FactureView.TYPE_EAU:
                         askForWaterDetails();
                         break;
-                    case "Gaz":
+                    case FactureView.TYPE_GAZ:
                         askForGasDetails();
                         break;
-                    case "Electricité":
+                    case FactureView.TYPE_ELECTRICITE:
                         askForElectricityDetails();
                         break;
-                    case "Custom":
+                    case FactureView.TYPE_ORDURE_MENAGERE:
+                    	repaint();
+                    	break;
+                    case FactureView.TYPE_ENTRETIENT:
+                    	repaint();
+                    	break;
+                    case FactureView.TYPE_AUTRE:
                         createCustomDetail();
                         break;
                     default:
@@ -73,7 +80,12 @@ public class FactureAjoutController extends TemplateAjoutController {
                 }
         });
     }
-
+    
+    private void repaint() {
+        view.getForm().revalidate();
+        view.getForm().repaint();
+    }
+    
     private void clearPreviousDetails() {
         view.getForm().removeAll();
         view.fillFormWithFields();
@@ -210,13 +222,13 @@ public class FactureAjoutController extends TemplateAjoutController {
     private void checkAdditionalDetails() {
         String selectedType = (String) view.getCbTypeFacture().getSelectedItem();
         switch (selectedType) {
-            case "Eau":
+            case FactureView.TYPE_EAU:
                 checkWaterDetails();
                 break;
-            case "Gaz":
+            case FactureView.TYPE_GAZ:
                 checkGasDetails();
                 break;
-            case "Electricité":
+            case FactureView.TYPE_ELECTRICITE:
                 checkElectricityDetails();
                 break;
             default:
@@ -272,7 +284,7 @@ public class FactureAjoutController extends TemplateAjoutController {
     	try {
     		String factureName = view.getFieldFactureName().getText();
     		String selectedType = (String) view.getCbTypeFacture().getSelectedItem();
-    		String factureType = selectedType.equals("Custom") ? view.getFieldDetail().getText() : selectedType;
+    		String factureType = selectedType.equals("Autre") ? view.getFieldDetail().getText() : selectedType;
     		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     		dateFormat.setLenient(false);
     		java.util.Date parsedDate = dateFormat.parse(view.getFieldDateFacture().getText());
@@ -317,7 +329,7 @@ public class FactureAjoutController extends TemplateAjoutController {
 	                modelElectricite.insert(electricite);
 	                modelElectricite.insertFK(electricite.getId_facture_electricite(), factureName);
 	                break;
-	            case "Custom":
+	            case "Autre":
 	                break;
 	            default:
 	                break;
@@ -360,6 +372,11 @@ public class FactureAjoutController extends TemplateAjoutController {
         	new TravauxController();
         	view.dispose();
         });
+        
+        view.getItemCharge().addActionListener(e -> {
+        	new ChargeController();
+        	view.dispose();
+        });
     }
 
 
@@ -378,8 +395,4 @@ public class FactureAjoutController extends TemplateAjoutController {
 				view.dispose();
 		});
 	}
-
-    public static void main(String[] args) {
-        new FactureAjoutController();
-    }
 }

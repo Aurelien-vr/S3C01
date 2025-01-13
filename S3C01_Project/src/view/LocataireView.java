@@ -6,12 +6,12 @@ import javax.swing.JLayeredPane;
 import javax.swing.JToggleButton;
 
 @SuppressWarnings("serial")
-public class Locataire extends TemplateTable {
+public class LocataireView extends TemplateTableView {
 
     private JButton ajoutLocataireButton;
     private JToggleButton toggleButton = new JToggleButton("Afficher uniquement les locataires actifs");
 
-    public Locataire() {
+    public LocataireView() {
         super();
 
         ajoutLocataireButton = addButtonLocataire();

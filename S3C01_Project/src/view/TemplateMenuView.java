@@ -25,7 +25,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class TemplateMenu extends TemplateHeader {
+public class TemplateMenuView extends TemplateHeaderView {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,10 +40,11 @@ public class TemplateMenu extends TemplateHeader {
     private JMenuItem itemAssurance;
     private JMenuItem itemFacture;
     private JMenuItem itemTravaux;
+    private JMenuItem itemCharge;
     private JLabel titleLab;
 
     @SuppressWarnings("serial")
-    public TemplateMenu() {
+    public TemplateMenuView() {
         super();
   
         JPanel buttonPanel = new JPanel(new GridBagLayout());
@@ -52,7 +53,7 @@ public class TemplateMenu extends TemplateHeader {
         btnBienLouable = new JButton("Biens");
         btnLocataire = new JButton("Locataires");
         btnContratLocation = new JButton("Contrats locations");
-
+        		
         stylizeButton(btnBienLouable);
         stylizeButton(btnLocataire);
         stylizeButton(btnContratLocation);
@@ -88,14 +89,23 @@ public class TemplateMenu extends TemplateHeader {
                 setOpaque(false);
             }
         };
+        itemCharge = new JMenuItem("Charge") {
+            @Override
+            public void updateUI() {
+                setUI(new CustomMenuItemUI());
+                setOpaque(false);
+            }
+        };
         
         stylizeMenuItems(itemAssurance);
         stylizeMenuItems(itemFacture);
         stylizeMenuItems(itemTravaux);
+        stylizeMenuItems(itemCharge);
 
         menuDocument.add(itemAssurance);
         menuDocument.add(itemFacture);
         menuDocument.add(itemTravaux);
+        menuDocument.add(itemCharge);
 
         // Create a menu bar and add the menu to it
         menuBar = new JMenuBar() {
@@ -203,7 +213,12 @@ public class TemplateMenu extends TemplateHeader {
         return itemTravaux;
     }
     
-    public void setTitleHeader(String titleString) {
+    
+    public JMenuItem getItemCharge() {
+		return itemCharge;
+	}
+
+	public void setTitleHeader(String titleString) {
         if (titleLab == null) {
             titleLab = new JLabel();
             headerPanel.add(titleLab, BorderLayout.CENTER);

@@ -7,17 +7,17 @@ import dao.BienDAO;
 import dao.DAOFactory;
 import utilities.FontComponent;
 import utilities.ScallingDimension;
-import view.Principale;
+import view.PrincipaleView;
 
 public class HomeController extends TemplateTableController {
     
-    private Principale view = new Principale();
+    private PrincipaleView view = new PrincipaleView();
     private BienDAO model = DAOFactory.createBienDAO();
     
     
     public HomeController() {
         super();
-        view.setTitleHeader("Page principale");
+        view.setTitleHeader("Acceuil");
         fillTable();
         addEventHandlers();
         view.setTableModel(modelTable, 0);
@@ -79,6 +79,11 @@ public class HomeController extends TemplateTableController {
         
         view.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
+        	view.dispose();
+        });
+        
+        view.getItemCharge().addActionListener(e -> {
+        	new ChargeController();
         	view.dispose();
         });
     }

@@ -8,11 +8,11 @@ import dao.DAOFactory;
 import dao.LocataireDAO;
 import dao.entities.Bien;
 import utilities.ErrorMessage;
-import view.BienAjout;
+import view.BienAjoutView;
 
 public class BienAjoutController extends TemplateAjoutController {
 
-    private BienAjout view = new BienAjout();
+    private BienAjoutView view = new BienAjoutView();
     private BienDAO modelBien = DAOFactory.createBienDAO();
     private LocataireDAO modelLocataire = DAOFactory.createLocataireDAO();
     private boolean errorRaise;
@@ -108,6 +108,11 @@ public class BienAjoutController extends TemplateAjoutController {
         
         view.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
+        	view.dispose();
+        });
+        
+        view.getItemCharge().addActionListener(e -> {
+        	new ChargeController();
         	view.dispose();
         });
     }

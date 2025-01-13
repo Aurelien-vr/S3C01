@@ -9,12 +9,12 @@ import dao.AvancerDAO;
 import dao.DAOFactory;
 import dao.TravauxDAO;
 import utilities.ErrorMessage;
-import view.Travaux;
+import view.TravauxView;
 
 @SuppressWarnings("serial")
 public class TravauxController extends TemplateTableController{
 	
-	private Travaux view = new Travaux();
+	private TravauxView view = new TravauxView();
 	private AvancerDAO modelAvancer = DAOFactory.createAvancerDAO();
 	private TravauxDAO model = DAOFactory.createTravauxDAO();
 	private List<List<String>> listData;
@@ -68,6 +68,11 @@ public class TravauxController extends TemplateTableController{
 	        	new TravauxController();
 	        	view.dispose();
 	        });
+	        
+	        view.getItemCharge().addActionListener(e -> {
+	        	new ChargeController();
+	        	view.dispose();
+	        });
 	    }
 
 	private void actionDeleteButton() {
@@ -95,7 +100,7 @@ public class TravauxController extends TemplateTableController{
 	
 	@Override
 	void fillTable() {
-		 modelTable = new DefaultTableModel(new String[]{"Référence facture", "Adresse", "Logement", "Montant", "Montant non déductible", "Réduction", "Date", "Nature", "SUPPRIMER"}, 0) {
+		 modelTable = new DefaultTableModel(new String[]{"Référence facture", "Adresse", "Logement", "Montant", "Montant non déductible", "Réduction", "Montant à déclarer", "Date", "Nature", "SUPPRIMER"}, 0) {
 	            @Override
 	            public boolean isCellEditable(int row, int column) {
 	            	 return column == 8;
@@ -113,10 +118,17 @@ public class TravauxController extends TemplateTableController{
 	        	String montant = rowResult.get(5);
 	        	String montantNonDeductible = rowResult.get(6);
 	        	String reduction = rowResult.get(7);
+	        	
+	        	float montantInt = Float.parseFloat(montant);
+	        	float montantNonDeductibleInt = Float.parseFloat(montantNonDeductible);
+	        	float reductionInt = Float.parseFloat(reduction);
+	        	float montantADeclarerInt = (montantInt - montantNonDeductibleInt) * (1 - reductionInt / 100);
+	        	String montantADeclarer = String.valueOf(montantADeclarerInt);
+	        	
 	        	String date = TemplateTableController.transformDate(rowResult.get(8));
 	        	String nature = rowResult.get(9);
 	        	
-	        	Object[] row = {refFacture, adresse, logement, montant, montantNonDeductible, reduction, date, nature, "Delete"};
+	        	Object[] row = {refFacture, adresse, logement, montant, montantNonDeductible, reduction, montantADeclarer ,date, nature, "Delete"};
 	        	modelTable.addRow(row);
 	        	
 	        }

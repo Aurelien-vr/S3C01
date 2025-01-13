@@ -1,10 +1,10 @@
 package controller;
 
-import view.TemplateAjout;
+import view.TemplateAjoutView;
 
 public class TemplateAjoutController extends TemplateMenuController{
 	
-	TemplateAjout viewAjoutSkeleton = new TemplateAjout();
+	TemplateAjoutView viewAjoutSkeleton = new TemplateAjoutView();
 
 	public TemplateAjoutController() {
 		super();

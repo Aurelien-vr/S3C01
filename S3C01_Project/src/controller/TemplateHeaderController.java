@@ -1,8 +1,8 @@
 package controller;
-import view.TemplateHeader;
+import view.TemplateHeaderView;
 
 public class TemplateHeaderController{
-	TemplateHeader view = new TemplateHeader();
+	TemplateHeaderView view = new TemplateHeaderView();
 
     public TemplateHeaderController() { /* Don't need a body, is a template */ }
 }

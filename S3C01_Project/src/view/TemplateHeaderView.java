@@ -4,12 +4,12 @@ import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.*;
 import javax.swing.*;
 
-public class TemplateHeader extends JFrame {
+public class TemplateHeaderView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JButton logoLabel;
 	protected JPanel headerPanel;
 	
-	public TemplateHeader() {
+	public TemplateHeaderView() {
 		FlatLightLaf.setup();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(Frame.MAXIMIZED_BOTH);

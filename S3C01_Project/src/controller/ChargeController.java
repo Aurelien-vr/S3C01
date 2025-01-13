@@ -3,119 +3,119 @@ package controller;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import dao.LocataireDAO;
+import dao.ChargeDAO;
+import dao.DAOFactory;
 import utilities.ErrorMessage;
 import utilities.FontComponent;
 import utilities.ScallingDimension;
-import dao.DAOFactory;
-import view.LocataireView;
+import view.ChargeView;
 
-public class LocataireController extends TemplateTableController {
-
-    private LocataireView view = new LocataireView();
-    private LocataireDAO modelLocataire = DAOFactory.createLocataireDAO();
+public class ChargeController extends TemplateTableController {
+    
+    private ChargeView view = new ChargeView();
+    private ChargeDAO modelCharge = DAOFactory.createChargeDAO();
     private List<List<String>> listData;
-
-    public LocataireController() {
+    
+    public ChargeController(){
         super();
-        view.setTitleHeader("Locataire");
+        view.setTitleHeader("Charges de location");
         updateFooter();
-        openAjoutLocatairePage();
+        openAjoutChargePage();
         actionDeleteButton();
         addEventHandlers();
         logoLabel();
         fillTable();
         actionToggleButton();
-        view.setTableModel(modelTable);
+        
+        view.setTableModel(modelTable, 3);
         view.setVisible(true);
     }
-
+    
     private void logoLabel() {
         view.getLogoLabel().addActionListener(e -> {
             new HomeController();
             view.dispose();
         });
     }
-
+    
     @Override
     void fillTable() {
-        modelTable = new DefaultTableModel(new String[]{"Name", "Date de naissance", "Logement", "IBAN" ,"SUPPRIMER"}, 0) {
+        modelTable = new DefaultTableModel(new String[]{"Adresse", "Date", "Total Electricité", "Total Eau", "Total Ordures Ménagères", "Total Entretien", "SUPPRIMER"}, 0) {
             private static final long serialVersionUID = 1L;
-
             @Override
             public boolean isCellEditable(int row, int column) {
                 int columnCount = getColumnCount();
                 return column == columnCount - 1;
-            }
-        };
-
-        if (view.getToggleButton() != null && view.getToggleButton().isSelected()) {
-            listData = modelLocataire.procGetLocatairesActifs();
+            }};
+        
+        if(view.getToggleButton() != null && view.getToggleButton().isSelected()) {
+            listData = modelCharge.procGetChargesActifs();
         } else {
-            listData = modelLocataire.procGetLocataires();
+            listData = modelCharge.procGetCharges();
         }
+        
+        for (List<String> rowResult : listData) {
+            String adresse = rowResult.get(0);
+            String date = rowResult.get(1);
+            String totalElectricite = rowResult.get(2);
+            String totalEau = rowResult.get(3);
+            String totalOrduresMenageres = rowResult.get(4);
+            String totalEntretien = rowResult.get(5);
 
-        for (int i = 0; i < listData.size(); i++) {
-            List<String> rowResult = listData.get(i);
-            String name = rowResult.get(1);
-            String date = rowResult.get(3);
-            String logement = rowResult.get(2);
-            String iban = rowResult.get(4);
-            Object[] row = {name, transformDate(date), logement, iban, "Delete"};
+            Object[] row = {adresse, transformDate(date), totalElectricite, totalEau, totalOrduresMenageres, totalEntretien, "Delete"};
             modelTable.addRow(row);
         }
     }
-
+    
     private void actionDeleteButton() {
         view.getDeleteButton().addActionListener(e -> {
             int selectedRow = view.getTable().getSelectedRow();
-            int idLocataire = Integer.parseInt(listData.get(selectedRow).get(0));
-            int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la suppression du locataire: " + idLocataire);
+            int idCharge = Integer.parseInt(listData.get(selectedRow).get(listData.get(selectedRow).size() - 1));
+            int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la suppression de la charge: " + idCharge);
             if (response == JOptionPane.YES_OPTION) {
-                modelLocataire.procDeleteLocataireCascade(idLocataire);
+                modelCharge.deleteById(idCharge);
                 modelTable.setRowCount(0);
                 fillTable();
                 view.setTableModel(modelTable, 1);
             }
         });
     }
-
-    private void openAjoutLocatairePage() {
-        view.getAjoutLocataireButton().addActionListener(e -> {
-        	view.dispose();
-            new LocataireAjoutController();
+    
+    private void openAjoutChargePage() {
+        view.getAjoutChargeButton().addActionListener(e -> {
+            //new ChargeAjoutController();
+            view.dispose();
         });
     }
-
+    
     private void addEventHandlers() {
         view.getBtnBienLouable().addActionListener(e -> {
-        	new BienController();
-        	view.dispose();
+            new BienController();
+            view.dispose();
         });
 
         view.getBtnLocataire().addActionListener(e -> {
-        	new LocataireController();
-        	view.dispose();
+            new LocataireController();
         });
         
         view.getBtnContratLocation().addActionListener(e -> {
-        	new ContratLocationController();
-        	view.dispose();
+            new ContratLocationController();
+            view.dispose();
         });
         
         view.getItemAssurance().addActionListener(e -> {
-        	new AssuranceController();
-        	view.dispose();
+            new AssuranceController();
+            view.dispose();
         });
         
         view.getItemFacture().addActionListener(e -> {
-        	new FactureController();
-        	view.dispose();
+            new FactureController();
+            view.dispose();
         });
         
         view.getItemTravaux().addActionListener(e -> {
-        	new TravauxController();
-        	view.dispose();
+            new TravauxController();
+            view.dispose();
         });
         
         view.getItemCharge().addActionListener(e -> {
@@ -123,19 +123,20 @@ public class LocataireController extends TemplateTableController {
         	view.dispose();
         });
     }
-
+    
     private void actionToggleButton() {
         view.getToggleButton().addActionListener(e -> {
             fillTable();
             view.setTableModel(modelTable, 3);
         });
+        
     }
-
+    
     @Override
     void updateFooter() {
         if (view.getToggleButton() != null) {
             view.getFooterPanel().add(view.getToggleButton());
             FontComponent.setFontForAllComponents(view.getFooterPanel(), ScallingDimension.scaleValue(18));
-        } 
+        }
     }
 }

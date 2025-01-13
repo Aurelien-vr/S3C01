@@ -9,11 +9,11 @@ import javax.swing.SwingUtilities;
 
 import dbConnection.DatabaseConnection;
 import utilities.ErrorMessage;
-import view.Connection;
+import view.ConnectionView;
 
 public class ConnectionController extends TemplateHeaderController {
 	
-	private Connection view = new Connection();
+	private ConnectionView view = new ConnectionView();
 	
 	public ConnectionController() {
 		super();

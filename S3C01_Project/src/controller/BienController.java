@@ -9,11 +9,11 @@ import dao.Contrat_locationDAO;
 import dao.DAOFactory;
 import dao.LocataireDAO;
 import utilities.ErrorMessage;
-import view.Bien;
+import view.BienView;
 
 public class BienController extends TemplateTableController{
 	
-	private Bien view = new Bien();
+	private BienView view = new BienView();
 	private BienDAO modelBien = DAOFactory.createBienDAO();
 	private Contrat_locationDAO modelContratLocation = DAOFactory.createContrat_locationDAO();
 	private LocataireDAO modelLocataire = DAOFactory.createLocataireDAO();
@@ -75,10 +75,11 @@ public class BienController extends TemplateTableController{
 	private void actionDeleteButton() {
 		view.getDeleteButton().addActionListener(e-> {
 				int selectedRow = view.getTable().getSelectedRow();
-				int idTravaux = Integer.parseInt(listData.get(selectedRow).get(listData.get(selectedRow).size() - 1));
-				int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la supression du travaux: " + idTravaux);
+				int idbBien = Integer.parseInt(listData.get(selectedRow).get(0));
+				int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la supression du travaux: " + idbBien);
+				System.out.println(response);
 				if (response == JOptionPane.YES_OPTION) {
-				    modelBien.deleteById(idTravaux);
+				    modelBien.procDeletBienCascade(idbBien);
 				    modelTable.setRowCount(0);
 				    fillTable();
 				    view.setTableModel(modelTable, 1);
@@ -87,15 +88,15 @@ public class BienController extends TemplateTableController{
 	}
 	
 	private void actionEditButton() {
-		
 		view.getEditIdContratBien().addActionListener(e-> {
 				int idCl;
 				String value = listData.get(view.getTable().getSelectedRow()).get(10);
 				if ("Unknown".equals(value)) {idCl = -1;} else {idCl = Integer.parseInt(value);}
 				
-				
 				List<List<String>> dataLocaSansContrat = modelLocataire.procLocataireSansContrat();
 				List<List<String>> dataClActif = modelContratLocation.procContratLocationDisponible();
+				view.getLocataireComboBox().removeAllItems();
+				view.getContratLocationComboBox().removeAllItems();
 				populateCbBien(dataLocaSansContrat,dataClActif);
 				
 				
@@ -186,6 +187,11 @@ public class BienController extends TemplateTableController{
         
         view.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
+        	view.dispose();
+        });
+        
+        view.getItemCharge().addActionListener(e -> {
+        	new ChargeController();
         	view.dispose();
         });
     }

@@ -8,11 +8,11 @@ import javax.swing.table.DefaultTableModel;
 import dao.DAOFactory;
 import dao.FactureDAO;
 import utilities.ErrorMessage;
-import view.Facture;
+import view.FactureView;
 
 public class FactureController extends TemplateTableController{
 	
-	private Facture view = new Facture();
+	private FactureView view = new FactureView();
 	private FactureDAO model = DAOFactory.createFactureDAO();
 	private List<List<String>> listData;
 	
@@ -63,6 +63,11 @@ public class FactureController extends TemplateTableController{
 	        
 	        view.getItemTravaux().addActionListener(e -> {
 	        	new TravauxController();
+	        	view.dispose();
+	        });
+	        
+	        view.getItemCharge().addActionListener(e -> {
+	        	new ChargeController();
 	        	view.dispose();
 	        });
 	    }

@@ -3,11 +3,11 @@ package view;
 import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
-public class Principale extends TemplateTable{
+public class PrincipaleView extends TemplateTableView{
 	
 	private JLabel footerlab = new JLabel();
 
-	public Principale() {
+	public PrincipaleView() {
 		super();
 	}
 	

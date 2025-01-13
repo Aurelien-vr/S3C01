@@ -6,11 +6,11 @@ import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 
 @SuppressWarnings("serial")
-public class Travaux extends TemplateTable{
+public class TravauxView extends TemplateTableView{
 	
 	JButton ajoutTravaux;
 	
-	public Travaux() {
+	public TravauxView() {
 		super();
 		
 	    ajoutTravaux = addButtonTravaux();

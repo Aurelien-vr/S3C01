@@ -375,4 +375,50 @@ public class BienImpl implements BienDAO {
 		}
 		return arrayRes;
 	}
+
+	@Override
+	public String procAdressOfFacture(String refFacture) {
+		CallableStatement statement = null;
+        ResultSet result = null;
+        String query = "{CALL db1_sae.get_BienFromRefFacture(?)}";
+        String address = "Unknown"; // Default value if no address is returned
+        
+        try {
+            statement = connection.prepareCall(query);
+            statement.setString(1, refFacture); // Set the input parameter for the stored procedure
+            if (statement.execute()) {
+                result = statement.getResultSet();
+                if (result.next()) {
+                    address = result.getString(1) != null ? result.getString(1) : "Unknown";
+                }
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.LogException(e, connection);
+        } finally {
+            DatabaseConnection.closeResult(result);
+            DatabaseConnection.closeStatement(statement);
+        }
+        return address;
+	}
+
+	@Override
+	public void procDeletBienCascade(int idBien) {
+		CallableStatement statement = null;
+		try {
+	        // Prepare the callable statement
+	        String sql = "{CALL db1_sae.del_BienCascade(?)}";
+	        statement = connection.prepareCall(sql);
+	        
+	        statement.setInt(1, idBien);
+
+	        statement.execute();
+	        
+	        System.out.println("Sucessfully delete in cascade.");
+	
+	    }catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeStatement(statement);
+		}
+	}
 }

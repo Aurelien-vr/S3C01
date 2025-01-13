@@ -8,7 +8,7 @@ import dbConnection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 import utilities.ErrorMessage;
 import dao.DAOFactory;
-import view.ContratLocationAjout;
+import view.ContratLocationAjoutView;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ContratLocationAjoutController extends TemplateAjoutController {
 
-    private ContratLocationAjout view = new ContratLocationAjout();
+    private ContratLocationAjoutView view = new ContratLocationAjoutView();
     private BienDAO bienDAO = DAOFactory.createBienDAO();
     private LocataireDAO locataireDAO = DAOFactory.createLocataireDAO();
     private Contrat_locationDAO contratLocationDAO = DAOFactory.createContrat_locationDAO();
@@ -34,6 +34,7 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
         pressedAjouterBien();
         pressedAjouterLocataire();
         populateComboBoxes();
+        addEventHandlers();
         view.setVisible(true);
     }
 
@@ -53,7 +54,7 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
             }
         });
     }
-
+    
     private void pressedAnnuler() {
         view.getAnnulerButton().addActionListener(e -> {
             new BienController();
@@ -181,5 +182,47 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
         	ExceptionStorageHandler.LogException(e, DatabaseConnection.getInstance());
             return null;
         }
+    }
+    
+    private void addEventHandlers() {
+    	
+	    view.getLogoLabel().addActionListener(e -> {
+	        new HomeController();
+	        view.dispose();
+	    });
+    	
+        view.getBtnBienLouable().addActionListener(e -> {
+            new BienController();
+            view.dispose();
+        });
+
+        view.getBtnLocataire().addActionListener(e -> {
+            new LocataireController();
+        });
+        
+        view.getBtnContratLocation().addActionListener(e -> {
+            new ContratLocationController();
+            view.dispose();
+        });
+        
+        view.getItemAssurance().addActionListener(e -> {
+            new AssuranceController();
+            view.dispose();
+        });
+        
+        view.getItemFacture().addActionListener(e -> {
+            new FactureController();
+            view.dispose();
+        });
+        
+        view.getItemTravaux().addActionListener(e -> {
+            new TravauxController();
+            view.dispose();
+        });
+        
+        view.getItemCharge().addActionListener(e -> {
+        	new ChargeController();
+        	view.dispose();
+        });
     }
 }

@@ -5,11 +5,11 @@ import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 
 @SuppressWarnings("serial")
-public class Assurance extends TemplateTable {
+public class AssuranceView extends TemplateTableView {
     
     private JButton ajoutAssurance = new JButton();
 
-    public Assurance() {
+    public AssuranceView() {
         ajoutAssurance = addButtonAssurance();
         
         layeredPane.add(ajoutAssurance, JLayeredPane.PALETTE_LAYER);

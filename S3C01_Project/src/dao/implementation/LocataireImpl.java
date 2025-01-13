@@ -278,7 +278,7 @@ public class LocataireImpl implements LocataireDAO {
 		String unknownString = "Unknown";
 		ArrayList<String> cell = new ArrayList<>();
 		cell.add(result.getString(1) != null ? result.getString(1) : unknownString);
-		cell.add(result.getString(2) + result.getString(3) != null ? result.getString(2) + result.getString(3) : unknownString);
+		cell.add(result.getString(2) +result.getString(3) != null ? result.getString(2) + " " +result.getString(3) : unknownString);
 		cell.add(result.getString(4) != null ? result.getString(4) : "Actuellement locataires d'aucun bien");
 		cell.add(result.getString(5) != null ? result.getString(5) : unknownString);
 		cell.add(result.getString(6) != null ? result.getString(6) : unknownString);
@@ -312,6 +312,27 @@ public class LocataireImpl implements LocataireDAO {
 			DatabaseConnection.closeStatement(statement);
 		}
 		return arrayRes;
+	}
+
+	@Override
+	public void procDeleteLocataireCascade(int idLocataire) {
+		CallableStatement statement = null;
+		try {
+	        // Prepare the callable statement
+	        String sql = "{CALL db1_sae.del_LocataireCascade(?)}";
+	        statement = connection.prepareCall(sql);
+	        
+	        statement.setInt(1, idLocataire);
+
+	        statement.execute();
+	        
+	        System.out.println("Sucessfully delete in cascade.");
+	
+	    }catch (Exception e) {
+			ExceptionStorageHandler.LogException(e, connection);
+		}finally {
+			DatabaseConnection.closeStatement(statement);
+		}
 	}
 
 

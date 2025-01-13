@@ -161,5 +161,10 @@ public class DAOFactory {
     public static TravauxDAO createTravauxDAO() {
         return new TravauxImpl(DatabaseConnection.getInstance());
     }
+    
+    
+    public static ChargeDAO createChargeDAO() {
+    	return new ChargeImpl(DatabaseConnection.getInstance());
+    }
 
 }

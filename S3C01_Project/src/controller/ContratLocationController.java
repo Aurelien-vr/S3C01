@@ -10,11 +10,11 @@ import dao.DAOFactory;
 import utilities.ErrorMessage;
 import utilities.FontComponent;
 import utilities.ScallingDimension;
-import view.ContratLocation;
+import view.ContratLocationView;
 
 public class ContratLocationController extends TemplateTableController {
     
-    private ContratLocation view = new ContratLocation();
+    private ContratLocationView view = new ContratLocationView();
     private Contrat_locationDAO modelContratLocation = DAOFactory.createContrat_locationDAO();
     private List<List<String>> listData;
     
@@ -84,10 +84,10 @@ public class ContratLocationController extends TemplateTableController {
     private void actionDeleteButton() {
         view.getDeleteButton().addActionListener(e -> {
             int selectedRow = view.getTable().getSelectedRow();
-            int idContratLocation = Integer.parseInt(listData.get(selectedRow).get(listData.get(selectedRow).size() - 1));
+            int idContratLocation = Integer.parseInt(listData.get(selectedRow).get(10));
             int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la suppression du contrat de location: " + idContratLocation);
             if (response == JOptionPane.YES_OPTION) {
-                modelContratLocation.deleteById(idContratLocation);
+                modelContratLocation.procCascadeDelete(idContratLocation);
                 modelTable.setRowCount(0);
                 fillTable();
                 view.setTableModel(modelTable, 1);
@@ -128,6 +128,11 @@ public class ContratLocationController extends TemplateTableController {
         
         view.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
+        	view.dispose();
+        });
+        
+        view.getItemCharge().addActionListener(e -> {
+        	new ChargeController();
         	view.dispose();
         });
     }

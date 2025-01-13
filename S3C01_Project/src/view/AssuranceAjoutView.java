@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import utilities.FontComponent;
+import utilities.PlaceHolderText;
 import utilities.ScallingDimension;
 
 import java.awt.BorderLayout;
@@ -18,7 +19,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 @SuppressWarnings("serial")
-public class AssuranceAjout extends TemplateAjout {
+public class AssuranceAjoutView extends TemplateAjoutView {
 
     private JLabel labPrime = new JLabel("Prime:");
     private JTextField fieldPrime = new JTextField(10);
@@ -35,7 +36,7 @@ public class AssuranceAjout extends TemplateAjout {
 
     int fontSize = ScallingDimension.scaleValue(14);
 
-    public AssuranceAjout() {
+    public AssuranceAjoutView() {
         super();
         changeLabel("Ajout d'assurance");
         FontComponent.setFontForAllComponents(form, fontSize);
@@ -63,6 +64,7 @@ public class AssuranceAjout extends TemplateAjout {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
+        PlaceHolderText.addPlaceholderText(fieldDate, "dd/mm/yyyy");
         form.add(labDate, gbc);
 
         gbc.gridx = 1;

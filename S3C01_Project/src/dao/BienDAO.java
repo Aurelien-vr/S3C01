@@ -14,4 +14,6 @@ public interface BienDAO extends DAO<Bien> {
 	public String[] procGetClNotInBien();
 	void insertFK(int id, int idContratLocation);
 	public List<List<String>> procBienSansContrat();
+	public String procAdressOfFacture(String refFacture);
+	void procDeletBienCascade(int idBien);
 }

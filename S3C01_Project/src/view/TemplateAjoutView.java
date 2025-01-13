@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import utilities.ScallingDimension;
 
 @SuppressWarnings("serial")
-public class TemplateAjout extends TemplateMenu{
+public class TemplateAjoutView extends TemplateMenuView{
 	
 	private JPanel contentPanel = new JPanel();
 	private JPanel topFiller = new JPanel();
@@ -27,7 +27,7 @@ public class TemplateAjout extends TemplateMenu{
 	private JPanel inerLeftFiller= new JPanel();	
 	private JPanel inerRightFiller = new JPanel();	
 	
-	public TemplateAjout() {
+	public TemplateAjoutView() {
 		super();
 		JPanel titlePanel = new JPanel();
 		

@@ -21,7 +21,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 @SuppressWarnings("serial")
-public class BienAjout extends TemplateAjout {
+public class BienAjoutView extends TemplateAjoutView {
 
     private JLabel labAdresse = new JLabel("Adresse:");
     private JTextField fieldAdresse = new JTextField(10);
@@ -53,7 +53,7 @@ public class BienAjout extends TemplateAjout {
 
     int fontSize = ScallingDimension.scaleValue(14);
 
-    public BienAjout() {
+    public BienAjoutView() {
         super();
         changeLabel("Ajout de Bien");
         FontComponent.setFontForAllComponents(form, fontSize);

@@ -3,12 +3,13 @@ package view;
 import javax.swing.*;
 
 import utilities.FontComponent;
+import utilities.PlaceHolderText;
 import utilities.ScallingDimension;
 
 import java.awt.*;
 
 @SuppressWarnings("serial")
-public class ContratLocationAjout extends TemplateAjout {
+public class ContratLocationAjoutView extends TemplateAjoutView {
 
     private JLabel labMontant = new JLabel("Montant:");
     private JTextField fieldMontant = new JTextField(10);
@@ -31,7 +32,7 @@ public class ContratLocationAjout extends TemplateAjout {
     private JButton ajouterLocataireButton;
     private JButton validerButton;
 
-    public ContratLocationAjout() {
+    public ContratLocationAjoutView() {
         super();
         setTitleHeader("Ajout Contrat Location");
         fillFormWithFields();
@@ -57,6 +58,7 @@ public class ContratLocationAjout extends TemplateAjout {
         form.add(labDateDebut, gbc);
 
         gbc.gridx = 3;
+        PlaceHolderText.addPlaceholderText(fieldDateDebut, "dd/mm/yyyy");
         form.add(fieldDateDebut, gbc);
 
         gbc.gridx = 0;
@@ -64,6 +66,7 @@ public class ContratLocationAjout extends TemplateAjout {
         form.add(labDateFin, gbc);
 
         gbc.gridx = 1;
+        PlaceHolderText.addPlaceholderText(fieldDateFin, "dd/mm/yyyy");
         form.add(fieldDateFin, gbc);
 
         gbc.gridx = 2;

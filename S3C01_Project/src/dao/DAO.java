@@ -8,7 +8,7 @@ import java.util.List;
  * Interface générique pour les opérations CRUD (Create, Read, Update, Delete).
  * Cette interface définit les méthodes de base pour gérer des entités dans la base de données.
  *
- * @param <T> Le type d'entité que cette interface manipule (par exemple, {@link Contrat_location} ou {@link Bien}).
+ * @param <T> Le type d'entité que cette interface manipule (par exemple, {@link Contrat_location} ou {@link BienView}).
  */
 public interface DAO<T> {
 

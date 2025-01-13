@@ -260,6 +260,31 @@ public class FactureImpl implements FactureDAO {
 	
 	
 	@Override
+	public void insertFKCharges(int idCharge, String refFacture) {
+	    PreparedStatement statement = null;
+	    String query = "UPDATE db1_sae.Facture SET Id_Charge = ? WHERE Reference_facture = ?";
+	    
+	    try {
+	        statement = connection.prepareStatement(query);
+	        statement.setString(2, refFacture);
+	        statement.setInt(1, idCharge);
+	        
+	        if (statement.executeUpdate() > 0) {
+	            System.out.println("FK inserted");
+	        }
+
+	    } catch (SQLIntegrityConstraintViolationException e) {
+	        System.out.println("Integrity constraint violation: " + e.getMessage());
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.LogException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeStatement(statement);
+	    }
+	}
+	
+	
+	@Override
 	public List<List<String>> procGet_factures() {
 		CallableStatement statement = null;
 		ResultSet result = null;

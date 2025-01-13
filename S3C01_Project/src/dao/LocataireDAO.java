@@ -14,4 +14,5 @@ public interface LocataireDAO extends DAO<Locataire> {
 	public List<List<String>> procGetLocataires();
 	public List<List<String>> procGetLocatairesActifs();
 	public List<List<String>> procLocataireSansContrat();
+	public void procDeleteLocataireCascade(int idLocataire);
 }

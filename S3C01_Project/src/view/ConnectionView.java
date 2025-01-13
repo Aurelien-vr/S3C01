@@ -4,13 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 
 @SuppressWarnings("serial")
-public class Connection extends TemplateHeader {
+public class ConnectionView extends TemplateHeaderView {
 	
 	public JButton connectButton;
 	public JTextField usernameField;
 	public JPasswordField passwordField;
 	
-    public Connection() {
+    public ConnectionView() {
     	super();
 
         // Panneau central pour le formulaire de connexion
