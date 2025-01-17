@@ -28,6 +28,7 @@ public class ButtonEditor extends DefaultCellEditor
     this.button.setBackground(Color.WHITE);
     this.button.setFocusPainted(false);    
   }
+  @Override
   public Component getTableCellEditorComponent(JTable table, Object value,
 	  boolean isSelected, int row, int column) {
 	    label = (value == null) ? "Modify" : value.toString();
@@ -35,7 +36,8 @@ public class ButtonEditor extends DefaultCellEditor
 	    return button;
 	  }
   
-	  public Object getCellEditorValue() {
-	    return new String(label);
+	  @Override
+	  public String getCellEditorValue() {
+	    return label;
 	  }
 }

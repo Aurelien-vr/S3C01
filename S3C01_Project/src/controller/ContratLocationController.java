@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import dao.Contrat_locationDAO;
+import dao.ContratLocationDAO;
 import dao.DAOFactory;
 import utilities.ErrorMessage;
 import utilities.FontComponent;
@@ -14,13 +14,13 @@ import view.ContratLocationView;
 
 public class ContratLocationController extends TemplateTableController {
     
-    private ContratLocationView view = new ContratLocationView();
-    private Contrat_locationDAO modelContratLocation = DAOFactory.createContrat_locationDAO();
+    private ContratLocationView viewContratLocation = new ContratLocationView();
+    private ContratLocationDAO modelContratLocation = DAOFactory.createContratLocationDAO();
     private List<List<String>> listData;
     
     public ContratLocationController(){
         super();
-        view.setTitleHeader("Contrat de location");
+        viewContratLocation.setTitleHeader("Contrat de location");
         updateFooter();
         openAjoutContratLocationPage();
         actionDeleteButton();
@@ -29,14 +29,14 @@ public class ContratLocationController extends TemplateTableController {
         fillTable();
         actionToggleButton();
         
-        view.setTableModel(modelTable, 3);
-        view.setVisible(true);
+        viewContratLocation.setTableModel(modelTable, 3);
+        viewContratLocation.setVisible(true);
     }
     
     private void logoLabel() {
-	    view.getLogoLabel().addActionListener(e -> {
+	    viewContratLocation.getLogoLabel().addActionListener(e -> {
 	        new HomeController();
-	        view.dispose();
+	        viewContratLocation.dispose();
 	    });
 	}
     
@@ -51,7 +51,7 @@ public class ContratLocationController extends TemplateTableController {
             }};
         
             
-        if(view.getToggleButton() != null && view.getToggleButton().isSelected()) {
+        if(viewContratLocation.getToggleButton() != null && viewContratLocation.getToggleButton().isSelected()) {
         	listData = modelContratLocation.procPageContratLocationActif();
         }else {
         	listData = modelContratLocation.procPageContratLocation();
@@ -82,74 +82,75 @@ public class ContratLocationController extends TemplateTableController {
     }
     
     private void actionDeleteButton() {
-        view.getDeleteButton().addActionListener(e -> {
-            int selectedRow = view.getTable().getSelectedRow();
+        viewContratLocation.getDeleteButton().addActionListener(e -> {
+            int selectedRow = viewContratLocation.getTable().getSelectedRow();
             int idContratLocation = Integer.parseInt(listData.get(selectedRow).get(10));
             int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la suppression du contrat de location: " + idContratLocation);
             if (response == JOptionPane.YES_OPTION) {
                 modelContratLocation.procCascadeDelete(idContratLocation);
                 modelTable.setRowCount(0);
                 fillTable();
-                view.setTableModel(modelTable, 1);
+                viewContratLocation.setTableModel(modelTable, 1);
             }
         });
     }
     
     private void openAjoutContratLocationPage() {
-        view.getAjoutContratLocationButton().addActionListener(e -> {
+        viewContratLocation.getAjoutContratLocationButton().addActionListener(e -> {
         	new ContratLocationAjoutController();
-        	view.dispose();});
+        	viewContratLocation.dispose();});
     }
     
     private void addEventHandlers() {
-        view.getBtnBienLouable().addActionListener(e -> {
+        viewContratLocation.getBtnBienLouable().addActionListener(e -> {
         	new BienController();
-        	view.dispose();
+        	viewContratLocation.dispose();
         });
 
-        view.getBtnLocataire().addActionListener(e -> {
+        viewContratLocation.getBtnLocataire().addActionListener(e -> {
         	new LocataireController();
+        	viewContratLocation.dispose();
         });
         
-        view.getBtnContratLocation().addActionListener(e -> {
+        viewContratLocation.getBtnContratLocation().addActionListener(e -> {
         	new ContratLocationController();
-        	view.dispose();
+        	viewContratLocation.dispose();
         });
         
-        view.getItemAssurance().addActionListener(e -> {
+        viewContratLocation.getItemAssurance().addActionListener(e -> {
         	new AssuranceController();
-        	view.dispose();
+        	viewContratLocation.dispose();
         });
         
-        view.getItemFacture().addActionListener(e -> {
+        viewContratLocation.getItemFacture().addActionListener(e -> {
         	new FactureController();
-        	view.dispose();
+        	viewContratLocation.dispose();
         });
         
-        view.getItemTravaux().addActionListener(e -> {
+        viewContratLocation.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
-        	view.dispose();
+        	viewContratLocation.dispose();
         });
         
-        view.getItemCharge().addActionListener(e -> {
+        viewContratLocation.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewContratLocation.dispose();
         });
     }
     
     
     private void actionToggleButton() {
-    	view.getToggleButton().addActionListener(e -> {
+    	viewContratLocation.getToggleButton().addActionListener(e -> {
     		fillTable();
-            view.setTableModel(modelTable, 3);
+            viewContratLocation.setTableModel(modelTable, 3);
     	});
     }
 
 	@Override
 	void updateFooter() {
-	    if (view.getToggleButton() != null) {
-	        view.getFooterPanel().add(view.getToggleButton());
-	        FontComponent.setFontForAllComponents(view.getFooterPanel(), ScallingDimension.scaleValue(18));
+	    if (viewContratLocation.getToggleButton() != null) {
+	        viewContratLocation.getFooterPanel().add(viewContratLocation.getToggleButton());
+	        FontComponent.setFontForAllComponents(viewContratLocation.getFooterPanel(), ScallingDimension.scaleValue(18));
 	    }
 	}
 	

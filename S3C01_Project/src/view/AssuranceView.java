@@ -7,7 +7,7 @@ import javax.swing.JLayeredPane;
 @SuppressWarnings("serial")
 public class AssuranceView extends TemplateTableView {
     
-    private JButton ajoutAssurance = new JButton();
+    private JButton ajoutAssurance;
 
     public AssuranceView() {
         ajoutAssurance = addButtonAssurance();
@@ -18,7 +18,7 @@ public class AssuranceView extends TemplateTableView {
     }
 
     private JButton addButtonAssurance() {
-        JButton ajoutAssurance = new JButton("Ajouter");
+        ajoutAssurance = new JButton("Ajouter");
         ajoutAssurance.setBackground(new Color(135, 206, 250));
         ajoutAssurance.setBounds(canvas.getX() + canvas.getWidth() - 220,
                 canvas.getY() + canvas.getHeight() - 90, // Adjust the y coordinate to lower the button

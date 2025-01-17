@@ -12,13 +12,13 @@ import view.ChargeView;
 
 public class ChargeController extends TemplateTableController {
     
-    private ChargeView view = new ChargeView();
+    private ChargeView viewCharge = new ChargeView();
     private ChargeDAO modelCharge = DAOFactory.createChargeDAO();
     private List<List<String>> listData;
     
     public ChargeController(){
         super();
-        view.setTitleHeader("Charges de location");
+        viewCharge.setTitleHeader("Charges de location");
         updateFooter();
         openAjoutChargePage();
         actionDeleteButton();
@@ -27,14 +27,14 @@ public class ChargeController extends TemplateTableController {
         fillTable();
         actionToggleButton();
         
-        view.setTableModel(modelTable, 3);
-        view.setVisible(true);
+        viewCharge.setTableModel(modelTable, 3);
+        viewCharge.setVisible(true);
     }
     
     private void logoLabel() {
-        view.getLogoLabel().addActionListener(e -> {
+        viewCharge.getLogoLabel().addActionListener(e -> {
             new HomeController();
-            view.dispose();
+            viewCharge.dispose();
         });
     }
     
@@ -48,7 +48,7 @@ public class ChargeController extends TemplateTableController {
                 return column == columnCount - 1;
             }};
         
-        if(view.getToggleButton() != null && view.getToggleButton().isSelected()) {
+        if(viewCharge.getToggleButton() != null && viewCharge.getToggleButton().isSelected()) {
             listData = modelCharge.procGetChargesActifs();
         } else {
             listData = modelCharge.procGetCharges();
@@ -68,75 +68,76 @@ public class ChargeController extends TemplateTableController {
     }
     
     private void actionDeleteButton() {
-        view.getDeleteButton().addActionListener(e -> {
-            int selectedRow = view.getTable().getSelectedRow();
+        viewCharge.getDeleteButton().addActionListener(e -> {
+            int selectedRow = viewCharge.getTable().getSelectedRow();
             int idCharge = Integer.parseInt(listData.get(selectedRow).get(listData.get(selectedRow).size() - 1));
             int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la suppression de la charge: " + idCharge);
             if (response == JOptionPane.YES_OPTION) {
                 modelCharge.deleteById(idCharge);
                 modelTable.setRowCount(0);
                 fillTable();
-                view.setTableModel(modelTable, 1);
+                viewCharge.setTableModel(modelTable, 1);
             }
         });
     }
     
     private void openAjoutChargePage() {
-        view.getAjoutChargeButton().addActionListener(e -> {
-            //new ChargeAjoutController();
-            view.dispose();
+        viewCharge.getAjoutChargeButton().addActionListener(e -> {
+            new ChargeAjoutController();
+            viewCharge.dispose();
         });
     }
     
     private void addEventHandlers() {
-        view.getBtnBienLouable().addActionListener(e -> {
+        viewCharge.getBtnBienLouable().addActionListener(e -> {
             new BienController();
-            view.dispose();
+            viewCharge.dispose();
         });
 
-        view.getBtnLocataire().addActionListener(e -> {
+        viewCharge.getBtnLocataire().addActionListener(e -> {
             new LocataireController();
+            viewCharge.dispose();
         });
         
-        view.getBtnContratLocation().addActionListener(e -> {
+        viewCharge.getBtnContratLocation().addActionListener(e -> {
             new ContratLocationController();
-            view.dispose();
+            viewCharge.dispose();
         });
         
-        view.getItemAssurance().addActionListener(e -> {
+        viewCharge.getItemAssurance().addActionListener(e -> {
             new AssuranceController();
-            view.dispose();
+            viewCharge.dispose();
         });
         
-        view.getItemFacture().addActionListener(e -> {
+        viewCharge.getItemFacture().addActionListener(e -> {
             new FactureController();
-            view.dispose();
+            viewCharge.dispose();
         });
         
-        view.getItemTravaux().addActionListener(e -> {
+        viewCharge.getItemTravaux().addActionListener(e -> {
             new TravauxController();
-            view.dispose();
+            viewCharge.dispose();
         });
         
-        view.getItemCharge().addActionListener(e -> {
+        viewCharge.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewCharge.dispose();
         });
     }
     
     private void actionToggleButton() {
-        view.getToggleButton().addActionListener(e -> {
+        viewCharge.getToggleButton().addActionListener(e -> {
             fillTable();
-            view.setTableModel(modelTable, 3);
+            viewCharge.setTableModel(modelTable, 3);
         });
         
     }
     
     @Override
     void updateFooter() {
-        if (view.getToggleButton() != null) {
-            view.getFooterPanel().add(view.getToggleButton());
-            FontComponent.setFontForAllComponents(view.getFooterPanel(), ScallingDimension.scaleValue(18));
+        if (viewCharge.getToggleButton() != null) {
+            viewCharge.getFooterPanel().add(viewCharge.getToggleButton());
+            FontComponent.setFontForAllComponents(viewCharge.getFooterPanel(), ScallingDimension.scaleValue(18));
         }
     }
 }

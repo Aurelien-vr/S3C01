@@ -6,14 +6,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.TravauxDAO;
 import dao.entities.Travaux;
-import dbConnection.DatabaseConnection;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
@@ -62,7 +61,7 @@ public class TravauxImpl implements TravauxDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-    			ExceptionStorageHandler.LogException(e, connection);
+    			ExceptionStorageHandler.logException(e, connection);
     		}finally {
     			DatabaseConnection.closeResult(result);
     			DatabaseConnection.closeStatement(statement);
@@ -99,7 +98,7 @@ public class TravauxImpl implements TravauxDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             }  catch (Exception e) {
-    			ExceptionStorageHandler.LogException(e, connection);
+    			ExceptionStorageHandler.logException(e, connection);
     		}finally {
     			DatabaseConnection.closeResult(result);
     			DatabaseConnection.closeStatement(statement);
@@ -121,24 +120,23 @@ public class TravauxImpl implements TravauxDAO {
    		
    		try {
    	        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-   			statement.setDate(1,entity.getDate_travaux());
+   			statement.setDate(1,entity.getDateTravaux());
     		statement.setString(2, entity.getNature());
     		statement.setString(3, entity.getIban());
     		statement.setBigDecimal(4,entity.getReduction());
     		statement.setBigDecimal(5, entity.getMontant());
-    		statement.setBigDecimal(6, entity.getMontant_non_deductible());
-    		statement.setBigDecimal(7, entity.getReduction_special());
+    		statement.setBigDecimal(6, entity.getMontantNonDeductible());
+    		statement.setBigDecimal(7, entity.getReductionSpeciale());
     			   		
     		 if (statement.executeUpdate() > 0) {
     	            ResultSet result = statement.getGeneratedKeys();
     	            if (result.next()) {
     	                int id = result.getInt(1);
-    	                entity.setNumero_facture(id);
+    	                entity.setNumeroFacture(id);
     	            }
-    	            System.out.println("User inserted");
     	        }
    		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
+   			ExceptionStorageHandler.logException(e, connection);
    		}finally {
    			DatabaseConnection.closeStatement(statement);
    		}
@@ -156,18 +154,18 @@ public class TravauxImpl implements TravauxDAO {
 
         try {
             statement = connection.prepareStatement(query);
-            statement.setDate(1, entity.getDate_travaux());
+            statement.setDate(1, entity.getDateTravaux());
             statement.setString(2, entity.getNature());
             statement.setString(3, entity.getIban());
             statement.setBigDecimal(4, entity.getReduction());
             statement.setBigDecimal(5, entity.getMontant());
-            statement.setBigDecimal(6, entity.getMontant_non_deductible());
-            statement.setBigDecimal(7, entity.getReduction_special());
-            statement.setLong(8, entity.getNumero_facture());
+            statement.setBigDecimal(6, entity.getMontantNonDeductible());
+            statement.setBigDecimal(7, entity.getReductionSpeciale());
+            statement.setLong(8, entity.getNumeroFacture());
 
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -189,7 +187,7 @@ public class TravauxImpl implements TravauxDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -206,13 +204,14 @@ public class TravauxImpl implements TravauxDAO {
     public Travaux createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Travaux à partir des données du ResultSet
         Travaux travaux = new Travaux();
-        travaux.setDate_travaux(result.getDate("date_travaux"));
+        travaux.setNumeroFacture(result.getInt("numero_facture"));
+        travaux.setDateTravaux(result.getDate("date_travaux"));
         travaux.setNature(result.getString("nature"));
         travaux.setIban(result.getString("iban"));
         travaux.setReduction(result.getBigDecimal("reduction"));
         travaux.setMontant(result.getBigDecimal("montant"));
-        travaux.setMontant_non_deductible(result.getBigDecimal("montant_non_deductible"));
-        travaux.setReduction_special(result.getBigDecimal("reduction_special"));
+        travaux.setMontantNonDeductible(result.getBigDecimal("montant_non_deductible"));
+        travaux.setReductionSpeciale(result.getBigDecimal("reduction_special"));
         return travaux; // Retourne l'entité Travaux construite
     }
 
@@ -228,7 +227,7 @@ public class TravauxImpl implements TravauxDAO {
 			if(statement.execute()) {
 				result = statement.getResultSet();
 				while(result.next()) {
-					ArrayList<String> cell = new ArrayList<String>();
+					ArrayList<String> cell = new ArrayList<>();
 					for(int i = 1; i <= 11; i++) {
 						 String value = result.getString(i);
 		                    cell.add(value != null ? value : "Unknown");
@@ -237,7 +236,7 @@ public class TravauxImpl implements TravauxDAO {
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -254,15 +253,9 @@ public class TravauxImpl implements TravauxDAO {
 	        statement = connection.prepareStatement(query);
 	        statement.setString(1, facture);
 	        statement.setInt(2, id);
-	        
-	        if (statement.executeUpdate() > 0) {
-	            System.out.println("FK inserted");
-	        }
-	    } catch (SQLIntegrityConstraintViolationException e) {
-	        System.out.println("Integrity constraint violation: " + e.getMessage());
-	        ExceptionStorageHandler.LogException(e, connection);
+
 	    } catch (Exception e) {
-	        ExceptionStorageHandler.LogException(e, connection);
+	        ExceptionStorageHandler.logException(e, connection);
 	    } finally {
 	        DatabaseConnection.closeStatement(statement);
 	    }

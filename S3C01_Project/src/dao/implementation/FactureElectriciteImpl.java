@@ -4,20 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.Facture_electriciteDAO;
-import dao.entities.Facture_electricite;
-import dbConnection.DatabaseConnection;
+import dao.FactureElectriciteDAO;
+import dao.entities.FactureElectricite;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
- * Implémentation de l'interface {@link Facture_electriciteDAO} pour gérer les opérations sur les entités "Facture_electricite".
+ * Implémentation de l'interface {@link FactureElectriciteDAO} pour gérer les opérations sur les entités "Facture_electricite".
  */
-public class Facture_electriciteImpl implements Facture_electriciteDAO {
+public class FactureElectriciteImpl implements FactureElectriciteDAO {
 
     private Connection connection; // Connexion à la base de données
 
@@ -26,7 +25,7 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      *
      * @param connection La connexion à la base de données.
      */
-    public Facture_electriciteImpl(Connection connection) {
+    public FactureElectriciteImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -34,10 +33,10 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      * Recherche une entité Facture_electricite par son identifiant.
      *
      * @param id L'identifiant de la facture d'électricité à rechercher.
-     * @return L'entité {@link Facture_electricite} si trouvée, sinon {@code null}.
+     * @return L'entité {@link FactureElectricite} si trouvée, sinon {@code null}.
      */
     @Override
-    public Facture_electricite findOne(long id) {
+    public FactureElectricite findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Facture_electricite WHERE id_facture_electricite = ?";
@@ -60,7 +59,7 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-                ExceptionStorageHandler.LogException(e, connection);
+                ExceptionStorageHandler.logException(e, connection);
             } finally {
                 DatabaseConnection.closeStatement(statement);
                 DatabaseConnection.closeResult(result);
@@ -76,8 +75,8 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      * @return Liste des facture d'electricite
      */
     @Override
-    public List<Facture_electricite> findAll() {
-    	List<Facture_electricite> facts_elec = new ArrayList<>();
+    public List<FactureElectricite> findAll() {
+    	List<FactureElectricite> facturesElectricites = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Facture_electricite";
@@ -87,8 +86,8 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
             result = statement.executeQuery();
             
             while (result.next()) {
-                Facture_electricite acte = createEntities(result);
-                facts_elec.add(acte);
+                FactureElectricite acte = createEntities(result);
+                facturesElectricites.add(acte);
             } 
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,14 +96,14 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-                ExceptionStorageHandler.LogException(e, connection);
+                ExceptionStorageHandler.logException(e, connection);
             } finally {
                 DatabaseConnection.closeStatement(statement);
                 DatabaseConnection.closeResult(result);
             }
         }
         
-        return facts_elec;
+        return facturesElectricites;
     }
 
     /**
@@ -113,26 +112,25 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      * @param entity L'entité Facture_electricite à créer.
      */
     @Override
-    public void insert(Facture_electricite entity) {
+    public void insert(FactureElectricite entity) {
         PreparedStatement statement = null;
         String query = "INSERT INTO db1_sae.Facture_electricite(compteur_electricite, prix_kw_electricite) VALUES (?, ?)";
 
         try {
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             
-            statement.setBigDecimal(1, entity.getCompteur_electricite());
-            statement.setString(2, entity.getPrix_kw_electricite());
+            statement.setBigDecimal(1, entity.getCompteurElectricite());
+            statement.setString(2, entity.getPrixKwElectricite());
 
             if (statement.executeUpdate() > 0) {
                 ResultSet result = statement.getGeneratedKeys();
                 if (result.next()) {
                     int id = result.getInt(1); 
-                    entity.setId_facture_electricite(id); 
+                    entity.setIdFactureElectricite(id); 
                     }
-                System.out.println("Facture_electricite inserted");
             }
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -145,19 +143,19 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
      * @param entity L'entité Facture_electricite à mettre à jour.
      */
     @Override
-    public void update(Facture_electricite entity) {
+    public void update(FactureElectricite entity) {
         PreparedStatement statement = null;
         String query = "UPDATE db1_sae.Facture_electricite SET compteur_electricite = ?, prix_kw_electricite = ? WHERE id_facture_electricite = ?";
 
         try {
             statement = connection.prepareStatement(query);
-            statement.setBigDecimal(1, entity.getCompteur_electricite());
-            statement.setString(2, entity.getPrix_kw_electricite());
-            statement.setLong(3, entity.getId_facture_electricite());
+            statement.setBigDecimal(1, entity.getCompteurElectricite());
+            statement.setString(2, entity.getPrixKwElectricite());
+            statement.setLong(3, entity.getIdFactureElectricite());
 
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -181,25 +179,26 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
     }
 
     /**
-     * Crée une entité {@link Facture_electricite} à partir des résultats d'une requête SQL.
+     * Crée une entité {@link FactureElectricite} à partir des résultats d'une requête SQL.
      *
      * @param result Le {@link ResultSet} contenant les données de l'entité Facture_electricite.
      * @return L'entité Facture_electricite construite.
      * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
      */
     @Override
-    public Facture_electricite createEntities(ResultSet result) throws SQLException {
+    public FactureElectricite createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture_electricite à partir des données du ResultSet
-        Facture_electricite factureElectricite = new Facture_electricite();
-        factureElectricite.setCompteur_electricite(result.getBigDecimal("compteur_electricite"));
-        factureElectricite.setPrix_kw_electricite(result.getString("prix_kw_electricite"));
+        FactureElectricite factureElectricite = new FactureElectricite();
+        factureElectricite.setIdFactureElectricite(result.getInt("id_facture_electricite"));
+        factureElectricite.setCompteurElectricite(result.getBigDecimal("compteur_electricite"));
+        factureElectricite.setPrixKwElectricite(result.getString("prix_kw_electricite"));
         return factureElectricite; // Retourne l'entité Facture_electricite construite
     }
     
@@ -212,15 +211,8 @@ public class Facture_electriciteImpl implements Facture_electriciteDAO {
             statement = connection.prepareStatement(query);
             statement.setString(1, referenceFacture); 
             statement.setInt(2, id); 
-
-            if (statement.executeUpdate() > 0) {
-                System.out.println("FK reference_facture inserted into Facture_electricite");
-            }
-        } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("Integrity constraint violation: " + e.getMessage());
-            ExceptionStorageHandler.LogException(e, connection);
-        } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+        }catch (Exception e) {
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }

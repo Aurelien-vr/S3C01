@@ -5,15 +5,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.Contrat_locationDAO;
-import dao.entities.Contrat_location;
-import dbConnection.DatabaseConnection;
+import dao.ContratLocationDAO;
+import dao.entities.ContratLocation;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
-public class Contrat_locationImpl implements Contrat_locationDAO {
+public class ContratLocationImpl implements ContratLocationDAO {
 
     private Connection connection; // Connexion à la base de données
 
@@ -22,12 +23,12 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
      *
      * @param connection La connexion à la base de données.
      */
-    public Contrat_locationImpl(Connection connection) {
+    public ContratLocationImpl(Connection connection) {
         this.connection = connection;
     }
 
 	@Override
-	public Contrat_location findOne(long id) {
+	public ContratLocation findOne(long id) {
 		PreparedStatement statement = null;
 		ResultSet result = null;
 		String query = "SELECT * FROM db1_sae.Contrat_location WHERE Id_Contrat_location = ?";
@@ -38,13 +39,12 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 			result = statement.executeQuery();
 			
 			if(result.next()) {
-				Contrat_location contrat_location = createEntities(result);
-				return contrat_location;
+				return createEntities(result);
 			}	
 		}
 		
 		catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeStatement(statement);
 		}
@@ -53,23 +53,38 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 
 
 	@Override
-	public void insert(Contrat_location entity) {
-		PreparedStatement statement = null;
-		String query = "INSERT INTO db1_sae.Contrat_location(Montant_loyer,Date_debut) VALUES (?,?);";
-		
-		try {
-			statement = connection.prepareStatement(query);
-			statement.setInt(1, entity.getMontant_loyer());
-			statement.setDate(2, entity.getDate_debut());
-			
-			if(statement.executeUpdate()>0) {
-				System.out.println("User inserted");
-			}
-		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
-		}finally {
-			DatabaseConnection.closeStatement(statement);
-		}
+	public void insert(ContratLocation entity) {
+	    PreparedStatement statement = null;
+	    String query = "INSERT INTO db1_sae.Contrat_location (montant_loyer, date_debut, date_fin, modalite_chauffage, modalite_eau_chaude_sanitaire, date_versement) VALUES (?, ?, ?, ?, ?, ?)";
+
+	    try {
+	        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+	        statement.setInt(1, entity.getMontantLoyer());
+	        statement.setDate(2, entity.getDateDebut());
+	        statement.setDate(3, entity.getDateFin());
+	        statement.setString(4, entity.getModaliteChauffage());
+	        statement.setString(5, entity.getModaliteEauChaudeSanitaire());
+	        statement.setDate(6, entity.getDateVersement());
+
+	        int affectedRows = statement.executeUpdate();
+	        if (affectedRows == 0) {
+	            throw new SQLException("Creating ContratLocation failed, no rows affected.");
+	        }
+
+	        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+	            if (generatedKeys.next()) {
+	                int id = generatedKeys.getInt(1);
+	                entity.setNumeroLocation(id);
+	            } else {
+	                throw new SQLException("Creating ContratLocation failed, no ID obtained.");
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        ExceptionStorageHandler.logException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeStatement(statement);
+	    }
 	}
 
 
@@ -81,8 +96,8 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
      * @return Liste des contrats de location.
      */
     @Override
-    public List<Contrat_location> findAll() {
-    	List<Contrat_location> contrats = new ArrayList<>();
+    public List<ContratLocation> findAll() {
+    	List<ContratLocation> contrats = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Contrat_location";
@@ -92,7 +107,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
             result = statement.executeQuery();
             
             while (result.next()) {
-                Contrat_location acte = createEntities(result);
+                ContratLocation acte = createEntities(result);
                 contrats.add(acte);
             } 
         } catch (Exception e) {
@@ -102,7 +117,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-    			ExceptionStorageHandler.LogException(e, connection);
+    			ExceptionStorageHandler.logException(e, connection);
     		}finally {
     			DatabaseConnection.closeResult(result);
     			DatabaseConnection.closeStatement(statement);
@@ -123,7 +138,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -136,22 +151,22 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
      * @param entity L'entité Contrat_location à mettre à jour.
      */
 	@Override
-	public void update(Contrat_location entity) {
+	public void update(ContratLocation entity) {
 	    PreparedStatement statement = null;
 	    String query = "UPDATE db1_sae.Contrat_location SET Montant_loyer = ?, Date_debut = ?, Date_fin = ?, Modalite_chauffage = ?, Modalite_eau_chaude_sanitaire = ?, Date_versement = ? WHERE Id_Contrat_location = ?";
 	    
 	    try {
 	        statement = connection.prepareStatement(query);
-	        statement.setInt(1, entity.getMontant_loyer());
-	        statement.setDate(2, entity.getDate_debut());
-	        statement.setDate(3, entity.getDate_fin());
-	        statement.setString(4, entity.getModalite_chauffage());
-	        statement.setString(5, entity.getModalite_eau_chaude_saniatire());
-	        statement.setDate(6, entity.getDate_versement());
-	        statement.setLong(7, entity.getNumero_location());
+	        statement.setInt(1, entity.getMontantLoyer());
+	        statement.setDate(2, entity.getDateDebut());
+	        statement.setDate(3, entity.getDateFin());
+	        statement.setString(4, entity.getModaliteChauffage());
+	        statement.setString(5, entity.getModaliteEauChaudeSanitaire());
+	        statement.setDate(6, entity.getDateVersement());
+	        statement.setLong(7, entity.getNumeroLocation());
 	        statement.executeUpdate();
 	    } catch (Exception e) {
-	        ExceptionStorageHandler.LogException(e, connection);
+	        ExceptionStorageHandler.logException(e, connection);
 	    } finally {
 	        DatabaseConnection.closeStatement(statement);
 	    }
@@ -175,7 +190,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 		            arrayRes.add(cell);
         }}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -201,7 +216,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 		        }
 		    }
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -227,17 +242,18 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 	}
 
 	@Override
-	public Contrat_location createEntities(ResultSet result) throws SQLException {
-		Contrat_location contrat_location = new Contrat_location();
+	public ContratLocation createEntities(ResultSet result) throws SQLException {
+		ContratLocation contratLocation = new ContratLocation();
 		
-		contrat_location.setMontant_loyer(result.getInt(2));
-		contrat_location.setDate_debut(result.getDate(3));
-		contrat_location.setDate_fin(result.getDate(4));
-		contrat_location.setModalite_chauffage(result.getString(5));
-		contrat_location.setModalite_eau_chaude_saniatire(result.getString(6));
-		contrat_location.setDate_versement(result.getDate(7));
+		contratLocation.setNumeroLocation(1);
+		contratLocation.setMontantLoyer(result.getInt(2));
+		contratLocation.setDateDebut(result.getDate(3));
+		contratLocation.setDateFin(result.getDate(4));
+		contratLocation.setModaliteChauffage(result.getString(5));
+		contratLocation.setModaliteEauChaudeSanitaire(result.getString(6));
+		contratLocation.setDateVersement(result.getDate(7));
 		
-		return contrat_location;
+		return contratLocation;
 	}
 
 	@Override
@@ -249,10 +265,8 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 	        statement.setInt(1, fkToRm);
 	        statement.execute();
 	        
-	        System.out.println("Foreign key references removed successfully.");
-		
 	} catch (Exception e) {
-		ExceptionStorageHandler.LogException(e, connection);
+		ExceptionStorageHandler.logException(e, connection);
 	}finally {
 		DatabaseConnection.closeStatement(statement);
 	}
@@ -270,15 +284,10 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 		        statement.setInt(1, fkToUpdate);
 		        statement.setInt(2, newFk);
 		        statement.setInt(3, locataireKey);
-
-		        
 		        // Execute the callable statement
 		        statement.execute();
-		        
-		        System.out.println("Foreign key references removed successfully.");
-		
 		    }catch (Exception e) {
-				ExceptionStorageHandler.LogException(e, connection);
+				ExceptionStorageHandler.logException(e, connection);
 			}finally {
 				DatabaseConnection.closeStatement(statement);
 			}
@@ -302,7 +311,7 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -322,10 +331,8 @@ public class Contrat_locationImpl implements Contrat_locationDAO {
 
 	        statement.execute();
 	        
-	        System.out.println("Sucessfully delete in cascade.");
-	
 	    }catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeStatement(statement);
 		}

@@ -9,16 +9,14 @@ import utilities.ButtonRenderer;
 import utilities.MultiLineTableCellRenderer;
 import utilities.RoundedBorder;
 import utilities.ScallingDimension;
-
 import javax.swing.border.Border;
 
 import java.awt.*;
-import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class TemplateTableView extends TemplateMenuView implements Serializable {
+public class TemplateTableView extends TemplateMenuView{
 
-    protected JLayeredPane layeredPane = new JLayeredPane();
+	protected JLayeredPane layeredPane = new JLayeredPane();
     protected JPanel canvas = new JPanel();
     private JPanel mainPanel = new JPanel();
     private JPanel container = new JPanel();
@@ -29,8 +27,7 @@ public class TemplateTableView extends TemplateMenuView implements Serializable 
     private JButton deleteButton = new JButton();
     private JButton editIdContratBien = new JButton();
     private JPanel footerPanel = new JPanel();
-
-    Border border = BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0), new RoundedBorder(10, 10, Color.black, new Color(125, 125, 125, 125)));
+    private transient Border border = BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0), new RoundedBorder(10, 10, Color.black, new Color(125, 125, 125, 125)));
 
     public TemplateTableView() {
         super();

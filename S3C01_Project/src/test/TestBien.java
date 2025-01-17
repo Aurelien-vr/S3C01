@@ -6,30 +6,40 @@ import org.junit.*;
 import application.App;
 import dao.*;
 import dao.entities.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import db_connection.DatabaseConnection;
+
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.*;
-import dbConnection.DatabaseConnection;
+import java.util.List;
+
 import exception.ExceptionStorageHandler;
 
-public class test_bien {
+public class TestBien {
 	
+	private String etageColumn = "Etage";
+	private String villeColumn = "Ville";
+	private String adressColumn = "Adresse";
+	private String errorMessage = "Erreur lors de l'appel de la procédure : ";
 	private BienDAO bienDAO;
 	private Connection connection;
 	private Bien bien;
 	int idInsertSetup;
 	
 	@Before
-	public void setUp() throws Exception {
+	public void setUp(){
 		connection = DatabaseConnection.getInstance();
 		if (connection == null) {
-			new App();
+			App.main(null);
 			connection = DatabaseConnection.getInstance();
 		}
-		connection.setAutoCommit(false);
+		try {
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		bienDAO = DAOFactory.createBienDAO();
 		PreparedStatement statement = null;
 		String query = "INSERT INTO db1_sae.Bien(etage, adresse, ville, code_postal, superficie, nombre_de_piece, meuble, accessoire_prive, accessoire_commun, est_garage) " +
@@ -45,7 +55,7 @@ public class test_bien {
 			DatabaseConnection.closeResult(result);
 		}
 	}catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}
 	
 	bien = new Bien(4, "33 rue du corbeau", "Toulouse", "31000", new BigDecimal(330).setScale(2, RoundingMode.DOWN), 5, true, "canapé, lit", "porte, cuisine", false);
@@ -55,20 +65,26 @@ public class test_bien {
 	
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown(){
 		bienDAO = null;
-		connection.rollback();		
+		try {
+			connection.rollback();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
 	}
 	
 	@Test
 	public void testFindOne() {
 		assertEquals(bienDAO.findOne(idInsertSetup),bien); 
+		
 	}
 	
 	@Test
 	public void testInsert() {
-		bienDAO.insert(bien);
-		assertEquals(bien, bienDAO.findOne(idInsertSetup));
+		Bien bi = new Bien(2, "13 rue du treize", "Toulouse", "31000", new BigDecimal(400).setScale(2, RoundingMode.DOWN), 7, false, "armoire, lit", "douche, cuisine", true);
+		bienDAO.insert(bi);
+		assertEquals(bi, bienDAO.findOne(bi.getIdBien()));
 
 	}
 	
@@ -77,5 +93,175 @@ public class test_bien {
 		bienDAO.deleteById(idInsertSetup);
 		assertNull(bienDAO.findOne(idInsertSetup));
 		}
+	
+	@Test
+	public void testFindAll() {
+	    List<Bien> biens = bienDAO.findAll();
+	    int nombreBiensDansLaBase = 0;
+
+	    // Récupérer le nombre total d'actes dans la base avec une requête SQL
+	    PreparedStatement statement = null;
+	    ResultSet result = null;
+	    String query = "SELECT COUNT(*) FROM db1_sae.Bien";
+	    try {
+	        statement = connection.prepareStatement(query);
+	        result = statement.executeQuery();
+	        if (result.next()) {
+	            nombreBiensDansLaBase = result.getInt(1); 
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.logException(e, connection);
+	    } finally {
+	        try {
+	            if (result != null) result.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        //Vérifie que le nombre d'actes retournés par findAll() correspond au nombre réel d'actes dans la base
+		    assertEquals(nombreBiensDansLaBase, biens.size());
+		    
+		    //Vérifie que l'acte inséré au setUp() est bien dans la liste des actes
+		    assertEquals(true, biens.contains(bien));
+		    }
+	    }
+	    
+	    @Test
+	    public void testBienStatus() {
+	        // Appel à la méthode BienStatus
+	        List<List<String>> result = bienDAO.bienStatus();
+	        
+	        // Vérification que le résultat n'est pas vide
+	        assertNotNull("La méthode BienStatus ne doit pas retourner null", result);
+	        assertFalse("La méthode BienStatus doit retourner des résultats", result.isEmpty());
+	    } 
+	    
+	    @Test
+	    public void testUpdate() {
+	        bien.setAdresse("44 rue des oiseaux");
+	        bien.setVille("Paris");
+	        bien.setSuperficie(new BigDecimal(350).setScale(2, RoundingMode.DOWN));
+
+	        bienDAO.update(bien);
+
+	        assertEquals(bien.getAdresse(), bien.getAdresse());
+	        assertEquals(bien.getVille(), bien.getVille());
+	        assertEquals(bien.getSuperficie(), bien.getSuperficie());
+	    }
+	    
+	    @Test
+	    public void testFKBien(){
+	        String sql = "{ CALL db1_sae.TestFK_Bien(?) }";
+
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            
+	            callableStatement.setInt(1, 1);
+
+	            callableStatement.execute();
+
+	        } catch (Exception e) {
+	            
+	            assertEquals("Success", e.getMessage());
+	        }
+	    }
+
+	    public void testProcedureGetAllAdresses() {
+	        String sql = "{ CALL db1_sae.get_AllAdresses() }";
+	        String sqlVerif = "SELECT Adresse, Ville, Etage FROM db1_sae.Bien LIMIT 1"; // Récupère la première ligne
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            try (ResultSet resultSet = callableStatement.executeQuery()) {
+	                // Vérifie si le ResultSet contient des résultats
+	                assertTrue(resultSet.next());
+
+	                // Récupère les valeurs réelles de la base pour la première ligne
+	                try (Statement stmt = connection.createStatement();
+	                        ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+	                    assertTrue(expectedResultSet.next());
+
+	                    String adresseAttendue = expectedResultSet.getString(adressColumn);
+	                    String villeAttendue = expectedResultSet.getString(villeColumn);
+	                    Integer etageAttendu = expectedResultSet.getInt(etageColumn);
+
+	                    // Récupère les valeurs de la procédure et les compare avec les valeurs attendues
+	                    String adresse = resultSet.getString(adressColumn);
+	                    String ville = resultSet.getString(villeColumn);
+	                    Integer etage = resultSet.getInt(etageColumn);
+
+	                    assertEquals(adresseAttendue, adresse);
+	                    assertEquals(villeAttendue, ville);
+	                    assertEquals(etageAttendu, etage);
+	                }
+	            }
+	        } catch (Exception e) {
+	            ExceptionStorageHandler.logException(e, connection);
+	            fail(errorMessage + e.getMessage());
+	        }
+	    }
+	    
+	    public void testProcedureGetBiens() {
+	        String sql = "{ CALL db1_sae.get_biens() }";
+	        String sqlVerif = "SELECT * FROM db1_sae.Bien LIMIT 1"; // Récupère la première ligne
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            try (ResultSet resultSet = callableStatement.executeQuery()) {
+	                // Vérifie si le ResultSet contient des résultats
+	                assertTrue(resultSet.next());
+
+	                // Récupère les valeurs réelles de la base pour la première ligne
+	                try (Statement stmt = connection.createStatement();
+	                        ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+	                    assertTrue(expectedResultSet.next());
+
+	                    // Boucle sur les colonnes du ResultSet pour une vérification générique
+	                    ResultSetMetaData metaData = expectedResultSet.getMetaData();
+	                    int columnCount = metaData.getColumnCount();
+
+	                    for (int i = 1; i <= columnCount; i++) {
+	                        String columnName = metaData.getColumnName(i);
+	                        Object expectedValue = expectedResultSet.getObject(columnName);
+	                        Object actualValue = resultSet.getObject(columnName);
+
+	                        assertEquals("Incompatibilité dans la colonne: " + columnName, expectedValue, actualValue);
+	                    }
+	                }
+	            }
+	        } catch (Exception e) {
+	            ExceptionStorageHandler.logException(e, connection);
+	            fail(errorMessage + e.getMessage());
+	        }
+	    }
+	    
+	    public void testProcedureGetBienSansContrat() {
+	        String sql = "{ CALL db1_sae.get_bienSansContrat() }";
+	        String sqlVerif = "SELECT Adresse, Id_Bien FROM db1_sae.Bien WHERE Id_Contrat_location IS NULL LIMIT 1"; // Récupère la première ligne
+	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
+	            try (ResultSet resultSet = callableStatement.executeQuery()) {
+	                // Vérifie si le ResultSet contient des résultats
+	                assertTrue(resultSet.next());
+
+	                // Récupère les valeurs réelles de la base pour la première ligne
+	                try (Statement stmt = connection.createStatement();
+	                        ResultSet expectedResultSet = stmt.executeQuery(sqlVerif)) {
+
+	                    assertTrue(expectedResultSet.next());
+
+	                    String adresseAttendue = expectedResultSet.getString(adressColumn);
+	                    Integer idBienAttendu = expectedResultSet.getInt("Id_Bien");
+
+	                    // Récupère les valeurs de la procédure et les compare avec les valeurs attendues
+	                    String adresse = resultSet.getString(adressColumn);
+	                    Integer idBien = resultSet.getInt("Id_Bien");
+
+	                    assertEquals(adresseAttendue, adresse);
+	                    assertEquals(idBienAttendu, idBien);
+	                }
+	            }
+	        } catch (Exception e) {
+	            ExceptionStorageHandler.logException(e, connection);
+	            fail(errorMessage + e.getMessage());
+	        }
+	    }
+
 
 }

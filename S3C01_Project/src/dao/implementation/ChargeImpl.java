@@ -6,7 +6,7 @@ import java.util.List;
 
 import dao.ChargeDAO;
 import dao.entities.Charge;
-import dbConnection.DatabaseConnection;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
@@ -15,6 +15,7 @@ import exception.ExceptionStorageHandler;
 public class ChargeImpl implements ChargeDAO {
     
     private Connection connection; // Connexion à la base de données
+    private String stringUnknown = "Unknown";
     
     /**
      * Constructeur de la classe ChargeImpl.
@@ -45,11 +46,10 @@ public class ChargeImpl implements ChargeDAO {
             
             // Si un résultat est trouvé, création de l'entité Charge
             if (result.next()) {
-                Charge charge = createEntities(result);
-                return charge;
+                return createEntities(result);
             } 
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -77,7 +77,7 @@ public class ChargeImpl implements ChargeDAO {
                 charges.add(charge);
             } 
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -96,18 +96,17 @@ public class ChargeImpl implements ChargeDAO {
 
         try {
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setDate(1, entity.getDate_charge());
+            statement.setDate(1, entity.getDateCharge());
 
             if (statement.executeUpdate() > 0) {
                 ResultSet result = statement.getGeneratedKeys();
                 if (result.next()) {
                     int id = result.getInt(1);
-                    entity.setId_charge(id);
+                    entity.setIdCharge(id);
                 }
-                System.out.println("Charge inserted");
             }
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -125,11 +124,11 @@ public class ChargeImpl implements ChargeDAO {
         
         try {
             statement = connection.prepareStatement(query);
-            statement.setDate(1, entity.getDate_charge());
-            statement.setLong(2, entity.getId_charge());
+            statement.setDate(1, entity.getDateCharge());
+            statement.setLong(2, entity.getIdCharge());
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -150,7 +149,7 @@ public class ChargeImpl implements ChargeDAO {
             statement.setLong(1, id);
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -168,8 +167,8 @@ public class ChargeImpl implements ChargeDAO {
         // Création de l'entité Charge à partir des données du ResultSet
         Charge charge = new Charge();
         
-        charge.setId_charge(result.getInt("Id_Charge"));
-        charge.setDate_charge(result.getDate("Date_Charge"));
+        charge.setIdCharge(result.getInt("Id_Charge"));
+        charge.setDateCharge(result.getDate("Date_Charge"));
         
         return charge;  // Retourne l'entité Charge construite
     }
@@ -183,16 +182,9 @@ public class ChargeImpl implements ChargeDAO {
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, idContratLocation);
 	        statement.setInt(2, idCharges);
-	        
-	        if (statement.executeUpdate() > 0) {
-	            System.out.println("FK inserted");
-	        }
 
-	    } catch (SQLIntegrityConstraintViolationException e) {
-	        System.out.println("Integrity constraint violation: " + e.getMessage());
-	        ExceptionStorageHandler.LogException(e, connection);
-	    } catch (Exception e) {
-	        ExceptionStorageHandler.LogException(e, connection);
+	    }catch (Exception e) {
+	        ExceptionStorageHandler.logException(e, connection);
 	    } finally {
 	        DatabaseConnection.closeStatement(statement);
 	    }
@@ -211,20 +203,13 @@ public class ChargeImpl implements ChargeDAO {
 				result = statement.getResultSet();
 				while(result.next()) {
 					ArrayList<String> cell = new ArrayList<>();
-					cell.add(result.getString(2) != null ? result.getString(2) : "Unknown");
-					cell.add(result.getString(3) != null ? result.getString(3): "Unknown");
-					cell.add(result.getString(4) != null ? result.getString(4): "Unknown");
-					cell.add(result.getString(5) != null ? result.getString(5): "Unknown");
-					cell.add(result.getString(6) != null ? result.getString(6): "Unknown");
-					cell.add(result.getString(7) != null ? result.getString(7): "Unknown");
-					cell.add(result.getString(8) != null ? result.getString(8): "Unknown");
+					fillCells(result, cell);
 
 					arrayRes.add(cell);
-					System.out.println(cell);
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -245,24 +230,26 @@ public class ChargeImpl implements ChargeDAO {
 				result = statement.getResultSet();
 				while(result.next()) {
 					ArrayList<String> cell = new ArrayList<>();
-					cell.add(result.getString(2) != null ? result.getString(2) : "Unknown");
-					cell.add(result.getString(3) != null ? result.getString(3): "Unknown");
-					cell.add(result.getString(4) != null ? result.getString(4): "Unknown");
-					cell.add(result.getString(5) != null ? result.getString(5): "Unknown");
-					cell.add(result.getString(6) != null ? result.getString(6): "Unknown");
-					cell.add(result.getString(7) != null ? result.getString(7): "Unknown");
-					cell.add(result.getString(8) != null ? result.getString(8): "Unknown");
-
+					fillCells(result, cell);
 					arrayRes.add(cell);
-					System.out.println(cell);
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
 		}
 		return arrayRes;
+	}
+
+	private void fillCells(ResultSet result, ArrayList<String> cell) throws SQLException {
+		cell.add(result.getString(2) != null ? result.getString(2) : stringUnknown);
+		cell.add(result.getString(3) != null ? result.getString(3): stringUnknown);
+		cell.add(result.getString(4) != null ? result.getString(4): stringUnknown);
+		cell.add(result.getString(5) != null ? result.getString(5): stringUnknown);
+		cell.add(result.getString(6) != null ? result.getString(6): stringUnknown);
+		cell.add(result.getString(7) != null ? result.getString(7): stringUnknown);
+		cell.add(result.getString(8) != null ? result.getString(8): stringUnknown);
 	}
 }

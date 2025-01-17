@@ -3,7 +3,7 @@ package application;
 import javax.swing.SwingUtilities;
 
 import controller.ConnectionController;
-import dbConnection.DatabaseConnection;
+import db_connection.DatabaseConnection;
 
 public class App {
     /**
@@ -23,6 +23,9 @@ public class App {
     }
   
     public static void main(String[] args) {
-    	new App();
+    	 Runtime.getRuntime().addShutdownHook(
+    			 new Thread(DatabaseConnection::closeConnection)
+    			 );
+         new App();
     }
 }

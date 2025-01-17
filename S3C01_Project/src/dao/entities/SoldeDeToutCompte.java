@@ -8,22 +8,22 @@ import java.util.Objects;
  * Cette classe contient des informations sur le reste à devoir, la provision pour charges,
  * la caution et l'identifiant du contrat de location associé.
  */
-public class Solde_de_tout_compte {
+public class SoldeDeToutCompte {
 
-    private int id_solde_de_tout_compte;  // Identifiant unique du solde de tout compte
-    private BigDecimal reste_a_devoir;  // Montant restant à devoir par le locataire
-    private BigDecimal provision_pour_charges;  // Montant de la provision pour charges
+    private int idSoldeDeToutCompte;  // Identifiant unique du solde de tout compte
+    private BigDecimal resteADevoir;  // Montant restant à devoir par le locataire
+    private BigDecimal provisionPourCharges;  // Montant de la provision pour charges
     private BigDecimal caution;  // Montant de la caution à restituer ou à déduire
-    private int id_contrat_location;  // Identifiant du contrat de location associé au solde de tout compte
+    private int idContratLocation;  // Identifiant du contrat de location associé au solde de tout compte
 
     
     
-    public Solde_de_tout_compte() {}
+    public SoldeDeToutCompte() {}
 
-	public Solde_de_tout_compte(BigDecimal reste_a_devoir, BigDecimal provision_pour_charges, BigDecimal caution) {
+	public SoldeDeToutCompte(BigDecimal resteADevoir, BigDecimal provisionPourCharges, BigDecimal caution) {
 		super();
-		this.reste_a_devoir = reste_a_devoir;
-		this.provision_pour_charges = provision_pour_charges;
+		this.resteADevoir = resteADevoir;
+		this.provisionPourCharges = provisionPourCharges;
 		this.caution = caution;
 	}
 
@@ -32,17 +32,17 @@ public class Solde_de_tout_compte {
      *
      * @return L'identifiant du solde de tout compte.
      */
-    public int getId_solde_de_tout_compte() {
-        return id_solde_de_tout_compte;
+    public int getIdSoldeDeToutCompte() {
+        return idSoldeDeToutCompte;
     }
 
     /**
      * Définit l'identifiant du solde de tout compte.
      *
-     * @param id_solde_de_tout_compte L'identifiant du solde de tout compte à définir.
+     * @param idSoldeDeToutCompte L'identifiant du solde de tout compte à définir.
      */
-    public void setId_solde_de_tout_compte(int id_solde_de_tout_compte) {
-        this.id_solde_de_tout_compte = id_solde_de_tout_compte;
+    public void setIdSoldeDeToutCompte(int idSoldeDeToutCompte) {
+        this.idSoldeDeToutCompte = idSoldeDeToutCompte;
     }
 
     /**
@@ -50,17 +50,17 @@ public class Solde_de_tout_compte {
      *
      * @return Le montant restant à devoir.
      */
-    public BigDecimal getReste_a_devoir() {
-        return reste_a_devoir;
+    public BigDecimal getResteADevoir() {
+        return resteADevoir;
     }
 
     /**
      * Définit le montant restant à devoir par le locataire.
      *
-     * @param reste_a_devoir Le montant restant à devoir à définir.
+     * @param resteADevoir Le montant restant à devoir à définir.
      */
-    public void setReste_a_devoir(BigDecimal reste_a_devoir) {
-        this.reste_a_devoir = reste_a_devoir;
+    public void setResteADevoir(BigDecimal resteADevoir) {
+        this.resteADevoir = resteADevoir;
     }
 
     /**
@@ -68,17 +68,17 @@ public class Solde_de_tout_compte {
      *
      * @return Le montant de la provision pour charges.
      */
-    public BigDecimal getProvision_pour_charges() {
-        return provision_pour_charges;
+    public BigDecimal getProvisionPourCharges() {
+        return provisionPourCharges;
     }
 
     /**
      * Définit le montant de la provision pour charges.
      *
-     * @param provision_pour_charges Le montant de la provision pour charges à définir.
+     * @param provisionPourCharges Le montant de la provision pour charges à définir.
      */
-    public void setProvision_pour_charges(BigDecimal provision_pour_charges) {
-        this.provision_pour_charges = provision_pour_charges;
+    public void setProvisionPourCharges(BigDecimal provisionPourCharges) {
+        this.provisionPourCharges = provisionPourCharges;
     }
 
     /**
@@ -104,21 +104,21 @@ public class Solde_de_tout_compte {
      *
      * @return L'identifiant du contrat de location.
      */
-    public int getId_contrat_location() {
-        return id_contrat_location;
+    public int getIdContratLocation() {
+        return idContratLocation;
     }
 
     /**
      * Définit l'identifiant du contrat de location associé à ce solde de tout compte.
      *
-     * @param id_contrat_location L'identifiant du contrat de location à définir.
+     * @param idContratLocation L'identifiant du contrat de location à définir.
      */
-    public void setId_contrat_location(int id_contrat_location) {
-        this.id_contrat_location = id_contrat_location;
+    public void setIdContratLocation(int idContratLocation) {
+        this.idContratLocation = idContratLocation;
     }
 
     /**
-     * Retourne une représentation textuelle de l'objet {@link Solde_de_tout_compte}.
+     * Retourne une représentation textuelle de l'objet {@link SoldeDeToutCompte}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
      * @return Une chaîne de caractères représentant l'entité.
@@ -126,18 +126,18 @@ public class Solde_de_tout_compte {
     @Override
     public String toString() {
         return "Solde_de_tout_compte{" +
-               "id_solde_de_tout_compte=" + id_solde_de_tout_compte +
-               ", reste_a_devoir=" + (reste_a_devoir != null ? reste_a_devoir : "N/A") +
-               ", provision_pour_charges=" + (provision_pour_charges != null ? provision_pour_charges : "N/A") +
+               "id_solde_de_tout_compte=" + idSoldeDeToutCompte +
+               ", reste_a_devoir=" + (resteADevoir != null ? resteADevoir : "N/A") +
+               ", provision_pour_charges=" + (provisionPourCharges != null ? provisionPourCharges : "N/A") +
                ", caution=" + (caution != null ? caution : "N/A") +
-               ", id_contrat_location=" + id_contrat_location +
+               ", id_contrat_location=" + idContratLocation +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(caution, id_contrat_location, id_solde_de_tout_compte, provision_pour_charges,
-				reste_a_devoir);
+		return Objects.hash(caution, idContratLocation, idSoldeDeToutCompte, provisionPourCharges,
+				resteADevoir);
 	}
 
 	@Override
@@ -148,10 +148,10 @@ public class Solde_de_tout_compte {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Solde_de_tout_compte other = (Solde_de_tout_compte) obj;
-		return Objects.equals(caution, other.caution) && id_contrat_location == other.id_contrat_location
-				&& id_solde_de_tout_compte == other.id_solde_de_tout_compte
-				&& Objects.equals(provision_pour_charges, other.provision_pour_charges)
-				&& Objects.equals(reste_a_devoir, other.reste_a_devoir);
+		SoldeDeToutCompte other = (SoldeDeToutCompte) obj;
+		return Objects.equals(caution, other.caution) && idContratLocation == other.idContratLocation
+				&& idSoldeDeToutCompte == other.idSoldeDeToutCompte
+				&& Objects.equals(provisionPourCharges, other.provisionPourCharges)
+				&& Objects.equals(resteADevoir, other.resteADevoir);
 	}
 }

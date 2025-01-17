@@ -8,19 +8,19 @@ import java.util.Objects;
  * Cette classe contient les informations relatives à une facture d'électricité,
  * incluant le compteur d'électricité, le prix par kilowatt et la référence de la facture.
  */
-public class Facture_electricite {
+public class FactureElectricite {
 
-	private int id_facture_electricite;  // Identifiant unique de la facture d'électricité
-    private BigDecimal compteur_electricite;  // Valeur du compteur d'électricité au moment de la facturation
-    private String prix_kw_electricite;  // Prix du kilowatt pour la facture d'électricité
-    private String reference_facture;  // Référence unique de la facture d'électricité
+	private int idFactureElectricite;  // Identifiant unique de la facture d'électricité
+    private BigDecimal compteurElectricite;  // Valeur du compteur d'électricité au moment de la facturation
+    private String prixKwElectricite;  // Prix du kilowatt pour la facture d'électricité
+    private String referenceFacture;  // Référence unique de la facture d'électricité
 
-    public Facture_electricite() {};
+    public FactureElectricite() {}
     
-    public Facture_electricite(BigDecimal compteur_electricite, String prix_kw_electricite) {
+    public FactureElectricite(BigDecimal compteurElectricite, String prixKwElectricite) {
 		super();
-		this.compteur_electricite = compteur_electricite;
-		this.prix_kw_electricite = prix_kw_electricite;
+		this.compteurElectricite = compteurElectricite;
+		this.prixKwElectricite = prixKwElectricite;
 	}
 
 	/**
@@ -28,17 +28,17 @@ public class Facture_electricite {
      *
      * @return L'identifiant de la facture d'électricité.
      */
-    public int getId_facture_electricite() {
-        return id_facture_electricite;
+    public int getIdFactureElectricite() {
+        return idFactureElectricite;
     }
 
     /**
      * Définit l'identifiant de la facture d'électricité.
      *
-     * @param id_facture_electricite L'identifiant de la facture d'électricité à définir.
+     * @param idFactureElectricite L'identifiant de la facture d'électricité à définir.
      */
-    public void setId_facture_electricite(int id_facture_electricite) {
-        this.id_facture_electricite = id_facture_electricite;
+    public void setIdFactureElectricite(int idFactureElectricite) {
+        this.idFactureElectricite = idFactureElectricite;
     }
 
     /**
@@ -46,17 +46,17 @@ public class Facture_electricite {
      *
      * @return La valeur du compteur d'électricité.
      */
-    public BigDecimal getCompteur_electricite() {
-        return compteur_electricite;
+    public BigDecimal getCompteurElectricite() {
+        return compteurElectricite;
     }
 
     /**
      * Définit la valeur du compteur d'électricité.
      *
-     * @param compteur_electricite La valeur du compteur d'électricité à définir.
+     * @param compteurElectricite La valeur du compteur d'électricité à définir.
      */
-    public void setCompteur_electricite(BigDecimal compteur_electricite) {
-        this.compteur_electricite = compteur_electricite;
+    public void setCompteurElectricite(BigDecimal compteurElectricite) {
+        this.compteurElectricite = compteurElectricite;
     }
 
     /**
@@ -64,17 +64,17 @@ public class Facture_electricite {
      *
      * @return Le prix par kilowatt.
      */
-    public String getPrix_kw_electricite() {
-        return prix_kw_electricite;
+    public String getPrixKwElectricite() {
+        return prixKwElectricite;
     }
 
     /**
      * Définit le prix par kilowatt de la facture d'électricité.
      *
-     * @param prix_kw_electricite Le prix du kilowatt à définir.
+     * @param prixKwElectricite Le prix du kilowatt à définir.
      */
-    public void setPrix_kw_electricite(String prix_kw_electricite) {
-        this.prix_kw_electricite = prix_kw_electricite;
+    public void setPrixKwElectricite(String prixKwElectricite) {
+        this.prixKwElectricite = prixKwElectricite;
     }
 
     /**
@@ -82,21 +82,21 @@ public class Facture_electricite {
      *
      * @return La référence de la facture d'électricité.
      */
-    public String getReference_facture() {
-        return reference_facture;
+    public String getReferenceFacture() {
+        return referenceFacture;
     }
 
     /**
      * Définit la référence de la facture d'électricité.
      *
-     * @param reference_facture La référence de la facture à définir.
+     * @param referenceFacture La référence de la facture à définir.
      */
-    public void setReference_facture(String reference_facture) {
-        this.reference_facture = reference_facture;
+    public void setReferenceFacture(String referenceFacture) {
+        this.referenceFacture = referenceFacture;
     }
 
     /**
-     * Retourne une représentation textuelle de l'objet {@link Facture_electricite}.
+     * Retourne une représentation textuelle de l'objet {@link FactureElectricite}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
      * @return Une chaîne de caractères représentant l'entité.
@@ -104,16 +104,16 @@ public class Facture_electricite {
     @Override
     public String toString() {
         return "Facture_electricite{" +
-               "id_facture_electricite=" + id_facture_electricite +
-               ", compteur_electricite=" + (compteur_electricite != null ? compteur_electricite : "N/A") +
-               ", prix_kw_electricite='" + (prix_kw_electricite != null ? prix_kw_electricite : "N/A") + '\'' +
-               ", reference_facture='" + (reference_facture != null ? reference_facture : "N/A") + '\'' +
+               "id_facture_electricite=" + idFactureElectricite +
+               ", compteur_electricite=" + (compteurElectricite != null ? compteurElectricite : "N/A") +
+               ", prix_kw_electricite='" + (prixKwElectricite != null ? prixKwElectricite : "N/A") + '\'' +
+               ", reference_facture='" + (referenceFacture != null ? referenceFacture : "N/A") + '\'' +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(compteur_electricite, id_facture_electricite, prix_kw_electricite, reference_facture);
+		return Objects.hash(compteurElectricite, idFactureElectricite, prixKwElectricite, referenceFacture);
 	}
 
 	@Override
@@ -124,11 +124,10 @@ public class Facture_electricite {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Facture_electricite other = (Facture_electricite) obj;
-		return Objects.equals(compteur_electricite, other.compteur_electricite)
-				&& id_facture_electricite == other.id_facture_electricite
-				&& Objects.equals(prix_kw_electricite, other.prix_kw_electricite)
-				&& Objects.equals(reference_facture, other.reference_facture);
+		FactureElectricite other = (FactureElectricite) obj;
+		return Objects.equals(compteurElectricite, other.compteurElectricite)
+				&& Objects.equals(prixKwElectricite, other.prixKwElectricite)
+				&& Objects.equals(referenceFacture, other.referenceFacture);
 	}
     
     

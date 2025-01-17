@@ -8,21 +8,21 @@ import java.util.Objects;
  * Cette classe contient les informations relatives à une facture de gaz,
  * incluant la consommation en mètres cubes, le prix par mètre cube et la référence de la facture.
  */
-public class Facture_gaz {
+public class FactureGaz {
 
-    private int id_facture_gaz;  // Identifiant unique de la facture de gaz
-    private BigDecimal consommation_m3;  // Consommation de gaz en mètres cubes
-    private String prix_m3_gaz;  // Prix par mètre cube de gaz
-    private String reference_facture;  // Référence unique de la facture de gaz
+    private int idFactureGaz;  // Identifiant unique de la facture de gaz
+    private BigDecimal consommationM3;  // Consommation de gaz en mètres cubes
+    private String prixM3Gaz;  // Prix par mètre cube de gaz
+    private String referenceFacture;  // Référence unique de la facture de gaz
     
     
     
-    public Facture_gaz() {}
+    public FactureGaz() {}
 
-	public Facture_gaz(BigDecimal consommation_m3, String prix_m3_gaz) {
+	public FactureGaz(BigDecimal consommationM3, String prixM3Gaz) {
     	super();
-    	this.consommation_m3 = consommation_m3;
-    	this.prix_m3_gaz = prix_m3_gaz;
+    	this.consommationM3 = consommationM3;
+    	this.prixM3Gaz = prixM3Gaz;
     }
     
     /**
@@ -30,18 +30,18 @@ public class Facture_gaz {
      *
      * @return L'identifiant de la facture de gaz.
      */
-    public int getId_facture_gaz() {
-        return id_facture_gaz;
+    public int getIdFactureGaz() {
+        return idFactureGaz;
     }
 
 
 	/**
      * Définit l'identifiant de la facture de gaz.
      *
-     * @param id_facture_gaz L'identifiant de la facture de gaz à définir.
+     * @param idFactureGaz L'identifiant de la facture de gaz à définir.
      */
-    public void setId_facture_gaz(int id_facture_gaz) {
-        this.id_facture_gaz = id_facture_gaz;
+    public void setIdFactureGaz(int idFactureGaz) {
+        this.idFactureGaz = idFactureGaz;
     }
 
     /**
@@ -49,17 +49,17 @@ public class Facture_gaz {
      *
      * @return La consommation de gaz en mètres cubes.
      */
-    public BigDecimal getConsommation_m3() {
-        return consommation_m3;
+    public BigDecimal getConsommationM3() {
+        return consommationM3;
     }
 
     /**
      * Définit la consommation de gaz en mètres cubes.
      *
-     * @param consommation_m3 La consommation de gaz à définir.
+     * @param consommationM3 La consommation de gaz à définir.
      */
-    public void setConsommation_m3(BigDecimal consommation_m3) {
-        this.consommation_m3 = consommation_m3;
+    public void setConsommationM3(BigDecimal consommationM3) {
+        this.consommationM3 = consommationM3;
     }
 
     /**
@@ -67,17 +67,17 @@ public class Facture_gaz {
      *
      * @return Le prix par mètre cube de gaz.
      */
-    public String getPrix_m3_gaz() {
-        return prix_m3_gaz;
+    public String getPrixM3Gaz() {
+        return prixM3Gaz;
     }
 
     /**
      * Définit le prix par mètre cube de gaz.
      *
-     * @param prix_m3_gaz Le prix du gaz par mètre cube à définir.
+     * @param prixm3gaz Le prix du gaz par mètre cube à définir.
      */
-    public void setPrix_m3_gaz(String prix_m3_gaz) {
-        this.prix_m3_gaz = prix_m3_gaz;
+    public void setPrixM3Gaz(String prixm3gaz) {
+        this.prixM3Gaz = prixm3gaz;
     }
 
     /**
@@ -85,21 +85,21 @@ public class Facture_gaz {
      *
      * @return La référence de la facture de gaz.
      */
-    public String getReference_facture() {
-        return reference_facture;
+    public String getReferenceFacture() {
+        return referenceFacture;
     }
 
     /**
      * Définit la référence de la facture de gaz.
      *
-     * @param reference_facture La référence de la facture de gaz à définir.
+     * @param referenceFacture La référence de la facture de gaz à définir.
      */
-    public void setReference_facture(String reference_facture) {
-        this.reference_facture = reference_facture;
+    public void setReferenceFacture(String referenceFacture) {
+        this.referenceFacture = referenceFacture;
     }
 
     /**
-     * Retourne une représentation textuelle de l'objet {@link Facture_gaz}.
+     * Retourne une représentation textuelle de l'objet {@link FactureGaz}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
      * @return Une chaîne de caractères représentant l'entité.
@@ -107,16 +107,16 @@ public class Facture_gaz {
     @Override
     public String toString() {
         return "Facture_gaz{" +
-               "id_facture_gaz=" + id_facture_gaz +
-               ", consommation_m3=" + (consommation_m3 != null ? consommation_m3 : "N/A") +
-               ", prix_m3_gaz='" + (prix_m3_gaz != null ? prix_m3_gaz : "N/A") + '\'' +
-               ", reference_facture='" + (reference_facture != null ? reference_facture : "N/A") + '\'' +
+               "id_facture_gaz=" + idFactureGaz +
+               ", consommation_m3=" + (consommationM3 != null ? consommationM3 : "N/A") +
+               ", prix_m3_gaz='" + (prixM3Gaz != null ? prixM3Gaz : "N/A") + '\'' +
+               ", reference_facture='" + (referenceFacture != null ? referenceFacture : "N/A") + '\'' +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(consommation_m3, id_facture_gaz, prix_m3_gaz, reference_facture);
+		return Objects.hash(consommationM3, idFactureGaz, prixM3Gaz, referenceFacture);
 	}
 
 	@Override
@@ -127,10 +127,10 @@ public class Facture_gaz {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Facture_gaz other = (Facture_gaz) obj;
-		return Objects.equals(consommation_m3, other.consommation_m3) && id_facture_gaz == other.id_facture_gaz
-				&& Objects.equals(prix_m3_gaz, other.prix_m3_gaz)
-				&& Objects.equals(reference_facture, other.reference_facture);
+		FactureGaz other = (FactureGaz) obj;
+		return Objects.equals(consommationM3, other.consommationM3) 
+				&& Objects.equals(prixM3Gaz, other.prixM3Gaz)
+				&& Objects.equals(referenceFacture, other.referenceFacture);
 	}
 
 	

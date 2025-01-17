@@ -11,18 +11,18 @@ import view.PrincipaleView;
 
 public class HomeController extends TemplateTableController {
     
-    private PrincipaleView view = new PrincipaleView();
+    private PrincipaleView viewPrincipale = new PrincipaleView();
     private BienDAO model = DAOFactory.createBienDAO();
     
     
     public HomeController() {
         super();
-        view.setTitleHeader("Acceuil");
+        viewPrincipale.setTitleHeader("Accueil");
         fillTable();
         addEventHandlers();
-        view.setTableModel(modelTable, 0);
+        viewPrincipale.setTableModel(modelTable, 0);
         updateFooter();
-        view.setVisible(true);
+        viewPrincipale.setVisible(true);
     }
     
     @SuppressWarnings("serial")
@@ -35,7 +35,7 @@ public class HomeController extends TemplateTableController {
                 return false; // Make cells non-editable
             }
         };
-        listData = model.BienStatus();
+        listData = model.bienStatus();
 
         for (int i = 0; i < listData.size(); i++) {
             List<String> rowResult = listData.get(i);
@@ -52,39 +52,39 @@ public class HomeController extends TemplateTableController {
     }
      
     private void addEventHandlers() {
-        view.getBtnBienLouable().addActionListener(e -> {
+        viewPrincipale.getBtnBienLouable().addActionListener(e -> {
         	new BienController();
-        	view.dispose();
+        	viewPrincipale.dispose();
         });
 
-        view.getBtnLocataire().addActionListener(e -> {
+        viewPrincipale.getBtnLocataire().addActionListener(e -> {
                 new LocataireController();
-                view.dispose();
+                viewPrincipale.dispose();
         });
         
-        view.getBtnContratLocation().addActionListener(e -> {
+        viewPrincipale.getBtnContratLocation().addActionListener(e -> {
         	new ContratLocationController();
-        	view.dispose();
+        	viewPrincipale.dispose();
         });
         
-        view.getItemAssurance().addActionListener(e -> {
+        viewPrincipale.getItemAssurance().addActionListener(e -> {
         	new AssuranceController();
-        	view.dispose();
+        	viewPrincipale.dispose();
         });
         
-        view.getItemFacture().addActionListener(e -> {
+        viewPrincipale.getItemFacture().addActionListener(e -> {
         	new FactureController();
-        	view.dispose();
+        	viewPrincipale.dispose();
         });
         
-        view.getItemTravaux().addActionListener(e -> {
+        viewPrincipale.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
-        	view.dispose();
+        	viewPrincipale.dispose();
         });
         
-        view.getItemCharge().addActionListener(e -> {
+        viewPrincipale.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewPrincipale.dispose();
         });
     }
     
@@ -98,8 +98,8 @@ public class HomeController extends TemplateTableController {
         }
         
         String footerText = "Total Loyer en Retard: " + String.format("%.2f", totalLoyerRetard);
-        view.setFooterLabText(footerText);
-        view.updateFooter(view.getFooterlab());
-        FontComponent.setFontForAllComponents(view.getFooterPanel(), (int) (ScallingDimension.scaleValue(14) * 1.3));
+        viewPrincipale.setFooterLabText(footerText);
+        viewPrincipale.updateFooter(viewPrincipale.getFooterlab());
+        FontComponent.setFontForAllComponents(viewPrincipale.getFooterPanel(), (int) (ScallingDimension.scaleValue(14) * 1.3));
     }
 }

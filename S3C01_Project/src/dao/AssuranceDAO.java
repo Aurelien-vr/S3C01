@@ -10,6 +10,6 @@ import dao.entities.Assurance;
  */
 public interface AssuranceDAO extends DAO<Assurance> {
 
-	List<List<String>> procGet_assurances();
+	List<List<String>> procGetAssurances();
 	void insertFK(int selectedIdBien, int numeroContrat);
 }

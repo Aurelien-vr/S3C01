@@ -7,10 +7,10 @@ import view.TemplateTableView;
 
 public abstract class TemplateTableController extends TemplateMenuController{
 
-    protected TemplateTableView view = new TemplateTableView();
+    protected TemplateTableView viewTemplatetable = new TemplateTableView();
     protected DefaultTableModel modelTable;
 
-    public TemplateTableController() {
+    protected TemplateTableController() {
     	super();
     }
 

@@ -9,21 +9,21 @@ import java.util.Objects;
  * Cette classe contient les informations sur la déclaration de revenu, y compris la date d'acquisition,
  * le nombre de locataires, le montant des recettes générées par l'immeuble, et l'identifiant du bien concerné.
  */
-public class Declaration_revenu {
+public class DeclarationRevenu {
 
-    private int id_declaration_revenu;  // Identifiant unique de la déclaration de revenu
-    private Date date_acquisition;  // Date d'acquisition du bien immobilier
+    private int idDeclarationRevenu;  // Identifiant unique de la déclaration de revenu
+    private Date dateAcquisition;  // Date d'acquisition du bien immobilier
     private int locataires;  // Nombre de locataires du bien immobilier
-    private BigDecimal recette_immeuble;  // Montant des recettes générées par l'immeuble
-    private int id_bien;  // Identifiant du bien immobilier lié à la déclaration
+    private BigDecimal recetteImmeuble;  // Montant des recettes générées par l'immeuble
+    private int idBien;  // Identifiant du bien immobilier lié à la déclaration
 
-    public Declaration_revenu() {};
+    public DeclarationRevenu() {}
     
-    public Declaration_revenu(Date date_acquisition, int locataires, BigDecimal recette_immeuble) {
+    public DeclarationRevenu(Date dateAcquisition, int locataires, BigDecimal recetteImmeuble) {
 		super();
-		this.date_acquisition = date_acquisition;
+		this.dateAcquisition = dateAcquisition;
 		this.locataires = locataires;
-		this.recette_immeuble = recette_immeuble;
+		this.recetteImmeuble = recetteImmeuble;
 	}
 
 	/**
@@ -31,17 +31,17 @@ public class Declaration_revenu {
      *
      * @return L'identifiant de la déclaration de revenu.
      */
-    public int getId_declaration_revenu() {
-        return id_declaration_revenu;
+    public int getIdDeclarationRevenu() {
+        return idDeclarationRevenu;
     }
 
     /**
      * Définit l'identifiant unique de la déclaration de revenu.
      *
-     * @param id_declaration_revenu L'identifiant à définir.
+     * @param idDeclarationRevenu L'identifiant à définir.
      */
-    public void setId_declaration_revenu(int id_declaration_revenu) {
-        this.id_declaration_revenu = id_declaration_revenu;
+    public void setIdDeclarationRevenu(int idDeclarationRevenu) {
+        this.idDeclarationRevenu = idDeclarationRevenu;
     }
 
     /**
@@ -49,17 +49,17 @@ public class Declaration_revenu {
      *
      * @return La date d'acquisition du bien.
      */
-    public Date getDate_acquisition() {
-        return date_acquisition;
+    public Date getDateAcquisition() {
+        return dateAcquisition;
     }
 
     /**
      * Définit la date d'acquisition du bien immobilier.
      *
-     * @param date_acquisition La date d'acquisition à définir.
+     * @param dateAcquisition La date d'acquisition à définir.
      */
-    public void setDate_acquisition(Date date_acquisition) {
-        this.date_acquisition = date_acquisition;
+    public void setDateAcquisition(Date dateAcquisition) {
+        this.dateAcquisition = dateAcquisition;
     }
 
     /**
@@ -85,17 +85,17 @@ public class Declaration_revenu {
      *
      * @return Les recettes de l'immeuble.
      */
-    public BigDecimal getRecette_immeuble() {
-        return recette_immeuble;
+    public BigDecimal getRecetteImmeuble() {
+        return recetteImmeuble;
     }
 
     /**
      * Définit les recettes générées par l'immeuble.
      *
-     * @param recette_immeuble Le montant des recettes à définir.
+     * @param recetteImmeuble Le montant des recettes à définir.
      */
-    public void setRecette_immeuble(BigDecimal recette_immeuble) {
-        this.recette_immeuble = recette_immeuble;
+    public void setRecetteImmeuble(BigDecimal recetteImmeuble) {
+        this.recetteImmeuble = recetteImmeuble;
     }
 
     /**
@@ -103,21 +103,21 @@ public class Declaration_revenu {
      *
      * @return L'identifiant du bien immobilier.
      */
-    public int getId_bien() {
-        return id_bien;
+    public int getIdBien() {
+        return idBien;
     }
 
     /**
      * Définit l'identifiant du bien immobilier lié à la déclaration.
      *
-     * @param id_bien L'identifiant du bien à définir.
+     * @param idBien L'identifiant du bien à définir.
      */
-    public void setId_bien(int id_bien) {
-        this.id_bien = id_bien;
+    public void setIdBien(int idBien) {
+        this.idBien = idBien;
     }
 
     /**
-     * Retourne une représentation textuelle de l'objet {@link Declaration_revenu}.
+     * Retourne une représentation textuelle de l'objet {@link DeclarationRevenu}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
      * @return Une chaîne de caractères représentant la déclaration de revenu.
@@ -125,17 +125,17 @@ public class Declaration_revenu {
     @Override
     public String toString() {
         return "Declaration_revenu{" +
-               "id_declaration_revenu=" + id_declaration_revenu +
-               ", date_acquisition=" + (date_acquisition != null ? date_acquisition : "N/A") +
+               "id_declaration_revenu=" + idDeclarationRevenu +
+               ", date_acquisition=" + (dateAcquisition != null ? dateAcquisition : "N/A") +
                ", locataires=" + locataires +
-               ", recette_immeuble=" + (recette_immeuble != null ? recette_immeuble : "N/A") +
-               ", id_bien=" + id_bien +
+               ", recette_immeuble=" + (recetteImmeuble != null ? recetteImmeuble : "N/A") +
+               ", id_bien=" + idBien +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_acquisition, id_bien, id_declaration_revenu, locataires, recette_immeuble);
+		return Objects.hash(dateAcquisition, idBien, idDeclarationRevenu, locataires, recetteImmeuble);
 	}
 
 	@Override
@@ -146,9 +146,9 @@ public class Declaration_revenu {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Declaration_revenu other = (Declaration_revenu) obj;
-		return Objects.equals(date_acquisition, other.date_acquisition) && id_bien == other.id_bien
-				&& id_declaration_revenu == other.id_declaration_revenu && locataires == other.locataires
-				&& Objects.equals(recette_immeuble, other.recette_immeuble);
+		DeclarationRevenu other = (DeclarationRevenu) obj;
+		return Objects.equals(dateAcquisition, other.dateAcquisition) && idBien == other.idBien
+				&& idDeclarationRevenu == other.idDeclarationRevenu && locataires == other.locataires
+				&& Objects.equals(recetteImmeuble, other.recetteImmeuble);
 	}
 }

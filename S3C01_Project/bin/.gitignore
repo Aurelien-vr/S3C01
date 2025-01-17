@@ -1,2 +1,9 @@
 /controller/
 /dao/
+/dbConnection/
+/exception/
+/test/
+/utilities/
+/view/
+/application/
+/db_connection/

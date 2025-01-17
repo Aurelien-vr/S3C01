@@ -20,9 +20,10 @@ public class FontComponent {
                     || component instanceof JToggleButton) {
                 component.setFont(component.getFont().deriveFont((float) fontSize));
             }
-            if (component instanceof Container) {
-                setFontForAllComponents((Container) component, fontSize); // Recursive for nested containers
+            if (component instanceof Container containerIf) {
+                setFontForAllComponents(containerIf, fontSize); // Recursive for nested containers
             }
+
         }
     }
 }

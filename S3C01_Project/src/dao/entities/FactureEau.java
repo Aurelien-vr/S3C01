@@ -8,18 +8,18 @@ import java.util.Objects;
  * Cette classe contient les informations relatives à une facture d'eau, incluant la partie fixe,
  * la consommation et la référence de la facture.
  */
-public class Facture_eau {
+public class FactureEau {
 
-    private int id_facture_eau;  // Identifiant unique de la facture d'eau
-    private BigDecimal partie_fixe;  // Partie fixe de la facture d'eau (ex: frais fixes pour l'abonnement)
+    private int idFactureEau;  // Identifiant unique de la facture d'eau
+    private BigDecimal partieFixe;  // Partie fixe de la facture d'eau (ex: frais fixes pour l'abonnement)
     private BigDecimal consommation;  // Consommation d'eau facturée
-    private String reference_facture;  // Référence unique de la facture
+    private String referenceFacture;  // Référence unique de la facture
 
-    public Facture_eau() {};
+    public FactureEau() {}
     
-    public Facture_eau(BigDecimal partie_fixe, BigDecimal consommation) {
+    public FactureEau(BigDecimal partieFixe, BigDecimal consommation) {
 		super();
-		this.partie_fixe = partie_fixe;
+		this.partieFixe = partieFixe;
 		this.consommation = consommation;
 	}
 
@@ -28,17 +28,17 @@ public class Facture_eau {
      *
      * @return L'identifiant de la facture d'eau.
      */
-    public int getId_facture_eau() {
-        return id_facture_eau;
+    public int getIdFactureEau() {
+        return idFactureEau;
     }
 
     /**
      * Définit l'identifiant de la facture d'eau.
      *
-     * @param id_facture_eau L'identifiant de la facture d'eau à définir.
+     * @param idFactureEau L'identifiant de la facture d'eau à définir.
      */
-    public void setId_facture_eau(int id_facture_eau) {
-        this.id_facture_eau = id_facture_eau;
+    public void setIdFactureEau(int idFactureEau) {
+        this.idFactureEau = idFactureEau;
     }
 
     /**
@@ -46,17 +46,17 @@ public class Facture_eau {
      *
      * @return La partie fixe de la facture d'eau.
      */
-    public BigDecimal getPartie_fixe() {
-        return partie_fixe;
+    public BigDecimal getPartieFixe() {
+        return partieFixe;
     }
 
     /**
      * Définit la partie fixe de la facture d'eau.
      *
-     * @param partie_fixe La partie fixe à définir.
+     * @param partieFixe La partie fixe à définir.
      */
-    public void setPartie_fixe(BigDecimal partie_fixe) {
-        this.partie_fixe = partie_fixe;
+    public void setPartieFixe(BigDecimal partieFixe) {
+        this.partieFixe = partieFixe;
     }
 
     /**
@@ -82,21 +82,21 @@ public class Facture_eau {
      *
      * @return La référence de la facture.
      */
-    public String getReference_facture() {
-        return reference_facture;
+    public String getReferenceFacture() {
+        return referenceFacture;
     }
 
     /**
      * Définit la référence de la facture d'eau.
      *
-     * @param reference_facture La référence de la facture à définir.
+     * @param referenceFacture La référence de la facture à définir.
      */
-    public void setReference_facture(String reference_facture) {
-        this.reference_facture = reference_facture;
+    public void setReferenceFacture(String referenceFacture) {
+        this.referenceFacture = referenceFacture;
     }
 
     /**
-     * Retourne une représentation textuelle de l'objet {@link Facture_eau}.
+     * Retourne une représentation textuelle de l'objet {@link FactureEau}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
      * @return Une chaîne de caractères représentant l'entité.
@@ -104,16 +104,16 @@ public class Facture_eau {
     @Override
     public String toString() {
         return "Facture_eau{" +
-               "id_facture_eau=" + id_facture_eau +
-               ", partie_fixe=" + (partie_fixe != null ? partie_fixe : "N/A") +
+               "id_facture_eau=" + idFactureEau +
+               ", partie_fixe=" + (partieFixe != null ? partieFixe : "N/A") +
                ", consommation=" + (consommation != null ? consommation : "N/A") +
-               ", reference_facture='" + (reference_facture != null ? reference_facture : "N/A") + '\'' +
+               ", reference_facture='" + (referenceFacture != null ? referenceFacture : "N/A") + '\'' +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(consommation, id_facture_eau, partie_fixe, reference_facture);
+		return Objects.hash(consommation, idFactureEau, partieFixe, referenceFacture);
 	}
 
 	@Override
@@ -124,9 +124,9 @@ public class Facture_eau {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Facture_eau other = (Facture_eau) obj;
-		return Objects.equals(consommation, other.consommation) && id_facture_eau == other.id_facture_eau
-				&& Objects.equals(partie_fixe, other.partie_fixe)
-				&& Objects.equals(reference_facture, other.reference_facture);
+		FactureEau other = (FactureEau) obj;
+		return Objects.equals(consommation, other.consommation)
+				&& Objects.equals(partieFixe, other.partieFixe)
+				&& Objects.equals(referenceFacture, other.referenceFacture);
 	}
 }

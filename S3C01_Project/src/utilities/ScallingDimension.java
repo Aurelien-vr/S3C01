@@ -5,6 +5,8 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 public class ScallingDimension {
+	private ScallingDimension() {}
+	
 	public static int scaleValue(int value) {
 	    int referenceWidth = 2880;
 	    int referenceHeight = 1800;

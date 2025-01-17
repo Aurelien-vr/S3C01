@@ -9,20 +9,19 @@ import java.util.Objects;
  */
 public class Locataire {
 
-    private int id_locataire;  // Identifiant unique du locataire
+    private int idLocataire;  // Identifiant unique du locataire
     private String nom;  // Nom du locataire
     private String prenom;  // Prénom du locataire
-    private Date date_de_naissance;  // Date de naissance du locataire
+    private Date dateNeNaissance;  // Date de naissance du locataire
     private String iban;  // IBAN du locataire pour le paiement des loyers
-    private int id_contrat_location;  // Identifiant du contrat de location associé
 
     public Locataire() {}
     
-    public Locataire(String nom, String prenom, Date date_de_naissance, String iban) {
+    public Locataire(String nom, String prenom, Date dateDeNaissance, String iban) {
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
-		this.date_de_naissance = date_de_naissance;
+		this.dateNeNaissance = dateDeNaissance;
 		this.iban = iban;
 	}
 
@@ -31,17 +30,17 @@ public class Locataire {
      *
      * @return L'identifiant du locataire.
      */
-    public int getId_locataire() {
-        return id_locataire;
+    public int getIdLocataire() {
+        return idLocataire;
     }
 
     /**
      * Définit l'identifiant du locataire.
      *
-     * @param id_locataire L'identifiant du locataire à définir.
+     * @param idLocataire L'identifiant du locataire à définir.
      */
-    public void setId_locataire(int id_locataire) {
-        this.id_locataire = id_locataire;
+    public void setIdLocataire(int idLocataire) {
+        this.idLocataire = idLocataire;
     }
 
     /**
@@ -85,17 +84,17 @@ public class Locataire {
      *
      * @return La date de naissance du locataire.
      */
-    public Date getDate_de_naissance() {
-        return date_de_naissance;
+    public Date getDateDeNaissance() {
+        return dateNeNaissance;
     }
 
     /**
      * Définit la date de naissance du locataire.
      *
-     * @param date_de_naissance La date de naissance du locataire à définir.
+     * @param dateDeNaissance La date de naissance du locataire à définir.
      */
-    public void setDate_de_naissance(Date date_de_naissance) {
-        this.date_de_naissance = date_de_naissance;
+    public void setDateDeNaissance(Date dateDeNaissance) {
+        this.dateNeNaissance = dateDeNaissance;
     }
 
     /**
@@ -117,24 +116,6 @@ public class Locataire {
     }
 
     /**
-     * Récupère l'identifiant du contrat de location du locataire.
-     *
-     * @return L'identifiant du contrat de location.
-     */
-    public int getId_contrat_location() {
-        return id_contrat_location;
-    }
-
-    /**
-     * Définit l'identifiant du contrat de location du locataire.
-     *
-     * @param id_contrat_location L'identifiant du contrat de location à définir.
-     */
-    public void setId_contrat_location(int id_contrat_location) {
-        this.id_contrat_location = id_contrat_location;
-    }
-
-    /**
      * Retourne une représentation textuelle de l'objet {@link Locataire}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
@@ -143,18 +124,17 @@ public class Locataire {
     @Override
     public String toString() {
         return "Locataire{" +
-               "id_locataire=" + id_locataire +
+               "id_locataire=" + idLocataire +
                ", nom='" + (nom != null ? nom : "N/A") + '\'' +
                ", prenom='" + (prenom != null ? prenom : "N/A") + '\'' +
-               ", date_de_naissance=" + (date_de_naissance != null ? date_de_naissance : "N/A") +
+               ", date_de_naissance=" + (dateNeNaissance != null ? dateNeNaissance : "N/A") +
                ", iban='" + (iban != null ? iban : "N/A") + '\'' +
-               ", id_contrat_location=" + id_contrat_location +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_de_naissance, iban, id_contrat_location, id_locataire, nom, prenom);
+		return Objects.hash(dateNeNaissance, iban, idLocataire, nom, prenom);
 	}
 
 	@Override
@@ -166,8 +146,7 @@ public class Locataire {
 		if (getClass() != obj.getClass())
 			return false;
 		Locataire other = (Locataire) obj;
-		return Objects.equals(date_de_naissance, other.date_de_naissance) && Objects.equals(iban, other.iban)
-				&& id_contrat_location == other.id_contrat_location && id_locataire == other.id_locataire
+		return Objects.equals(dateNeNaissance, other.dateNeNaissance) && Objects.equals(iban, other.iban)
 				&& Objects.equals(nom, other.nom) && Objects.equals(prenom, other.prenom);
 	}
 }

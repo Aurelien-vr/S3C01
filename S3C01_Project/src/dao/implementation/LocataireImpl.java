@@ -11,7 +11,7 @@ import java.util.List;
 
 import dao.LocataireDAO;
 import dao.entities.Locataire;
-import dbConnection.DatabaseConnection;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
@@ -20,6 +20,8 @@ import exception.ExceptionStorageHandler;
 public class LocataireImpl implements LocataireDAO {
 
     private Connection connection; // Connexion à la base de données
+	private String unknownString = "Unknown";
+    
 
     /**
      * Constructeur de la classe LocataireImpl.
@@ -60,7 +62,7 @@ public class LocataireImpl implements LocataireDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-                ExceptionStorageHandler.LogException(e, connection);
+                ExceptionStorageHandler.logException(e, connection);
             } finally {
                 DatabaseConnection.closeStatement(statement);
                 DatabaseConnection.closeResult(result);
@@ -97,7 +99,7 @@ public class LocataireImpl implements LocataireDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-                ExceptionStorageHandler.LogException(e, connection);
+                ExceptionStorageHandler.logException(e, connection);
             } finally {
                 DatabaseConnection.closeStatement(statement);
                 DatabaseConnection.closeResult(result);
@@ -122,19 +124,18 @@ public class LocataireImpl implements LocataireDAO {
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, entity.getNom());
             statement.setString(2, entity.getPrenom());
-            statement.setDate(3, entity.getDate_de_naissance());
+            statement.setDate(3, entity.getDateDeNaissance());
             statement.setString(4, entity.getIban());
 
             if (statement.executeUpdate() > 0) {
                 ResultSet result = statement.getGeneratedKeys();
                 if (result.next()) {
                     int id = result.getInt(1);
-                    entity.setId_locataire(id);
+                    entity.setIdLocataire(id);
                 }
-                System.out.println("Locataire inserted");
             }
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -154,13 +155,13 @@ public class LocataireImpl implements LocataireDAO {
             statement = connection.prepareStatement(query);
             statement.setString(1, entity.getNom());
             statement.setString(2, entity.getPrenom());
-            statement.setDate(3, entity.getDate_de_naissance());
+            statement.setDate(3, entity.getDateDeNaissance());
             statement.setString(4, entity.getIban());
-            statement.setLong(5, entity.getId_locataire());
+            statement.setLong(5, entity.getIdLocataire());
 
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -183,7 +184,7 @@ public class LocataireImpl implements LocataireDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -202,7 +203,7 @@ public class LocataireImpl implements LocataireDAO {
         Locataire locataire = new Locataire();
         locataire.setNom(result.getString("nom"));
         locataire.setPrenom(result.getString("prenom"));
-        locataire.setDate_de_naissance(result.getDate("date_de_naissance"));
+        locataire.setDateDeNaissance(result.getDate("date_de_naissance"));
         locataire.setIban(result.getString("iban"));
         return locataire; // Retourne l'entité Locataire construite
     }
@@ -217,11 +218,8 @@ public class LocataireImpl implements LocataireDAO {
             statement.setInt(1, idContratLocation);
             statement.setInt(2, idLocataire);
 
-            if (statement.executeUpdate() > 0) {
-                System.out.println("FK inserted");
-            }
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -242,7 +240,7 @@ public class LocataireImpl implements LocataireDAO {
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -266,7 +264,7 @@ public class LocataireImpl implements LocataireDAO {
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -275,7 +273,6 @@ public class LocataireImpl implements LocataireDAO {
 	}
 
 	private void insertCell(ResultSet result, List<List<String>> arrayRes) throws SQLException {
-		String unknownString = "Unknown";
 		ArrayList<String> cell = new ArrayList<>();
 		cell.add(result.getString(1) != null ? result.getString(1) : unknownString);
 		cell.add(result.getString(2) +result.getString(3) != null ? result.getString(2) + " " +result.getString(3) : unknownString);
@@ -300,13 +297,13 @@ public class LocataireImpl implements LocataireDAO {
 				while(result.next()) {
 					ArrayList<String> cell = new ArrayList<>();
 					String value = result.getString(1) +" "+ result.getString(2);
-					cell.add(value != null ? value : "Unknown");
-					cell.add(result.getString(3) != null ? result.getString(3): "Unknown");
+					cell.add(value != null ? value : unknownString);
+					cell.add(result.getString(3) != null ? result.getString(3): unknownString);
 					arrayRes.add(cell);
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -321,15 +318,11 @@ public class LocataireImpl implements LocataireDAO {
 	        // Prepare the callable statement
 	        String sql = "{CALL db1_sae.del_LocataireCascade(?)}";
 	        statement = connection.prepareCall(sql);
-	        
 	        statement.setInt(1, idLocataire);
-
 	        statement.execute();
-	        
-	        System.out.println("Sucessfully delete in cascade.");
 	
 	    }catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeStatement(statement);
 		}

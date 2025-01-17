@@ -4,20 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.Facture_eauDAO;
-import dao.entities.Facture_eau;
-import dbConnection.DatabaseConnection;
+import dao.FactureEauDAO;
+import dao.entities.FactureEau;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
- * Implémentation de l'interface {@link Facture_eauDAO} pour gérer les opérations sur les entités "Facture_eau".
+ * Implémentation de l'interface {@link FactureEauDAO} pour gérer les opérations sur les entités "Facture_eau".
  */
-public class Facture_eauImpl implements Facture_eauDAO {
+public class FactureEauImpl implements FactureEauDAO {
 
     private Connection connection; // Connexion à la base de données
 
@@ -26,7 +25,7 @@ public class Facture_eauImpl implements Facture_eauDAO {
      *
      * @param connection La connexion à la base de données.
      */
-    public Facture_eauImpl(Connection connection) {
+    public FactureEauImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -34,10 +33,10 @@ public class Facture_eauImpl implements Facture_eauDAO {
      * Recherche une entité Facture_eau par son identifiant.
      *
      * @param id L'identifiant de la facture d'eau à rechercher.
-     * @return L'entité {@link Facture_eau} si trouvée, sinon {@code null}.
+     * @return L'entité {@link FactureEau} si trouvée, sinon {@code null}.
      */
     @Override
-    public Facture_eau findOne(long id) {
+    public FactureEau findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Facture_eau WHERE id_facture_eau = ?";
@@ -60,7 +59,7 @@ public class Facture_eauImpl implements Facture_eauDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             }catch (Exception e) {
-                ExceptionStorageHandler.LogException(e, connection);
+                ExceptionStorageHandler.logException(e, connection);
             } finally {
                 DatabaseConnection.closeStatement(statement);
             }
@@ -75,8 +74,8 @@ public class Facture_eauImpl implements Facture_eauDAO {
      * @return Liste des facture eau
      */
     @Override
-    public List<Facture_eau> findAll() {
-    	List<Facture_eau> facts_eau = new ArrayList<>();
+    public List<FactureEau> findAll() {
+    	List<FactureEau> facturesEau = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Facture_eau";
@@ -86,8 +85,8 @@ public class Facture_eauImpl implements Facture_eauDAO {
             result = statement.executeQuery();
             
             while (result.next()) {
-                Facture_eau acte = createEntities(result);
-                facts_eau.add(acte);
+                FactureEau acte = createEntities(result);
+                facturesEau.add(acte);
             } 
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,13 +95,13 @@ public class Facture_eauImpl implements Facture_eauDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             }catch (Exception e) {
-                ExceptionStorageHandler.LogException(e, connection);
+                ExceptionStorageHandler.logException(e, connection);
             } finally {
                 DatabaseConnection.closeStatement(statement);
             }
         }
         
-        return facts_eau;
+        return facturesEau;
     }
 
     /**
@@ -111,25 +110,24 @@ public class Facture_eauImpl implements Facture_eauDAO {
      * @param entity L'entité Facture_eau à créer.
      */
     @Override
-    public void insert(Facture_eau entity) {
+    public void insert(FactureEau entity) {
         PreparedStatement statement = null;
         String query = "INSERT INTO db1_sae.Facture_eau(partie_fixe, consommation) VALUES (?,?)";
 
         try {
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setBigDecimal(1, entity.getPartie_fixe());
+            statement.setBigDecimal(1, entity.getPartieFixe());
             statement.setBigDecimal(2, entity.getConsommation());
 
             if (statement.executeUpdate() > 0) {
                 ResultSet result = statement.getGeneratedKeys();
                 if (result.next()) {
                     int id = result.getInt(1); 
-                    entity.setId_facture_eau(id); 
+                    entity.setIdFactureEau(id); 
                 }
-                System.out.println("Facture_eau inserted");
             }
         }catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -142,19 +140,19 @@ public class Facture_eauImpl implements Facture_eauDAO {
      * @param entity L'entité Facture_eau à mettre à jour.
      */
     @Override
-    public void update(Facture_eau entity) {
+    public void update(FactureEau entity) {
         PreparedStatement statement = null;
         String query = "UPDATE db1_sae.Facture_eau SET partie_fixe = ?, consommation = ? WHERE id_facture_eau = ?";
 
         try {
             statement = connection.prepareStatement(query);
-            statement.setBigDecimal(1, entity.getPartie_fixe());
+            statement.setBigDecimal(1, entity.getPartieFixe());
             statement.setBigDecimal(2, entity.getConsommation());
-            statement.setLong(3, entity.getId_facture_eau());
+            statement.setLong(3, entity.getIdFactureEau());
 
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -179,24 +177,25 @@ public class Facture_eauImpl implements Facture_eauDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
     }
 
     /**
-     * Crée une entité {@link Facture_eau} à partir des résultats d'une requête SQL.
+     * Crée une entité {@link FactureEau} à partir des résultats d'une requête SQL.
      *
      * @param result Le {@link ResultSet} contenant les données de l'entité Facture_eau.
      * @return L'entité Facture_eau construite.
      * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
      */
     @Override
-    public Facture_eau createEntities(ResultSet result) throws SQLException {
+    public FactureEau createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture_eau à partir des données du ResultSet
-        Facture_eau factureEau = new Facture_eau();
-        factureEau.setPartie_fixe(result.getBigDecimal("partie_fixe"));
+        FactureEau factureEau = new FactureEau();
+        factureEau.setIdFactureEau(result.getInt(1));
+        factureEau.setPartieFixe(result.getBigDecimal("partie_fixe"));
         factureEau.setConsommation(result.getBigDecimal("consommation"));
         return factureEau; // Retourne l'entité Facture_eau construite
     }
@@ -210,14 +209,8 @@ public class Facture_eauImpl implements Facture_eauDAO {
             statement.setString(1, referenceFacture); 
             statement.setInt(2, id); 
 
-            if (statement.executeUpdate() > 0) {
-                System.out.println("FK reference_facture inserted into Facture_eau");
-            }
-        } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("Integrity constraint violation: " + e.getMessage());
-            ExceptionStorageHandler.LogException(e, connection);
-        } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+        }catch (Exception e) {
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }

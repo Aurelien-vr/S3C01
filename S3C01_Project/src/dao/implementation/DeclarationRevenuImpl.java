@@ -8,15 +8,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.Declaration_revenuDAO;
-import dao.entities.Declaration_revenu;
-import dbConnection.DatabaseConnection;
+import dao.DeclarationRevenuDAO;
+import dao.entities.DeclarationRevenu;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
- * Implémentation de l'interface {@link Declaration_revenuDAO} pour gérer les opérations sur les entités "Declaration_revenu".
+ * Implémentation de l'interface {@link DeclarationRevenuDAO} pour gérer les opérations sur les entités "Declaration_revenu".
  */
-public class Declaration_revenuImpl implements Declaration_revenuDAO {
+public class DeclarationRevenuImpl implements DeclarationRevenuDAO {
     
     private Connection connection; // Connexion à la base de données
     
@@ -25,7 +25,7 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      * 
      * @param connection La connexion à la base de données.
      */
-    public Declaration_revenuImpl(Connection connection) {
+    public DeclarationRevenuImpl(Connection connection) {
         this.connection = connection;
     }
     
@@ -33,10 +33,10 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      * Recherche une déclaration de revenu par son identifiant.
      * 
      * @param id L'identifiant de la déclaration de revenu à rechercher.
-     * @return L'entité {@link Declaration_revenu} si trouvée, sinon {@code null}.
+     * @return L'entité {@link DeclarationRevenu} si trouvée, sinon {@code null}.
      */
     @Override
-    public Declaration_revenu findOne(long id) {
+    public DeclarationRevenu findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Declaration_revenu WHERE id_declaration_revenu = ?";
@@ -69,8 +69,8 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      * @return Liste des déclarations de revenus ou {@code null} si non implémentée.
      */
     @Override
-    public List<Declaration_revenu> findAll() {
-    	List<Declaration_revenu> declas = new ArrayList<>();
+    public List<DeclarationRevenu> findAll() {
+    	List<DeclarationRevenu> declas = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Declaration_revenu";
@@ -80,7 +80,7 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
             result = statement.executeQuery();
             
             while (result.next()) {
-                Declaration_revenu acte = createEntities(result);
+                DeclarationRevenu acte = createEntities(result);
                 declas.add(acte);
             } 
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-       			ExceptionStorageHandler.LogException(e, connection);
+       			ExceptionStorageHandler.logException(e, connection);
        		}finally {
        			DatabaseConnection.closeStatement(statement);
        		}
@@ -105,23 +105,18 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      * @param entity L'entité Declaration_revenu à créer.
      */
     @Override
-    public void insert(Declaration_revenu entity) {
+    public void insert(DeclarationRevenu entity) {
     	PreparedStatement statement = null;
     	String query = "INSERT INTO db1_sae.Declaration_revenu(date_acquisition, locataires, recette_immeuble)  VALUES (?,?,?)";
    		
    		try {
    			statement = connection.prepareStatement(query);
-    		statement.setDate(1, entity.getDate_acquisition());
+    		statement.setDate(1, entity.getDateAcquisition());
     		statement.setInt(2, entity.getLocataires());
-    		statement.setBigDecimal(3, entity.getRecette_immeuble());
-    		
-    			
-    			
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
+    		statement.setBigDecimal(3, entity.getRecetteImmeuble());
+
    		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
+   			ExceptionStorageHandler.logException(e, connection);
    		}finally {
    			DatabaseConnection.closeStatement(statement);
    		}
@@ -133,20 +128,20 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
      * @param entity L'entité Declaration_revenu à mettre à jour.
      */
     @Override
-    public void update(Declaration_revenu entity) {
+    public void update(DeclarationRevenu entity) {
         PreparedStatement statement = null;
         String query = "UPDATE db1_sae.Declaration_revenu SET date_acquisition = ?, locataires = ?, recette_immeuble = ? WHERE id_declaration_revenu = ?";
 
         try {
             statement = connection.prepareStatement(query);
-            statement.setDate(1, entity.getDate_acquisition());
+            statement.setDate(1, entity.getDateAcquisition());
             statement.setInt(2, entity.getLocataires());
-            statement.setBigDecimal(3, entity.getRecette_immeuble());
-            statement.setLong(4, entity.getId_declaration_revenu());
+            statement.setBigDecimal(3, entity.getRecetteImmeuble());
+            statement.setLong(4, entity.getIdDeclarationRevenu());
 
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -168,25 +163,25 @@ public class Declaration_revenuImpl implements Declaration_revenuDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
     }
 
     /**
-     * Crée une entité {@link Declaration_revenu} à partir des résultats d'une requête SQL.
+     * Crée une entité {@link DeclarationRevenu} à partir des résultats d'une requête SQL.
      * 
      * @param result Le {@link ResultSet} contenant les données de la déclaration de revenu.
      * @return L'entité Declaration_revenu construite.
      * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
      */
     @Override
-    public Declaration_revenu createEntities(ResultSet result) throws SQLException {
-        Declaration_revenu revenu = new Declaration_revenu();
-        revenu.setDate_acquisition(result.getDate("date_acquisition"));
+    public DeclarationRevenu createEntities(ResultSet result) throws SQLException {
+        DeclarationRevenu revenu = new DeclarationRevenu();
+        revenu.setDateAcquisition(result.getDate("date_acquisition"));
         revenu.setLocataires(result.getInt("locataires"));
-        revenu.setRecette_immeuble(result.getBigDecimal("recette_immeuble"));
+        revenu.setRecetteImmeuble(result.getBigDecimal("recette_immeuble"));
         return revenu;
     }
 }

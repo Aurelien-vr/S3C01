@@ -7,15 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.Regularisation_chargesDAO;
-import dao.entities.Regularisation_charges;
-import dbConnection.DatabaseConnection;
+import dao.RegularisationChargesDAO;
+import dao.entities.RegularisationCharges;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
- * Implémentation de l'interface {@link Regularisation_chargesDAO} pour gérer les opérations sur les entités "Regularisation_charges".
+ * Implémentation de l'interface {@link RegularisationChargesDAO} pour gérer les opérations sur les entités "Regularisation_charges".
  */
-public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
+public class RegularisationChargesImpl implements RegularisationChargesDAO {
 
     private Connection connection; // Connexion à la base de données
 
@@ -24,7 +24,7 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
      *
      * @param connection La connexion à la base de données.
      */
-    public Regularisation_chargesImpl(Connection connection) {
+    public RegularisationChargesImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -32,10 +32,10 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
      * Recherche une régularisation des charges par l'identifiant du locataire.
      *
      * @param id L'identifiant du locataire.
-     * @return L'entité {@link Regularisation_charges} si trouvée, sinon {@code null}.
+     * @return L'entité {@link RegularisationCharges} si trouvée, sinon {@code null}.
      */
     @Override
-    public Regularisation_charges findOne(long id) {
+    public RegularisationCharges findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Regularisation_charges WHERE id_charge_locataire = ?";
@@ -57,7 +57,7 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
             try {
                 if (result != null) result.close();
             }catch (Exception e) {
-    			ExceptionStorageHandler.LogException(e, connection);
+    			ExceptionStorageHandler.logException(e, connection);
     		}finally {
     			DatabaseConnection.closeResult(result);
     			DatabaseConnection.closeStatement(statement);
@@ -73,8 +73,8 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
      * @return Liste des régularisations des charges ou {@code null} si non implémentée.
      */
     @Override
-    public List<Regularisation_charges> findAll() {
-    	List<Regularisation_charges> regus = new ArrayList<>();
+    public List<RegularisationCharges> findAll() {
+    	List<RegularisationCharges> regus = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Regularisation_charges";
@@ -84,7 +84,7 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
             result = statement.executeQuery();
             
             while (result.next()) {
-                Regularisation_charges acte = createEntities(result);
+                RegularisationCharges acte = createEntities(result);
                 regus.add(acte);
             } 
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
             try {
                 if (result != null) result.close();
         }catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -109,26 +109,23 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
      * @param entity L'entité Regularisation_charges à créer.
      */
     @Override
-    public void insert(Regularisation_charges entity) {
+    public void insert(RegularisationCharges entity) {
     	PreparedStatement statement = null;
     	String query = "INSERT INTO db1_sae.Regularisation_charges(date_effet, charge_eau, charge_ordure_menagere, charge_eclairage, provision_pour_charge, indice, entretien) VALUES (?,?,?,?,?,?,?)";
    		
    		try {
    			statement = connection.prepareStatement(query);
-   			statement.setDate(1,entity.getDate_effet());
-    		statement.setBigDecimal(2, entity.getCharge_eau());
-    		statement.setBigDecimal(3, entity.getCharge_ordure_menagere());
-    		statement.setBigDecimal(4, entity.getCharge_eclairage());
-    		statement.setBigDecimal(5, entity.getProvision_pour_charge());
+   			statement.setDate(1,entity.getDateEffet());
+    		statement.setBigDecimal(2, entity.getChargeEau());
+    		statement.setBigDecimal(3, entity.getChargeOrdureMenagere());
+    		statement.setBigDecimal(4, entity.getChargeEclairage());
+    		statement.setBigDecimal(5, entity.getProvisionPourCharge());
     		statement.setBigDecimal(6, entity.getIndice());
     		statement.setString(7, entity.getEntretien());
     			
-    			
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
+
    		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
+   			ExceptionStorageHandler.logException(e, connection);
    		}finally {
    			DatabaseConnection.closeStatement(statement);
    		}
@@ -140,24 +137,24 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
      * @param entity L'entité Regularisation_charges à mettre à jour.
      */
     @Override
-    public void update(Regularisation_charges entity) {
+    public void update(RegularisationCharges entity) {
         PreparedStatement statement = null;
         String query = "UPDATE db1_sae.Regularisation_charges SET date_effet = ?, charge_eau = ?, charge_ordure_menagere = ?, charge_eclairage = ?, provision_pour_charge = ?, indice = ?, entretien = ? WHERE id_charge_locataire = ?";
 
         try {
             statement = connection.prepareStatement(query);
-            statement.setDate(1, entity.getDate_effet());
-            statement.setBigDecimal(2, entity.getCharge_eau());
-            statement.setBigDecimal(3, entity.getCharge_ordure_menagere());
-            statement.setBigDecimal(4, entity.getCharge_eclairage());
-            statement.setBigDecimal(5, entity.getProvision_pour_charge());
+            statement.setDate(1, entity.getDateEffet());
+            statement.setBigDecimal(2, entity.getChargeEau());
+            statement.setBigDecimal(3, entity.getChargeOrdureMenagere());
+            statement.setBigDecimal(4, entity.getChargeEclairage());
+            statement.setBigDecimal(5, entity.getProvisionPourCharge());
             statement.setBigDecimal(6, entity.getIndice());
             statement.setString(7, entity.getEntretien());
-            statement.setLong(8, entity.getId_charge_locataire());
+            statement.setLong(8, entity.getIdChargeLocataire());
 
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -179,28 +176,29 @@ public class Regularisation_chargesImpl implements Regularisation_chargesDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
     }
 
     /**
-     * Crée une entité {@link Regularisation_charges} à partir des résultats d'une requête SQL.
+     * Crée une entité {@link RegularisationCharges} à partir des résultats d'une requête SQL.
      *
      * @param result Le {@link ResultSet} contenant les données de la régularisation des charges.
      * @return L'entité Regularisation_charges construite.
      * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
      */
     @Override
-    public Regularisation_charges createEntities(ResultSet result) throws SQLException {
+    public RegularisationCharges createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Regularisation_charges à partir des données du ResultSet
-        Regularisation_charges regularisation = new Regularisation_charges();
-        regularisation.setDate_effet(result.getDate("date_effet"));
-        regularisation.setCharge_eau(result.getBigDecimal("charge_eau"));
-        regularisation.setCharge_ordure_menagere(result.getBigDecimal("charge_ordure_menagere"));
-        regularisation.setCharge_eclairage(result.getBigDecimal("charge_eclairage"));
-        regularisation.setProvision_pour_charge(result.getBigDecimal("provision_pour_charge"));
+        RegularisationCharges regularisation = new RegularisationCharges();
+        regularisation.setIdChargeLocataire(result.getInt("id_charge_locataire"));
+        regularisation.setDateEffet(result.getDate("date_effet"));
+        regularisation.setChargeEau(result.getBigDecimal("charge_eau"));
+        regularisation.setChargeOrdureMenagere(result.getBigDecimal("charge_ordure_menagere"));
+        regularisation.setChargeEclairage(result.getBigDecimal("charge_eclairage"));
+        regularisation.setProvisionPourCharge(result.getBigDecimal("provision_pour_charge"));
         regularisation.setIndice(result.getBigDecimal("indice"));
         regularisation.setEntretien(result.getString("entretien"));
         return regularisation; // Retourne l'entité Regularisation_charges construite

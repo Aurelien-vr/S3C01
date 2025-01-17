@@ -7,6 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,20 +22,23 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.Serializable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class TemplateMenuView extends TemplateHeaderView {
+public class TemplateMenuView extends TemplateHeaderView implements Serializable{
 
-    private static final long serialVersionUID = 1L;
+    private static final String FONT = "Arial";
+
+	private static final long serialVersionUID = 1L;
 
     // Boutons accessibles depuis le contrôleur
     private JButton btnBienLouable;
     private JButton btnLocataire;
     private JButton btnContratLocation;
     private JMenu menuDocument;
-    private JMenuBar menuBar;
+    private JMenuBar menuBarTemplate;
     
     // Menu items
     private JMenuItem itemAssurance;
@@ -108,7 +112,7 @@ public class TemplateMenuView extends TemplateHeaderView {
         menuDocument.add(itemCharge);
 
         // Create a menu bar and add the menu to it
-        menuBar = new JMenuBar() {
+        menuBarTemplate = new JMenuBar() {
             @Override
             public void updateUI() {
                 super.updateUI();
@@ -121,7 +125,7 @@ public class TemplateMenuView extends TemplateHeaderView {
                 setOpaque(false);
             }
         };
-        menuBar.add(menuDocument);
+        menuBarTemplate.add(menuDocument);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
@@ -141,7 +145,7 @@ public class TemplateMenuView extends TemplateHeaderView {
         gbc.gridx++;
         buttonPanel.add(createSeparator(), gbc);
         gbc.gridx++;
-        buttonPanel.add(menuBar, gbc);
+        buttonPanel.add(menuBarTemplate, gbc);
         gbc.gridx++;
         
         gbc.weightx = 1.0;
@@ -154,7 +158,7 @@ public class TemplateMenuView extends TemplateHeaderView {
     // Méthode pour styliser les boutons
     private void stylizeButton(JButton button) {
         button.setPreferredSize(new Dimension(ScallingDimension.scaleValue(170), ScallingDimension.scaleValue(75))); 
-        button.setFont(new Font("Arial", Font.PLAIN, 18)); // Taille du texte du bouton
+        button.setFont(new Font(FONT, Font.PLAIN, 18)); // Taille du texte du bouton
         button.setOpaque(false);
         button.setContentAreaFilled(false); // Remove background fill
         button.setBorder(BorderFactory.createEmptyBorder()); // Remove border
@@ -163,7 +167,7 @@ public class TemplateMenuView extends TemplateHeaderView {
     
     private void stylizeMenuItems(JMenuItem menuItem) {
         menuItem.setPreferredSize(new Dimension(ScallingDimension.scaleValue(170), ScallingDimension.scaleValue(75))); 
-        menuItem.setFont(new Font("Arial", Font.PLAIN, 18)); // Taille du texte du bouton
+        menuItem.setFont(new Font(FONT, Font.PLAIN, 18)); // Taille du texte du bouton
         menuItem.setOpaque(false);
         menuItem.setContentAreaFilled(false); // Remove background fill
         menuItem.setBorder(BorderFactory.createEmptyBorder()); // Remove border
@@ -173,7 +177,7 @@ public class TemplateMenuView extends TemplateHeaderView {
     // Méthode pour styliser les menus
     private void stylizeMenu(JMenu menu) {
         menu.setPreferredSize(new Dimension(ScallingDimension.scaleValue(170), ScallingDimension.scaleValue(75))); 
-        menu.setFont(new Font("Arial", Font.PLAIN, 18)); // Taille du texte du bouton
+        menu.setFont(new Font(FONT, Font.PLAIN, 18)); // Taille du texte du bouton
         menu.setContentAreaFilled(false); // Remove background fill
         menu.setBackground(new Color(135, 206, 250));
         menu.setBorder(BorderFactory.createEmptyBorder()); // Remove border
@@ -181,7 +185,7 @@ public class TemplateMenuView extends TemplateHeaderView {
     }
     
     private JSeparator createSeparator() {
-        JSeparator separator = new JSeparator(JSeparator.VERTICAL);
+        JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
         separator.setPreferredSize(new Dimension(1, ScallingDimension.scaleValue(75)));
         separator.setBackground(Color.BLACK);
         separator.setOpaque(true);
@@ -224,7 +228,7 @@ public class TemplateMenuView extends TemplateHeaderView {
             headerPanel.add(titleLab, BorderLayout.CENTER);
         }
         titleLab.setText(titleString);
-        titleLab.setFont(new Font("Arial", Font.BOLD, ScallingDimension.scaleValue(28)));
+        titleLab.setFont(new Font(FONT, Font.BOLD, ScallingDimension.scaleValue(28)));
         titleLab.setBorder(BorderFactory.createEmptyBorder(0, ScallingDimension.scaleValue(20), 0, 0));
     }
 }

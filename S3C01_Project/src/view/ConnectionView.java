@@ -6,19 +6,20 @@ import java.awt.*;
 @SuppressWarnings("serial")
 public class ConnectionView extends TemplateHeaderView {
 	
-	public JButton connectButton;
-	public JTextField usernameField;
-	public JPasswordField passwordField;
+	private static final String FONT = "Arial";
+	private JButton connectButton;
+	private JTextField usernameField;
+	private JPasswordField passwordField;
 	
     public ConnectionView() {
     	super();
 
         // Panneau central pour le formulaire de connexion
         JPanel centerPanel = new JPanel();
-        GridBagLayout gbl_centerPanel = new GridBagLayout();
-        gbl_centerPanel.rowHeights = new int[] {0, 3};
-        gbl_centerPanel.columnWidths = new int[] {0, 3};
-        centerPanel.setLayout(gbl_centerPanel); // Utilisation de GridBagLayout pour centrer le formulaire
+        GridBagLayout gblCenterPanel = new GridBagLayout();
+        gblCenterPanel.rowHeights = new int[] {0, 3};
+        gblCenterPanel.columnWidths = new int[] {0, 3};
+        centerPanel.setLayout(gblCenterPanel); // Utilisation de GridBagLayout pour centrer le formulaire
         centerPanel.setBackground(Color.WHITE);
 
         // Contraintes communes
@@ -40,11 +41,11 @@ public class ConnectionView extends TemplateHeaderView {
         buttonUi(insets, loginPanel);
                                                                         
         // Ajout du panneau de connexion au centre
-        GridBagConstraints gbc_loginPanel = new GridBagConstraints();
-        gbc_loginPanel.insets = new Insets(0, 0, 5, 5);
-        gbc_loginPanel.gridx = 0;
-        gbc_loginPanel.gridy = 0;
-        centerPanel.add(loginPanel, gbc_loginPanel);
+        GridBagConstraints gbcLoginPanel = new GridBagConstraints();
+        gbcLoginPanel.insets = new Insets(0, 0, 5, 5);
+        gbcLoginPanel.gridx = 0;
+        gbcLoginPanel.gridy = 0;
+        centerPanel.add(loginPanel, gbcLoginPanel);
 
     }
 
@@ -57,7 +58,7 @@ public class ConnectionView extends TemplateHeaderView {
         gbcTitle.gridwidth = 2; // S'étend sur deux colonnes
         gbcTitle.fill = GridBagConstraints.HORIZONTAL; // Étend horizontalement
         JLabel titleLabel = new JLabel("Connexion");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setFont(new Font(FONT, Font.BOLD, 16));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         loginPanel.add(titleLabel, gbcTitle);
 	}
@@ -92,7 +93,7 @@ public class ConnectionView extends TemplateHeaderView {
         gbcUsernameLabel.gridy = 1;
         gbcUsernameLabel.anchor = GridBagConstraints.WEST; // Aligné à gauche
         JLabel usernameLabel = new JLabel("Identifiant :");
-        usernameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        usernameLabel.setFont(new Font(FONT, Font.PLAIN, 14));
         loginPanel.add(usernameLabel, gbcUsernameLabel);
         
         // Champ Identifiant
@@ -114,7 +115,7 @@ public class ConnectionView extends TemplateHeaderView {
         gbcPasswordLabel.gridy = 2;
         gbcPasswordLabel.anchor = GridBagConstraints.WEST; // Aligné à gauche
         JLabel passwordLabel = new JLabel("Mot de passe :");
-        passwordLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        passwordLabel.setFont(new Font(FONT, Font.PLAIN, 14));
         loginPanel.add(passwordLabel, gbcPasswordLabel);
         
         // Champ Mot de passe

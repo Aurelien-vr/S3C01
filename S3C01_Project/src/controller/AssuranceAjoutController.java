@@ -17,7 +17,7 @@ import view.AssuranceAjoutView;
 
 public class AssuranceAjoutController extends TemplateAjoutController {
 
-	private AssuranceAjoutView view = new AssuranceAjoutView();
+	private AssuranceAjoutView viewAssurance = new AssuranceAjoutView();
 	private BienDAO modelBien = DAOFactory.createBienDAO();
 	private AssuranceDAO modelAssurance = DAOFactory.createAssuranceDAO();
 	private boolean errorRaise;
@@ -26,25 +26,25 @@ public class AssuranceAjoutController extends TemplateAjoutController {
 
 	public AssuranceAjoutController() {
 		super();
-		view.setTitleHeader("Assurance");
+		viewAssurance.setTitleHeader("Assurance");
 		populateIdBienComboBox();
 		pressedValider();
 		pressedAnnuler();
 		logoLabel();
 		addEventHandlers();
-		view.setVisible(true);
+		viewAssurance.setVisible(true);
 	}
 
 	private void populateIdBienComboBox() {
 		List<Bien> biens = modelBien.findAll();
 		for (Bien bien : biens) {
-			view.getCbIdBien().addItem(bien.getAdresse());
-			idBienMap.put(bien.getAdresse(), bien.getId_bien());
+			viewAssurance.getCbIdBien().addItem(bien.getAdresse());
+			idBienMap.put(bien.getAdresse(), bien.getIdBien());
 		}
 	}
 
 	private void pressedValider() {
-		view.getValiderButton().addActionListener(e -> {
+		viewAssurance.getValiderButton().addActionListener(e -> {
 			errorRaise = false;
 			checkPrime();
 			checkProtectionJuridique();
@@ -53,15 +53,15 @@ public class AssuranceAjoutController extends TemplateAjoutController {
 			if (!errorRaise) {
 				createAssurance();
 				new AssuranceController();
-				view.dispose();
+				viewAssurance.dispose();
 			}
 		});
 	}
 
 	private void pressedAnnuler() {
-		view.getAnnulerButton().addActionListener(e -> {
+		viewAssurance.getAnnulerButton().addActionListener(e -> {
 			new AssuranceController();
-			view.dispose();
+			viewAssurance.dispose();
 		});
 	}
 
@@ -69,7 +69,7 @@ public class AssuranceAjoutController extends TemplateAjoutController {
 		if (errorRaise) {
 			return;
 		}
-		String input = view.getFieldPrime().getText();
+		String input = viewAssurance.getFieldPrime().getText();
 		try {
 			double prime = Double.parseDouble(input.replace(',', '.'));
 			if (prime < 0) {
@@ -86,7 +86,7 @@ public class AssuranceAjoutController extends TemplateAjoutController {
 		if (errorRaise) {
 			return;
 		}
-		String input = view.getFieldProtectionJuridique().getText();
+		String input = viewAssurance.getFieldProtectionJuridique().getText();
 		if (input.isEmpty()) {
 			ErrorMessage.errorDialog("La protection juridique ne peut pas être vide");
 			errorRaise = true;
@@ -97,7 +97,7 @@ public class AssuranceAjoutController extends TemplateAjoutController {
 		if (errorRaise) {
 			return;
 		}
-		String selectedIdBien = (String) view.getCbIdBien().getSelectedItem();
+		String selectedIdBien = (String) viewAssurance.getCbIdBien().getSelectedItem();
 		if (selectedIdBien == null || selectedIdBien.isEmpty()) {
 			ErrorMessage.errorDialog("L'ID Bien ne peut pas être vide");
 			errorRaise = true;
@@ -108,7 +108,7 @@ public class AssuranceAjoutController extends TemplateAjoutController {
 		if (errorRaise) {
 			return;
 		}
-		String input = view.getFieldDate().getText();
+		String input = viewAssurance.getFieldDate().getText();
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			dateFormat.setLenient(false);
@@ -122,59 +122,60 @@ public class AssuranceAjoutController extends TemplateAjoutController {
 
 	private void createAssurance() {
 		try {
-			BigDecimal prime = new BigDecimal(view.getFieldPrime().getText().replace(',', '.'));
-			BigDecimal protectionJuridique = new BigDecimal(view.getFieldProtectionJuridique().getText());
-			int selectedIdBien = idBienMap.get(view.getCbIdBien().getSelectedItem());
+			BigDecimal prime = new BigDecimal(viewAssurance.getFieldPrime().getText().replace(',', '.'));
+			BigDecimal protectionJuridique = new BigDecimal(viewAssurance.getFieldProtectionJuridique().getText());
+			int selectedIdBien = idBienMap.get(viewAssurance.getCbIdBien().getSelectedItem());
 			Date date = sqlDate;
 
 			Assurance assurance = new Assurance(date, prime, protectionJuridique);
 			modelAssurance.insert(assurance);
-			modelAssurance.insertFK(selectedIdBien, assurance.getId_bien());
+			modelAssurance.insertFK(selectedIdBien, assurance.getIdBien());
 		} catch (NumberFormatException e) {
 			ErrorMessage.errorDialog("Erreur lors de l'insertion des données dans la base de données");
 		}
 	}
 
 	private void logoLabel() {
-		view.getLogoLabel().addActionListener(e -> {
+		viewAssurance.getLogoLabel().addActionListener(e -> {
 			new HomeController();
-			view.dispose();
+			viewAssurance.dispose();
 		});
 	}
 
 	private void addEventHandlers() {
-		view.getBtnBienLouable().addActionListener(e -> {
+		viewAssurance.getBtnBienLouable().addActionListener(e -> {
 			new BienController();
-			view.dispose();
+			viewAssurance.dispose();
 		});
 
-		view.getBtnLocataire().addActionListener(e -> {
+		viewAssurance.getBtnLocataire().addActionListener(e -> {
 			new LocataireController();
+			viewAssurance.dispose();
 		});
 
-		view.getBtnContratLocation().addActionListener(e -> {
+		viewAssurance.getBtnContratLocation().addActionListener(e -> {
 			new ContratLocationController();
-			view.dispose();
+			viewAssurance.dispose();
 		});
 
-		view.getItemAssurance().addActionListener(e -> {
+		viewAssurance.getItemAssurance().addActionListener(e -> {
 			new AssuranceController();
-			view.dispose();
+			viewAssurance.dispose();
 		});
 
-		view.getItemFacture().addActionListener(e -> {
+		viewAssurance.getItemFacture().addActionListener(e -> {
 			new FactureController();
-			view.dispose();
+			viewAssurance.dispose();
 		});
 
-		view.getItemTravaux().addActionListener(e -> {
+		viewAssurance.getItemTravaux().addActionListener(e -> {
 			new TravauxController();
-			view.dispose();
+			viewAssurance.dispose();
 		});
 		
-        view.getItemCharge().addActionListener(e -> {
+        viewAssurance.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewAssurance.dispose();
         });
 	}
 }

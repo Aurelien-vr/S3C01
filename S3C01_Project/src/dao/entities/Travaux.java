@@ -10,30 +10,30 @@ import java.util.Objects;
  */
 public class Travaux {
 
-    private int numero_facture;  // Numéro de la facture liée aux travaux
-    private Date date_travaux;  // Date à laquelle les travaux ont été réalisés
+    private int numeroFacture;  // Numéro de la facture liée aux travaux
+    private Date dateTravaux;  // Date à laquelle les travaux ont été réalisés
     private String nature;  // Nature des travaux réalisés
     private String iban;  // IBAN du destinataire du paiement
     private BigDecimal reduction;  // Réduction appliquée sur le montant des travaux
     private BigDecimal montant;  // Montant total des travaux
-    private BigDecimal montant_non_deductible;  // Montant des travaux non déductible
-    private BigDecimal reduction_special;  // Réduction spéciale applicable
-    private String reference_facture;  // Référence de la facture associée aux travaux
+    private BigDecimal montantNonDeductible;  // Montant des travaux non déductible
+    private BigDecimal reductionSpeciale;  // Réduction spéciale applicable
+    private String referenceFacture;  // Référence de la facture associée aux travaux
 
     
     
     public Travaux() {}
 
-	public Travaux(Date date_travaux, String nature, String iban, BigDecimal reduction, BigDecimal montant,
-			BigDecimal montant_non_deductible, BigDecimal reduction_special) {
+	public Travaux(Date dateTravaux, String nature, String iban, BigDecimal reduction, BigDecimal montant,
+			BigDecimal montantNonDeductible, BigDecimal reductionSpecial) {
 		super();
-		this.date_travaux = date_travaux;
+		this.dateTravaux = dateTravaux;
 		this.nature = nature;
 		this.iban = iban;
 		this.reduction = reduction;
 		this.montant = montant;
-		this.montant_non_deductible = montant_non_deductible;
-		this.reduction_special = reduction_special;
+		this.montantNonDeductible = montantNonDeductible;
+		this.reductionSpeciale = reductionSpecial;
 	}
 
 	/**
@@ -41,8 +41,8 @@ public class Travaux {
      *
      * @return Le numéro de la facture.
      */
-    public int getNumero_facture() {
-        return numero_facture;
+    public int getNumeroFacture() {
+        return numeroFacture;
     }
 
     /**
@@ -50,8 +50,8 @@ public class Travaux {
      *
      * @param string Le numéro de la facture à définir.
      */
-    public void setNumero_facture(int numero_facture) {
-        this.numero_facture = numero_facture;
+    public void setNumeroFacture(int numeroFacture) {
+        this.numeroFacture = numeroFacture;
     }
 
     /**
@@ -59,17 +59,17 @@ public class Travaux {
      *
      * @return La date des travaux.
      */
-    public Date getDate_travaux() {
-        return date_travaux;
+    public Date getDateTravaux() {
+        return dateTravaux;
     }
 
     /**
      * Définit la date des travaux effectués.
      *
-     * @param date_travaux La date des travaux à définir.
+     * @param dateTravaux La date des travaux à définir.
      */
-    public void setDate_travaux(Date date_travaux) {
-        this.date_travaux = date_travaux;
+    public void setDateTravaux(Date dateTravaux) {
+        this.dateTravaux = dateTravaux;
     }
 
     /**
@@ -149,17 +149,17 @@ public class Travaux {
      *
      * @return Le montant des travaux non déductibles.
      */
-    public BigDecimal getMontant_non_deductible() {
-        return montant_non_deductible;
+    public BigDecimal getMontantNonDeductible() {
+        return montantNonDeductible;
     }
 
     /**
      * Définit le montant des travaux non déductibles.
      *
-     * @param montant_non_deductible Le montant des travaux non déductibles à définir.
+     * @param montantNonDeductible Le montant des travaux non déductibles à définir.
      */
-    public void setMontant_non_deductible(BigDecimal montant_non_deductible) {
-        this.montant_non_deductible = montant_non_deductible;
+    public void setMontantNonDeductible(BigDecimal montantNonDeductible) {
+        this.montantNonDeductible = montantNonDeductible;
     }
 
     /**
@@ -167,17 +167,17 @@ public class Travaux {
      *
      * @return Le montant de la réduction spéciale.
      */
-    public BigDecimal getReduction_special() {
-        return reduction_special;
+    public BigDecimal getReductionSpeciale() {
+        return reductionSpeciale;
     }
 
     /**
      * Définit le montant de la réduction spéciale appliquée.
      *
-     * @param reduction_special Le montant de la réduction spéciale à définir.
+     * @param reductionSpeciale Le montant de la réduction spéciale à définir.
      */
-    public void setReduction_special(BigDecimal reduction_special) {
-        this.reduction_special = reduction_special;
+    public void setReductionSpeciale(BigDecimal reductionSpeciale) {
+        this.reductionSpeciale = reductionSpeciale;
     }
 
     /**
@@ -185,17 +185,17 @@ public class Travaux {
      *
      * @return La référence de la facture.
      */
-    public String getReference_facture() {
-        return reference_facture;
+    public String getReferenceFacture() {
+        return referenceFacture;
     }
 
     /**
      * Définit la référence de la facture associée aux travaux.
      *
-     * @param reference_facture La référence de la facture à définir.
+     * @param referenceFacture La référence de la facture à définir.
      */
-    public void setReference_facture(String reference_facture) {
-        this.reference_facture = reference_facture;
+    public void setReferenceFacture(String referenceFacture) {
+        this.referenceFacture = referenceFacture;
     }
 
     /**
@@ -207,22 +207,22 @@ public class Travaux {
     @Override
     public String toString() {
         return "Travaux{" +
-               "numero_facture=" + numero_facture +
-               ", date_travaux=" + (date_travaux != null ? date_travaux : "N/A") +
+               "numero_facture=" + numeroFacture +
+               ", date_travaux=" + (dateTravaux != null ? dateTravaux : "N/A") +
                ", nature='" + (nature != null ? nature : "N/A") + '\'' +
                ", iban='" + (iban != null ? iban : "N/A") + '\'' +
                ", reduction=" + (reduction != null ? reduction : "N/A") +
                ", montant=" + (montant != null ? montant : "N/A") +
-               ", montant_non_deductible=" + (montant_non_deductible != null ? montant_non_deductible : "N/A") +
-               ", reduction_special=" + (reduction_special != null ? reduction_special : "N/A") +
-               ", reference_facture='" + (reference_facture != null ? reference_facture : "N/A") + '\'' +
+               ", montant_non_deductible=" + (montantNonDeductible != null ? montantNonDeductible : "N/A") +
+               ", reduction_special=" + (reductionSpeciale != null ? reductionSpeciale : "N/A") +
+               ", reference_facture='" + (referenceFacture != null ? referenceFacture : "N/A") + '\'' +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_travaux, iban, montant, montant_non_deductible, nature, numero_facture, reduction,
-				reduction_special, reference_facture);
+		return Objects.hash(dateTravaux, iban, montant, montantNonDeductible, nature, numeroFacture, reduction,
+				reductionSpeciale, referenceFacture);
 	}
 
 	@Override
@@ -234,12 +234,12 @@ public class Travaux {
 		if (getClass() != obj.getClass())
 			return false;
 		Travaux other = (Travaux) obj;
-		return Objects.equals(date_travaux, other.date_travaux) && Objects.equals(iban, other.iban)
+		return Objects.equals(dateTravaux, other.dateTravaux) && Objects.equals(iban, other.iban)
 				&& Objects.equals(montant, other.montant)
-				&& Objects.equals(montant_non_deductible, other.montant_non_deductible)
-				&& Objects.equals(nature, other.nature) && numero_facture == other.numero_facture
+				&& Objects.equals(montantNonDeductible, other.montantNonDeductible)
+				&& Objects.equals(nature, other.nature) 
 				&& Objects.equals(reduction, other.reduction)
-				&& Objects.equals(reduction_special, other.reduction_special)
-				&& Objects.equals(reference_facture, other.reference_facture);
+				&& Objects.equals(reductionSpeciale, other.reductionSpeciale)
+				&& Objects.equals(referenceFacture, other.referenceFacture);
 	}
 }

@@ -11,43 +11,43 @@ import java.util.Objects;
  */
 public class Bien {
 	
-    private int id_bien;  // Identifiant unique du bien
+    private int idBien;  // Identifiant unique du bien
     private int etage;  // L'étage du bien immobilier
     private String adresse;  // L'adresse du bien immobilier
     private String ville;  // La ville où se situe le bien
-    private String code_postal; //Code postal du bien
+    private String codePostal; //Code postal du bien
     private BigDecimal superficie;  // Superficie du bien immobilier
-    private int nombre_de_piece;  // Nombre de pièces dans le bien
+    private int nombreDePiece;  // Nombre de pièces dans le bien
     private boolean meuble;  // Indique si le bien est meublé
-    private String accessoire_prive;  // Accessoires privés du bien
-    private String accessoire_commun;  // Accessoires communs du bien
-    private boolean est_garage;  // Indique si le bien possède un garage
-    private int id_contrat_location;  // Identifiant du contrat de location associé
+    private String accessoirePrive;  // Accessoires privés du bien
+    private String accessoireCommun;  // Accessoires communs du bien
+    private boolean estGarage;  // Indique si le bien possède un garage
 
     /**
      * Constructeur de la classe Bien.
      * Initialise un bien avec son identifiant unique.
      *
-     * @param id_bien L'identifiant du bien.
+     * @param idBien L'identifiant du bien.
      */
     
     public Bien() {}
     
     
     
-    public Bien(int etage, String adresse, String ville, String code_postal, BigDecimal superficie, int nombre_de_piece, boolean meuble,
-			String accessoire_prive, String accessoire_commun, boolean est_garage) {
+    public Bien(int etage, String adresse, String ville, String codePostal, BigDecimal superficie, int nombreDePiece, boolean meuble,
+			String accessoirePrive, String accessoireCommun, boolean estGarage) {
+    	
 		super();
 		this.etage = etage;
 		this.adresse = adresse;
 		this.ville = ville;
-		this.code_postal = code_postal;
+		this.codePostal = codePostal;
 		this.superficie = superficie;
-		this.nombre_de_piece = nombre_de_piece;
+		this.nombreDePiece = nombreDePiece;
 		this.meuble = meuble;
-		this.accessoire_prive = accessoire_prive;
-		this.accessoire_commun = accessoire_commun;
-		this.est_garage = est_garage;
+		this.accessoirePrive = accessoirePrive;
+		this.accessoireCommun = accessoireCommun;
+		this.estGarage = estGarage;
 	}
 
 
@@ -57,17 +57,17 @@ public class Bien {
      *
      * @return L'identifiant du bien.
      */
-    public int getId_bien() {
-        return id_bien;
+    public int getIdBien() {
+        return idBien;
     }
 
     /**
      * Définit l'identifiant du bien.
      *
-     * @param id_bien L'identifiant du bien à définir.
+     * @param idBien L'identifiant du bien à définir.
      */
-    public void setId_bien(int id_bien) {
-        this.id_bien = id_bien;
+    public void setIdBien(int idBien) {
+        this.idBien = idBien;
     }
 
     /**
@@ -147,17 +147,17 @@ public class Bien {
      *
      * @return Le nombre de pièces.
      */
-    public int getNombre_de_piece() {
-        return nombre_de_piece;
+    public int getNombreDePiece() {
+        return nombreDePiece;
     }
 
     /**
      * Définit le nombre de pièces du bien.
      *
-     * @param nombre_de_piece Le nombre de pièces à définir.
+     * @param nombreDePiece Le nombre de pièces à définir.
      */
-    public void setNombre_de_piece(int nombre_de_piece) {
-        this.nombre_de_piece = nombre_de_piece;
+    public void setNombreDePiece(int nombreDePiece) {
+        this.nombreDePiece = nombreDePiece;
     }
 
     /**
@@ -183,17 +183,17 @@ public class Bien {
      *
      * @return Les accessoires privés du bien.
      */
-    public String getAccessoire_prive() {
-        return accessoire_prive;
+    public String getAccessoirePrive() {
+        return accessoirePrive;
     }
 
     /**
      * Définit les accessoires privés du bien.
      *
-     * @param accessoire_prive Les accessoires privés à définir.
+     * @param accessoirePrive Les accessoires privés à définir.
      */
-    public void setAccessoire_prive(String accessoire_prive) {
-        this.accessoire_prive = accessoire_prive;
+    public void setAccessoirePrive(String accessoirePrive) {
+        this.accessoirePrive = accessoirePrive;
     }
 
     /**
@@ -201,17 +201,17 @@ public class Bien {
      *
      * @return Les accessoires communs du bien.
      */
-    public String getAccessoire_commun() {
-        return accessoire_commun;
+    public String getAccessoireCommun() {
+        return accessoireCommun;
     }
 
     /**
      * Définit les accessoires communs du bien.
      *
-     * @param accessoire_commun Les accessoires communs à définir.
+     * @param accessoireCommun Les accessoires communs à définir.
      */
-    public void setAccessoire_commun(String accessoire_commun) {
-        this.accessoire_commun = accessoire_commun;
+    public void setAccessoireCommun(String accessoireCommun) {
+        this.accessoireCommun = accessoireCommun;
     }
 
     /**
@@ -219,35 +219,17 @@ public class Bien {
      *
      * @return true si le bien possède un garage, false sinon.
      */
-    public boolean isEst_garage() {
-        return est_garage;
+    public boolean isEstGarage() {
+        return estGarage;
     }
 
     /**
      * Définit si le bien possède un garage.
      *
-     * @param est_garage true si le bien possède un garage, false sinon.
+     * @param estGarage true si le bien possède un garage, false sinon.
      */
-    public void setEst_garage(boolean est_garage) {
-        this.est_garage = est_garage;
-    }
-
-    /**
-     * Récupère l'identifiant du contrat de location associé au bien.
-     *
-     * @return L'identifiant du contrat de location.
-     */
-    public int getId_contrat_location() {
-        return id_contrat_location;
-    }
-
-    /**
-     * Définit l'identifiant du contrat de location associé au bien.
-     *
-     * @param id_contrat_location L'identifiant du contrat de location à définir.
-     */
-    public void setId_contrat_location(int id_contrat_location) {
-        this.id_contrat_location = id_contrat_location;
+    public void setEstGarage(boolean estGarage) {
+        this.estGarage = estGarage;
     }
     
     /**
@@ -255,8 +237,8 @@ public class Bien {
      *
      * @return L'identifiant du contrat de location.
      */
-    public String getCode_postal() {
-        return code_postal;
+    public String getCodePostal() {
+        return codePostal;
     }
 
     /**
@@ -264,8 +246,8 @@ public class Bien {
      *
      * @param id_contrat_location L'identifiant du contrat de location à définir.
      */
-    public void setCode_postal(String code_postal) {
-        this.code_postal = code_postal;
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
     }
 
     /**
@@ -277,25 +259,24 @@ public class Bien {
     @Override
     public String toString() {
         return "Bien{" +
-               "numero_Bien=" + id_bien +
+               "numero_Bien=" + idBien +
                ", etage=" + etage +
                ", adresse=" + (adresse != null ? adresse : "N/A") +
                ", ville=" + (ville != null ? ville : "N/A") +
-               ", code_postal=" + (code_postal != null ? code_postal : "N/A") +
+               ", code_postal=" + (codePostal != null ? codePostal : "N/A") +
                ", superficie=" + (superficie != null ? superficie : "N/A") +
-               ", nombre_de_piece=" + nombre_de_piece +
+               ", nombre_de_piece=" + nombreDePiece +
                ", meuble=" + meuble +
-               ", accessoire_prive=" + (accessoire_prive != null ? accessoire_prive : "N/A") +
-               ", accessoire_commun=" + (accessoire_commun != null ? accessoire_commun : "N/A") +
-               ", est_garage=" + est_garage +
-               ", numero_contrat_location=" + id_contrat_location +
+               ", accessoire_prive=" + (accessoirePrive != null ? accessoirePrive : "N/A") +
+               ", accessoire_commun=" + (accessoireCommun != null ? accessoireCommun : "N/A") +
+               ", est_garage=" + estGarage +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(accessoire_commun, accessoire_prive, adresse, est_garage, etage, id_bien, id_contrat_location,
-				meuble, nombre_de_piece, code_postal, superficie, ville);
+		return Objects.hash(accessoireCommun, accessoirePrive, adresse, estGarage, etage, idBien,
+				meuble, nombreDePiece, codePostal, superficie, ville);
 	}
 
 	@Override
@@ -307,11 +288,11 @@ public class Bien {
 		if (getClass() != obj.getClass())
 			return false;
 		Bien other = (Bien) obj;
-		return Objects.equals(accessoire_commun, other.accessoire_commun)
-				&& Objects.equals(accessoire_prive, other.accessoire_prive) && Objects.equals(adresse, other.adresse)
-				&& est_garage == other.est_garage && etage == other.etage && id_bien == other.id_bien
-				&& id_contrat_location == other.id_contrat_location && meuble == other.meuble
-				&& nombre_de_piece == other.nombre_de_piece && Objects.equals(superficie, other.superficie)
-				&& Objects.equals(ville, other.ville) && Objects.equals(code_postal, other.code_postal);
+		return Objects.equals(accessoireCommun, other.accessoireCommun)
+				&& Objects.equals(accessoirePrive, other.accessoirePrive) && Objects.equals(adresse, other.adresse)
+				&& estGarage == other.estGarage && etage == other.etage
+				&& meuble == other.meuble
+				&& nombreDePiece == other.nombreDePiece && Objects.equals(superficie, other.superficie)
+				&& Objects.equals(ville, other.ville) && Objects.equals(codePostal, other.codePostal);
 	}
 }

@@ -9,20 +9,20 @@ import java.util.Objects;
  * telles que l'existence d'une clause de solidarité, la part des charges à payer,
  * et l'identifiant du contrat de location associé.
  */
-public class Contrat_colocation {
+public class ContratColocation {
 
-    private int id_contrat_colocation;  // Identifiant unique du contrat de colocation
-    private boolean clause_solidarite;  // Indique si le contrat de colocation contient une clause de solidarité
-    private BigDecimal part_des_charges;  // Part des charges à payer par le locataire
-    private int id_contrat_location;  // Identifiant du contrat de location associé
+    private int idContratColocation;  // Identifiant unique du contrat de colocation
+    private boolean clauseSolidarite;  // Indique si le contrat de colocation contient une clause de solidarité
+    private BigDecimal partDesCharges;  // Part des charges à payer par le locataire
+    private int idContratLocation;  // Identifiant du contrat de location associé
 
     
-    public Contrat_colocation() {};
+    public ContratColocation() {}
     
-    public Contrat_colocation(boolean clause_solidarite, BigDecimal part_des_charges) {
+    public ContratColocation(boolean clauseSolidarite, BigDecimal partDesCharges) {
 		super();
-		this.clause_solidarite = clause_solidarite;
-		this.part_des_charges = part_des_charges;
+		this.clauseSolidarite = clauseSolidarite;
+		this.partDesCharges = partDesCharges;
 	}
 
 	/**
@@ -30,17 +30,17 @@ public class Contrat_colocation {
      *
      * @return L'identifiant du contrat de colocation.
      */
-    public int getId_contrat_colocation() {
-        return id_contrat_colocation;
+    public int getIdContratColocation() {
+        return idContratColocation;
     }
 
     /**
      * Définit l'identifiant du contrat de colocation.
      *
-     * @param id_contrat_colocation L'identifiant du contrat de colocation à définir.
+     * @param idContratColocation L'identifiant du contrat de colocation à définir.
      */
-    public void setId_contrat_colocation(int id_contrat_colocation) {
-        this.id_contrat_colocation = id_contrat_colocation;
+    public void setIdContratColocation(int idContratColocation) {
+        this.idContratColocation = idContratColocation;
     }
 
     /**
@@ -48,17 +48,17 @@ public class Contrat_colocation {
      *
      * @return true si la clause de solidarité est présente, false sinon.
      */
-    public boolean isClause_solidarite() {
-        return clause_solidarite;
+    public boolean isClauseSolidarite() {
+        return clauseSolidarite;
     }
 
     /**
      * Définit si le contrat de colocation contient une clause de solidarité.
      *
-     * @param clause_solidarite true si la clause de solidarité doit être présente, false sinon.
+     * @param clauseSolidarite true si la clause de solidarité doit être présente, false sinon.
      */
-    public void setClause_solidarite(boolean clause_solidarite) {
-        this.clause_solidarite = clause_solidarite;
+    public void setClauseSolidarite(boolean clauseSolidarite) {
+        this.clauseSolidarite = clauseSolidarite;
     }
 
     /**
@@ -66,17 +66,17 @@ public class Contrat_colocation {
      *
      * @return La part des charges sous forme de BigDecimal.
      */
-    public BigDecimal getPart_des_charges() {
-        return part_des_charges;
+    public BigDecimal getPartDesCharges() {
+        return partDesCharges;
     }
 
     /**
      * Définit la part des charges à payer par le locataire.
      *
-     * @param part_des_charges La part des charges sous forme de BigDecimal à définir.
+     * @param partDesCharges La part des charges sous forme de BigDecimal à définir.
      */
-    public void setPart_des_charges(BigDecimal part_des_charges) {
-        this.part_des_charges = part_des_charges;
+    public void setPartDesCharges(BigDecimal partDesCharges) {
+        this.partDesCharges = partDesCharges;
     }
 
     /**
@@ -84,21 +84,21 @@ public class Contrat_colocation {
      *
      * @return L'identifiant du contrat de location.
      */
-    public int getId_contrat_location() {
-        return id_contrat_location;
+    public int getIdContratLocation() {
+        return idContratLocation;
     }
 
     /**
      * Définit l'identifiant du contrat de location associé au contrat de colocation.
      *
-     * @param id_contrat_location L'identifiant du contrat de location à définir.
+     * @param idContratLocation L'identifiant du contrat de location à définir.
      */
-    public void setId_contrat_location(int id_contrat_location) {
-        this.id_contrat_location = id_contrat_location;
+    public void setIdContratLocation(int idContratLocation) {
+        this.idContratLocation = idContratLocation;
     }
 
     /**
-     * Retourne une représentation textuelle de l'objet {@link Contrat_colocation}.
+     * Retourne une représentation textuelle de l'objet {@link ContratColocation}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
      * @return Une chaîne de caractères représentant le contrat de colocation.
@@ -106,16 +106,16 @@ public class Contrat_colocation {
     @Override
     public String toString() {
         return "Contrat_colocation{" +
-               "id_contrat_colocation=" + id_contrat_colocation +
-               ", clause_solidarite=" + clause_solidarite +
-               ", part_des_charges=" + (part_des_charges != null ? part_des_charges : "N/A") +
-               ", id_contrat_location=" + id_contrat_location +
+               "id_contrat_colocation=" + idContratColocation +
+               ", clause_solidarite=" + clauseSolidarite +
+               ", part_des_charges=" + (partDesCharges != null ? partDesCharges : "N/A") +
+               ", id_contrat_location=" + idContratLocation +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(clause_solidarite, id_contrat_colocation, id_contrat_location, part_des_charges);
+		return Objects.hash(clauseSolidarite, idContratColocation, idContratLocation, partDesCharges);
 	}
 
 	@Override
@@ -126,9 +126,9 @@ public class Contrat_colocation {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Contrat_colocation other = (Contrat_colocation) obj;
-		return clause_solidarite == other.clause_solidarite && id_contrat_colocation == other.id_contrat_colocation
-				&& id_contrat_location == other.id_contrat_location
-				&& Objects.equals(part_des_charges, other.part_des_charges);
+		ContratColocation other = (ContratColocation) obj;
+		return clauseSolidarite == other.clauseSolidarite && idContratColocation == other.idContratColocation
+				&& idContratLocation == other.idContratLocation
+				&& Objects.equals(partDesCharges, other.partDesCharges);
 	}
 }

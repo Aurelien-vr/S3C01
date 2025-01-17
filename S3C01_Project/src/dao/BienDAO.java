@@ -8,8 +8,8 @@ import dao.entities.Bien;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface BienDAO extends DAO<Bien> {
-	public List<List<String>> BienStatus();
-	String[] get_AllAdresses();
+	public List<List<String>> bienStatus();
+	String[] getAllAdresses();
 	public List<List<String>> procPageBien();
 	public String[] procGetClNotInBien();
 	void insertFK(int id, int idContratLocation);

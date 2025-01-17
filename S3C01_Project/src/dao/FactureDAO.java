@@ -9,10 +9,11 @@ import dao.entities.Facture;
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
 public interface FactureDAO extends DAO<Facture> {
-    public String[] get_numFacture();
+    public String[] getNumFacture();
     public void insertFK(int id, String facture);
     public void insertFKCharges(int idCharge, String refFacture);
-    public List<List<String>> procGet_factures();
+    public List<List<String>> procGetFactures();
 	void deleteByRef(String ref);
+	Facture findOneRef(String reference);
 }
 

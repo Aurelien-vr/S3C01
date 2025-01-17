@@ -11,19 +11,19 @@ import java.util.Objects;
  */
 public class Assurance {
 
-    private int numero_contrat;  // Numéro de contrat d'assurance
-    private Date date_assurance;
+    private int numeroContrat;  // Numéro de contrat d'assurance
+    private Date dateAssurance;
     private BigDecimal prime;  // Montant de la prime d'assurance
-    private BigDecimal protection_juridique;  // Montant de la protection juridique incluse
-    private int id_bien;  // Identifiant du bien assuré
+    private BigDecimal protectionJuridique;  // Montant de la protection juridique incluse
+    private int idBien;  // Identifiant du bien assuré
 
-    public Assurance() {};
+    public Assurance() {}
     
-    public Assurance(Date date_assurance, BigDecimal prime, BigDecimal protection_juridique) {
+    public Assurance(Date dateAssurance, BigDecimal prime, BigDecimal protectionJuridique) {
 		super();
-		this.date_assurance = date_assurance;
+		this.dateAssurance = dateAssurance;
 		this.prime = prime;
-		this.protection_juridique = protection_juridique;
+		this.protectionJuridique = protectionJuridique;
 	}
 
 	/**
@@ -31,17 +31,17 @@ public class Assurance {
      *
      * @return Le numéro de contrat d'assurance.
      */
-    public int getNumero_contrat() {
-        return numero_contrat;
+    public int getNumeroContrat() {
+        return numeroContrat;
     }
 
     /**
      * Définit le numéro du contrat d'assurance.
      *
-     * @param numero_contrat Le numéro de contrat d'assurance à définir.
+     * @param numeroContrat Le numéro de contrat d'assurance à définir.
      */
-    public void setNumero_contrat(int numero_contrat) {
-        this.numero_contrat = numero_contrat;
+    public void setNumeroContrat(int numeroContrat) {
+        this.numeroContrat = numeroContrat;
     }
 
     /**
@@ -69,17 +69,17 @@ public class Assurance {
      *
      * @return Le montant de la protection juridique.
      */
-    public BigDecimal getProtection_juridique() {
-        return protection_juridique;
+    public BigDecimal getProtectionJuridique() {
+        return protectionJuridique;
     }
 
     /**
      * Définit le montant de la protection juridique.
      *
-     * @param protection_juridique Le montant de la protection juridique à définir.
+     * @param protectionJuridique Le montant de la protection juridique à définir.
      */
-    public void setProtection_juridique(BigDecimal protection_juridique) {
-        this.protection_juridique = protection_juridique;
+    public void setProtectionJuridique(BigDecimal protectionJuridique) {
+        this.protectionJuridique = protectionJuridique;
     }
 
     /**
@@ -87,31 +87,39 @@ public class Assurance {
      *
      * @return L'identifiant du bien assuré.
      */
-    public int getId_bien() {
-        return id_bien;
+    public int getIdBien() {
+        return idBien;
     }
 
     /**
      * Définit l'identifiant du bien assuré par le contrat.
      *
-     * @param id_bien L'identifiant du bien à définir.
+     * @param idBien L'identifiant du bien à définir.
      */
-    public void setId_bien(int id_bien) {
-        this.id_bien = id_bien;
+    public void setIdBien(int idBien) {
+        this.idBien = idBien;
     }
     
     
-	public Date getDate_assurance() {
-		return date_assurance;
+	public Date getDateAssurance() {
+		return dateAssurance;
 	}
 
-	public void setDate_assurance(Date date_assurance) {
-		this.date_assurance = date_assurance;
+	public void setDateAssurance(Date dateAssurance) {
+		this.dateAssurance = dateAssurance;
+	}
+	
+	
+	
+	@Override
+	public String toString() {
+		return "Assurance [numero_contrat=" + numeroContrat + ", date_assurance=" + dateAssurance + ", prime=" + prime
+				+ ", protection_juridique=" + protectionJuridique + ", id_bien=" + idBien + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_assurance, id_bien, numero_contrat, prime, protection_juridique);
+		return Objects.hash(dateAssurance, idBien, numeroContrat, prime, protectionJuridique);
 	}
 
 	@Override
@@ -123,10 +131,12 @@ public class Assurance {
 		if (getClass() != obj.getClass())
 			return false;
 		Assurance other = (Assurance) obj;
-		return Objects.equals(date_assurance, other.date_assurance) && id_bien == other.id_bien
-				&& numero_contrat == other.numero_contrat && Objects.equals(prime, other.prime)
-				&& Objects.equals(protection_juridique, other.protection_juridique);
+		return Objects.equals(dateAssurance, other.dateAssurance) && idBien == other.idBien
+				&& Objects.equals(prime, other.prime)
+				&& Objects.equals(protectionJuridique, other.protectionJuridique);
 	}
+
+
 
 
     

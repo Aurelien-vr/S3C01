@@ -1,11 +1,11 @@
 package dao;
 
-import dao.entities.Regularisation_charges;
+import dao.entities.RegularisationCharges;
 
 /**
- * Interface spécifique pour les opérations liées à l'entité {@link Regularisation_charges}.
+ * Interface spécifique pour les opérations liées à l'entité {@link RegularisationCharges}.
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
-public interface Regularisation_chargesDAO extends DAO<Regularisation_charges> {
+public interface RegularisationChargesDAO extends DAO<RegularisationCharges> {
     // Les méthodes spécifiques à l'entité Facture peuvent être ajoutées ici si nécessaire
 }

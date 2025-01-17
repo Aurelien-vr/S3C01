@@ -4,35 +4,35 @@ import java.sql.Date;
 import java.util.Objects;
 
 public class Charge {
-	private int id_charge;
-	private Date date_charge;
+	private int idCharge;
+	private Date dateCharge;
 	
 	public Charge() {}
 	
-	public Charge(int id_charge, Date date_charge) {
-		this.id_charge = id_charge;
-		this.date_charge = date_charge;
+	public Charge(int idCharge, Date dateCharge) {
+		this.idCharge = idCharge;
+		this.dateCharge = dateCharge;
 	}
 
-	public int getId_charge() {
-		return id_charge;
+	public int getIdCharge() {
+		return idCharge;
 	}
 
-	public Date getDate_charge() {
-		return date_charge;
+	public Date getDateCharge() {
+		return dateCharge;
 	}
 
-	public void setId_charge(int id_charge) {
-		this.id_charge = id_charge;
+	public void setIdCharge(int idCharge) {
+		this.idCharge = idCharge;
 	}
 
-	public void setDate_charge(Date date_charge) {
-		this.date_charge = date_charge;
+	public void setDateCharge(Date dateCharge) {
+		this.dateCharge = dateCharge;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_charge, id_charge);
+		return Objects.hash(dateCharge, idCharge);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class Charge {
 		if (getClass() != obj.getClass())
 			return false;
 		Charge other = (Charge) obj;
-		return Objects.equals(date_charge, other.date_charge) && id_charge == other.id_charge;
+		return Objects.equals(dateCharge, other.dateCharge) && idCharge == other.idCharge;
 	}
 	
 	

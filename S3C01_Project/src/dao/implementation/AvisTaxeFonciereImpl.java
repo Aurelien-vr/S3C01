@@ -7,15 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.Avis_Taxe_FonciereDAO;
-import dao.entities.Avis_Taxe_Fonciere;
-import dbConnection.DatabaseConnection;
+import dao.AvisTaxeFonciereDAO;
+import dao.entities.AvisTaxeFonciere;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
- * Implémentation de l'interface {@link Avis_Taxe_FonciereDAO} pour gérer les opérations sur les entités "Avis_Taxe_Fonciere".
+ * Implémentation de l'interface {@link AvisTaxeFonciereDAO} pour gérer les opérations sur les entités "Avis_Taxe_Fonciere".
  */
-public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
+public class AvisTaxeFonciereImpl implements AvisTaxeFonciereDAO {
 
     private Connection connection; // Connexion à la base de données
 
@@ -24,7 +24,7 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
      *
      * @param connection La connexion à la base de données.
      */
-    public Avis_Taxe_FonciereImpl(Connection connection) {
+    public AvisTaxeFonciereImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -32,10 +32,10 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
      * Recherche un avis de taxe foncière par son numéro fiscal.
      *
      * @param id Le numéro fiscal de l'avis à rechercher.
-     * @return L'entité {@link Avis_Taxe_Fonciere} si trouvée, sinon {@code null}.
+     * @return L'entité {@link AvisTaxeFonciere} si trouvée, sinon {@code null}.
      */
     @Override
-    public Avis_Taxe_Fonciere findOne(long id) {
+    public AvisTaxeFonciere findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Avis_Taxe_Fonciere WHERE numero_fiscal = ?";
@@ -52,7 +52,7 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
             }
             
         } catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
+   			ExceptionStorageHandler.logException(e, connection);
    		}finally {
    			DatabaseConnection.closeStatement(statement);
    		}
@@ -66,8 +66,8 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
      * @return Liste des avis ou {@code null} si non implémentée.
      */
     @Override
-    public List<Avis_Taxe_Fonciere> findAll() {
-    	List<Avis_Taxe_Fonciere> avis = new ArrayList<>();
+    public List<AvisTaxeFonciere> findAll() {
+    	List<AvisTaxeFonciere> avis = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Avis_Taxe_Fonciere";
@@ -77,7 +77,7 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
             result = statement.executeQuery();
             
             while (result.next()) {
-                Avis_Taxe_Fonciere acte = createEntities(result);
+                AvisTaxeFonciere acte = createEntities(result);
                 avis.add(acte);
             } 
         } catch (Exception e) {
@@ -87,7 +87,7 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-       			ExceptionStorageHandler.LogException(e, connection);
+       			ExceptionStorageHandler.logException(e, connection);
        		}finally {
        			DatabaseConnection.closeStatement(statement);
        		}
@@ -102,20 +102,17 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
      * @param entity L'entité Avis_Taxe_Fonciere à créer.
      */
     @Override
-    public void insert(Avis_Taxe_Fonciere entity) {
+    public void insert(AvisTaxeFonciere entity) {
     	PreparedStatement statement = null;
     	String query = "INSERT INTO db1_sae.Avis_Taxe_Fonciere(date_etablissement, debiteur_legaux,total_cotisation) VALUES (?,?,?)";
    		
    		try {
    			statement = connection.prepareStatement(query);
-    		statement.setDate(1, entity.getDate_etablissement());
-    		statement.setString(2, entity.getDebiteur_legaux());
-    		statement.setDouble(3,  entity.getTotal_cotisation());
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
+    		statement.setDate(1, entity.getDateEtablissement());
+    		statement.setString(2, entity.getDebiteurLegaux());
+    		statement.setDouble(3,  entity.getTotalCotisation());
    		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
+   			ExceptionStorageHandler.logException(e, connection);
    		}finally {
    			DatabaseConnection.closeStatement(statement);
    		}
@@ -127,21 +124,20 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
      * @param entity L'entité Avis_Taxe_Fonciere à mettre à jour.
      */
     @Override
-    public void update(Avis_Taxe_Fonciere entity) {
+    public void update(AvisTaxeFonciere entity) {
         PreparedStatement statement = null;
         String query = "UPDATE db1_sae.Avis_Taxe_Fonciere SET Date_etablissement = ? AND Debiteur_legaux = ? AND Total_cotisation = ? WHERE Numero_fiscal = ?";
 		
 		try {
 			statement = connection.prepareStatement(query);
-			statement.setDate(1, entity.getDate_etablissement());
-			statement.setString(2, entity.getDebiteur_legaux());
-			statement.setDouble(3,entity.getTotal_cotisation());
-			statement.setInt(4,entity.getNumero_fiscal());
+			statement.setDate(1, entity.getDateEtablissement());
+			statement.setString(2, entity.getDebiteurLegaux());
+			statement.setDouble(3,entity.getTotalCotisation());
+			statement.setInt(4,entity.getNumeroFiscal());
 
-            int rowsUpdated = statement.executeUpdate();
-            System.out.println("Nombre de lignes mises à jour : " + rowsUpdated);
+            statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -164,26 +160,26 @@ public class Avis_Taxe_FonciereImpl implements Avis_Taxe_FonciereDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
     }
 
     /**
-     * Crée une entité {@link Avis_Taxe_Fonciere} à partir des résultats d'une requête SQL.
+     * Crée une entité {@link AvisTaxeFonciere} à partir des résultats d'une requête SQL.
      *
      * @param result Le {@link ResultSet} contenant les données de l'avis de taxe foncière.
      * @return L'entité Avis_Taxe_Fonciere construite.
      * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
      */
     @Override
-    public Avis_Taxe_Fonciere createEntities(ResultSet result) throws SQLException {
+    public AvisTaxeFonciere createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Avis_Taxe_Fonciere à partir des données du ResultSet
-        Avis_Taxe_Fonciere avis = new Avis_Taxe_Fonciere();
-        avis.setDate_etablissement(result.getDate("date_etablissement"));
-        avis.setDebiteur_legaux(result.getString("debiteur_legaux"));
-        avis.setTotal_cotisation(result.getDouble("total_cotisation"));
+        AvisTaxeFonciere avis = new AvisTaxeFonciere();
+        avis.setDateEtablissement(result.getDate("date_etablissement"));
+        avis.setDebiteurLegaux(result.getString("debiteur_legaux"));
+        avis.setTotalCotisation(result.getDouble("total_cotisation"));
         return avis; // Retourne l'entité Avis_Taxe_Fonciere construite
     }
 }

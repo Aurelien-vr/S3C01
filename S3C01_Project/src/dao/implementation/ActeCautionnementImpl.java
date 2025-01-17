@@ -4,18 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.Acte_cautionnementDAO;
-import dao.entities.Acte_cautionnement;
-import dbConnection.DatabaseConnection;
+import dao.ActeCautionnementDAO;
+import dao.entities.ActeCautionnement;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
  * Implémentation de l'interface {@link ActeCautionnementDAO} pour gérer les opérations sur les entités "Acte_cautionnement".
  */
-public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
+public class ActeCautionnementImpl implements ActeCautionnementDAO {
     
     private Connection connection; // Connexion à la base de données
     
@@ -24,7 +25,7 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      * 
      * @param connection La connexion à la base de données.
      */
-    public Acte_cautionnementImpl(Connection connection) {
+    public ActeCautionnementImpl(Connection connection) {
         this.connection = connection;
     }
     
@@ -32,10 +33,10 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      * Recherche un acte de cautionnement par son identifiant.
      * 
      * @param id L'identifiant de l'acte de cautionnement à rechercher.
-     * @return L'entité {@link Acte_cautionnement} si trouvée, sinon {@code null}.
+     * @return L'entité {@link ActeCautionnement} si trouvée, sinon {@code null}.
      */
     @Override
-    public Acte_cautionnement findOne(long id) {
+    public ActeCautionnement findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Acte_cautionnement WHERE Id_Acte_cautionnement = ?";
@@ -58,7 +59,7 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-       			ExceptionStorageHandler.LogException(e, connection);
+       			ExceptionStorageHandler.logException(e, connection);
        		}finally {
        			DatabaseConnection.closeStatement(statement);
        		}
@@ -73,8 +74,8 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      * @return Liste des actes de cautionnement ou {@code null} si non implémentée.
      */
     @Override
-    public List<Acte_cautionnement> findAll() {
-    	List<Acte_cautionnement> actes = new ArrayList<>();
+    public List<ActeCautionnement> findAll() {
+    	List<ActeCautionnement> actes = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Acte_cautionnement";
@@ -84,7 +85,7 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
             result = statement.executeQuery();
             
             while (result.next()) {
-                Acte_cautionnement acte = createEntities(result);
+                ActeCautionnement acte = createEntities(result);
                 actes.add(acte);
             } 
         } catch (Exception e) {
@@ -94,7 +95,7 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             } catch (Exception e) {
-       			ExceptionStorageHandler.LogException(e, connection);
+       			ExceptionStorageHandler.logException(e, connection);
        		}finally {
        			DatabaseConnection.closeStatement(statement);
        		}
@@ -109,20 +110,22 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      * @param entity L'entité Acte_cautionnement à créer.
      */
     @Override
-    public void insert(Acte_cautionnement entity) {
+    public void insert(ActeCautionnement entity) {
     	PreparedStatement statement = null;
     	String query = "INSERT INTO db1_sae.Acte_cautionnement(montant_caution) VALUES (?)";
    		
    		try {
-   			statement = connection.prepareStatement(query);
-    		statement.setBigDecimal(1, entity.getMontant_caution());
-    			
-    			
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
+   			statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+    		statement.setBigDecimal(1, entity.getMontantCaution());
+            if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setIdActeCautionnement(id);
+                }
+            }
    		} catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
+   			ExceptionStorageHandler.logException(e, connection);
    		}finally {
    			DatabaseConnection.closeStatement(statement);
    		}
@@ -134,18 +137,17 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
      * @param entity L'entité Acte_cautionnement à mettre à jour.
      */
     @Override
-    public void update(Acte_cautionnement entity) {
+    public void update(ActeCautionnement entity) {
         PreparedStatement statement = null;
         String query = "UPDATE db1_sae.Acte_cautionnement SET Montant_caution = ? WHERE Id_Acte_cautionnement = ?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setBigDecimal(1, entity.getMontant_caution());
-            statement.setLong(2, entity.getId_acte_cautionnement()); // Ajoute l'ID ici
+            statement.setBigDecimal(1, entity.getMontantCaution());
+            statement.setLong(2, entity.getIdActeCautionnement()); // Ajoute l'ID ici
 
-            int rowsUpdated = statement.executeUpdate();
-            System.out.println("Nombre de lignes mises à jour : " + rowsUpdated);
+            statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -169,24 +171,25 @@ public class Acte_cautionnementImpl implements Acte_cautionnementDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
     }
 
     /**
-     * Crée une entité {@link Acte_cautionnement} à partir des résultats d'une requête SQL.
+     * Crée une entité {@link ActeCautionnement} à partir des résultats d'une requête SQL.
      * 
      * @param result Le {@link ResultSet} contenant les données de l'acte de cautionnement.
      * @return L'entité Acte_cautionnement construite.
      * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
      */
     @Override
-    public Acte_cautionnement createEntities(ResultSet result) throws SQLException {
+    public ActeCautionnement createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Acte_cautionnement à partir des données du ResultSet
-        Acte_cautionnement acte = new Acte_cautionnement();
-        acte.setMontant_caution((result.getBigDecimal("Montant_caution")));
+        ActeCautionnement acte = new ActeCautionnement();
+        acte.setIdActeCautionnement(result.getInt(1));
+        acte.setMontantCaution((result.getBigDecimal("Montant_caution")));
         return acte;  // Retourne l'entité Acte_cautionnement construite
     }
 

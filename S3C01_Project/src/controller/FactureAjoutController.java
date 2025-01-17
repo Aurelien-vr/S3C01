@@ -14,24 +14,24 @@ import javax.swing.JLabel;
 import dao.BienDAO;
 import dao.DAOFactory;
 import dao.FactureDAO;
-import dao.Facture_eauDAO;
-import dao.Facture_electriciteDAO;
-import dao.Facture_gazDAO;
+import dao.FactureEauDAO;
+import dao.FactureElectriciteDAO;
+import dao.FactureGazDAO;
 import dao.entities.Bien;
-import dao.entities.Facture_eau;
-import dao.entities.Facture_electricite;
-import dao.entities.Facture_gaz;
+import dao.entities.FactureEau;
+import dao.entities.FactureElectricite;
+import dao.entities.FactureGaz;
 import utilities.ErrorMessage;
 import view.FactureAjoutView;
 
 public class FactureAjoutController extends TemplateAjoutController {
 
-    private FactureAjoutView view = new FactureAjoutView();
+    private FactureAjoutView viewAjoutFacture = new FactureAjoutView();
     private BienDAO modelBien = DAOFactory.createBienDAO();
     private FactureDAO modelFacture = DAOFactory.createFactureDAO();
-    private Facture_eauDAO modelEau = DAOFactory.createFacture_eauDAO();
-    private Facture_electriciteDAO modelElectricite = DAOFactory.createFacture_electriciteDAO();
-    private Facture_gazDAO modelGaz = DAOFactory.createFacture_gazDAO();
+    private FactureEauDAO modelEau = DAOFactory.createFactureEauDAO();
+    private FactureElectriciteDAO modelElectricite = DAOFactory.createFactureElectriciteDAO();
+    private FactureGazDAO modelGaz = DAOFactory.createFactureGazDAO();
     
     private boolean errorRaise;
     private java.sql.Date sqlDate;
@@ -39,7 +39,7 @@ public class FactureAjoutController extends TemplateAjoutController {
 
     public FactureAjoutController() {
         super();
-        view.setTitleHeader("Facture");
+        viewAjoutFacture.setTitleHeader("Facture");
         askForWaterDetails();
         addTypeFactureListener();
         populateAddressComboBox();
@@ -47,15 +47,15 @@ public class FactureAjoutController extends TemplateAjoutController {
         pressedAnnuler();
         logoLabel();
         addEventHandlers();
-        view.setVisible(true);
+        viewAjoutFacture.setVisible(true);
     }
     
     
 
     private void addTypeFactureListener() {
-        view.getCbTypeFacture().addActionListener(e -> {
+        viewAjoutFacture.getCbTypeFacture().addActionListener(e -> {
                 clearPreviousDetails();
-                String selectedType = (String) view.getCbTypeFacture().getSelectedItem();
+                String selectedType = (String) viewAjoutFacture.getCbTypeFacture().getSelectedItem();
                 switch (selectedType) {
                     case FactureView.TYPE_EAU:
                         askForWaterDetails();
@@ -82,65 +82,65 @@ public class FactureAjoutController extends TemplateAjoutController {
     }
     
     private void repaint() {
-        view.getForm().revalidate();
-        view.getForm().repaint();
+        viewAjoutFacture.getForm().revalidate();
+        viewAjoutFacture.getForm().repaint();
     }
     
     private void clearPreviousDetails() {
-        view.getForm().removeAll();
-        view.fillFormWithFields();
+        viewAjoutFacture.getForm().removeAll();
+        viewAjoutFacture.fillFormWithFields();
     }
 
     private void createCustomDetail() {
-        view.getGbc().gridy = 1;
-        view.getGbc().gridx = 0;
-        view.getForm().add(new JLabel("Detail"), view.getGbc());
-        view.getGbc().gridx = 1;
-        view.getForm().add(view.getFieldDetail(), view.getGbc());
-        view.getForm().revalidate();
-        view.getForm().repaint();
+        viewAjoutFacture.getGbc().gridy = 1;
+        viewAjoutFacture.getGbc().gridx = 0;
+        viewAjoutFacture.getForm().add(new JLabel("Detail"), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getGbc().gridx = 1;
+        viewAjoutFacture.getForm().add(viewAjoutFacture.getFieldDetail(), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getForm().revalidate();
+        viewAjoutFacture.getForm().repaint();
     }
 
     private void askForWaterDetails() {
-        view.getGbc().gridy = 1;
-        view.getGbc().gridx = 0;
-        view.getForm().add(new JLabel("Consommation en m3"), view.getGbc());
-        view.getGbc().gridx = 1;
-        view.getForm().add(view.getFieldWaterConsumption(), view.getGbc());
-        view.getForm().revalidate();
-        view.getForm().repaint();
+        viewAjoutFacture.getGbc().gridy = 1;
+        viewAjoutFacture.getGbc().gridx = 0;
+        viewAjoutFacture.getForm().add(new JLabel("Consommation en m3"), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getGbc().gridx = 1;
+        viewAjoutFacture.getForm().add(viewAjoutFacture.getFieldWaterConsumption(), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getForm().revalidate();
+        viewAjoutFacture.getForm().repaint();
     }
 
     private void askForGasDetails() {
-        view.getGbc().gridy = 1;
-        view.getGbc().gridx = 0;
-        view.getForm().add(new JLabel("Le prix du M3 de gaz"), view.getGbc());
-        view.getGbc().gridx = 1;
-        view.getForm().add(view.getFieldGasPrice(), view.getGbc());
-        view.getGbc().gridx = 2;
-        view.getForm().add(new JLabel("Consommation en m3 de gaz"), view.getGbc());
-        view.getGbc().gridx = 3;
-        view.getForm().add(view.getFieldGasConsumption(), view.getGbc());
-        view.getForm().revalidate();
-        view.getForm().repaint();
+        viewAjoutFacture.getGbc().gridy = 1;
+        viewAjoutFacture.getGbc().gridx = 0;
+        viewAjoutFacture.getForm().add(new JLabel("Le prix du M3 de gaz"), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getGbc().gridx = 1;
+        viewAjoutFacture.getForm().add(viewAjoutFacture.getFieldGasPrice(), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getGbc().gridx = 2;
+        viewAjoutFacture.getForm().add(new JLabel("Consommation en m3 de gaz"), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getGbc().gridx = 3;
+        viewAjoutFacture.getForm().add(viewAjoutFacture.getFieldGasConsumption(), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getForm().revalidate();
+        viewAjoutFacture.getForm().repaint();
     }
 
     private void askForElectricityDetails() {
-        view.getGbc().gridy = 1;
-        view.getGbc().gridx = 0;
-        view.getForm().add(new JLabel("Le prix du kWh d'électricité"), view.getGbc());
-        view.getGbc().gridx = 1;
-        view.getForm().add(view.getFieldElectricityPrice(), view.getGbc());
-        view.getGbc().gridx = 2;
-        view.getForm().add(new JLabel("Consommation en kWh d'électricité"), view.getGbc());
-        view.getGbc().gridx = 3;
-        view.getForm().add(view.getFieldElectricityConsumption(), view.getGbc());
-        view.getForm().revalidate();
-        view.getForm().repaint();
+        viewAjoutFacture.getGbc().gridy = 1;
+        viewAjoutFacture.getGbc().gridx = 0;
+        viewAjoutFacture.getForm().add(new JLabel("Le prix du kWh d'électricité"), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getGbc().gridx = 1;
+        viewAjoutFacture.getForm().add(viewAjoutFacture.getFieldElectricityPrice(), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getGbc().gridx = 2;
+        viewAjoutFacture.getForm().add(new JLabel("Consommation en kWh d'électricité"), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getGbc().gridx = 3;
+        viewAjoutFacture.getForm().add(viewAjoutFacture.getFieldElectricityConsumption(), viewAjoutFacture.getGbc());
+        viewAjoutFacture.getForm().revalidate();
+        viewAjoutFacture.getForm().repaint();
     }
 
     private void pressedValider() {
-        view.getValiderButton().addActionListener(e -> {
+        viewAjoutFacture.getValiderButton().addActionListener(e -> {
                 errorRaise = false;
                 checkFactureName();
                 checkDateFacture();
@@ -151,21 +151,21 @@ public class FactureAjoutController extends TemplateAjoutController {
                 if (!errorRaise) {
                     createFacture();
                     new FactureController();
-                    view.dispose();
+                    viewAjoutFacture.dispose();
                 }
         });
     }
 
     private void pressedAnnuler() {
-        view.getAnnulerButton().addActionListener(e -> {
+        viewAjoutFacture.getAnnulerButton().addActionListener(e -> {
                 new FactureController();
-                view.dispose();
+                viewAjoutFacture.dispose();
         });
     }
 
     private void checkFactureName() {
         if (errorRaise) { return; }
-        String input = view.getFieldFactureName().getText();
+        String input = viewAjoutFacture.getFieldFactureName().getText();
         if (input.isEmpty() || input.length() > 50) {
             ErrorMessage.errorDialog("Le nom de la facture doit être non vide et ne pas dépasser 50 caractères");
             errorRaise = true;
@@ -174,7 +174,7 @@ public class FactureAjoutController extends TemplateAjoutController {
 
     private void checkMontantFacture() {
         if (errorRaise) { return; }
-        String input = view.getFieldMontantFacture().getText();
+        String input = viewAjoutFacture.getFieldMontantFacture().getText();
         try {
             double montant = Double.parseDouble(input.replace(',', '.'));
             if (montant < 0) {
@@ -189,7 +189,7 @@ public class FactureAjoutController extends TemplateAjoutController {
 
     private void checkDateFacture() {
         if (errorRaise) { return; }
-        String input = view.getFieldDateFacture().getText();
+        String input = viewAjoutFacture.getFieldDateFacture().getText();
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             dateFormat.setLenient(false);
@@ -203,7 +203,7 @@ public class FactureAjoutController extends TemplateAjoutController {
 
     private void checkMoyenPaiement() {
         if (errorRaise) { return; }
-        String input = view.getFieldMoyenPaiement().getText();
+        String input = viewAjoutFacture.getFieldMoyenPaiement().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("Le moyen de paiement ne peut pas être vide");
             errorRaise = true;
@@ -212,7 +212,7 @@ public class FactureAjoutController extends TemplateAjoutController {
 
     private void checkAddress() {
         if (errorRaise) { return; }
-        String selectedAddress = (String) view.getCbAdress().getSelectedItem();
+        String selectedAddress = (String) viewAjoutFacture.getCbAdress().getSelectedItem();
         if (selectedAddress == null || selectedAddress.isEmpty()) {
             ErrorMessage.errorDialog("L'adresse ne peut pas être vide");
             errorRaise = true;
@@ -220,7 +220,7 @@ public class FactureAjoutController extends TemplateAjoutController {
     }
 
     private void checkAdditionalDetails() {
-        String selectedType = (String) view.getCbTypeFacture().getSelectedItem();
+        String selectedType = (String) viewAjoutFacture.getCbTypeFacture().getSelectedItem();
         switch (selectedType) {
             case FactureView.TYPE_EAU:
                 checkWaterDetails();
@@ -239,7 +239,7 @@ public class FactureAjoutController extends TemplateAjoutController {
     private void checkWaterDetails() {
         if (errorRaise) { return; }
         try {
-            double consumption = Double.parseDouble(view.getFieldWaterConsumption().getText().replace(',', '.'));
+            double consumption = Double.parseDouble(viewAjoutFacture.getFieldWaterConsumption().getText().replace(',', '.'));
             if (consumption < 0) {
                 ErrorMessage.errorDialog("Le prix et la consommation d'eau doivent être des nombres positifs");
                 errorRaise = true;
@@ -253,8 +253,8 @@ public class FactureAjoutController extends TemplateAjoutController {
     private void checkGasDetails() {
         if (errorRaise) { return; }
         try {
-            double price = Double.parseDouble(view.getFieldGasPrice().getText().replace(',', '.'));
-            double consumption = Double.parseDouble(view.getFieldGasConsumption().getText().replace(',', '.'));
+            double price = Double.parseDouble(viewAjoutFacture.getFieldGasPrice().getText().replace(',', '.'));
+            double consumption = Double.parseDouble(viewAjoutFacture.getFieldGasConsumption().getText().replace(',', '.'));
             if (price < 0 || consumption < 0) {
                 ErrorMessage.errorDialog("Le prix et la consommation de gaz doivent être des nombres positifs");
                 errorRaise = true;
@@ -268,8 +268,8 @@ public class FactureAjoutController extends TemplateAjoutController {
     private void checkElectricityDetails() {
         if (errorRaise) { return; }
         try {
-            double price = Double.parseDouble(view.getFieldElectricityPrice().getText().replace(',', '.'));
-            double consumption = Double.parseDouble(view.getFieldElectricityConsumption().getText().replace(',', '.'));
+            double price = Double.parseDouble(viewAjoutFacture.getFieldElectricityPrice().getText().replace(',', '.'));
+            double consumption = Double.parseDouble(viewAjoutFacture.getFieldElectricityConsumption().getText().replace(',', '.'));
             if (price < 0 || consumption < 0) {
                 ErrorMessage.errorDialog("Le prix et la consommation d'électricité doivent être des nombres positifs");
                 errorRaise = true;
@@ -282,22 +282,22 @@ public class FactureAjoutController extends TemplateAjoutController {
 
     private void createFacture() {
     	try {
-    		String factureName = view.getFieldFactureName().getText();
-    		String selectedType = (String) view.getCbTypeFacture().getSelectedItem();
-    		String factureType = selectedType.equals("Autre") ? view.getFieldDetail().getText() : selectedType;
+    		String factureName = viewAjoutFacture.getFieldFactureName().getText();
+    		String selectedType = (String) viewAjoutFacture.getCbTypeFacture().getSelectedItem();
+    		String factureType = selectedType.equals("Autre") ? viewAjoutFacture.getFieldDetail().getText() : selectedType;
     		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     		dateFormat.setLenient(false);
-    		java.util.Date parsedDate = dateFormat.parse(view.getFieldDateFacture().getText());
+    		java.util.Date parsedDate = dateFormat.parse(viewAjoutFacture.getFieldDateFacture().getText());
     		sqlDate = new java.sql.Date(parsedDate.getTime());
-    		BigDecimal montantFacture = new BigDecimal(view.getFieldMontantFacture().getText().replace(',', '.'));
-    		String moyenPaiement = view.getFieldMoyenPaiement().getText();
-    		String selectedAddress = (String) view.getCbAdress().getSelectedItem();
+    		BigDecimal montantFacture = new BigDecimal(viewAjoutFacture.getFieldMontantFacture().getText().replace(',', '.'));
+    		String moyenPaiement = viewAjoutFacture.getFieldMoyenPaiement().getText();
+    		String selectedAddress = (String) viewAjoutFacture.getCbAdress().getSelectedItem();
     		Integer idBien = addressToIdMap.get(selectedAddress);
     		
     		Facture facture = new Facture(factureType, sqlDate, montantFacture, moyenPaiement);
-    		facture.setReference_facture(factureName);
+    		facture.setReferenceFacture(factureName);
     		modelFacture.insert(facture);
-    		if("ERROR CODE 1062".equals(facture.getReference_facture())) {
+    		if("ERROR CODE 1062".equals(facture.getReferenceFacture())) {
     			ErrorMessage.errorDialog("La facture n'a pas pu être inserer car l'ID de la facture est déjà utilisé");
     			return;
     		}
@@ -305,29 +305,29 @@ public class FactureAjoutController extends TemplateAjoutController {
     		modelFacture.insertFK(idBien, factureName);
     		
 
-            String selectedTypeInsert = (String) view.getCbTypeFacture().getSelectedItem();
+            String selectedTypeInsert = (String) viewAjoutFacture.getCbTypeFacture().getSelectedItem();
     		switch (selectedTypeInsert) {
 	            case "Eau":
-	            	BigDecimal consomation = new BigDecimal(view.getFieldWaterConsumption().getText().replace(',', '.'));
-	            	Facture_eau eau = new Facture_eau(null, consomation);
+	            	BigDecimal consomation = new BigDecimal(viewAjoutFacture.getFieldWaterConsumption().getText().replace(',', '.'));
+	            	FactureEau eau = new FactureEau(null, consomation);
 	            	modelEau.insert(eau);
-	            	modelEau.insertFK(eau.getId_facture_eau(),factureName);
+	            	modelEau.insertFK(eau.getIdFactureEau(),factureName);
 	                break;
 	            case "Gaz":
-	                BigDecimal prixGaz = new BigDecimal(view.getFieldGasPrice().getText().replace(',', '.'));
-	                String consommationGaz = view.getFieldGasConsumption().getText();
+	                BigDecimal prixGaz = new BigDecimal(viewAjoutFacture.getFieldGasPrice().getText().replace(',', '.'));
+	                String consommationGaz = viewAjoutFacture.getFieldGasConsumption().getText();
 	                // Create and insert the Facture_gaz object
-	                Facture_gaz gaz = new Facture_gaz(prixGaz, consommationGaz);
+	                FactureGaz gaz = new FactureGaz(prixGaz, consommationGaz);
 	                modelGaz.insert(gaz);
-	                modelGaz.insertFK(gaz.getId_facture_gaz(), factureName);
+	                modelGaz.insertFK(gaz.getIdFactureGaz(), factureName);
 	                break;
 	            case "Electricité":
-	                BigDecimal prixElectricite = new BigDecimal(view.getFieldElectricityPrice().getText().replace(',', '.'));
-	                String consommationElectricite = view.getFieldElectricityConsumption().getText();
+	                BigDecimal prixElectricite = new BigDecimal(viewAjoutFacture.getFieldElectricityPrice().getText().replace(',', '.'));
+	                String consommationElectricite = viewAjoutFacture.getFieldElectricityConsumption().getText();
 	                // Create and insert the Facture_electricite object
-	                Facture_electricite electricite = new Facture_electricite(prixElectricite, consommationElectricite);
+	                FactureElectricite electricite = new FactureElectricite(prixElectricite, consommationElectricite);
 	                modelElectricite.insert(electricite);
-	                modelElectricite.insertFK(electricite.getId_facture_electricite(), factureName);
+	                modelElectricite.insertFK(electricite.getIdFactureElectricite(), factureName);
 	                break;
 	            case "Autre":
 	                break;
@@ -344,38 +344,39 @@ public class FactureAjoutController extends TemplateAjoutController {
     
     
     private void addEventHandlers() {
-        view.getBtnBienLouable().addActionListener(e -> {
+        viewAjoutFacture.getBtnBienLouable().addActionListener(e -> {
         	new BienController();
-        	view.dispose();
+        	viewAjoutFacture.dispose();
         });
 
-        view.getBtnLocataire().addActionListener(e -> {
+        viewAjoutFacture.getBtnLocataire().addActionListener(e -> {
         	new LocataireController();
+        	viewAjoutFacture.dispose();
         });
         
-        view.getBtnContratLocation().addActionListener(e -> {
+        viewAjoutFacture.getBtnContratLocation().addActionListener(e -> {
         	new ContratLocationController();
-        	view.dispose();
+        	viewAjoutFacture.dispose();
         });
         
-        view.getItemAssurance().addActionListener(e -> {
+        viewAjoutFacture.getItemAssurance().addActionListener(e -> {
         	new AssuranceController();
-        	view.dispose();
+        	viewAjoutFacture.dispose();
         });
         
-        view.getItemFacture().addActionListener(e -> {
+        viewAjoutFacture.getItemFacture().addActionListener(e -> {
         	new FactureController();
-        	view.dispose();
+        	viewAjoutFacture.dispose();
         });
         
-        view.getItemTravaux().addActionListener(e -> {
+        viewAjoutFacture.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
-        	view.dispose();
+        	viewAjoutFacture.dispose();
         });
         
-        view.getItemCharge().addActionListener(e -> {
+        viewAjoutFacture.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewAjoutFacture.dispose();
         });
     }
 
@@ -383,16 +384,16 @@ public class FactureAjoutController extends TemplateAjoutController {
     private void populateAddressComboBox() {
         List<Bien> biens = modelBien.findAll();
         for (Bien bien : biens) {
-            view.getCbAdress().addItem(bien.getAdresse());
-            addressToIdMap.put(bien.getAdresse(), bien.getId_bien());
+            viewAjoutFacture.getCbAdress().addItem(bien.getAdresse());
+            addressToIdMap.put(bien.getAdresse(), bien.getIdBien());
         }
     }
     
     
 	private void logoLabel() {
-		view.getLogoLabel().addActionListener(e->{
+		viewAjoutFacture.getLogoLabel().addActionListener(e->{
 				new HomeController();
-				view.dispose();
+				viewAjoutFacture.dispose();
 		});
 	}
 }

@@ -12,13 +12,13 @@ import view.LocataireView;
 
 public class LocataireController extends TemplateTableController {
 
-    private LocataireView view = new LocataireView();
+    private LocataireView viewLocataire = new LocataireView();
     private LocataireDAO modelLocataire = DAOFactory.createLocataireDAO();
     private List<List<String>> listData;
 
     public LocataireController() {
         super();
-        view.setTitleHeader("Locataire");
+        viewLocataire.setTitleHeader("Locataire");
         updateFooter();
         openAjoutLocatairePage();
         actionDeleteButton();
@@ -26,14 +26,14 @@ public class LocataireController extends TemplateTableController {
         logoLabel();
         fillTable();
         actionToggleButton();
-        view.setTableModel(modelTable);
-        view.setVisible(true);
+        viewLocataire.setTableModel(modelTable);
+        viewLocataire.setVisible(true);
     }
 
     private void logoLabel() {
-        view.getLogoLabel().addActionListener(e -> {
+        viewLocataire.getLogoLabel().addActionListener(e -> {
             new HomeController();
-            view.dispose();
+            viewLocataire.dispose();
         });
     }
 
@@ -49,7 +49,7 @@ public class LocataireController extends TemplateTableController {
             }
         };
 
-        if (view.getToggleButton() != null && view.getToggleButton().isSelected()) {
+        if (viewLocataire.getToggleButton() != null && viewLocataire.getToggleButton().isSelected()) {
             listData = modelLocataire.procGetLocatairesActifs();
         } else {
             listData = modelLocataire.procGetLocataires();
@@ -67,75 +67,75 @@ public class LocataireController extends TemplateTableController {
     }
 
     private void actionDeleteButton() {
-        view.getDeleteButton().addActionListener(e -> {
-            int selectedRow = view.getTable().getSelectedRow();
+        viewLocataire.getDeleteButton().addActionListener(e -> {
+            int selectedRow = viewLocataire.getTable().getSelectedRow();
             int idLocataire = Integer.parseInt(listData.get(selectedRow).get(0));
             int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la suppression du locataire: " + idLocataire);
             if (response == JOptionPane.YES_OPTION) {
                 modelLocataire.procDeleteLocataireCascade(idLocataire);
                 modelTable.setRowCount(0);
                 fillTable();
-                view.setTableModel(modelTable, 1);
+                viewLocataire.setTableModel(modelTable, 1);
             }
         });
     }
 
     private void openAjoutLocatairePage() {
-        view.getAjoutLocataireButton().addActionListener(e -> {
-        	view.dispose();
+        viewLocataire.getAjoutLocataireButton().addActionListener(e -> {
+        	viewLocataire.dispose();
             new LocataireAjoutController();
         });
     }
 
     private void addEventHandlers() {
-        view.getBtnBienLouable().addActionListener(e -> {
+        viewLocataire.getBtnBienLouable().addActionListener(e -> {
         	new BienController();
-        	view.dispose();
+        	viewLocataire.dispose();
         });
 
-        view.getBtnLocataire().addActionListener(e -> {
+        viewLocataire.getBtnLocataire().addActionListener(e -> {
         	new LocataireController();
-        	view.dispose();
+        	viewLocataire.dispose();
         });
         
-        view.getBtnContratLocation().addActionListener(e -> {
+        viewLocataire.getBtnContratLocation().addActionListener(e -> {
         	new ContratLocationController();
-        	view.dispose();
+        	viewLocataire.dispose();
         });
         
-        view.getItemAssurance().addActionListener(e -> {
+        viewLocataire.getItemAssurance().addActionListener(e -> {
         	new AssuranceController();
-        	view.dispose();
+        	viewLocataire.dispose();
         });
         
-        view.getItemFacture().addActionListener(e -> {
+        viewLocataire.getItemFacture().addActionListener(e -> {
         	new FactureController();
-        	view.dispose();
+        	viewLocataire.dispose();
         });
         
-        view.getItemTravaux().addActionListener(e -> {
+        viewLocataire.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
-        	view.dispose();
+        	viewLocataire.dispose();
         });
         
-        view.getItemCharge().addActionListener(e -> {
+        viewLocataire.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewLocataire.dispose();
         });
     }
 
     private void actionToggleButton() {
-        view.getToggleButton().addActionListener(e -> {
+        viewLocataire.getToggleButton().addActionListener(e -> {
             fillTable();
-            view.setTableModel(modelTable, 3);
+            viewLocataire.setTableModel(modelTable, 3);
         });
     }
 
     @Override
     void updateFooter() {
-        if (view.getToggleButton() != null) {
-            view.getFooterPanel().add(view.getToggleButton());
-            FontComponent.setFontForAllComponents(view.getFooterPanel(), ScallingDimension.scaleValue(18));
+        if (viewLocataire.getToggleButton() != null) {
+            viewLocataire.getFooterPanel().add(viewLocataire.getToggleButton());
+            FontComponent.setFontForAllComponents(viewLocataire.getFooterPanel(), ScallingDimension.scaleValue(18));
         } 
     }
 }

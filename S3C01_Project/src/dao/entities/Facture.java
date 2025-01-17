@@ -11,23 +11,23 @@ import java.util.Objects;
  */
 public class Facture {
 
-    private String reference_facture;  // Référence unique de la facture
-    private String type_facture;  // Type de la facture (par exemple, eau, électricité, gaz, etc.)
-    private Date date_facture;  // Date à laquelle la facture a été émise
-    private BigDecimal montant_facture;  // Montant total de la facture
-    private String moyen_paiement;  // Moyen de paiement utilisé pour régler la facture
-    private int id_bien;  // Identifiant du bien associé à cette facture
+    private String referenceFacture;  // Référence unique de la facture
+    private String typeFacture;  // Type de la facture (par exemple, eau, électricité, gaz, etc.)
+    private Date dateFacture;  // Date à laquelle la facture a été émise
+    private BigDecimal montantFacture;  // Montant total de la facture
+    private String moyenPaiement;  // Moyen de paiement utilisé pour régler la facture
+    private int idBien;  // Identifiant du bien associé à cette facture
     
     
     
     public Facture() {}
 
-	public Facture(String type_facture, Date date_facture, BigDecimal montant_facture, String moyen_paiement) {
+	public Facture(String typeFacture, Date dateFacture, BigDecimal montantFacture, String moyenPaiement) {
 		super();
-		this.type_facture = type_facture;
-		this.date_facture = date_facture;
-		this.montant_facture = montant_facture;
-		this.moyen_paiement = moyen_paiement;
+		this.typeFacture = typeFacture;
+		this.dateFacture = dateFacture;
+		this.montantFacture = montantFacture;
+		this.moyenPaiement = moyenPaiement;
 	}
 
 	/**
@@ -35,17 +35,17 @@ public class Facture {
      *
      * @return La référence de la facture.
      */
-    public String getReference_facture() {
-        return reference_facture;
+    public String getReferenceFacture() {
+        return referenceFacture;
     }
 
     /**
      * Définit la référence de la facture.
      *
-     * @param reference_facture La référence de la facture à définir.
+     * @param referenceFacture La référence de la facture à définir.
      */
-    public void setReference_facture(String reference_facture) {
-        this.reference_facture = reference_facture;
+    public void setReferenceFacture(String referenceFacture) {
+        this.referenceFacture = referenceFacture;
     }
 
     /**
@@ -53,17 +53,17 @@ public class Facture {
      *
      * @return Le type de la facture (par exemple, eau, électricité).
      */
-    public String getType_facture() {
-        return type_facture;
+    public String getTypeFacture() {
+        return typeFacture;
     }
 
     /**
      * Définit le type de la facture.
      *
-     * @param type_facture Le type de la facture à définir.
+     * @param typeFacture Le type de la facture à définir.
      */
-    public void setType_facture(String type_facture) {
-        this.type_facture = type_facture;
+    public void setTypeFacture(String typeFacture) {
+        this.typeFacture = typeFacture;
     }
 
     /**
@@ -71,17 +71,17 @@ public class Facture {
      *
      * @return La date de la facture.
      */
-    public Date getDate_facture() {
-        return date_facture;
+    public Date getDateFacture() {
+        return dateFacture;
     }
 
     /**
      * Définit la date de la facture.
      *
-     * @param date_facture La date de la facture à définir.
+     * @param dateFacture La date de la facture à définir.
      */
-    public void setDate_facture(Date date_facture) {
-        this.date_facture = date_facture;
+    public void setDateFacture(Date dateFacture) {
+        this.dateFacture = dateFacture;
     }
 
     /**
@@ -89,17 +89,17 @@ public class Facture {
      *
      * @return Le montant de la facture.
      */
-    public BigDecimal getMontant_facture() {
-        return montant_facture;
+    public BigDecimal getMontantFacture() {
+        return montantFacture;
     }
 
     /**
      * Définit le montant total de la facture.
      *
-     * @param montant_facture Le montant de la facture à définir.
+     * @param montantFacture Le montant de la facture à définir.
      */
-    public void setMontant_facture(BigDecimal montant_facture) {
-        this.montant_facture = montant_facture;
+    public void setMontantFacture(BigDecimal montantFacture) {
+        this.montantFacture = montantFacture;
     }
 
     /**
@@ -107,17 +107,17 @@ public class Facture {
      *
      * @return Le moyen de paiement.
      */
-    public String getMoyen_paiement() {
-        return moyen_paiement;
+    public String getMoyenPaiement() {
+        return moyenPaiement;
     }
 
     /**
      * Définit le moyen de paiement utilisé pour régler la facture.
      *
-     * @param moyen_paiement Le moyen de paiement à définir.
+     * @param moyenPaiement Le moyen de paiement à définir.
      */
-    public void setMoyen_paiement(String moyen_paiement) {
-        this.moyen_paiement = moyen_paiement;
+    public void setMoyenPaiement(String moyenPaiement) {
+        this.moyenPaiement = moyenPaiement;
     }
 
     /**
@@ -125,17 +125,17 @@ public class Facture {
      *
      * @return L'identifiant du bien.
      */
-    public int getId_bien() {
-        return id_bien;
+    public int getIdBien() {
+        return idBien;
     }
 
     /**
      * Définit l'identifiant du bien associé à la facture.
      *
-     * @param id_bien L'identifiant du bien à définir.
+     * @param idBien L'identifiant du bien à définir.
      */
-    public void setId_bien(int id_bien) {
-        this.id_bien = id_bien;
+    public void setIdBien(int idBien) {
+        this.idBien = idBien;
     }
 
     /**
@@ -147,18 +147,18 @@ public class Facture {
     @Override
     public String toString() {
         return "Facture{" +
-               "reference_facture='" + (reference_facture != null ? reference_facture : "N/A") + '\'' +
-               ", type_facture='" + (type_facture != null ? type_facture : "N/A") + '\'' +
-               ", date_facture=" + (date_facture != null ? date_facture : "N/A") +
-               ", montant_facture=" + (montant_facture != null ? montant_facture : "N/A") +
-               ", moyen_paiement='" + (moyen_paiement != null ? moyen_paiement : "N/A") + '\'' +
-               ", id_bien=" + id_bien +
+               "reference_facture='" + (referenceFacture != null ? referenceFacture : "N/A") + '\'' +
+               ", type_facture='" + (typeFacture != null ? typeFacture : "N/A") + '\'' +
+               ", date_facture=" + (dateFacture != null ? dateFacture : "N/A") +
+               ", montant_facture=" + (montantFacture != null ? montantFacture : "N/A") +
+               ", moyen_paiement='" + (moyenPaiement != null ? moyenPaiement : "N/A") + '\'' +
+               ", id_bien=" + idBien +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_facture, id_bien, montant_facture, moyen_paiement, reference_facture, type_facture);
+		return Objects.hash(dateFacture, idBien, montantFacture, moyenPaiement, referenceFacture, typeFacture);
 	}
 
 	@Override
@@ -170,11 +170,10 @@ public class Facture {
 		if (getClass() != obj.getClass())
 			return false;
 		Facture other = (Facture) obj;
-		return Objects.equals(date_facture, other.date_facture) && id_bien == other.id_bien
-				&& Objects.equals(montant_facture, other.montant_facture)
-				&& Objects.equals(moyen_paiement, other.moyen_paiement)
-				&& Objects.equals(reference_facture, other.reference_facture)
-				&& Objects.equals(type_facture, other.type_facture);
+		return Objects.equals(dateFacture, other.dateFacture) && idBien == other.idBien
+				&& Objects.equals(montantFacture, other.montantFacture)
+				&& Objects.equals(moyenPaiement, other.moyenPaiement)
+				&& Objects.equals(typeFacture, other.typeFacture);
 	}
 
 	

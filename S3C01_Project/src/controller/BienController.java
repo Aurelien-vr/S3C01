@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import dao.BienDAO;
-import dao.Contrat_locationDAO;
+import dao.ContratLocationDAO;
 import dao.DAOFactory;
 import dao.LocataireDAO;
 import utilities.ErrorMessage;
@@ -13,31 +13,31 @@ import view.BienView;
 
 public class BienController extends TemplateTableController{
 	
-	private BienView view = new BienView();
+	private BienView viewBein = new BienView();
 	private BienDAO modelBien = DAOFactory.createBienDAO();
-	private Contrat_locationDAO modelContratLocation = DAOFactory.createContrat_locationDAO();
+	private ContratLocationDAO modelContratLocation = DAOFactory.createContratLocationDAO();
 	private LocataireDAO modelLocataire = DAOFactory.createLocataireDAO();
 	private List<List<String>> listData;
 	
 	public BienController(){
         super();
-        view.setTitleHeader("Bien");
+        viewBein.setTitleHeader("Bien");
         fillTable(); 
-        view.setTableModel(modelTable, 0);
+        viewBein.setTableModel(modelTable, 0);
         actionDeleteButton();
         actionEditButton();
         openAjoutBienPage();
         logoLabel();
         addEventHandlers();
-        view.setVisible(true);
+        viewBein.setVisible(true);
     }
 	
 	
 	
 	private void logoLabel() {
-	    view.getLogoLabel().addActionListener(e -> {
+	    viewBein.getLogoLabel().addActionListener(e -> {
 	        new HomeController();
-	        view.dispose();
+	        viewBein.dispose();
 	    });
 	}
 	
@@ -73,36 +73,35 @@ public class BienController extends TemplateTableController{
 	}
 	
 	private void actionDeleteButton() {
-		view.getDeleteButton().addActionListener(e-> {
-				int selectedRow = view.getTable().getSelectedRow();
+		viewBein.getDeleteButton().addActionListener(e-> {
+				int selectedRow = viewBein.getTable().getSelectedRow();
 				int idbBien = Integer.parseInt(listData.get(selectedRow).get(0));
 				int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la supression du travaux: " + idbBien);
-				System.out.println(response);
 				if (response == JOptionPane.YES_OPTION) {
 				    modelBien.procDeletBienCascade(idbBien);
 				    modelTable.setRowCount(0);
 				    fillTable();
-				    view.setTableModel(modelTable, 1);
+				    viewBein.setTableModel(modelTable, 1);
 				}
 		});
 	}
 	
 	private void actionEditButton() {
-		view.getEditIdContratBien().addActionListener(e-> {
+		viewBein.getEditIdContratBien().addActionListener(e-> {
 				int idCl;
-				String value = listData.get(view.getTable().getSelectedRow()).get(10);
+				String value = listData.get(viewBein.getTable().getSelectedRow()).get(10);
 				if ("Unknown".equals(value)) {idCl = -1;} else {idCl = Integer.parseInt(value);}
 				
 				List<List<String>> dataLocaSansContrat = modelLocataire.procLocataireSansContrat();
 				List<List<String>> dataClActif = modelContratLocation.procContratLocationDisponible();
-				view.getLocataireComboBox().removeAllItems();
-				view.getContratLocationComboBox().removeAllItems();
+				viewBein.getLocataireComboBox().removeAllItems();
+				viewBein.getContratLocationComboBox().removeAllItems();
 				populateCbBien(dataLocaSansContrat,dataClActif);
 				
 				
-				view.fillEditClDialog(idCl);
-				if(view.getLocataireComboBox().getSelectedItem() == null || view.getContratLocationComboBox().getSelectedItem() == null) {
-					view.getModifierButton().setEnabled(false);
+				viewBein.fillEditClDialog(idCl);
+				if(viewBein.getLocataireComboBox().getSelectedItem() == null || viewBein.getContratLocationComboBox().getSelectedItem() == null) {
+					viewBein.getModifierButton().setEnabled(false);
 				}
 	            actionAnnulerButton(idCl);
 	            actionModifierBoutton(idCl);
@@ -113,18 +112,18 @@ public class BienController extends TemplateTableController{
 
 	
     private void actionNouveauCl() {
-    	view.getAjouterContratLocationButton().addActionListener(e ->{
+    	viewBein.getAjouterContratLocationButton().addActionListener(e ->{
     		new ContratLocationAjoutController();
-    		view.getEditClDialog().dispose();
+    		viewBein.getEditClDialog().dispose();
     	});
 	}
 
 
 
 	private void actionNouveauLocataire() {
-		view.getAjouterLocataireButton().addActionListener(e ->{
+		viewBein.getAjouterLocataireButton().addActionListener(e ->{
 	    	new LocataireAjoutController();
-			view.getEditClDialog().dispose();
+			viewBein.getEditClDialog().dispose();
 
 		});		
 	}
@@ -132,9 +131,9 @@ public class BienController extends TemplateTableController{
 
 
 	private void actionModifierBoutton(int idCl) {
-    	view.getModifierButton().addActionListener(e -> {
-            int newCl = Integer.parseInt((String) view.getContratLocationComboBox().getSelectedItem());
-    		int newLocataire= Integer.parseInt((String) view.getContratLocationComboBox().getSelectedItem());
+    	viewBein.getModifierButton().addActionListener(e -> {
+            int newCl = Integer.parseInt((String) viewBein.getContratLocationComboBox().getSelectedItem());
+    		int newLocataire= Integer.parseInt((String) viewBein.getContratLocationComboBox().getSelectedItem());
     		int result = ErrorMessage.confirmationDialog("Confirmez vous l'insertion du lien entre le bien, le contrat de location et le locataire ?");
             if(result == JOptionPane.YES_OPTION) {
             	modelContratLocation.procUpdateFkBienLocation(idCl, newCl, newLocataire);
@@ -145,7 +144,7 @@ public class BienController extends TemplateTableController{
 	}
 
 	private void actionAnnulerButton(int idCl) {
-        view.getDeleteButtonDialog().addActionListener(e -> {
+        viewBein.getDeleteButtonDialog().addActionListener(e -> {
             int result = ErrorMessage.confirmationDialog("Confirmez vous la supression du lien entre le bien, le contrat de location et le locataire ?");
             if(result == JOptionPane.YES_OPTION) {
             	modelContratLocation.procRemoveFkBienLocation(idCl);
@@ -154,45 +153,46 @@ public class BienController extends TemplateTableController{
    
 
 	private void openAjoutBienPage() {
-		view.getAjoutBienButton().addActionListener(e -> {
+		viewBein.getAjoutBienButton().addActionListener(e -> {
 				new BienAjoutController();
-				view.dispose();
+				viewBein.dispose();
 		});
 	}
 	
 	 private void addEventHandlers() {
-        view.getBtnBienLouable().addActionListener(e -> {
+        viewBein.getBtnBienLouable().addActionListener(e -> {
         	new BienController();
-        	view.dispose();
+        	viewBein.dispose();
         });
 
-        view.getBtnLocataire().addActionListener(e -> {
+        viewBein.getBtnLocataire().addActionListener(e -> {
         	new LocataireController();
+        	viewBein.dispose();
         });
         
-        view.getBtnContratLocation().addActionListener(e -> {
+        viewBein.getBtnContratLocation().addActionListener(e -> {
         	new ContratLocationController();
-        	view.dispose();
+        	viewBein.dispose();
         });
         
-        view.getItemAssurance().addActionListener(e -> {
+        viewBein.getItemAssurance().addActionListener(e -> {
         	new AssuranceController();
-        	view.dispose();
+        	viewBein.dispose();
         });
         
-        view.getItemFacture().addActionListener(e -> {
+        viewBein.getItemFacture().addActionListener(e -> {
         	new FactureController();
-        	view.dispose();
+        	viewBein.dispose();
         });
         
-        view.getItemTravaux().addActionListener(e -> {
+        viewBein.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
-        	view.dispose();
+        	viewBein.dispose();
         });
         
-        view.getItemCharge().addActionListener(e -> {
+        viewBein.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewBein.dispose();
         });
     }
 
@@ -200,17 +200,17 @@ public class BienController extends TemplateTableController{
 
 	@Override
 	void updateFooter() {
-		return;
+		// NO footer for this page
 	}
 
 	private void populateCbBien(List<List<String>> dataLocaSansContrat,List<List<String>> dataClActif) {
 		
 		for(List<String> list : dataLocaSansContrat) {
-			view.getLocataireComboBox().addItem(list.get(0));
+			viewBein.getLocataireComboBox().addItem(list.get(0));
 		}
 		
 		for(List<String> list : dataClActif) {
-			view.getContratLocationComboBox().addItem(list.get(0));
+			viewBein.getContratLocationComboBox().addItem(list.get(0));
 		}
 	}
 	

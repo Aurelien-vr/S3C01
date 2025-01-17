@@ -1,4 +1,4 @@
-package dbConnection;
+package db_connection;
 
 import java.sql.*;
 import javax.swing.*;
@@ -9,13 +9,13 @@ public class DatabaseConnection {
     private static String username;
     private static String password;
     private static Connection instance;
+    public static boolean connected;
 
     /**
      * Constructeur privé pour empêcher l'instanciation directe de cette classe.
      * Utilise le pattern Singleton pour garantir qu'il n'y ait qu'une seule connexion à la fois.
      */
     private DatabaseConnection() { }
-    public static boolean connected = false;
 
     /**
      * Méthode singelton pour récupérer l'instance unique de la connexion à la base de données.
@@ -33,13 +33,9 @@ public class DatabaseConnection {
                     "jdbc:mysql://" + "mysql-1ba067f8-s3c01.e.aivencloud.com:24004/defaultdb?sslmode=require", 
                     username, password
                 );
-                System.out.println("Connected with the database successfully");
                 DatabaseConnection.connected = true;
             } catch (SQLException e) {
-                // Gestion des erreurs de connexion
-                System.out.println("Error while connecting to the database");
-                System.out.println(e.getClass()+" |SQL state :"+e.getSQLState()
-				+"|SQL error code:"+e.getErrorCode()+"| -> " +e.getMessage());
+            	e.printStackTrace();
             }
         }
         return instance;
@@ -85,7 +81,7 @@ public class DatabaseConnection {
     			instance.close(); // Ferme la connexion à la base de données
     			DatabaseConnection.connected = false;
     		} catch (SQLException e) {
-    			ExceptionStorageHandler.LogException(e, instance);
+    			ExceptionStorageHandler.logException(e, instance);
     		}
     	}
     }
@@ -95,7 +91,7 @@ public class DatabaseConnection {
     		try {
     			statement.close();
     		}catch (Exception e) {
-    			ExceptionStorageHandler.LogException(e, instance);
+    			ExceptionStorageHandler.logException(e, instance);
     		}
     	}
     }
@@ -105,7 +101,7 @@ public class DatabaseConnection {
     		try {
 				result.close();
 			} catch (Exception e) {
-				ExceptionStorageHandler.LogException(e, instance);
+				ExceptionStorageHandler.logException(e, instance);
 			}
     	}
     }

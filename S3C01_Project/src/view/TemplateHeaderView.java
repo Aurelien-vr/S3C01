@@ -2,9 +2,11 @@ package view;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.*;
+import java.io.Serializable;
+
 import javax.swing.*;
 
-public class TemplateHeaderView extends JFrame {
+public class TemplateHeaderView extends JFrame implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private JButton logoLabel;
 	protected JPanel headerPanel;

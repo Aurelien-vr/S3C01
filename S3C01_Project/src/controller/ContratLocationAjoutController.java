@@ -1,10 +1,10 @@
 package controller;
 
 import dao.BienDAO;
-import dao.Contrat_locationDAO;
+import dao.ContratLocationDAO;
 import dao.LocataireDAO;
-import dao.entities.Contrat_location;
-import dbConnection.DatabaseConnection;
+import dao.entities.ContratLocation;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 import utilities.ErrorMessage;
 import dao.DAOFactory;
@@ -18,28 +18,28 @@ import java.util.List;
 
 public class ContratLocationAjoutController extends TemplateAjoutController {
 
-    private ContratLocationAjoutView view = new ContratLocationAjoutView();
+    private ContratLocationAjoutView viewContratLocation = new ContratLocationAjoutView();
     private BienDAO bienDAO = DAOFactory.createBienDAO();
     private LocataireDAO locataireDAO = DAOFactory.createLocataireDAO();
-    private Contrat_locationDAO contratLocationDAO = DAOFactory.createContrat_locationDAO();
+    private ContratLocationDAO contratLocationDAO = DAOFactory.createContratLocationDAO();
     private boolean errorRaise;
     List<List<String>> dataLocaSansContrat;
 	List<List<String>> dataBienSansContrat;
 
     public ContratLocationAjoutController() {
         super();
-        view.setTitleHeader("Ajout Contrat Location");
+        viewContratLocation.setTitleHeader("Ajout Contrat Location");
         pressedValider();
         pressedAnnuler();
         pressedAjouterBien();
         pressedAjouterLocataire();
         populateComboBoxes();
         addEventHandlers();
-        view.setVisible(true);
+        viewContratLocation.setVisible(true);
     }
 
     private void pressedValider() {
-        view.getValiderButton().addActionListener(e -> {
+        viewContratLocation.getValiderButton().addActionListener(e -> {
             errorRaise = false;
             checkMontant();
             checkDateDebut();
@@ -50,35 +50,35 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
             if (!errorRaise) {
                 createContratLocation();
                 new BienController();
-                view.dispose();
+                viewContratLocation.dispose();
             }
         });
     }
     
     private void pressedAnnuler() {
-        view.getAnnulerButton().addActionListener(e -> {
+        viewContratLocation.getAnnulerButton().addActionListener(e -> {
             new BienController();
-            view.dispose();
+            viewContratLocation.dispose();
         });
     }
 
     private void pressedAjouterBien() {
-        view.getAjouterBienButton().addActionListener(e -> {
+        viewContratLocation.getAjouterBienButton().addActionListener(e -> {
             new BienAjoutController();
-            view.dispose();
+            viewContratLocation.dispose();
         });
     }
 
     private void pressedAjouterLocataire() {
-        view.getAjouterLocataireButton().addActionListener(e -> {
+        viewContratLocation.getAjouterLocataireButton().addActionListener(e -> {
             new LocataireAjoutController();
-            view.dispose();
+            viewContratLocation.dispose();
         });
     }
 
     private void checkMontant() {
         if (errorRaise) { return; }
-        String input = view.getFieldMontant().getText();
+        String input = viewContratLocation.getFieldMontant().getText();
         try {
             BigDecimal montant = new BigDecimal(input);
             if (montant.compareTo(BigDecimal.ZERO) <= 0) {
@@ -93,7 +93,7 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
 
     private void checkDateDebut() {
         if (errorRaise) { return; }
-        String input = view.getFieldDateDebut().getText();
+        String input = viewContratLocation.getFieldDateDebut().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("La date de début ne peut pas être vide");
             errorRaise = true;
@@ -102,7 +102,7 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
 
     private void checkDateFin() {
         if (errorRaise) { return; }
-        String input = view.getFieldDateFin().getText();
+        String input = viewContratLocation.getFieldDateFin().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("La date de fin ne peut pas être vide");
             errorRaise = true;
@@ -111,7 +111,7 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
 
     private void checkModaliteChauffage() {
         if (errorRaise) { return; }
-        String input = view.getFieldModaliteChauffage().getText();
+        String input = viewContratLocation.getFieldModaliteChauffage().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("La modalité chauffage ne peut pas être vide");
             errorRaise = true;
@@ -120,7 +120,7 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
 
     private void checkModaliteEauChaude() {
         if (errorRaise) { return; }
-        String input = view.getFieldModaliteEauChaude().getText();
+        String input = viewContratLocation.getFieldModaliteEauChaude().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("La modalité eau chaude sanitaire ne peut pas être vide");
             errorRaise = true;
@@ -129,7 +129,7 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
 
     private void checkDateVersement() {
         if (errorRaise) { return; }
-        String input = view.getFieldDateVersement().getText();
+        String input = viewContratLocation.getFieldDateVersement().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("La date de versement ne peut pas être vide");
             errorRaise = true;
@@ -138,19 +138,21 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
 
     private void createContratLocation() {
         try {
-            int montant = Integer.parseInt(view.getFieldMontant().getText());
-            Date dateDebut = transformStringToDate(view.getFieldDateDebut().getText());
-            Date dateFin = transformStringToDate(view.getFieldDateFin().getText());
-            String modaliteChauffage = view.getFieldModaliteChauffage().getText();
-            String modaliteEauChaude = view.getFieldModaliteEauChaude().getText();
-            Date dateVersement = transformStringToDate(view.getFieldDateVersement().getText());
+            int montant = Integer.parseInt(viewContratLocation.getFieldMontant().getText());
+            Date dateDebut = transformStringToDate(viewContratLocation.getFieldDateDebut().getText());
+            Date dateFin = transformStringToDate(viewContratLocation.getFieldDateFin().getText());
+            String modaliteChauffage = viewContratLocation.getFieldModaliteChauffage().getText();
+            String modaliteEauChaude = viewContratLocation.getFieldModaliteEauChaude().getText();
+            Date dateVersement = transformStringToDate(viewContratLocation.getFieldDateVersement().getText());
             //Recupere le l'indice de la combo box afin de recuperer l'id placer dans la liste de données recuperer par la procédure SQL
-            int bienId = Integer.parseInt(dataBienSansContrat.get(view.getComboBien().getSelectedIndex()).get(1));
-            int locataireId = Integer.parseInt(dataBienSansContrat.get(view.getComboLocataire().getSelectedIndex()).get(1));
-            Contrat_location contratLocation = new Contrat_location(montant, dateDebut, dateFin, modaliteChauffage, modaliteEauChaude, dateVersement);
+            int bienId = Integer.parseInt(dataBienSansContrat.get(viewContratLocation.getComboBien().getSelectedIndex()).get(1));
+            int locataireId = Integer.parseInt(dataBienSansContrat.get(viewContratLocation.getComboLocataire().getSelectedIndex()).get(1));
+            
+            //create the contrat location with the data for inserting it
+            ContratLocation contratLocation = new ContratLocation(montant, dateDebut, dateFin, modaliteChauffage, modaliteEauChaude, dateVersement);
             contratLocationDAO.insert(contratLocation);
             // Lie le bien et le locataire au contrat de location en recuperant la clé auto générer  de contrat location
-            contratLocationDAO.procUpdateFkBienLocation(contratLocation.getNumero_location(), bienId, locataireId);;
+            contratLocationDAO.procUpdateFkBienLocation(contratLocation.getNumeroLocation(), bienId, locataireId);
         } catch (NumberFormatException e) {
             ErrorMessage.errorDialog("Erreur lors de l'insertion des données dans la base de données");
         }
@@ -161,15 +163,15 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
     	dataBienSansContrat = bienDAO.procBienSansContrat();
 
     	if(dataBienSansContrat.isEmpty() || dataLocaSansContrat.isEmpty()) {
-    		view.getValiderButton().setEnabled(false);
+    		viewContratLocation.getValiderButton().setEnabled(false);
     	}
     	
 		for(List<String> list : dataLocaSansContrat) {
-			view.getComboBien().addItem(list.get(0));
+			viewContratLocation.getComboBien().addItem(list.get(0));
 		}
 		
 		for(List<String> list : dataBienSansContrat) {
-			view.getComboLocataire().addItem(list.get(0));
+			viewContratLocation.getComboLocataire().addItem(list.get(0));
 		}
 	}
     
@@ -179,50 +181,51 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
             java.util.Date parsed = format.parse(dateString);
             return new Date(parsed.getTime());
         } catch (ParseException e) {
-        	ExceptionStorageHandler.LogException(e, DatabaseConnection.getInstance());
+        	ExceptionStorageHandler.logException(e, DatabaseConnection.getInstance());
             return null;
         }
     }
     
     private void addEventHandlers() {
     	
-	    view.getLogoLabel().addActionListener(e -> {
+	    viewContratLocation.getLogoLabel().addActionListener(e -> {
 	        new HomeController();
-	        view.dispose();
+	        viewContratLocation.dispose();
 	    });
     	
-        view.getBtnBienLouable().addActionListener(e -> {
+        viewContratLocation.getBtnBienLouable().addActionListener(e -> {
             new BienController();
-            view.dispose();
+            viewContratLocation.dispose();
         });
 
-        view.getBtnLocataire().addActionListener(e -> {
+        viewContratLocation.getBtnLocataire().addActionListener(e -> {
             new LocataireController();
+            viewContratLocation.dispose();
         });
         
-        view.getBtnContratLocation().addActionListener(e -> {
+        viewContratLocation.getBtnContratLocation().addActionListener(e -> {
             new ContratLocationController();
-            view.dispose();
+            viewContratLocation.dispose();
         });
         
-        view.getItemAssurance().addActionListener(e -> {
+        viewContratLocation.getItemAssurance().addActionListener(e -> {
             new AssuranceController();
-            view.dispose();
+            viewContratLocation.dispose();
         });
         
-        view.getItemFacture().addActionListener(e -> {
+        viewContratLocation.getItemFacture().addActionListener(e -> {
             new FactureController();
-            view.dispose();
+            viewContratLocation.dispose();
         });
         
-        view.getItemTravaux().addActionListener(e -> {
+        viewContratLocation.getItemTravaux().addActionListener(e -> {
             new TravauxController();
-            view.dispose();
+            viewContratLocation.dispose();
         });
         
-        view.getItemCharge().addActionListener(e -> {
+        viewContratLocation.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewContratLocation.dispose();
         });
     }
 }

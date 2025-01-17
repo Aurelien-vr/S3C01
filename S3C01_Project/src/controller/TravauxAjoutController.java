@@ -13,14 +13,14 @@ import dao.DAOFactory;
 import dao.FactureDAO;
 import dao.TravauxDAO;
 import dao.entities.Travaux;
-import dbConnection.DatabaseConnection;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 import utilities.ErrorMessage;
 import view.TravauxAjout;
 
 public class TravauxAjoutController extends TemplateAjoutController {
 
-    private TravauxAjout view = new TravauxAjout();
+    private TravauxAjout viewTravaux = new TravauxAjout();
     private FactureDAO model = DAOFactory.createFactureDAO();
     private BienDAO modelBien = DAOFactory.createBienDAO();
     private TravauxDAO modelTravaux = DAOFactory.createTravauxDAO();
@@ -29,10 +29,10 @@ public class TravauxAjoutController extends TemplateAjoutController {
 
     public TravauxAjoutController() {
         super();
-        view.setTitleHeader("Travaux");
-        view.setCbFacture(model.get_numFacture());
-        view.getLabResAdress().setText(modelBien.procAdressOfFacture((String) view.getCbFacture().getSelectedItem()));
-        addAutoResultListener(new JTextField[]{view.getFieldMontant(), view.getFieldMontantNonDeductible(), view.getFielReduction()});
+        viewTravaux.setTitleHeader("Travaux");
+        viewTravaux.setCbFacture(model.getNumFacture());
+        viewTravaux.getLabResAdress().setText(modelBien.procAdressOfFacture((String) viewTravaux.getCbFacture().getSelectedItem()));
+        addAutoResultListener(new JTextField[]{viewTravaux.getFieldMontant(), viewTravaux.getFieldMontantNonDeductible(), viewTravaux.getFielReduction()});
         pressedValider();
         pressedAnnuler();
         pressedAjouterTravauxButton();
@@ -40,7 +40,7 @@ public class TravauxAjoutController extends TemplateAjoutController {
         addComboBoxListener();
         logoLabel();
 
-        view.setVisible(true);
+        viewTravaux.setVisible(true);
     }
 
 	private void addAutoResultListener(JTextField[] jTextFields) {
@@ -64,12 +64,12 @@ public class TravauxAjoutController extends TemplateAjoutController {
                 private void calculate() {
                     double result = 0.0;
                     try {
-                        String montText = view.getFieldMontant().getText();
-                        String montNDText = view.getFieldMontantNonDeductible().getText();
-                        String reducText = view.getFielReduction().getText();
+                        String montText = viewTravaux.getFieldMontant().getText();
+                        String montNDText = viewTravaux.getFieldMontantNonDeductible().getText();
+                        String reducText = viewTravaux.getFielReduction().getText();
 
                         if (montText.isEmpty() || montNDText.isEmpty() || reducText.isEmpty()) {
-                            view.getResultField().setText("");
+                            viewTravaux.getResultField().setText("");
                             return;
                         }
 
@@ -78,12 +78,12 @@ public class TravauxAjoutController extends TemplateAjoutController {
                         double reduc = Double.parseDouble(reducText);
                         result = (mont - montND) * (1 - reduc / 100);
                         DecimalFormat df = new DecimalFormat("#.##");
-                        view.getResultField().setText(df.format(result));
+                        viewTravaux.getResultField().setText(df.format(result));
                         
                     } catch (NumberFormatException e) {
-                        view.getResultField().setText("");
+                        viewTravaux.getResultField().setText("");
                     } catch (Exception e) {
-                        ExceptionStorageHandler.LogException(e, DatabaseConnection.getInstance());
+                        ExceptionStorageHandler.logException(e, DatabaseConnection.getInstance());
                     }
                 }
             });
@@ -91,19 +91,19 @@ public class TravauxAjoutController extends TemplateAjoutController {
     }
 	
     private void addComboBoxListener() {
-        view.getCbFacture().addActionListener(e -> {
-            String selectedFacture = (String) view.getCbFacture().getSelectedItem();
+        viewTravaux.getCbFacture().addActionListener(e -> {
+            String selectedFacture = (String) viewTravaux.getCbFacture().getSelectedItem();
             if (selectedFacture != null) {
                 String address = modelBien.procAdressOfFacture(selectedFacture);
-                view.getLabResAdress().setText(address);
+                viewTravaux.getLabResAdress().setText(address);
             }else {
-            	 view.getLabResAdress().setText("Aucune adresse liée");
+            	 viewTravaux.getLabResAdress().setText("Aucune adresse liée");
             }
         });
     }
 
     private void pressedValider() {
-        view.getValiderButton().addActionListener(e -> {
+        viewTravaux.getValiderButton().addActionListener(e -> {
                 errorRaise = false;
                 checkMontant();
                 checkMontantNonDeductible();
@@ -112,21 +112,21 @@ public class TravauxAjoutController extends TemplateAjoutController {
                 if (!errorRaise) {
                     createTravaux();
                     new TravauxController();
-                    view.dispose();
+                    viewTravaux.dispose();
                 }
         });
     }
 
     private void checkMontantNonDeductible() {
         if (errorRaise) { return; }
-        String input = view.getFieldMontantNonDeductible().getText();
+        String input = viewTravaux.getFieldMontantNonDeductible().getText();
         try {
             double montantNonDeductible = Double.parseDouble(input.replace(',', '.'));
             if (montantNonDeductible < 0) {
                 ErrorMessage.errorDialog("Le champs montant non déductible doit être supérieur à 0");
                 errorRaise = true;
             }
-            double montant = Double.parseDouble(view.getFieldMontant().getText().replace(',', '.'));
+            double montant = Double.parseDouble(viewTravaux.getFieldMontant().getText().replace(',', '.'));
             if (montantNonDeductible > montant) {
                 ErrorMessage.errorDialog("Le champs montant non déductible non déductible doit être inférieur au montant");
                 errorRaise = true;
@@ -139,7 +139,7 @@ public class TravauxAjoutController extends TemplateAjoutController {
 
     private void checkMontant() {
         if (errorRaise) { return; }
-        String input = view.getFieldMontant().getText();
+        String input = viewTravaux.getFieldMontant().getText();
         try {
             double montant = Double.parseDouble(input.replace(',', '.'));
             if (montant < 0) {
@@ -154,7 +154,7 @@ public class TravauxAjoutController extends TemplateAjoutController {
 
     private void checkReduction() {
         if (errorRaise) { return; }
-        String input = view.getFielReduction().getText();
+        String input = viewTravaux.getFielReduction().getText();
         try {
             double reduction = Double.parseDouble(input.replace(',', '.'));
             if (reduction < 0) {
@@ -173,7 +173,7 @@ public class TravauxAjoutController extends TemplateAjoutController {
 
     private void checkDate() {
         if (errorRaise) { return; }
-        String input = view.getDateField().getText();
+        String input = viewTravaux.getDateField().getText();
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             dateFormat.setLenient(false);
@@ -188,15 +188,15 @@ public class TravauxAjoutController extends TemplateAjoutController {
     private void createTravaux() {
         try {
             Date dateTravaux = sqlDate;
-            String nature = view.getNatureField().getText();
-            BigDecimal reduction = new BigDecimal(view.getFielReduction().getText().replace(',', '.'));
-            BigDecimal montant = new BigDecimal(view.getFieldMontant().getText().replace(',', '.'));
-            BigDecimal montantNonDeductible = new BigDecimal(view.getFieldMontantNonDeductible().getText().replace(',', '.'));
+            String nature = viewTravaux.getNatureField().getText();
+            BigDecimal reduction = new BigDecimal(viewTravaux.getFielReduction().getText().replace(',', '.'));
+            BigDecimal montant = new BigDecimal(viewTravaux.getFieldMontant().getText().replace(',', '.'));
+            BigDecimal montantNonDeductible = new BigDecimal(viewTravaux.getFieldMontantNonDeductible().getText().replace(',', '.'));
             
             Travaux travaux = new Travaux(dateTravaux, nature, null, reduction, montant, montantNonDeductible, null);
             
             modelTravaux.insert(travaux);
-            modelTravaux.insertFK(travaux.getNumero_facture(), view.getCbFacture().getSelectedItem().toString());
+            modelTravaux.insertFK(travaux.getNumeroFacture(), viewTravaux.getCbFacture().getSelectedItem().toString());
         } catch (Exception e) {
             ErrorMessage.errorDialog("Erreur lors de la création de l'objet Travaux: " + e.getMessage());
         }
@@ -207,60 +207,61 @@ public class TravauxAjoutController extends TemplateAjoutController {
     }
 
     private void pressedAnnuler() {
-        view.getAnnulerButton().addActionListener(e ->{
+        viewTravaux.getAnnulerButton().addActionListener(e ->{
                 new TravauxController();
-                view.dispose();
+                viewTravaux.dispose();
         });
     }
     
     
     private void pressedAjouterTravauxButton() {
-    	view.getAjouterFactureButton().addActionListener(e -> {
+    	viewTravaux.getAjouterFactureButton().addActionListener(e -> {
 				new FactureAjoutController();
-				view.dispose();		
+				viewTravaux.dispose();		
 		});
 	}
     
 	private void logoLabel() {
-		view.getLogoLabel().addActionListener(e -> {
+		viewTravaux.getLogoLabel().addActionListener(e -> {
 				new HomeController();
-				view.dispose();
+				viewTravaux.dispose();
 		});
 	}
 	
 	 private void addEventHandlers() {
-	        view.getBtnBienLouable().addActionListener(e -> {
+	        viewTravaux.getBtnBienLouable().addActionListener(e -> {
 	        	new BienController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 
-	        view.getBtnLocataire().addActionListener(e -> {
+	        viewTravaux.getBtnLocataire().addActionListener(e -> {
 	        	new LocataireController();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getBtnContratLocation().addActionListener(e -> {
+	        viewTravaux.getBtnContratLocation().addActionListener(e -> {
 	        	new ContratLocationController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getItemAssurance().addActionListener(e -> {
+	        viewTravaux.getItemAssurance().addActionListener(e -> {
 	        	new AssuranceController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getItemFacture().addActionListener(e -> {
+	        viewTravaux.getItemFacture().addActionListener(e -> {
 	        	new FactureController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getItemTravaux().addActionListener(e -> {
+	        viewTravaux.getItemTravaux().addActionListener(e -> {
 	        	new TravauxController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getItemCharge().addActionListener(e -> {
+	        viewTravaux.getItemCharge().addActionListener(e -> {
 	        	new ChargeController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	    }
 }

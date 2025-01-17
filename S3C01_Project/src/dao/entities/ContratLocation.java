@@ -8,28 +8,28 @@ import java.util.Objects;
  * Cette classe contient les informations relatives au contrat de location, telles que
  * les dates de début et de fin, le montant du loyer, et les modalités de chauffage et d'eau chaude sanitaire.
  */
-public class Contrat_location {
+public class ContratLocation {
 
-    private int id_numero_location;  // Identifiant unique du contrat de location
-    private int montant_loyer;  // Montant du loyer mensuel
-    private Date date_debut;  // Date de début du contrat
-    private Date date_fin;  // Date de fin du contrat
-    private String modalite_chauffage;  // Modalité de chauffage (ex : gaz, électrique, etc.)
-    private String modalite_eau_chaude_sanitaire;  // Modalité d'eau chaude sanitaire (ex : collective, individuelle, etc.)
-    private Date date_versement;  // Date de versement du loyer
+    private int idNumeroLocation;  // Identifiant unique du contrat de location
+    private int montantLoyer;  // Montant du loyer mensuel
+    private Date dateDebut;  // Date de début du contrat
+    private Date dateFin;  // Date de fin du contrat
+    private String modaliteChauffage;  // Modalité de chauffage (ex : gaz, électrique, etc.)
+    private String modaliteEauChaudeSanitaire;  // Modalité d'eau chaude sanitaire (ex : collective, individuelle, etc.)
+    private Date dateVersement;  // Date de versement du loyer
 
 
-    public Contrat_location() {}
+    public ContratLocation() {}
 	
-    public Contrat_location(int montant_loyer, Date date_debut, Date date_fin, String modalite_chauffage,
-			String modalite_eau_chaude_sanitaire, Date date_versement) {
+    public ContratLocation(int montantLoyer, Date dateDebut, Date dateFin, String modaliteChauffage,
+			String modaliteEauChaudeSanitaire, Date dateVersement) {
 		super();
-		this.montant_loyer = montant_loyer;
-		this.date_debut = date_debut;
-		this.date_fin = date_fin;
-		this.modalite_chauffage = modalite_chauffage;
-		this.modalite_eau_chaude_sanitaire = modalite_eau_chaude_sanitaire;
-		this.date_versement = date_versement;
+		this.montantLoyer = montantLoyer;
+		this.dateDebut = dateDebut;
+		this.dateFin = dateFin;
+		this.modaliteChauffage = modaliteChauffage;
+		this.modaliteEauChaudeSanitaire = modaliteEauChaudeSanitaire;
+		this.dateVersement = dateVersement;
 	}
     
 
@@ -38,17 +38,17 @@ public class Contrat_location {
      *
      * @return Le numéro de location.
      */
-    public int getNumero_location() {
-        return id_numero_location;
+    public int getNumeroLocation() {
+        return idNumeroLocation;
     }
 
     /**
      * Définit le numéro unique du contrat de location.
      *
-     * @param numero_location Le numéro de location à définir.
+     * @param numeroLocation Le numéro de location à définir.
      */
-    public void setNumero_location(int numero_location) {
-        this.id_numero_location = numero_location;
+    public void setNumeroLocation(int numeroLocation) {
+        this.idNumeroLocation = numeroLocation;
     }
 
     /**
@@ -56,17 +56,17 @@ public class Contrat_location {
      *
      * @return Le montant du loyer.
      */
-    public int getMontant_loyer() {
-        return montant_loyer;
+    public int getMontantLoyer() {
+        return montantLoyer;
     }
 
     /**
      * Définit le montant du loyer mensuel.
      *
-     * @param montant_loyer Le montant du loyer à définir.
+     * @param montantLoyer Le montant du loyer à définir.
      */
-    public void setMontant_loyer(int montant_loyer) {
-        this.montant_loyer = montant_loyer;
+    public void setMontantLoyer(int montantLoyer) {
+        this.montantLoyer = montantLoyer;
     }
 
     /**
@@ -74,17 +74,17 @@ public class Contrat_location {
      *
      * @return La date de début du contrat.
      */
-    public Date getDate_debut() {
-        return date_debut;
+    public Date getDateDebut() {
+        return dateDebut;
     }
 
     /**
      * Définit la date de début du contrat.
      *
-     * @param date_debut La date de début du contrat à définir.
+     * @param dateDebut La date de début du contrat à définir.
      */
-    public void setDate_debut(Date date_debut) {
-        this.date_debut = date_debut;
+    public void setDateDebut(Date dateDebut) {
+        this.dateDebut = dateDebut;
     }
 
     /**
@@ -92,17 +92,17 @@ public class Contrat_location {
      *
      * @return La date de fin du contrat.
      */
-    public Date getDate_fin() {
-        return date_fin;
+    public Date getDateFin() {
+        return dateFin;
     }
 
     /**
      * Définit la date de fin du contrat.
      *
-     * @param date_fin La date de fin du contrat à définir.
+     * @param dateFin La date de fin du contrat à définir.
      */
-    public void setDate_fin(Date date_fin) {
-        this.date_fin = date_fin;
+    public void setDateFin(Date dateFin) {
+        this.dateFin = dateFin;
     }
 
     /**
@@ -110,17 +110,17 @@ public class Contrat_location {
      *
      * @return Les modalités de chauffage (ex : gaz, électrique).
      */
-    public String getModalite_chauffage() {
-        return modalite_chauffage;
+    public String getModaliteChauffage() {
+        return modaliteChauffage;
     }
 
     /**
      * Définit les modalités de chauffage du bien.
      *
-     * @param modalite_chauffage Les modalités de chauffage à définir.
+     * @param modaliteChauffage Les modalités de chauffage à définir.
      */
-    public void setModalite_chauffage(String modalite_chauffage) {
-        this.modalite_chauffage = modalite_chauffage;
+    public void setModaliteChauffage(String modaliteChauffage) {
+        this.modaliteChauffage = modaliteChauffage;
     }
 
     /**
@@ -128,17 +128,17 @@ public class Contrat_location {
      *
      * @return Les modalités d'eau chaude sanitaire (ex : collective, individuelle).
      */
-    public String getModalite_eau_chaude_saniatire() {
-        return modalite_eau_chaude_sanitaire;
+    public String getModaliteEauChaudeSanitaire() {
+        return modaliteEauChaudeSanitaire;
     }
 
     /**
      * Définit les modalités d'eau chaude sanitaire du bien.
      *
-     * @param modalite_eau_chaude_saniatire Les modalités d'eau chaude sanitaire à définir.
+     * @param modaliteEauChaudeSanitaire Les modalités d'eau chaude sanitaire à définir.
      */
-    public void setModalite_eau_chaude_saniatire(String modalite_eau_chaude_saniatire) {
-        this.modalite_eau_chaude_sanitaire = modalite_eau_chaude_saniatire;
+    public void setModaliteEauChaudeSanitaire(String modaliteEauChaudeSanitaire) {
+        this.modaliteEauChaudeSanitaire = modaliteEauChaudeSanitaire;
     }
 
     /**
@@ -146,21 +146,21 @@ public class Contrat_location {
      *
      * @return La date de versement du loyer.
      */
-    public Date getDate_versement() {
-        return date_versement;
+    public Date getDateVersement() {
+        return dateVersement;
     }
 
     /**
      * Définit la date de versement du loyer.
      *
-     * @param date_versement La date de versement à définir.
+     * @param dateVersement La date de versement à définir.
      */
-    public void setDate_versement(Date date_versement) {
-        this.date_versement = date_versement;
+    public void setDateVersement(Date dateVersement) {
+        this.dateVersement = dateVersement;
     }
 
     /**
-     * Retourne une représentation textuelle de l'objet {@link Contrat_location}.
+     * Retourne une représentation textuelle de l'objet {@link ContratLocation}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
      * @return Une chaîne de caractères représentant le contrat de location.
@@ -168,21 +168,21 @@ public class Contrat_location {
     @Override
     public String toString() {
         return "ContratLocation{" +
-               "numero_location=" + id_numero_location +
-               ", montant_loyer=" + montant_loyer +
-               ", date_debut=" + (date_debut != null ? date_debut : "N/A") +
-               ", date_fin=" + (date_fin != null ? date_fin : "N/A") +
-               ", modalite_chauffage='" + (modalite_chauffage != null ? modalite_chauffage : "N/A") + '\'' +
-               ", modalite_eau_chaude_saniatire='" + (modalite_eau_chaude_sanitaire != null ? modalite_eau_chaude_sanitaire : "N/A") + '\'' +
-               ", date_versement=" + (date_versement != null ? date_versement : "N/A") +
+               "numero_location=" + idNumeroLocation +
+               ", montant_loyer=" + montantLoyer +
+               ", date_debut=" + (dateDebut != null ? dateDebut : "N/A") +
+               ", date_fin=" + (dateFin != null ? dateFin : "N/A") +
+               ", modalite_chauffage='" + (modaliteChauffage != null ? modaliteChauffage : "N/A") + '\'' +
+               ", modalite_eau_chaude_saniatire='" + (modaliteEauChaudeSanitaire != null ? modaliteEauChaudeSanitaire : "N/A") + '\'' +
+               ", date_versement=" + (dateVersement != null ? dateVersement : "N/A") +
                '}';
     }
 
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_debut, date_fin, date_versement, id_numero_location, modalite_chauffage,
-				modalite_eau_chaude_sanitaire, montant_loyer);
+		return Objects.hash(dateDebut, dateFin, dateVersement, idNumeroLocation, modaliteChauffage,
+				modaliteEauChaudeSanitaire, montantLoyer);
 	}
 
 	@Override
@@ -193,13 +193,12 @@ public class Contrat_location {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Contrat_location other = (Contrat_location) obj;
-		return Objects.equals(date_debut, other.date_debut) && Objects.equals(date_fin, other.date_fin)
-				&& Objects.equals(date_versement, other.date_versement)
-				&& id_numero_location == other.id_numero_location
-				&& Objects.equals(modalite_chauffage, other.modalite_chauffage)
-				&& Objects.equals(modalite_eau_chaude_sanitaire, other.modalite_eau_chaude_sanitaire)
-				&& montant_loyer == other.montant_loyer;
+		ContratLocation other = (ContratLocation) obj;
+		return Objects.equals(dateDebut, other.dateDebut) && Objects.equals(dateFin, other.dateFin)
+				&& Objects.equals(dateVersement, other.dateVersement)
+				&& Objects.equals(modaliteChauffage, other.modaliteChauffage)
+				&& Objects.equals(modaliteEauChaudeSanitaire, other.modaliteEauChaudeSanitaire)
+				&& montantLoyer == other.montantLoyer;
 	}
     
     

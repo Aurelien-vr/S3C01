@@ -4,20 +4,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.Facture_gazDAO;
-import dao.entities.Facture_gaz;
-import dbConnection.DatabaseConnection;
+import dao.FactureGazDAO;
+import dao.entities.FactureGaz;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
- * Implémentation de l'interface {@link Facture_electriciteDAO} pour gérer les opérations sur les entités "Facture_electricite".
+ * Implémentation de l'interface {@link FactureElectriciteDAO} pour gérer les opérations sur les entités "Facture_electricite".
  */
-public class Facture_gazImpl implements Facture_gazDAO {
+public class FactureGazImpl implements FactureGazDAO {
 
     private Connection connection; // Connexion à la base de données
 
@@ -26,7 +25,7 @@ public class Facture_gazImpl implements Facture_gazDAO {
      *
      * @param connection La connexion à la base de données.
      */
-    public Facture_gazImpl(Connection connection) {
+    public FactureGazImpl(Connection connection) {
         this.connection = connection;
     }
 
@@ -34,10 +33,10 @@ public class Facture_gazImpl implements Facture_gazDAO {
      * Recherche une entité Facture_gaz par son identifiant.
      *
      * @param id L'identifiant de la facture de gaz à rechercher.
-     * @return L'entité {@link Facture_gaz} si trouvée, sinon {@code null}.
+     * @return L'entité {@link FactureGaz} si trouvée, sinon {@code null}.
      */
     @Override
-    public Facture_gaz findOne(long id) {
+    public FactureGaz findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Facture_gaz WHERE id_facture_gaz = ?";
@@ -60,7 +59,7 @@ public class Facture_gazImpl implements Facture_gazDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             }catch (Exception e) {
-                ExceptionStorageHandler.LogException(e, connection);
+                ExceptionStorageHandler.logException(e, connection);
             } finally {
                 DatabaseConnection.closeStatement(statement);
                 DatabaseConnection.closeResult(result);
@@ -76,8 +75,8 @@ public class Facture_gazImpl implements Facture_gazDAO {
      * @return Liste des facture de gaz
      */
     @Override
-    public List<Facture_gaz> findAll() {
-    	List<Facture_gaz> facts_gaz = new ArrayList<>();
+    public List<FactureGaz> findAll() {
+    	List<FactureGaz> facturesGaz = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
         String query = "SELECT * FROM db1_sae.Facture_gaz";
@@ -87,8 +86,8 @@ public class Facture_gazImpl implements Facture_gazDAO {
             result = statement.executeQuery();
             
             while (result.next()) {
-                Facture_gaz acte = createEntities(result);
-                facts_gaz.add(acte);
+                FactureGaz acte = createEntities(result);
+                facturesGaz.add(acte);
             } 
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,14 +96,14 @@ public class Facture_gazImpl implements Facture_gazDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             }catch (Exception e) {
-                ExceptionStorageHandler.LogException(e, connection);
+                ExceptionStorageHandler.logException(e, connection);
             } finally {
                 DatabaseConnection.closeStatement(statement);
                 DatabaseConnection.closeResult(result);
             }
         }
         
-        return facts_gaz;
+        return facturesGaz;
     }
 
     /**
@@ -113,25 +112,24 @@ public class Facture_gazImpl implements Facture_gazDAO {
      * @param entity L'entité Facture_gaz à créer.
      */
     @Override
-    public void insert(Facture_gaz entity) {
+    public void insert(FactureGaz entity) {
         PreparedStatement statement = null;
         String query = "INSERT INTO db1_sae.Facture_gaz(consommation_m3, prix_m3_gaz) VALUES (?, ?)";
 
         try {
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setBigDecimal(1, entity.getConsommation_m3());
-            statement.setString(2, entity.getPrix_m3_gaz());
+            statement.setBigDecimal(1, entity.getConsommationM3());
+            statement.setString(2, entity.getPrixM3Gaz());
 
             if (statement.executeUpdate() > 0) {
                 ResultSet result = statement.getGeneratedKeys();
                 if (result.next()) {
                     int id = result.getInt(1);
-                    entity.setId_facture_gaz(id);
+                    entity.setIdFactureGaz(id);
                 }
-                System.out.println("Facture_gaz inserted");
             }
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -144,19 +142,19 @@ public class Facture_gazImpl implements Facture_gazDAO {
      * @param entity L'entité Facture_gaz à mettre à jour.
      */
     @Override
-    public void update(Facture_gaz entity) {
+    public void update(FactureGaz entity) {
         PreparedStatement statement = null;
         String query = "UPDATE db1_sae.Facture_gaz SET consommation_m3 = ?, prix_m3_gaz = ? WHERE id_facture_gaz = ?";
 
         try {
             statement = connection.prepareStatement(query);
-            statement.setBigDecimal(1, entity.getConsommation_m3());
-            statement.setString(2, entity.getPrix_m3_gaz());
-            statement.setLong(3, entity.getId_facture_gaz());
+            statement.setBigDecimal(1, entity.getConsommationM3());
+            statement.setString(2, entity.getPrixM3Gaz());
+            statement.setLong(3, entity.getIdFactureGaz());
 
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -179,25 +177,26 @@ public class Facture_gazImpl implements Facture_gazDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
     }
 
     /**
-     * Crée une entité {@link Facture_gaz} à partir des résultats d'une requête SQL.
+     * Crée une entité {@link FactureGaz} à partir des résultats d'une requête SQL.
      *
      * @param result Le {@link ResultSet} contenant les données de l'entité Facture_gaz.
      * @return L'entité Facture_gaz construite.
      * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
      */
     @Override
-    public Facture_gaz createEntities(ResultSet result) throws SQLException {
+    public FactureGaz createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture_gaz à partir des données du ResultSet
-        Facture_gaz factureGaz = new Facture_gaz();
-        factureGaz.setConsommation_m3(result.getBigDecimal("consommation_m3"));
-        factureGaz.setPrix_m3_gaz(result.getString("prix_m3_gaz"));
+        FactureGaz factureGaz = new FactureGaz();
+        factureGaz.setIdFactureGaz(result.getInt("id_facture_gaz"));
+        factureGaz.setConsommationM3(result.getBigDecimal("consommation_m3"));
+        factureGaz.setPrixM3Gaz(result.getString("prix_m3_gaz"));
         return factureGaz; // Retourne l'entité Facture_electricite construite
     }
     
@@ -211,14 +210,9 @@ public class Facture_gazImpl implements Facture_gazDAO {
             statement.setString(1, referenceFacture); 
             statement.setInt(2, id); 
 
-            if (statement.executeUpdate() > 0) {
-                System.out.println("FK reference_facture inserted into Facture_gaz");
-            }
-        } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("Integrity constraint violation: " + e.getMessage());
-            ExceptionStorageHandler.LogException(e, connection);
-        } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+
+        }catch (Exception e) {
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }

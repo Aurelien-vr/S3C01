@@ -1,21 +1,23 @@
 package dao;
 
-import dbConnection.*;
 import dao.implementation.*;
+import db_connection.*;
 
 /**
  * Usine pour la création des DAO (Data Access Objects).
  * Permet d'instancier les implémentations spécifiques des DAO en fournissant une connexion à la base de données.
  */
 public class DAOFactory {
+	
+	private DAOFactory() {}
 
     /**
      * Crée une instance de Contrat_locationDAO.
      *
-     * @return Une instance de {@link Contrat_locationDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link ContratLocationDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Contrat_locationDAO createContrat_locationDAO() {
-        return new Contrat_locationImpl(DatabaseConnection.getInstance());
+    public static ContratLocationDAO createContratLocationDAO() {
+        return new ContratLocationImpl(DatabaseConnection.getInstance());
     }
 
     /**
@@ -30,10 +32,10 @@ public class DAOFactory {
     /**
      * Crée une instance de Acte_cautionnementDAO.
      *
-     * @return Une instance de {@link Acte_cautionnementDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link ActeCautionnementDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Acte_cautionnementDAO createActe_cautionnementDAO() {
-        return new Acte_cautionnementImpl(DatabaseConnection.getInstance());
+    public static ActeCautionnementDAO createActeCautionnementDAO() {
+        return new ActeCautionnementImpl(DatabaseConnection.getInstance());
     }
     
     /**
@@ -57,64 +59,73 @@ public class DAOFactory {
     /**
      * Crée une instance de Avis_taxe_fonciereDAO.
      *
-     * @return Une instance de {@link Avis_Taxe_FonciereDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link AvisTaxeFonciereDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Avis_Taxe_FonciereDAO createAvis_Taxe_FonciereDAO() {
-        return new Avis_Taxe_FonciereImpl(DatabaseConnection.getInstance());
+    public static AvisTaxeFonciereDAO createAvisTaxeFonciereDAO() {
+        return new AvisTaxeFonciereImpl(DatabaseConnection.getInstance());
     }
     
     /**
      * Crée une instance de Contrat_colocationDAO.
      *
-     * @return Une instance de {@link Contrat_colocationDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link ContratColocationDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Contrat_colocationDAO createContrat_colocationDAO() {
-        return new Contrat_colocationImpl(DatabaseConnection.getInstance());
+    public static ContratColocationDAO createContratColocationDAO() {
+        return new ContratColocationImpl(DatabaseConnection.getInstance());
     }
     
     /**
      * Crée une instance de Declaration_revenuDAO.
      *
-     * @return Une instance de {@link Declaration_revenuDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link DeclarationRevenuDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Declaration_revenuDAO createDeclaration_revenuDAO() {
-        return new Declaration_revenuImpl(DatabaseConnection.getInstance());
+    public static DeclarationRevenuDAO createDeclarationRevenuDAO() {
+        return new DeclarationRevenuImpl(DatabaseConnection.getInstance());
+    }
+    
+    /**
+     * Crée une instance de EnumererDAO.
+     *
+     * @return Une instance de {@link EnumererDAO} utilisant la connexion à la base de données partagée.
+     */
+    public static EnumererDAO createEnumererDAO() {
+        return new EnumererImpl(DatabaseConnection.getInstance());
     }
     
     /**
      * Crée une instance de Etat_des_lieuxDAO.
      *
-     * @return Une instance de {@link Etat_des_lieuxDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link EtatDesLieuxDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Etat_des_lieuxDAO createEtat_des_lieuxDAO() {
-        return new Etat_des_lieuxImpl(DatabaseConnection.getInstance());
+    public static EtatDesLieuxDAO createEtatDesLieuxDAO() {
+        return new EtatDesLieuxImpl(DatabaseConnection.getInstance());
     }
     
     /**
      * Crée une instance de Facture_eauDAO.
      *
-     * @return Une instance de {@link Facture_eauDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link FactureEauDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Facture_eauDAO createFacture_eauDAO() {
-        return new Facture_eauImpl(DatabaseConnection.getInstance());
+    public static FactureEauDAO createFactureEauDAO() {
+        return new FactureEauImpl(DatabaseConnection.getInstance());
     }
     
     /**
      * Crée une instance de Facture_electriciteDAO.
      *
-     * @return Une instance de {@link Facture_electriciteDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link FactureElectriciteDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Facture_electriciteDAO createFacture_electriciteDAO() {
-        return new Facture_electriciteImpl(DatabaseConnection.getInstance());
+    public static FactureElectriciteDAO createFactureElectriciteDAO() {
+        return new FactureElectriciteImpl(DatabaseConnection.getInstance());
     }
     
     /**
      * Crée une instance de Facture_gazDAO.
      *
-     * @return Une instance de {@link Facture_gazDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link FactureGazDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Facture_gazDAO createFacture_gazDAO() {
-        return new Facture_gazImpl(DatabaseConnection.getInstance());
+    public static FactureGazDAO createFactureGazDAO() {
+        return new FactureGazImpl(DatabaseConnection.getInstance());
     }
     
     /**
@@ -138,19 +149,19 @@ public class DAOFactory {
     /**
      * Crée une instance de Regularisation_chargesDAO.
      *
-     * @return Une instance de {@link Regularisation_chargesDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link RegularisationChargesDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Regularisation_chargesDAO createRegularisation_chargesDAO() {
-        return new Regularisation_chargesImpl(DatabaseConnection.getInstance());
+    public static RegularisationChargesDAO createRegularisationChargesDAO() {
+        return new RegularisationChargesImpl(DatabaseConnection.getInstance());
     }
     
     /**
      * Crée une instance de Solde_de_tout_compteDAO.
      *
-     * @return Une instance de {@link Solde_de_tout_compteDAO} utilisant la connexion à la base de données partagée.
+     * @return Une instance de {@link SoldeDeToutCompteDAO} utilisant la connexion à la base de données partagée.
      */
-    public static Solde_de_tout_compteDAO createSolde_de_tout_compteDAO() {
-        return new Solde_de_tout_compteImpl(DatabaseConnection.getInstance());
+    public static SoldeDeToutCompteDAO createSoldeDeToutCompteDAO() {
+        return new SoldeDeToutCompteImpl(DatabaseConnection.getInstance());
     }
     
     /**
@@ -161,10 +172,9 @@ public class DAOFactory {
     public static TravauxDAO createTravauxDAO() {
         return new TravauxImpl(DatabaseConnection.getInstance());
     }
-    
-    
-    public static ChargeDAO createChargeDAO() {
-    	return new ChargeImpl(DatabaseConnection.getInstance());
-    }
+
+	public static ChargeDAO createChargeDAO() {
+		return new ChargeImpl(DatabaseConnection.getInstance());
+	}
 
 }

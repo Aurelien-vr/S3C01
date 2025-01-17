@@ -9,30 +9,30 @@ import java.util.Objects;
  * Cette classe contient des informations sur les charges liées à l'eau, les ordures ménagères, l'éclairage,
  * la provision pour charges, l'indice d'ajustement, l'entretien, ainsi que l'identifiant du contrat de location associé.
  */
-public class Regularisation_charges {
+public class RegularisationCharges {
 
-    private int id_charge_locataire;  // Identifiant unique de la régularisation des charges du locataire
-    private Date date_effet;  // Date d'effet de la régularisation des charges
-    private BigDecimal charge_eau;  // Montant de la charge d'eau
-    private BigDecimal charge_ordure_menagere;  // Montant de la charge des ordures ménagères
-    private BigDecimal charge_eclairage;  // Montant de la charge d'éclairage
-    private BigDecimal provision_pour_charge;  // Montant de la provision pour charges
+    private int idChargeLocataire;  // Identifiant unique de la régularisation des charges du locataire
+    private Date dateEffet;  // Date d'effet de la régularisation des charges
+    private BigDecimal chargeEau;  // Montant de la charge d'eau
+    private BigDecimal chargeOrdureMenagere;  // Montant de la charge des ordures ménagères
+    private BigDecimal chargeEclairage;  // Montant de la charge d'éclairage
+    private BigDecimal provisionPourCharge;  // Montant de la provision pour charges
     private BigDecimal indice;  // Indice d'ajustement des charges
     private String entretien;  // Informations sur l'entretien
-    private int id_contrat_location;  // Identifiant du contrat de location associé
+    private int idContratLocation;  // Identifiant du contrat de location associé
 
     
     
-    public Regularisation_charges() {}
+    public RegularisationCharges() {}
 
-	public Regularisation_charges(Date date_effet, BigDecimal charge_eau, BigDecimal charge_ordure_menagere,
-			BigDecimal charge_eclairage, BigDecimal provision_pour_charge, BigDecimal indice, String entretien) {
+	public RegularisationCharges(Date dateEffet, BigDecimal chargeEau, BigDecimal chargeOrdureMenagere,
+			BigDecimal chargeEclairage, BigDecimal provisionPourCharge, BigDecimal indice, String entretien) {
 		super();
-		this.date_effet = date_effet;
-		this.charge_eau = charge_eau;
-		this.charge_ordure_menagere = charge_ordure_menagere;
-		this.charge_eclairage = charge_eclairage;
-		this.provision_pour_charge = provision_pour_charge;
+		this.dateEffet = dateEffet;
+		this.chargeEau = chargeEau;
+		this.chargeOrdureMenagere = chargeOrdureMenagere;
+		this.chargeEclairage = chargeEclairage;
+		this.provisionPourCharge = provisionPourCharge;
 		this.indice = indice;
 		this.entretien = entretien;
 	}
@@ -42,17 +42,17 @@ public class Regularisation_charges {
      *
      * @return L'identifiant de la régularisation des charges.
      */
-    public int getId_charge_locataire() {
-        return id_charge_locataire;
+    public int getIdChargeLocataire() {
+        return idChargeLocataire;
     }
 
     /**
      * Définit l'identifiant de la régularisation des charges du locataire.
      *
-     * @param id_charge_locataire L'identifiant de la régularisation des charges à définir.
+     * @param idChargeLocataire L'identifiant de la régularisation des charges à définir.
      */
-    public void setId_charge_locataire(int id_charge_locataire) {
-        this.id_charge_locataire = id_charge_locataire;
+    public void setIdChargeLocataire(int idChargeLocataire) {
+        this.idChargeLocataire = idChargeLocataire;
     }
 
     /**
@@ -60,17 +60,17 @@ public class Regularisation_charges {
      *
      * @return La date d'effet de la régularisation des charges.
      */
-    public Date getDate_effet() {
-        return date_effet;
+    public Date getDateEffet() {
+        return dateEffet;
     }
 
     /**
      * Définit la date d'effet de la régularisation des charges.
      *
-     * @param date_effet La date d'effet à définir.
+     * @param dateEffet La date d'effet à définir.
      */
-    public void setDate_effet(Date date_effet) {
-        this.date_effet = date_effet;
+    public void setDateEffet(Date dateEffet) {
+        this.dateEffet = dateEffet;
     }
 
     /**
@@ -78,17 +78,17 @@ public class Regularisation_charges {
      *
      * @return Le montant de la charge d'eau.
      */
-    public BigDecimal getCharge_eau() {
-        return charge_eau;
+    public BigDecimal getChargeEau() {
+        return chargeEau;
     }
 
     /**
      * Définit le montant de la charge d'eau.
      *
-     * @param charge_eau Le montant de la charge d'eau à définir.
+     * @param chargeEau Le montant de la charge d'eau à définir.
      */
-    public void setCharge_eau(BigDecimal charge_eau) {
-        this.charge_eau = charge_eau;
+    public void setChargeEau(BigDecimal chargeEau) {
+        this.chargeEau = chargeEau;
     }
 
     /**
@@ -96,17 +96,17 @@ public class Regularisation_charges {
      *
      * @return Le montant de la charge des ordures ménagères.
      */
-    public BigDecimal getCharge_ordure_menagere() {
-        return charge_ordure_menagere;
+    public BigDecimal getChargeOrdureMenagere() {
+        return chargeOrdureMenagere;
     }
 
     /**
      * Définit le montant de la charge des ordures ménagères.
      *
-     * @param charge_ordure_menagere Le montant de la charge des ordures ménagères à définir.
+     * @param chargeOrdureMenagere Le montant de la charge des ordures ménagères à définir.
      */
-    public void setCharge_ordure_menagere(BigDecimal charge_ordure_menagere) {
-        this.charge_ordure_menagere = charge_ordure_menagere;
+    public void setChargeOrdureMenagere(BigDecimal chargeOrdureMenagere) {
+        this.chargeOrdureMenagere = chargeOrdureMenagere;
     }
 
     /**
@@ -114,17 +114,17 @@ public class Regularisation_charges {
      *
      * @return Le montant de la charge d'éclairage.
      */
-    public BigDecimal getCharge_eclairage() {
-        return charge_eclairage;
+    public BigDecimal getChargeEclairage() {
+        return chargeEclairage;
     }
 
     /**
      * Définit le montant de la charge d'éclairage.
      *
-     * @param charge_eclairage Le montant de la charge d'éclairage à définir.
+     * @param chargeEclairage Le montant de la charge d'éclairage à définir.
      */
-    public void setCharge_eclairage(BigDecimal charge_eclairage) {
-        this.charge_eclairage = charge_eclairage;
+    public void setChargeEclairage(BigDecimal chargeEclairage) {
+        this.chargeEclairage = chargeEclairage;
     }
 
     /**
@@ -132,17 +132,17 @@ public class Regularisation_charges {
      *
      * @return Le montant de la provision pour charges.
      */
-    public BigDecimal getProvision_pour_charge() {
-        return provision_pour_charge;
+    public BigDecimal getProvisionPourCharge() {
+        return provisionPourCharge;
     }
 
     /**
      * Définit le montant de la provision pour charges.
      *
-     * @param provision_pour_charge Le montant de la provision pour charges à définir.
+     * @param provisionPourCharge Le montant de la provision pour charges à définir.
      */
-    public void setProvision_pour_charge(BigDecimal provision_pour_charge) {
-        this.provision_pour_charge = provision_pour_charge;
+    public void setProvisionPourCharge(BigDecimal provisionPourCharge) {
+        this.provisionPourCharge = provisionPourCharge;
     }
 
     /**
@@ -186,21 +186,21 @@ public class Regularisation_charges {
      *
      * @return L'identifiant du contrat de location.
      */
-    public int getId_contrat_location() {
-        return id_contrat_location;
+    public int getIdContratLocation() {
+        return idContratLocation;
     }
 
     /**
      * Définit l'identifiant du contrat de location associé à cette régularisation des charges.
      *
-     * @param id_contrat_location L'identifiant du contrat de location à définir.
+     * @param idContratLocation L'identifiant du contrat de location à définir.
      */
-    public void setId_contrat_location(int id_contrat_location) {
-        this.id_contrat_location = id_contrat_location;
+    public void setIdContratLocation(int idContratLocation) {
+        this.idContratLocation = idContratLocation;
     }
 
     /**
-     * Retourne une représentation textuelle de l'objet {@link Regularisation_charges}.
+     * Retourne une représentation textuelle de l'objet {@link RegularisationCharges}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
      * @return Une chaîne de caractères représentant l'entité.
@@ -208,22 +208,22 @@ public class Regularisation_charges {
     @Override
     public String toString() {
         return "Regularisation_charges{" +
-               "id_charge_locataire=" + id_charge_locataire +
-               ", date_effet=" + (date_effet != null ? date_effet : "N/A") +
-               ", charge_eau=" + (charge_eau != null ? charge_eau : "N/A") +
-               ", charge_ordure_menagere=" + (charge_ordure_menagere != null ? charge_ordure_menagere : "N/A") +
-               ", charge_eclairage=" + (charge_eclairage != null ? charge_eclairage : "N/A") +
-               ", provision_pour_charge=" + (provision_pour_charge != null ? provision_pour_charge : "N/A") +
+               "id_charge_locataire=" + idChargeLocataire +
+               ", date_effet=" + (dateEffet != null ? dateEffet : "N/A") +
+               ", charge_eau=" + (chargeEau != null ? chargeEau : "N/A") +
+               ", charge_ordure_menagere=" + (chargeOrdureMenagere != null ? chargeOrdureMenagere : "N/A") +
+               ", charge_eclairage=" + (chargeEclairage != null ? chargeEclairage : "N/A") +
+               ", provision_pour_charge=" + (provisionPourCharge != null ? provisionPourCharge : "N/A") +
                ", indice=" + (indice != null ? indice : "N/A") +
                ", entretien='" + (entretien != null ? entretien : "N/A") + '\'' +
-               ", id_contrat_location=" + id_contrat_location +
+               ", id_contrat_location=" + idContratLocation +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(charge_eau, charge_eclairage, charge_ordure_menagere, date_effet, entretien,
-				id_charge_locataire, id_contrat_location, indice, provision_pour_charge);
+		return Objects.hash(chargeEau, chargeEclairage, chargeOrdureMenagere, dateEffet, entretien,
+				idChargeLocataire, idContratLocation, indice, provisionPourCharge);
 	}
 
 	@Override
@@ -234,12 +234,12 @@ public class Regularisation_charges {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Regularisation_charges other = (Regularisation_charges) obj;
-		return Objects.equals(charge_eau, other.charge_eau) && Objects.equals(charge_eclairage, other.charge_eclairage)
-				&& Objects.equals(charge_ordure_menagere, other.charge_ordure_menagere)
-				&& Objects.equals(date_effet, other.date_effet) && Objects.equals(entretien, other.entretien)
-				&& id_charge_locataire == other.id_charge_locataire && id_contrat_location == other.id_contrat_location
+		RegularisationCharges other = (RegularisationCharges) obj;
+		return Objects.equals(chargeEau, other.chargeEau) && Objects.equals(chargeEclairage, other.chargeEclairage)
+				&& Objects.equals(chargeOrdureMenagere, other.chargeOrdureMenagere)
+				&& Objects.equals(dateEffet, other.dateEffet) && Objects.equals(entretien, other.entretien)
+				&& idContratLocation == other.idContratLocation
 				&& Objects.equals(indice, other.indice)
-				&& Objects.equals(provision_pour_charge, other.provision_pour_charge);
+				&& Objects.equals(provisionPourCharge, other.provisionPourCharge);
 	}
 }

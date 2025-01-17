@@ -8,23 +8,23 @@ import java.util.Objects;
  * Cette classe contient les informations relatives à la signature de l'état des lieux, 
  * les éléments présents dans le bien, et les informations sur le contrat de location associé.
  */
-public class Etat_des_lieux {
+public class EtatDesLieux {
 
-    private int id_etat_des_lieux;  // Identifiant unique de l'état des lieux
-    private Date date_signature;  // Date de signature de l'état des lieux
-    private int nombre_cles;  // Nombre de clés remises lors de l'état des lieux
-    private String etats_des_element;  // État des éléments du bien (ex: pièces, équipements)
-    private int id_contrat_location;  // Identifiant du contrat de location associé
-    private boolean est_entrer;  // Indique si l'état des lieux a été fait à l'entrée (true) ou à la sortie (false)
+    private int idEtatDesLieux;  // Identifiant unique de l'état des lieux
+    private Date dateSignature;  // Date de signature de l'état des lieux
+    private int nombreCles;  // Nombre de clés remises lors de l'état des lieux
+    private String etatsDesElement;  // État des éléments du bien (ex: pièces, équipements)
+    private int idContratLocation;  // Identifiant du contrat de location associé
+    private boolean estEntrer;  // Indique si l'état des lieux a été fait à l'entrée (true) ou à la sortie (false)
 
-    public Etat_des_lieux() {};
+    public EtatDesLieux() {}
     
-    public Etat_des_lieux(Date date_signature, int nombre_cles, String etat_des_elements, boolean est_entrer) {
+    public EtatDesLieux(Date dateSignature, int nombreCles, String etatDesElements, boolean estEntrer) {
 		super();
-		this.date_signature = date_signature;
-		this.nombre_cles = nombre_cles;
-		this.etats_des_element = etat_des_elements;
-		this.est_entrer = est_entrer;
+		this.dateSignature = dateSignature;
+		this.nombreCles = nombreCles;
+		this.etatsDesElement = etatDesElements;
+		this.estEntrer = estEntrer;
 	}
 
 	/**
@@ -32,17 +32,17 @@ public class Etat_des_lieux {
      *
      * @return L'identifiant de l'état des lieux.
      */
-    public int getId_etat_des_lieux() {
-        return id_etat_des_lieux;
+    public int getIdEtatDesLieux() {
+        return idEtatDesLieux;
     }
 
     /**
      * Définit l'identifiant de l'état des lieux.
      *
-     * @param id_etat_des_lieux L'identifiant de l'état des lieux à définir.
+     * @param idEtatDesLieux L'identifiant de l'état des lieux à définir.
      */
-    public void setId_etat_des_lieux(int id_etat_des_lieux) {
-        this.id_etat_des_lieux = id_etat_des_lieux;
+    public void setIdEtatDesLieux(int idEtatDesLieux) {
+        this.idEtatDesLieux = idEtatDesLieux;
     }
 
     /**
@@ -50,17 +50,17 @@ public class Etat_des_lieux {
      *
      * @return La date de signature de l'état des lieux.
      */
-    public Date getDate_signature() {
-        return date_signature;
+    public Date getDateSignature() {
+        return dateSignature;
     }
 
     /**
      * Définit la date de signature de l'état des lieux.
      *
-     * @param date_signature La date de signature de l'état des lieux à définir.
+     * @param dateSignature La date de signature de l'état des lieux à définir.
      */
-    public void setDate_signature(Date date_signature) {
-        this.date_signature = date_signature;
+    public void setDateSignature(Date dateSignature) {
+        this.dateSignature = dateSignature;
     }
 
     /**
@@ -68,17 +68,17 @@ public class Etat_des_lieux {
      *
      * @return Le nombre de clés.
      */
-    public int getNombre_cles() {
-        return nombre_cles;
+    public int getNombreCles() {
+        return nombreCles;
     }
 
     /**
      * Définit le nombre de clés remises lors de l'état des lieux.
      *
-     * @param nombre_cles Le nombre de clés à définir.
+     * @param nombreCles Le nombre de clés à définir.
      */
-    public void setNombre_cles(int nombre_cles) {
-        this.nombre_cles = nombre_cles;
+    public void setNombreCles(int nombreCles) {
+        this.nombreCles = nombreCles;
     }
 
     /**
@@ -86,17 +86,17 @@ public class Etat_des_lieux {
      *
      * @return L'état des éléments (ex: pièces, équipements).
      */
-    public String getEtat_des_elements() {
-        return etats_des_element;
+    public String getEtatDesElements() {
+        return etatsDesElement;
     }
 
     /**
      * Définit l'état des éléments dans le bien.
      *
-     * @param etat_des_elements L'état des éléments à définir.
+     * @param etatDesElements L'état des éléments à définir.
      */
-    public void setEtat_des_elements(String etat_des_elements) {
-        this.etats_des_element = etat_des_elements;
+    public void setEtatDesElements(String etatDesElements) {
+        this.etatsDesElement = etatDesElements;
     }
 
     /**
@@ -104,17 +104,17 @@ public class Etat_des_lieux {
      *
      * @return L'identifiant du contrat de location.
      */
-    public int getId_contrat_location() {
-        return id_contrat_location;
+    public int getIdContratLocation() {
+        return idContratLocation;
     }
 
     /**
      * Définit l'identifiant du contrat de location associé.
      *
-     * @param id_contrat_location L'identifiant du contrat de location à définir.
+     * @param idContratLocation L'identifiant du contrat de location à définir.
      */
-    public void setId_contrat_location(int id_contrat_location) {
-        this.id_contrat_location = id_contrat_location;
+    public void setIdContratLocation(int idContratLocation) {
+        this.idContratLocation = idContratLocation;
     }
 
     /**
@@ -122,21 +122,21 @@ public class Etat_des_lieux {
      *
      * @return true si l'état des lieux a été fait à l'entrée, false sinon.
      */
-    public boolean isEst_entrer() {
-        return est_entrer;
+    public boolean isEstEntrer() {
+        return estEntrer;
     }
 
     /**
      * Définit si l'état des lieux a été effectué à l'entrée du locataire.
      *
-     * @param est_entrer true si l'état des lieux a été fait à l'entrée, false sinon.
+     * @param estEntrer true si l'état des lieux a été fait à l'entrée, false sinon.
      */
-    public void setEst_entrer(boolean est_entrer) {
-        this.est_entrer = est_entrer;
+    public void setEstEntrer(boolean estEntrer) {
+        this.estEntrer = estEntrer;
     }
 
     /**
-     * Retourne une représentation textuelle de l'objet {@link Etat_des_lieux}.
+     * Retourne une représentation textuelle de l'objet {@link EtatDesLieux}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
      * @return Une chaîne de caractères représentant l'entité.
@@ -144,19 +144,19 @@ public class Etat_des_lieux {
     @Override
     public String toString() {
         return "Etat_des_lieux{" +
-               "id_etat_des_lieux=" + id_etat_des_lieux +
-               ", date_signature=" + (date_signature != null ? date_signature : "N/A") +
-               ", nombre_cles=" + nombre_cles +
-               ", etats_des_elements='" + (etats_des_element != null ? etats_des_element : "N/A") + '\'' +
-               ", id_contrat_location=" + id_contrat_location +
-               ", est_entrer=" + est_entrer +
+               "id_etat_des_lieux=" + idEtatDesLieux +
+               ", date_signature=" + (dateSignature != null ? dateSignature : "N/A") +
+               ", nombre_cles=" + nombreCles +
+               ", etats_des_elements='" + (etatsDesElement != null ? etatsDesElement : "N/A") + '\'' +
+               ", id_contrat_location=" + idContratLocation +
+               ", est_entrer=" + estEntrer +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(date_signature, est_entrer, etats_des_element, id_contrat_location, id_etat_des_lieux,
-				nombre_cles);
+		return Objects.hash(dateSignature, estEntrer, etatsDesElement, idContratLocation, idEtatDesLieux,
+				nombreCles);
 	}
 
 	@Override
@@ -167,10 +167,10 @@ public class Etat_des_lieux {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Etat_des_lieux other = (Etat_des_lieux) obj;
-		return Objects.equals(date_signature, other.date_signature) && est_entrer == other.est_entrer
-				&& Objects.equals(etats_des_element, other.etats_des_element)
-				&& id_contrat_location == other.id_contrat_location && id_etat_des_lieux == other.id_etat_des_lieux
-				&& nombre_cles == other.nombre_cles;
+		EtatDesLieux other = (EtatDesLieux) obj;
+		return Objects.equals(dateSignature, other.dateSignature) && estEntrer == other.estEntrer
+				&& Objects.equals(etatsDesElement, other.etatsDesElement)
+				&& idContratLocation == other.idContratLocation && idEtatDesLieux == other.idEtatDesLieux
+				&& nombreCles == other.nombreCles;
 	}
 }

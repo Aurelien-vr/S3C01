@@ -5,13 +5,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.FactureDAO;
 import dao.entities.Facture;
-import dbConnection.DatabaseConnection;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
@@ -51,11 +50,36 @@ public class FactureImpl implements FactureDAO {
                 return createEntities(result);
             }
         }   catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
+   			ExceptionStorageHandler.logException(e, connection);
    		}finally {
    			DatabaseConnection.closeStatement(statement);
    			DatabaseConnection.closeResult(result);
    		}
+
+        return null;
+    }
+    
+    
+    @Override
+    public Facture findOneRef(String reference) {
+        PreparedStatement statement = null;
+        ResultSet result = null;
+        String query = "SELECT * FROM db1_sae.Facture WHERE Reference_facture = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, reference); // Utilisation de setString pour le paramètre String
+            result = statement.executeQuery();
+
+            if (result.next()) {
+                return createEntities(result);
+            }
+        } catch (Exception e) {
+            ExceptionStorageHandler.logException(e, connection);
+        } finally {
+            DatabaseConnection.closeStatement(statement);
+            DatabaseConnection.closeResult(result);
+        }
 
         return null;
     }
@@ -87,7 +111,7 @@ public class FactureImpl implements FactureDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             }catch (Exception e) {
-       			ExceptionStorageHandler.LogException(e, connection);
+       			ExceptionStorageHandler.logException(e, connection);
        		}finally {
        			DatabaseConnection.closeStatement(statement);
        			DatabaseConnection.closeResult(result);
@@ -110,22 +134,18 @@ public class FactureImpl implements FactureDAO {
    		
    		try {
    			statement = connection.prepareStatement(query);
-   			statement.setString(1,entity.getReference_facture());
-    		statement.setString(2, entity.getType_facture());
-    		statement.setDate(3, entity.getDate_facture());
-    		statement.setBigDecimal(4, entity.getMontant_facture());
-    		statement.setString(5, entity.getMoyen_paiement());
-    			
-    			
-    		if(statement.executeUpdate()>0) {
-    			System.out.println("User inserted");
-    		}
+   			statement.setString(1,entity.getReferenceFacture());
+    		statement.setString(2, entity.getTypeFacture());
+    		statement.setDate(3, entity.getDateFacture());
+    		statement.setBigDecimal(4, entity.getMontantFacture());
+    		statement.setString(5, entity.getMoyenPaiement());
+
    		}catch (java.sql.SQLIntegrityConstraintViolationException e) {
             if ("23000".equals(e.getSQLState()) && e.getErrorCode() == 1062) {
-                entity.setReference_facture("ERROR CODE 1062");
+                entity.setReferenceFacture("ERROR CODE 1062");
              }
          }  catch (Exception e) {
-   			ExceptionStorageHandler.LogException(e, connection);
+   			ExceptionStorageHandler.logException(e, connection);
    		}finally {
    			DatabaseConnection.closeStatement(statement);
    		}
@@ -143,15 +163,15 @@ public class FactureImpl implements FactureDAO {
 
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, entity.getType_facture());
-            statement.setDate(2, entity.getDate_facture());
-            statement.setBigDecimal(3, entity.getMontant_facture());
-            statement.setString(4, entity.getMoyen_paiement());
-            statement.setString(5, entity.getReference_facture());
+            statement.setString(1, entity.getTypeFacture());
+            statement.setDate(2, entity.getDateFacture());
+            statement.setBigDecimal(3, entity.getMontantFacture());
+            statement.setString(4, entity.getMoyenPaiement());
+            statement.setString(5, entity.getReferenceFacture());
 
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -160,19 +180,7 @@ public class FactureImpl implements FactureDAO {
     
     @Override
     public void deleteById(long id) {
-    	PreparedStatement statement = null;
-        String query = "DELETE FROM db1_sae.Facture WHERE Reference_facture = ?";
-
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setLong(1, id);
-        } catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
-		}
-		
-		finally {
-			DatabaseConnection.closeStatement(statement);
-		}
+    	// no id of type long in delete
     }
     
     
@@ -187,7 +195,7 @@ public class FactureImpl implements FactureDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -204,15 +212,16 @@ public class FactureImpl implements FactureDAO {
     public Facture createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Facture à partir des données du ResultSet
         Facture facture = new Facture();
-        facture.setType_facture(result.getString("Type_facture"));
-        facture.setDate_facture(result.getDate("Date_facture"));
-        facture.setMontant_facture(result.getBigDecimal("Montant_facture"));
-        facture.setMoyen_paiement(result.getString("Moyen_paiement"));
+        facture.setReferenceFacture(result.getString("Reference_facture"));
+        facture.setTypeFacture(result.getString("Type_facture"));
+        facture.setDateFacture(result.getDate("Date_facture"));
+        facture.setMontantFacture(result.getBigDecimal("Montant_facture"));
+        facture.setMoyenPaiement(result.getString("Moyen_paiement"));
         return facture;
     }
 
 	@Override
-	public String[] get_numFacture() {
+	public String[] getNumFacture() {
 		CallableStatement statement = null;
 		ResultSet result = null;
 		String query = "{CALL db1_sae.get_numFacture()}";
@@ -228,7 +237,7 @@ public class FactureImpl implements FactureDAO {
 	            factureNumbers = factureList.toArray(new String[0]);
 			}
 		}catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}
 		
 		return factureNumbers;
@@ -243,16 +252,9 @@ public class FactureImpl implements FactureDAO {
 	        statement = connection.prepareStatement(query);
 	        statement.setString(2, refFacture);
 	        statement.setInt(1, idBien);
-	        
-	        if (statement.executeUpdate() > 0) {
-	            System.out.println("FK inserted");
-	        }
 
-	    } catch (SQLIntegrityConstraintViolationException e) {
-	        System.out.println("Integrity constraint violation: " + e.getMessage());
-	        ExceptionStorageHandler.LogException(e, connection);
-	    } catch (Exception e) {
-	        ExceptionStorageHandler.LogException(e, connection);
+	    }catch (Exception e) {
+	        ExceptionStorageHandler.logException(e, connection);
 	    } finally {
 	        DatabaseConnection.closeStatement(statement);
 	    }
@@ -268,16 +270,9 @@ public class FactureImpl implements FactureDAO {
 	        statement = connection.prepareStatement(query);
 	        statement.setString(2, refFacture);
 	        statement.setInt(1, idCharge);
-	        
-	        if (statement.executeUpdate() > 0) {
-	            System.out.println("FK inserted");
-	        }
 
-	    } catch (SQLIntegrityConstraintViolationException e) {
-	        System.out.println("Integrity constraint violation: " + e.getMessage());
-	        ExceptionStorageHandler.LogException(e, connection);
 	    } catch (Exception e) {
-	        ExceptionStorageHandler.LogException(e, connection);
+	        ExceptionStorageHandler.logException(e, connection);
 	    } finally {
 	        DatabaseConnection.closeStatement(statement);
 	    }
@@ -285,7 +280,7 @@ public class FactureImpl implements FactureDAO {
 	
 	
 	@Override
-	public List<List<String>> procGet_factures() {
+	public List<List<String>> procGetFactures() {
 		CallableStatement statement = null;
 		ResultSet result = null;
 		String query = "{CALL db1_sae.get_factures()}";
@@ -305,7 +300,7 @@ public class FactureImpl implements FactureDAO {
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);

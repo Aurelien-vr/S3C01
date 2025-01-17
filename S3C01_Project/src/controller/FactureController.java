@@ -12,69 +12,71 @@ import view.FactureView;
 
 public class FactureController extends TemplateTableController{
 	
-	private FactureView view = new FactureView();
+	private FactureView viewFacture = new FactureView();
 	private FactureDAO model = DAOFactory.createFactureDAO();
-	private List<List<String>> listData;
+	
 	
 			
 	public FactureController() {
 		super();
-		view.setTitleHeader("Facture");
+		viewFacture.setTitleHeader("Facture");
 		fillTable();
-		view.setTableModel(modelTable);
+		viewFacture.setTableModel(modelTable);
 		deleteActionButton();
 		openAjoutFactuePage();
 		logoLabel();
 		addEventHandlers();
-		view.setVisible(true);
+		viewFacture.setVisible(true);
 	}
 	
 	private void logoLabel() {
-		view.getLogoLabel().addActionListener(e -> {
+		viewFacture.getLogoLabel().addActionListener(e -> {
 				new HomeController();
-				view.dispose();
+				viewFacture.dispose();
 		});
 	}
 	
 	 private void addEventHandlers() {
-	        view.getBtnBienLouable().addActionListener(e -> {
+	        viewFacture.getBtnBienLouable().addActionListener(e -> {
 	        	new BienController();
-	        	view.dispose();
+	        	viewFacture.dispose();
 	        });
 
-	        view.getBtnLocataire().addActionListener(e -> {
+	        viewFacture.getBtnLocataire().addActionListener(e -> {
 	        	new LocataireController();
+	        	viewFacture.dispose();
 	        });
 	        
-	        view.getBtnContratLocation().addActionListener(e -> {
+	        viewFacture.getBtnContratLocation().addActionListener(e -> {
 	        	new ContratLocationController();
-	        	view.dispose();
+	        	viewFacture.dispose();
 	        });
 	        
-	        view.getItemAssurance().addActionListener(e -> {
+	        viewFacture.getItemAssurance().addActionListener(e -> {
 	        	new AssuranceController();
-	        	view.dispose();
+	        	viewFacture.dispose();
 	        });
 	        
-	        view.getItemFacture().addActionListener(e -> {
+	        viewFacture.getItemFacture().addActionListener(e -> {
 	        	new FactureController();
-	        	view.dispose();
+	        	viewFacture.dispose();
 	        });
 	        
-	        view.getItemTravaux().addActionListener(e -> {
+	        viewFacture.getItemTravaux().addActionListener(e -> {
 	        	new TravauxController();
-	        	view.dispose();
+	        	viewFacture.dispose();
 	        });
 	        
-	        view.getItemCharge().addActionListener(e -> {
+	        viewFacture.getItemCharge().addActionListener(e -> {
 	        	new ChargeController();
-	        	view.dispose();
+	        	viewFacture.dispose();
 	        });
 	    }
 	
 	@SuppressWarnings("serial")
 	@Override
-	void fillTable() { 
+	void fillTable() {
+  List<List<String>> listData; 
 		modelTable = new DefaultTableModel(new String[]{"Référence facture", "Adresse", "Type", "Date", "Montant", "Moyen de paiment", "SUPPRIMER"}, 0) {
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -82,7 +84,7 @@ public class FactureController extends TemplateTableController{
         }
     };
     
-	    listData = model.procGet_factures();
+	    listData = model.procGetFactures();
 	    for (int i = 0; i < listData.size(); i++) {
 	        List<String> rowResult = listData.get(i);
 	        
@@ -100,23 +102,23 @@ public class FactureController extends TemplateTableController{
 	}
 	
 	private void openAjoutFactuePage() {
-		view.getAjoutFacture().addActionListener(e -> {
+		viewFacture.getAjoutFacture().addActionListener(e -> {
 				new FactureAjoutController();
-				view.dispose();
+				viewFacture.dispose();
 		});
 	}
 	
 	
 	private void deleteActionButton() {
-		view.getDeleteButton().addActionListener(e -> {
-				int selectedRow = view.getTable().getSelectedRow();
-				String refFacture = (String) view.getTable().getValueAt(selectedRow, 0);
+		viewFacture.getDeleteButton().addActionListener(e -> {
+				int selectedRow = viewFacture.getTable().getSelectedRow();
+				String refFacture = (String) viewFacture.getTable().getValueAt(selectedRow, 0);
 				int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la supression du travaux: " + refFacture);
 				if (response == JOptionPane.YES_OPTION) {
 				    model.deleteByRef(refFacture);
 				    modelTable.setRowCount(0);
 				    fillTable();
-				    view.setTableModel(modelTable, 1);
+				    viewFacture.setTableModel(modelTable, 1);
 				} else if (response == JOptionPane.NO_OPTION) {
 				    return;
 				}
@@ -125,7 +127,6 @@ public class FactureController extends TemplateTableController{
 
 	@Override
 	void updateFooter() {
-		// TODO Auto-generated method stub
-		
+		// No specific footer on this page		
 	}
 }

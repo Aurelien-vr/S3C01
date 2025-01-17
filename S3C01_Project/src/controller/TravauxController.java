@@ -14,70 +14,71 @@ import view.TravauxView;
 @SuppressWarnings("serial")
 public class TravauxController extends TemplateTableController{
 	
-	private TravauxView view = new TravauxView();
+	private TravauxView viewTravaux = new TravauxView();
 	private AvancerDAO modelAvancer = DAOFactory.createAvancerDAO();
 	private TravauxDAO model = DAOFactory.createTravauxDAO();
 	private List<List<String>> listData;
 	
 	public TravauxController() {
 		super();
-		view.setTitleHeader("Travaux");
+		viewTravaux.setTitleHeader("Travaux");
         fillTable(); 
-        view.setTableModel(modelTable, 1);
+        viewTravaux.setTableModel(modelTable, 1);
         actionDeleteButton();
         openAjoutTravauxPage();
         addEventHandlers();
         logoLabel();
         
-        view.setVisible(true);
+        viewTravaux.setVisible(true);
 	}
 
 	private void logoLabel() {
-		view.getLogoLabel().addActionListener(e-> {
+		viewTravaux.getLogoLabel().addActionListener(e-> {
 				new HomeController();
-				view.dispose();
+				viewTravaux.dispose();
 		});
 	}
 	
 	 private void addEventHandlers() {
-	        view.getBtnBienLouable().addActionListener(e -> {
+	        viewTravaux.getBtnBienLouable().addActionListener(e -> {
 	        	new BienController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 
-	        view.getBtnLocataire().addActionListener(e -> {
+	        viewTravaux.getBtnLocataire().addActionListener(e -> {
 	        	new LocataireController();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getBtnContratLocation().addActionListener(e -> {
+	        viewTravaux.getBtnContratLocation().addActionListener(e -> {
 	        	new ContratLocationController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getItemAssurance().addActionListener(e -> {
+	        viewTravaux.getItemAssurance().addActionListener(e -> {
 	        	new AssuranceController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getItemFacture().addActionListener(e -> {
+	        viewTravaux.getItemFacture().addActionListener(e -> {
 	        	new FactureController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getItemTravaux().addActionListener(e -> {
+	        viewTravaux.getItemTravaux().addActionListener(e -> {
 	        	new TravauxController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	        
-	        view.getItemCharge().addActionListener(e -> {
+	        viewTravaux.getItemCharge().addActionListener(e -> {
 	        	new ChargeController();
-	        	view.dispose();
+	        	viewTravaux.dispose();
 	        });
 	    }
 
 	private void actionDeleteButton() {
-		view.getDeleteButton().addActionListener(e -> {
-				int selectedRow = view.getTable().getSelectedRow();
+		viewTravaux.getDeleteButton().addActionListener(e -> {
+				int selectedRow = viewTravaux.getTable().getSelectedRow();
 				int idTravaux = Integer.parseInt(listData.get(selectedRow).get(listData.get(selectedRow).size() - 1));
 				int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la supression du travaux: " + idTravaux);
 				if (response == JOptionPane.YES_OPTION) {
@@ -85,16 +86,16 @@ public class TravauxController extends TemplateTableController{
 				    model.deleteById(idTravaux);
 				    modelTable.setRowCount(0);
 				    fillTable();
-				    view.setTableModel(modelTable, 1);
+				    viewTravaux.setTableModel(modelTable, 1);
 				   	}
 		});
 		
 	}
 
 	private void openAjoutTravauxPage() {
-		view.getButtonAjoutTravaux().addActionListener(e-> {
+		viewTravaux.getButtonAjoutTravaux().addActionListener(e-> {
 				new TravauxAjoutController();
-				view.dispose();
+				viewTravaux.dispose();
 		});
 	}
 	
@@ -136,8 +137,7 @@ public class TravauxController extends TemplateTableController{
 
 	@Override
 	void updateFooter() {
-		// TODO Auto-generated method stub
-		
+		//footer empty because no specific information to display
 	}
 	
 }

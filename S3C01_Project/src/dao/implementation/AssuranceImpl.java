@@ -5,14 +5,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import dao.AssuranceDAO;
 import dao.entities.Assurance;
-import dbConnection.DatabaseConnection;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
@@ -61,7 +60,7 @@ public class AssuranceImpl implements AssuranceDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             }catch (Exception e) {
-    			ExceptionStorageHandler.LogException(e, connection);
+    			ExceptionStorageHandler.logException(e, connection);
     		}finally {
     			DatabaseConnection.closeStatement(statement);
     		}
@@ -97,7 +96,7 @@ public class AssuranceImpl implements AssuranceDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             }catch (Exception e) {
-    			ExceptionStorageHandler.LogException(e, connection);
+    			ExceptionStorageHandler.logException(e, connection);
     		}finally {
     			DatabaseConnection.closeStatement(statement);
     		}
@@ -118,20 +117,20 @@ public class AssuranceImpl implements AssuranceDAO {
 		
 		try {
    	        statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			statement.setDate(1, entity.getDate_assurance());
+			statement.setDate(1, entity.getDateAssurance());
 			statement.setBigDecimal(2, entity.getPrime());
-			statement.setBigDecimal(3,entity.getProtection_juridique());
+			statement.setBigDecimal(3,entity.getProtectionJuridique());
 			
 			
    		 if (statement.executeUpdate() > 0) {
 	            ResultSet result = statement.getGeneratedKeys();
 	            if (result.next()) {
 	                int id = result.getInt(1);
-	                entity.setId_bien(id);
+	                entity.setNumeroContrat(id);
 	            }
 	        }
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeStatement(statement);
 		}
@@ -150,13 +149,12 @@ public class AssuranceImpl implements AssuranceDAO {
 		try {
 			statement = connection.prepareStatement(query);
 			statement.setBigDecimal(1, entity.getPrime());
-			statement.setBigDecimal(3,entity.getProtection_juridique());
-			statement.setInt(3,entity.getNumero_contrat());
+			statement.setBigDecimal(3,entity.getProtectionJuridique());
+			statement.setInt(3,entity.getNumeroContrat());
 
-            int rowsUpdated = statement.executeUpdate();
-            System.out.println("Nombre de lignes mises à jour : " + rowsUpdated);
+            statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -178,7 +176,7 @@ public class AssuranceImpl implements AssuranceDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -195,13 +193,15 @@ public class AssuranceImpl implements AssuranceDAO {
     public Assurance createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Assurance à partir des données du ResultSet
         Assurance assurance = new Assurance();
-        assurance.setDate_assurance(result.getDate("Date_assurance"));
+        assurance.setNumeroContrat(result.getInt("numero_contrat"));
+        assurance.setDateAssurance(result.getDate("Date_assurance"));
+        assurance.setProtectionJuridique(result.getBigDecimal("Protection_juridique"));
         assurance.setPrime(result.getBigDecimal("Prime"));
         return assurance; // Retourne l'entité Assurance construite
     }
 
 	@Override
-	public List<List<String>> procGet_assurances() {
+	public List<List<String>> procGetAssurances() {
 		CallableStatement statement = null;
 		ResultSet result = null;
 		String query = "{CALL db1_sae.get_assurances()}";
@@ -221,7 +221,7 @@ public class AssuranceImpl implements AssuranceDAO {
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -238,14 +238,8 @@ public class AssuranceImpl implements AssuranceDAO {
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, selectedIdBien);
 	        statement.setInt(2, numeroContrat);
-	        if (statement.executeUpdate() > 0) {
-	            System.out.println("FK inserted");
-	        }
-	    } catch (SQLIntegrityConstraintViolationException e) {
-	        System.out.println("Integrity constraint violation: " + e.getMessage());
-	        ExceptionStorageHandler.LogException(e, connection);
-	    } catch (Exception e) {
-	        ExceptionStorageHandler.LogException(e, connection);
+	    }catch (Exception e) {
+	        ExceptionStorageHandler.logException(e, connection);
 	    } finally {
 	        DatabaseConnection.closeStatement(statement);
 	    }

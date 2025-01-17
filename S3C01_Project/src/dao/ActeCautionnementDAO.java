@@ -1,12 +1,12 @@
 package dao;
 
-import dao.entities.Acte_cautionnement;
+import dao.entities.ActeCautionnement;
 
 /**
- * Interface spécifique pour les opérations liées à l'entité {@link Acte_cautionnement}.
+ * Interface spécifique pour les opérations liées à l'entité {@link ActeCautionnement}.
  * Hérite des méthodes génériques définies dans l'interface {@link DAO}.
  */
-public interface Acte_cautionnementDAO extends DAO<Acte_cautionnement> {
+public interface ActeCautionnementDAO extends DAO<ActeCautionnement> {
 
 	/**
 	 * Supprime un acte de cautionnement par son identifiant (fonctionnalité à implémenter).

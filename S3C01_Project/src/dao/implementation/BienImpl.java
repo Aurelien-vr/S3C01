@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import dao.BienDAO;
 import dao.entities.Bien;
-import dbConnection.DatabaseConnection;
+import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
 
 /**
@@ -14,6 +14,7 @@ import exception.ExceptionStorageHandler;
 public class BienImpl implements BienDAO {
     
     private Connection connection; // Connexion à la base de données
+    private String stringUnknown = "Unknown";
     
     /**
      * Constructeur de la classe BienImpl.
@@ -44,11 +45,10 @@ public class BienImpl implements BienDAO {
             
             // Si un résultat est trouvé, création de l'entité Bien
             if (result.next()) {
-                Bien bien = createEntities(result);
-                return bien;
+                return createEntities(result);
             } 
         } catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeStatement(statement);
 		}
@@ -82,7 +82,7 @@ public class BienImpl implements BienDAO {
                 if (result != null) result.close();
                 if (statement != null) statement.close();
             }catch (Exception e) {
-                ExceptionStorageHandler.LogException(e, connection);
+                ExceptionStorageHandler.logException(e, connection);
             } finally {
                 DatabaseConnection.closeStatement(statement);
             }
@@ -105,24 +105,23 @@ public class BienImpl implements BienDAO {
             statement.setInt(1, entity.getEtage());
             statement.setString(2, entity.getAdresse());
             statement.setString(3, entity.getVille());
-            statement.setString(4, entity.getCode_postal());
+            statement.setString(4, entity.getCodePostal());
             statement.setBigDecimal(5, entity.getSuperficie());
-            statement.setInt(6, entity.getNombre_de_piece());
+            statement.setInt(6, entity.getNombreDePiece());
             statement.setBoolean(7, entity.isMeuble());
-            statement.setString(8, entity.getAccessoire_prive());
-            statement.setString(9, entity.getAccessoire_commun());
-            statement.setBoolean(10, entity.isEst_garage());
+            statement.setString(8, entity.getAccessoirePrive());
+            statement.setString(9, entity.getAccessoireCommun());
+            statement.setBoolean(10, entity.isEstGarage());
 
             if (statement.executeUpdate() > 0) {
                 ResultSet result = statement.getGeneratedKeys();
                 if (result.next()) {
                     int id = result.getInt(1);
-                    entity.setId_bien(id);
+                    entity.setIdBien(id);
                 }
-                System.out.println("Bien inserted");
             }
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -144,17 +143,17 @@ public class BienImpl implements BienDAO {
             statement.setInt(1, entity.getEtage());
             statement.setString(2, entity.getAdresse());
             statement.setString(3, entity.getVille());
-            statement.setString(4, entity.getCode_postal());
+            statement.setString(4, entity.getCodePostal());
             statement.setBigDecimal(5, entity.getSuperficie());
-            statement.setInt(6, entity.getNombre_de_piece());
+            statement.setInt(6, entity.getNombreDePiece());
             statement.setBoolean(7, entity.isMeuble());
-            statement.setString(8, entity.getAccessoire_prive());
-            statement.setString(9, entity.getAccessoire_commun());
-            statement.setBoolean(10, entity.isEst_garage());
-            statement.setLong(11, entity.getId_bien()); 
+            statement.setString(8, entity.getAccessoirePrive());
+            statement.setString(9, entity.getAccessoireCommun());
+            statement.setBoolean(10, entity.isEstGarage());
+            statement.setLong(11, entity.getIdBien()); 
             statement.executeUpdate();
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -176,7 +175,7 @@ public class BienImpl implements BienDAO {
             statement.executeUpdate();
             
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -186,7 +185,7 @@ public class BienImpl implements BienDAO {
 
     
 	@Override
-	public List<List<String>> BienStatus() {
+	public List<List<String>> bienStatus() {
 		CallableStatement statement = null;
 		ResultSet result = null;
 		String query = "{CALL db1_sae.status_page_principale()}";
@@ -197,16 +196,16 @@ public class BienImpl implements BienDAO {
 			if(statement.execute()) {
 				result = statement.getResultSet();
 				while(result.next()) {
-					ArrayList<String> cell = new ArrayList<String>();
+					ArrayList<String> cell = new ArrayList<>();
 					for(int i = 2; i <= 11; i++) {
 						 String value = result.getString(i);
-		                    cell.add(value != null ? value : "Unknown");
+		                    cell.add(value != null ? value : stringUnknown);
 					}
 					arrayRes.add(cell);
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -226,23 +225,23 @@ public class BienImpl implements BienDAO {
         // Création de l'entité Bien à partir des données du ResultSet
         Bien bien = new Bien();
         
-        bien.setId_bien(result.getInt(1));
+        bien.setIdBien(result.getInt(1));
         bien.setEtage(result.getInt(2));
         bien.setAdresse(result.getString(3));
         bien.setVille(result.getString(4));
-        bien.setCode_postal(result.getString(5));
+        bien.setCodePostal(result.getString(5));
         bien.setSuperficie(result.getBigDecimal(6));
-        bien.setNombre_de_piece(result.getInt(7));
+        bien.setNombreDePiece(result.getInt(7));
         bien.setMeuble(result.getBoolean(8));
-        bien.setAccessoire_prive(result.getString(9));
-        bien.setAccessoire_commun(result.getString(10));
-        bien.setEst_garage(result.getBoolean(12));
+        bien.setAccessoirePrive(result.getString(9));
+        bien.setAccessoireCommun(result.getString(10));
+        bien.setEstGarage(result.getBoolean(12));
         
         return bien;  // Retourne l'entité Bien construite
     }
     
     @Override
-	public String[] get_AllAdresses() {
+	public String[] getAllAdresses() {
 		CallableStatement statement = null;
 		ResultSet result = null;
 		String query = "{CALL db1_sae.get_AllAdresses()}";
@@ -261,7 +260,7 @@ public class BienImpl implements BienDAO {
 	            factureNumbers = factureList.toArray(new String[0]);
 			}
 		}catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}
 		
 		return factureNumbers;
@@ -279,16 +278,16 @@ public class BienImpl implements BienDAO {
 			if(statement.execute()) {
 				result = statement.getResultSet();
 				while(result.next()) {
-					ArrayList<String> cell = new ArrayList<String>();
+					ArrayList<String> cell = new ArrayList<>();
 					for(int i = 1; i <= 12; i++) {
 						 String value = result.getString(i);
-		                    cell.add(value != null ? value : "Unknown");
+		                    cell.add(value != null ? value : stringUnknown);
 					}
 					arrayRes.add(cell);
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -311,11 +310,10 @@ public class BienImpl implements BienDAO {
 	            while (result.next()) {
 	            	factureList.add(result.getString(1));
 	            }
-	            System.out.println(factureList);
 	            bienList = factureList.toArray(new String[0]);
 			}
 		}catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -334,15 +332,8 @@ public class BienImpl implements BienDAO {
             statement = connection.prepareStatement(query);
             statement.setInt(1, idContratLocation);
             statement.setInt(2, id);
-
-            if (statement.executeUpdate() > 0) {
-                System.out.println("FK inserted");
-            }
-        } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("Integrity constraint violation: " + e.getMessage());
-            ExceptionStorageHandler.LogException(e, connection);
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -361,14 +352,13 @@ public class BienImpl implements BienDAO {
 				result = statement.getResultSet();
 				while(result.next()) {
 					ArrayList<String> cell = new ArrayList<>();
-					cell.add(result.getString(1) != null ? result.getString(1) : "Unknown");
-					cell.add(result.getString(2) != null ? result.getString(2): "Unknown");
+					cell.add(result.getString(1) != null ? result.getString(1) : stringUnknown);
+					cell.add(result.getString(2) != null ? result.getString(2): stringUnknown);
 					arrayRes.add(cell);
-					System.out.println(cell);
 				}
 			}
 		} catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeResult(result);
 			DatabaseConnection.closeStatement(statement);
@@ -381,7 +371,7 @@ public class BienImpl implements BienDAO {
 		CallableStatement statement = null;
         ResultSet result = null;
         String query = "{CALL db1_sae.get_BienFromRefFacture(?)}";
-        String address = "Unknown"; // Default value if no address is returned
+        String address = stringUnknown; // Default value if no address is returned
         
         try {
             statement = connection.prepareCall(query);
@@ -389,11 +379,11 @@ public class BienImpl implements BienDAO {
             if (statement.execute()) {
                 result = statement.getResultSet();
                 if (result.next()) {
-                    address = result.getString(1) != null ? result.getString(1) : "Unknown";
+                    address = result.getString(1) != null ? result.getString(1) : stringUnknown;
                 }
             }
         } catch (Exception e) {
-            ExceptionStorageHandler.LogException(e, connection);
+            ExceptionStorageHandler.logException(e, connection);
         } finally {
             DatabaseConnection.closeResult(result);
             DatabaseConnection.closeStatement(statement);
@@ -410,13 +400,10 @@ public class BienImpl implements BienDAO {
 	        statement = connection.prepareCall(sql);
 	        
 	        statement.setInt(1, idBien);
-
 	        statement.execute();
-	        
-	        System.out.println("Sucessfully delete in cascade.");
 	
 	    }catch (Exception e) {
-			ExceptionStorageHandler.LogException(e, connection);
+			ExceptionStorageHandler.logException(e, connection);
 		}finally {
 			DatabaseConnection.closeStatement(statement);
 		}

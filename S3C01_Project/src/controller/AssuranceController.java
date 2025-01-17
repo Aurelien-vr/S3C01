@@ -21,7 +21,7 @@ import view.AssuranceView;
 
 public class AssuranceController extends TemplateTableController {
     
-    private AssuranceView view = new AssuranceView();
+    private AssuranceView viewAssurance = new AssuranceView();
     private AssuranceDAO model = DAOFactory.createAssuranceDAO();
     private List<List<String>> listData;
     
@@ -31,14 +31,14 @@ public class AssuranceController extends TemplateTableController {
     
     public AssuranceController() {
         super();
-        view.setTitleHeader("Assurance");
+        viewAssurance.setTitleHeader("Assurance");
         fillTable();
-        view.setTableModel(modelTable);
+        viewAssurance.setTableModel(modelTable);
         deleteActionButton();
         openAjoutAssurancePage();
         logoLabel();
         addEventHandlers();
-        view.setVisible(true);
+        viewAssurance.setVisible(true);
     }
 
     @SuppressWarnings("serial")
@@ -51,9 +51,8 @@ public class AssuranceController extends TemplateTableController {
             }
         };
 
-        listData = model.procGet_assurances();
+        listData = model.procGetAssurances();
         List<String> latestDates = findLatestDate(listData);
-        System.out.println(latestDates);
         
         for (int i = 0; i < listData.size(); i++) {
             List<String> rowResult = listData.get(i);
@@ -75,7 +74,12 @@ public class AssuranceController extends TemplateTableController {
             modelTable.addRow(row);
         }
                 
-        for (int i = 0; i < modelTable.getRowCount(); i++) {
+        calculateTotal();
+        updateFooter();
+    }
+
+	private void calculateTotal() {
+		for (int i = 0; i < modelTable.getRowCount(); i++) {
             int diffPrev = -1;
             for (int j = 0; j < modelTable.getRowCount(); j++) {
                 int diff = compareDates((String) modelTable.getValueAt(i, 1), (String) modelTable.getValueAt(j, 1));
@@ -90,26 +94,25 @@ public class AssuranceController extends TemplateTableController {
                 }
             }
         }
-       updateFooter();
-    }
+	}
 
     private void openAjoutAssurancePage() {
-        view.getAjoutAssurance().addActionListener(e-> {
+        viewAssurance.getAjoutAssurance().addActionListener(e-> {
                 new AssuranceAjoutController();
-                view.dispose();
+                viewAssurance.dispose();
         });
     }
 
     private void deleteActionButton() {
-        view.getDeleteButton().addActionListener(e -> {
-                int selectedRow = view.getTable().getSelectedRow();
+        viewAssurance.getDeleteButton().addActionListener(e -> {
+                int selectedRow = viewAssurance.getTable().getSelectedRow();
                 int idAssurance = Integer.parseInt(listData.get(selectedRow).get(4)); // Parse as Double and cast to int
                 int response = ErrorMessage.confirmationDialog("Souhaitez vous confirmer la suppression de l'assurance: " + idAssurance);
                 if (response == JOptionPane.YES_OPTION) {
                     model.deleteById(idAssurance);
                     modelTable.setRowCount(0);
                     fillTable();
-                    view.setTableModel(modelTable, 1);
+                    viewAssurance.setTableModel(modelTable, 1);
                 }
         });
     }
@@ -145,9 +148,9 @@ public class AssuranceController extends TemplateTableController {
     }
     
     private void logoLabel() {
-        view.getLogoLabel().addActionListener (e ->{
+        viewAssurance.getLogoLabel().addActionListener (e ->{
                 new HomeController();
-                view.dispose();
+                viewAssurance.dispose();
         });
     }
     
@@ -166,44 +169,43 @@ public class AssuranceController extends TemplateTableController {
         }
 
         // Collect all the latest dates into a list
-        List<String> latestDates = new ArrayList<>(latestDatesMap.values());
-
-        return latestDates;
+        return new ArrayList<>(latestDatesMap.values());
     }
     
     private void addEventHandlers() {
-        view.getBtnBienLouable().addActionListener(e -> {
+        viewAssurance.getBtnBienLouable().addActionListener(e -> {
         	new BienController();
-        	view.dispose();
+        	viewAssurance.dispose();
         });
 
-        view.getBtnLocataire().addActionListener(e -> {
+        viewAssurance.getBtnLocataire().addActionListener(e -> {
         	new LocataireController();
+        	viewAssurance.dispose();
         });
         
-        view.getBtnContratLocation().addActionListener(e -> {
+        viewAssurance.getBtnContratLocation().addActionListener(e -> {
         	new ContratLocationController();
-        	view.dispose();
+        	viewAssurance.dispose();
         });
         
-        view.getItemAssurance().addActionListener(e -> {
+        viewAssurance.getItemAssurance().addActionListener(e -> {
         	new AssuranceController();
-        	view.dispose();
+        	viewAssurance.dispose();
         });
         
-        view.getItemFacture().addActionListener(e -> {
+        viewAssurance.getItemFacture().addActionListener(e -> {
         	new FactureController();
-        	view.dispose();
+        	viewAssurance.dispose();
         });
         
-        view.getItemTravaux().addActionListener(e -> {
+        viewAssurance.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
-        	view.dispose();
+        	viewAssurance.dispose();
         });
         
-        view.getItemCharge().addActionListener(e -> {
+        viewAssurance.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewAssurance.dispose();
         });
     }
     
@@ -213,7 +215,7 @@ public class AssuranceController extends TemplateTableController {
         JLabel totalProtectionJuridiqueLabel = new JLabel("Total Protection Juridique: " + totalProtectionJuridique);
         JLabel totalTotalLabel = new JLabel("Total: " + totalTotal);
 
-        view.updateFooter(totalPrimeLabel, totalProtectionJuridiqueLabel, totalTotalLabel);
-        FontComponent.setFontForAllComponents(view.getFooterPanel(), (int) (ScallingDimension.scaleValue(14) * 1.3));
+        viewAssurance.updateFooter(totalPrimeLabel, totalProtectionJuridiqueLabel, totalTotalLabel);
+        FontComponent.setFontForAllComponents(viewAssurance.getFooterPanel(), (int) (ScallingDimension.scaleValue(14) * 1.3));
     }
 }

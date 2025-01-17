@@ -12,7 +12,7 @@ import view.BienAjoutView;
 
 public class BienAjoutController extends TemplateAjoutController {
 
-    private BienAjoutView view = new BienAjoutView();
+    private BienAjoutView viewAjoutBien = new BienAjoutView();
     private BienDAO modelBien = DAOFactory.createBienDAO();
     private LocataireDAO modelLocataire = DAOFactory.createLocataireDAO();
     private boolean errorRaise;
@@ -22,25 +22,25 @@ public class BienAjoutController extends TemplateAjoutController {
 
     public BienAjoutController() {
         super();
-        view.setTitleHeader("Bien");
+        viewAjoutBien.setTitleHeader("Bien");
         pressedValider();
         pressedAjouterCl();
         pressedAnnuler();
         logoLabel();
         addEventHandlers();
         populateCb();
-        view.setVisible(true);
+        viewAjoutBien.setVisible(true);
     }
     
 	private void logoLabel() {
-		view.getLogoLabel().addActionListener(e -> {
+		viewAjoutBien.getLogoLabel().addActionListener(e -> {
 				new HomeController();
-				view.dispose();
+				viewAjoutBien.dispose();
 		});
 	}
     
     private void pressedValider() {
-        view.getValiderButton().addActionListener(e -> {
+        viewAjoutBien.getValiderButton().addActionListener(e -> {
                 errorRaise = false;
                 checkAdresse();
                 checkEtage();
@@ -53,28 +53,28 @@ public class BienAjoutController extends TemplateAjoutController {
                 if (!errorRaise) {
                     createBien();
                     new BienController();
-                    view.dispose();
+                    viewAjoutBien.dispose();
             }
         });
     }
 
 	private void pressedAnnuler() {
-        view.getAnnulerButton().addActionListener(e -> {
+        viewAjoutBien.getAnnulerButton().addActionListener(e -> {
                 new BienController();
-                view.dispose();
+                viewAjoutBien.dispose();
         });
     }
 	
 	private void pressedAjouterCl() {
-		view.getAjouterCLButton().addActionListener(e -> {
+		viewAjoutBien.getAjouterCLButton().addActionListener(e -> {
 			new ContratLocationAjoutController();
-			view.dispose();
+			viewAjoutBien.dispose();
 		});
 	}
 	
     private void checkAdresse() {
         if (errorRaise) { return; }
-        String input = view.getFieldAdresse().getText();
+        String input = viewAjoutBien.getFieldAdresse().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("L'adresse ne peut pas être vide");
             errorRaise = true;
@@ -82,44 +82,45 @@ public class BienAjoutController extends TemplateAjoutController {
     }
     
     private void addEventHandlers() {
-        view.getBtnBienLouable().addActionListener(e -> {
+        viewAjoutBien.getBtnBienLouable().addActionListener(e -> {
         	new BienController();
-        	view.dispose();
+        	viewAjoutBien.dispose();
         });
 
-        view.getBtnLocataire().addActionListener(e -> {
+        viewAjoutBien.getBtnLocataire().addActionListener(e -> {
         	new LocataireController();
+        	viewAjoutBien.dispose();
         });
         
-        view.getBtnContratLocation().addActionListener(e -> {
+        viewAjoutBien.getBtnContratLocation().addActionListener(e -> {
         	new ContratLocationController();
-        	view.dispose();
+        	viewAjoutBien.dispose();
         });
         
-        view.getItemAssurance().addActionListener(e -> {
+        viewAjoutBien.getItemAssurance().addActionListener(e -> {
         	new AssuranceController();
-        	view.dispose();
+        	viewAjoutBien.dispose();
         });
         
-        view.getItemFacture().addActionListener(e -> {
+        viewAjoutBien.getItemFacture().addActionListener(e -> {
         	new FactureController();
-        	view.dispose();
+        	viewAjoutBien.dispose();
         });
         
-        view.getItemTravaux().addActionListener(e -> {
+        viewAjoutBien.getItemTravaux().addActionListener(e -> {
         	new TravauxController();
-        	view.dispose();
+        	viewAjoutBien.dispose();
         });
         
-        view.getItemCharge().addActionListener(e -> {
+        viewAjoutBien.getItemCharge().addActionListener(e -> {
         	new ChargeController();
-        	view.dispose();
+        	viewAjoutBien.dispose();
         });
     }
 
     private void checkEtage() {
         if (errorRaise) { return; }
-        String input = view.getFieldEtage().getText();
+        String input = viewAjoutBien.getFieldEtage().getText();
         try {
             int etage = Integer.parseInt(input);
             if (etage < 0) {
@@ -134,7 +135,7 @@ public class BienAjoutController extends TemplateAjoutController {
 
     private void checkVille() {
         if (errorRaise) { return; }
-        String input = view.getFieldVille().getText();
+        String input = viewAjoutBien.getFieldVille().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("La ville ne peut pas être vide");
             errorRaise = true;
@@ -143,7 +144,7 @@ public class BienAjoutController extends TemplateAjoutController {
 
     private void checkCodePostal() {
         if (errorRaise) { return; }
-        String input = view.getFieldCodePostal().getText();
+        String input = viewAjoutBien.getFieldCodePostal().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("Le code postal ne peut pas être vide");
             errorRaise = true;
@@ -152,7 +153,7 @@ public class BienAjoutController extends TemplateAjoutController {
 
     private void checkSuperficie() {
         if (errorRaise) { return; }
-        String input = view.getFieldSuperficie().getText();
+        String input = viewAjoutBien.getFieldSuperficie().getText();
         try {
             double superficie = Double.parseDouble(input);
             if (superficie <= 0) {
@@ -167,7 +168,7 @@ public class BienAjoutController extends TemplateAjoutController {
 
     private void checkNombrePiece() {
         if (errorRaise) { return; }
-        int nombrePiece = (int) view.getSpinnerNombrePiece().getValue();
+        int nombrePiece = (int) viewAjoutBien.getSpinnerNombrePiece().getValue();
         if (nombrePiece <= 0) {
             ErrorMessage.errorDialog("Le nombre de pièces doit être supérieur à 0");
             errorRaise = true;
@@ -176,7 +177,7 @@ public class BienAjoutController extends TemplateAjoutController {
 
     private void checkAccesoirPrive() {
         if (errorRaise) { return; }
-        String input = view.getFieldAccesoirPrive().getText();
+        String input = viewAjoutBien.getFieldAccesoirPrive().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("L'accesoir privé ne peut pas être vide");
             errorRaise = true;
@@ -185,7 +186,7 @@ public class BienAjoutController extends TemplateAjoutController {
 
     private void checkAccesoirCommun() {
         if (errorRaise) { return; }
-        String input = view.getFieldAccesoirCommun().getText();
+        String input = viewAjoutBien.getFieldAccesoirCommun().getText();
         if (input.isEmpty()) {
             ErrorMessage.errorDialog("L'accesoir commun ne peut pas être vide");
             errorRaise = true;
@@ -194,31 +195,31 @@ public class BienAjoutController extends TemplateAjoutController {
 
     private void createBien() {
         try {
-            String adresse = view.getFieldAdresse().getText();
-            int etage = Integer.parseInt(view.getFieldEtage().getText());
-            String ville = view.getFieldVille().getText();
-            String codePostal = view.getFieldCodePostal().getText();
-            BigDecimal superficie = new BigDecimal(view.getFieldSuperficie().getText().replace(',', '.'));
-            int nombrePiece = (int) view.getSpinnerNombrePiece().getValue();
-            boolean meuble = view.getCheckMeuble().isSelected();
-            String accesoirPrive = view.getFieldAccesoirPrive().getText();
-            String accesoirCommun = view.getFieldAccesoirCommun().getText();
-            boolean garage = view.getCheckGarage().isSelected();
+            String adresse = viewAjoutBien.getFieldAdresse().getText();
+            int etage = Integer.parseInt(viewAjoutBien.getFieldEtage().getText());
+            String ville = viewAjoutBien.getFieldVille().getText();
+            String codePostal = viewAjoutBien.getFieldCodePostal().getText();
+            BigDecimal superficie = new BigDecimal(viewAjoutBien.getFieldSuperficie().getText().replace(',', '.'));
+            int nombrePiece = (int) viewAjoutBien.getSpinnerNombrePiece().getValue();
+            boolean meuble = viewAjoutBien.getCheckMeuble().isSelected();
+            String accesoirPrive = viewAjoutBien.getFieldAccesoirPrive().getText();
+            String accesoirCommun = viewAjoutBien.getFieldAccesoirCommun().getText();
+            boolean garage = viewAjoutBien.getCheckGarage().isSelected();
             
             Bien bien = new Bien(etage, adresse, ville, codePostal, superficie, nombrePiece, meuble, accesoirPrive, accesoirCommun,garage);
             
-            if ((view.getComboContratLocation().getSelectedItem() != defaultVal && view.getComboBoxLocataire().getSelectedItem() == defaultVal) ||
-            	    (view.getComboContratLocation().getSelectedItem() == defaultVal && view.getComboBoxLocataire().getSelectedItem() != defaultVal)) {
+            if ((viewAjoutBien.getComboContratLocation().getSelectedItem() != defaultVal && viewAjoutBien.getComboBoxLocataire().getSelectedItem() == defaultVal) ||
+            	    (viewAjoutBien.getComboContratLocation().getSelectedItem() == defaultVal && viewAjoutBien.getComboBoxLocataire().getSelectedItem() != defaultVal)) {
             	   ErrorMessage.errorDialog("Les 2 champs doivent être \"Créé seul\" ou aucun");
             }else {            	
             	modelBien.insert(bien);
             }
             
             //Handle fk
-            if(view.getComboContratLocation().getSelectedItem() != defaultVal) {
-            	int locataire = retriveIdLocataire(view.getComboBoxLocataire());
-            	int contratLocation = Integer.parseInt((String) view.getComboContratLocation().getSelectedItem());            	
-            	modelBien.insertFK(bien.getId_bien(), contratLocation);
+            if(viewAjoutBien.getComboContratLocation().getSelectedItem() != defaultVal) {
+            	int locataire = retriveIdLocataire(viewAjoutBien.getComboBoxLocataire());
+            	int contratLocation = Integer.parseInt((String) viewAjoutBien.getComboContratLocation().getSelectedItem());            	
+            	modelBien.insertFK(bien.getIdBien(), contratLocation);
             	modelLocataire.insertFK(locataire, contratLocation);
             }
         } catch (NumberFormatException e) {
@@ -230,13 +231,13 @@ public class BienAjoutController extends TemplateAjoutController {
 		String[] listCB = modelBien.procGetClNotInBien();
 		dataCbLocataire = modelLocataire.procGetLocatairesActifs();
 		
-		view.getComboContratLocation().addItem(defaultVal);
-		view.getComboBoxLocataire().addItem(defaultVal);
+		viewAjoutBien.getComboContratLocation().addItem(defaultVal);
+		viewAjoutBien.getComboBoxLocataire().addItem(defaultVal);
 		for(String item : listCB){			
-			view.getComboContratLocation().addItem(item);
+			viewAjoutBien.getComboContratLocation().addItem(item);
 		}
 		for(List<String> list: dataCbLocataire) {
-			view.getComboBoxLocataire().addItem(list.get(0));
+			viewAjoutBien.getComboBoxLocataire().addItem(list.get(0));
 		}
 	}
 	
