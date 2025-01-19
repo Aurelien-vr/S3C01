@@ -81,7 +81,7 @@ public class TestSoldeDeToutCompte {
 	public void testInsert() {
 		SoldeDeToutCompte solde = new SoldeDeToutCompte(new BigDecimal(200).setScale(2, RoundingMode.DOWN), new BigDecimal(300).setScale(2, RoundingMode.DOWN), new BigDecimal(500).setScale(2, RoundingMode.DOWN));
 		soldeDeToutCompteDAO.insert(solde);
-		assertEquals(solde, soldeDeToutCompteDAO.findOne(idInsertSetup++));
+		assertEquals(solde, soldeDeToutCompteDAO.findOne(solde.getIdSoldeDeToutCompte()));
 
 	}
 	

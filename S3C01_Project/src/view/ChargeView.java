@@ -20,7 +20,7 @@ public class ChargeView extends TemplateTableView {
     }
     
     private JButton addButtonCharge() {
-        ajoutChargeButton = new JButton("Ajouter Charge");
+        ajoutChargeButton = new JButton("Ajouter/modifier charge");
         ajoutChargeButton.setBackground(new Color(135, 206, 250));
         ajoutChargeButton.setBounds(canvas.getX() + canvas.getWidth() - 220,
                 canvas.getY() + canvas.getHeight() - 90, // Adjust the y coordinate to lower the button

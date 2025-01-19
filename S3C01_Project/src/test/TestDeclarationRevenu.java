@@ -78,7 +78,7 @@ public class TestDeclarationRevenu {
 	public void testInsert() {
 		DeclarationRevenu decla = new DeclarationRevenu(Date.valueOf("2018-07-14"),3,new BigDecimal(605).setScale(2, RoundingMode.DOWN));
 		declarationRevenuDAO.insert(decla);
-		assertEquals(decla, declarationRevenuDAO.findOne(idInsertSetup++));
+		assertEquals(decla, declarationRevenuDAO.findOne(decla.getIdDeclarationRevenu()));
 
 	}
 	

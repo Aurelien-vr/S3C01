@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class EtatDesLieuxImpl implements EtatDesLieuxDAO {
     public EtatDesLieux findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Etat_des_lieux WHERE id_etat_des_lieux = ?";
+        String query = "SELECT Id_Etat_des_lieux, Date_signature, Nombre_cles, Etats_des_element, Id_Contrat_location, Est_entrer FROM db1_sae.Etat_des_lieux WHERE id_etat_des_lieux = ?";
 
         try {
             // Préparation de la requête SQL avec l'identifiant de l'état des lieux
@@ -77,7 +78,7 @@ public class EtatDesLieuxImpl implements EtatDesLieuxDAO {
     	List<EtatDesLieux> edts = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Etat_des_lieux";
+        String query = "SELECT Id_Etat_des_lieux, Date_signature, Nombre_cles, Etats_des_element, Id_Contrat_location, Est_entrer FROM db1_sae.Etat_des_lieux";
         
         try {
             statement = connection.prepareStatement(query);
@@ -114,11 +115,19 @@ public class EtatDesLieuxImpl implements EtatDesLieuxDAO {
     	String query = "INSERT INTO db1_sae.Etat_des_lieux(date_signature, nombre_cles, etats_des_element, est_entrer)  VALUES (?,?,?,?)";
    		
    		try {
-   			statement = connection.prepareStatement(query);
+   			statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
     		statement.setDate(1, entity.getDateSignature());
     		statement.setInt(2, entity.getNombreCles());
     		statement.setString(3, entity.getEtatDesElements());
     		statement.setBoolean(4, entity.isEstEntrer());
+    		
+    		if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setIdEtatDesLieux(id);
+                }
+            }
     		
    		} catch (Exception e) {
    			ExceptionStorageHandler.logException(e, connection);
@@ -189,6 +198,7 @@ public class EtatDesLieuxImpl implements EtatDesLieuxDAO {
     public EtatDesLieux createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Etat_des_lieux à partir des données du ResultSet
         EtatDesLieux etatDesLieux = new EtatDesLieux();
+        etatDesLieux.setIdEtatDesLieux(result.getInt(1));
         etatDesLieux.setDateSignature(result.getDate("date_signature"));
         etatDesLieux.setNombreCles(result.getInt("nombre_cles"));
         etatDesLieux.setEtatDesElements(result.getString("etats_des_element"));

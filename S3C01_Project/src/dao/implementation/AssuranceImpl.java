@@ -40,7 +40,7 @@ public class AssuranceImpl implements AssuranceDAO {
     public Assurance findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Assurance WHERE numero_contrat = ?";
+        String query = "SELECT Numero_contrat, Date_assurance, Prime, Protection_juridique FROM db1_sae.Assurance WHERE numero_contrat = ?";
 
         try {
             // Préparation de la requête SQL avec le numéro de contrat
@@ -79,7 +79,7 @@ public class AssuranceImpl implements AssuranceDAO {
     	List<Assurance> ass = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Assurance";
+        String query = "SELECT Numero_contrat, Date_assurance, Prime, Protection_juridique FROM db1_sae.Assurance";
         
         try {
             statement = connection.prepareStatement(query);

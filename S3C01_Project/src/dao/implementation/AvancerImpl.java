@@ -35,7 +35,7 @@ public class AvancerImpl implements AvancerDAO {
     public Avancer findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Avancer WHERE id_locataire = ? ";
+        String query = "SELECT Id_Locataire, Numero_facture FROM db1_sae.Avancer WHERE id_locataire = ? ";
 
         try {
             statement = connection.prepareStatement(query);
@@ -63,7 +63,7 @@ public class AvancerImpl implements AvancerDAO {
         List<Avancer> avancerList = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Avancer";
+        String query = "SELECT Id_Locataire, Numero_facture FROM db1_sae.Avancer";
 
         try {
             statement = connection.prepareStatement(query);

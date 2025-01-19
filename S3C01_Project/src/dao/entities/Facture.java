@@ -16,7 +16,6 @@ public class Facture {
     private Date dateFacture;  // Date à laquelle la facture a été émise
     private BigDecimal montantFacture;  // Montant total de la facture
     private String moyenPaiement;  // Moyen de paiement utilisé pour régler la facture
-    private int idBien;  // Identifiant du bien associé à cette facture
     
     
     
@@ -121,24 +120,6 @@ public class Facture {
     }
 
     /**
-     * Récupère l'identifiant du bien associé à la facture.
-     *
-     * @return L'identifiant du bien.
-     */
-    public int getIdBien() {
-        return idBien;
-    }
-
-    /**
-     * Définit l'identifiant du bien associé à la facture.
-     *
-     * @param idBien L'identifiant du bien à définir.
-     */
-    public void setIdBien(int idBien) {
-        this.idBien = idBien;
-    }
-
-    /**
      * Retourne une représentation textuelle de l'objet {@link Facture}.
      * Utilisé pour un affichage ou un débogage rapide.
      *
@@ -152,13 +133,12 @@ public class Facture {
                ", date_facture=" + (dateFacture != null ? dateFacture : "N/A") +
                ", montant_facture=" + (montantFacture != null ? montantFacture : "N/A") +
                ", moyen_paiement='" + (moyenPaiement != null ? moyenPaiement : "N/A") + '\'' +
-               ", id_bien=" + idBien +
                '}';
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dateFacture, idBien, montantFacture, moyenPaiement, referenceFacture, typeFacture);
+		return Objects.hash(dateFacture, montantFacture, moyenPaiement, typeFacture);
 	}
 
 	@Override
@@ -170,7 +150,7 @@ public class Facture {
 		if (getClass() != obj.getClass())
 			return false;
 		Facture other = (Facture) obj;
-		return Objects.equals(dateFacture, other.dateFacture) && idBien == other.idBien
+		return Objects.equals(dateFacture, other.dateFacture)
 				&& Objects.equals(montantFacture, other.montantFacture)
 				&& Objects.equals(moyenPaiement, other.moyenPaiement)
 				&& Objects.equals(typeFacture, other.typeFacture);

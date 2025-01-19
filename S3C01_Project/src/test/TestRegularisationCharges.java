@@ -79,7 +79,7 @@ public class TestRegularisationCharges {
 	public void testInsert() {
 		RegularisationCharges charge = new RegularisationCharges(Date.valueOf("2024-09-18"), new BigDecimal(50).setScale(2, RoundingMode.DOWN), new BigDecimal(50).setScale(2, RoundingMode.DOWN),new BigDecimal(50).setScale(2, RoundingMode.DOWN),new BigDecimal(900).setScale(2, RoundingMode.DOWN),new BigDecimal(50).setScale(2, RoundingMode.DOWN), "Nul");
 		regularisationChargesDAO.insert(charge);
-		assertEquals(charge, regularisationChargesDAO.findOne(idInsertSetup++));
+		assertEquals(charge, regularisationChargesDAO.findOne(charge.getIdChargeLocataire()));
 
 	}
 	

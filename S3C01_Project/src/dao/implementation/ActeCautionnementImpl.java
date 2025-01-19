@@ -39,7 +39,7 @@ public class ActeCautionnementImpl implements ActeCautionnementDAO {
     public ActeCautionnement findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Acte_cautionnement WHERE Id_Acte_cautionnement = ?";
+        String query = "SELECT Id_Acte_cautionnement, Montant_caution, Id_Locataire FROM db1_sae.Acte_cautionnement WHERE Id_Acte_cautionnement = ?";
         
         try {
             // Préparation de la requête SQL avec l'ID de l'acte
@@ -78,7 +78,7 @@ public class ActeCautionnementImpl implements ActeCautionnementDAO {
     	List<ActeCautionnement> actes = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Acte_cautionnement";
+        String query = "SELECT Id_Acte_cautionnement, Montant_caution, Id_Locataire FROM db1_sae.Acte_cautionnement";
         
         try {
             statement = connection.prepareStatement(query);

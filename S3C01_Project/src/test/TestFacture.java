@@ -82,18 +82,16 @@ public class TestFacture {
 	
 	@Test
 	public void testFindOne() {
-		assertEquals(factureDAO.findOneRef(facture.getReferenceFacture()),facture); 
+		assertEquals(factureDAO.findOneRef(facture.getReferenceFacture()),facture);
 	}
 	
 	@Test
-	public void testInsert(){
-	    Facture newFacture = new Facture(typeFacture, Date.valueOf(date20241212), new BigDecimal(100).setScale(2, RoundingMode.DOWN), "Carte");
+	public void testInsert() {
+	    Facture newFacture = new Facture(typeFacture, Date.valueOf("2024-12-12"), new BigDecimal(100).setScale(2, RoundingMode.DOWN), "Carte");
 	    newFacture.setReferenceFacture("F1");
 	    factureDAO.insert(newFacture);
-
-	    // Vérifier que la facture a bien été insérée
-	    Facture insertedFacture = factureDAO.findOneRef(newFacture.getReferenceFacture());
-	    assertNotNull(insertedFacture);
+	    Facture insertedFacture = factureDAO.findOneRef("F1");
+        assertNotNull(insertedFacture);
 	    assertEquals(newFacture.getReferenceFacture(), insertedFacture.getReferenceFacture());
 	    assertEquals(newFacture.getMontantFacture(), insertedFacture.getMontantFacture());
 	}

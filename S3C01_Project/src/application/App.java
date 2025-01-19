@@ -24,8 +24,7 @@ public class App {
   
     public static void main(String[] args) {
     	 Runtime.getRuntime().addShutdownHook(
-    			 new Thread(DatabaseConnection::closeConnection)
-    			 );
+    			 new Thread(DatabaseConnection::closeConnection));
          new App();
     }
 }

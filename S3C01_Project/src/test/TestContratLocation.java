@@ -184,7 +184,7 @@ public class TestContratLocation {
 	            // Récupère les valeurs attendues de la base de données pour la première ligne
 	            String query = "SELECT DISTINCT cl.Montant_loyer AS Montant, cl.Date_debut AS `Date Début`, cl.Date_fin AS `Date Fin`, "
 	                    + "cl.Modalite_chauffage AS Modalite, cl.Modalite_eau_chaude_sanitaire AS ModaliteEau, "
-	                    + "b.Adresse AS `Adresse`, CONCAT(l.Prenom, ' ', l.Nom) AS `Nom Locataire`, "
+	                    + "b.Adresse AS `Adresse Bien`, CONCAT(l.Prenom, ' ', l.Nom) AS `Nom Locataire`, "
 	                    + "CASE WHEN cc.Clause_solidarite IS NOT NULL THEN TRUE ELSE FALSE END AS `Colocation`, "
 	                    + "CASE WHEN edl.Est_entrer IS NOT NULL THEN TRUE ELSE FALSE END AS `État des lieux`, "
 	                    + "CASE WHEN sdc.Reste_a_devoir IS NOT NULL THEN TRUE ELSE FALSE END AS `Solde de tout compte`, "
@@ -201,7 +201,7 @@ public class TestContratLocation {
 	                assertTrue(expectedResultSet.next());
 	                
 	                // Récupération des valeurs attendues de la base de données
-	                String adressColumn = "Adresse";
+	                String adressColumn = "Adresse Bien";
 	                String dateDebutColumn = "Date Début";
 	                String dateFinColumn = "Date Fin";
 	                String modaliteColumn = "Modalite";
@@ -227,7 +227,7 @@ public class TestContratLocation {
 	                String adresse = resultSet.getString(adressColumn);
 	                Date dateDebut = resultSet.getDate(dateDebutColumn);
 	                Date dateFin = resultSet.getDate(dateFinColumn);
-	                String modalite = resultSet.getString(modaliteEauColumn);
+	                String modalite = resultSet.getString(modaliteColumn);
 	                String modaliteEau = resultSet.getString(modaliteEauColumn);
 	                String nomLocataire = resultSet.getString(nomLocataireColumn);
 	                boolean colocation = resultSet.getBoolean(colocationColumn);

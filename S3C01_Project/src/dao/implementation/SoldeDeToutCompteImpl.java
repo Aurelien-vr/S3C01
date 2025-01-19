@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class SoldeDeToutCompteImpl implements SoldeDeToutCompteDAO {
     public SoldeDeToutCompte findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Solde_de_tout_compte WHERE id_solde_de_tout_compte = ?";
+        String query = "SELECT Id_Solde_de_tout_compte, Reste_a_devoir, Provision_pour_charges, Caution, Id_Contrat_location FROM db1_sae.Solde_de_tout_compte WHERE Id_Solde_de_tout_compte = ?";
 
         try {
             // Préparation de la requête SQL avec l'identifiant du locataire
@@ -53,16 +54,7 @@ public class SoldeDeToutCompteImpl implements SoldeDeToutCompteDAO {
         } catch (Exception e) {
             e.printStackTrace(); // Affichage de l'exception pour le débogage
         } finally {
-            // Fermeture des ressources
-            try {
-                if (result != null) result.close();
-                if (statement != null) statement.close();
-            }catch (Exception e) {
-    			ExceptionStorageHandler.logException(e, connection);
-    		}finally {
-    			DatabaseConnection.closeResult(result);
-    			DatabaseConnection.closeStatement(statement);
-    		}
+        	DatabaseConnection.closeStatement(statement);
         }
 
         return null; // Si aucun solde de tout compte n'est trouvé, retour de null
@@ -78,7 +70,7 @@ public class SoldeDeToutCompteImpl implements SoldeDeToutCompteDAO {
     	List<SoldeDeToutCompte> soldes = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Solde_de_tout_compte";
+        String query = "SELECT Id_Solde_de_tout_compte, Reste_a_devoir, Provision_pour_charges, Caution, Id_Contrat_location FROM db1_sae.Solde_de_tout_compte";
         
         try {
             statement = connection.prepareStatement(query);
@@ -116,10 +108,18 @@ public class SoldeDeToutCompteImpl implements SoldeDeToutCompteDAO {
     	String query = "INSERT INTO db1_sae.Solde_de_tout_compte(reste_a_devoir, provision_pour_charges, caution) VALUES (?,?,?)";
    		
    		try {
-   			statement = connection.prepareStatement(query);
+   			statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
    			statement.setBigDecimal(1,entity.getResteADevoir());
     		statement.setBigDecimal(2, entity.getProvisionPourCharges());
     		statement.setBigDecimal(3, entity.getCaution());
+    		
+    		if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setIdSoldeDeToutCompte(id);
+                }
+            }
     			
 
    		} catch (Exception e) {
@@ -188,6 +188,7 @@ public class SoldeDeToutCompteImpl implements SoldeDeToutCompteDAO {
     public SoldeDeToutCompte createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Solde_de_tout_compte à partir des données du ResultSet
         SoldeDeToutCompte solde = new SoldeDeToutCompte();
+        solde.setIdSoldeDeToutCompte(result.getInt("Id_Solde_de_tout_compte"));
         solde.setResteADevoir(result.getBigDecimal("reste_a_devoir"));
         solde.setProvisionPourCharges(result.getBigDecimal("provision_pour_charges"));
         solde.setCaution(result.getBigDecimal("caution"));

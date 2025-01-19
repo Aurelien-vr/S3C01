@@ -130,7 +130,6 @@ public class AvisTaxeFonciere {
 		AvisTaxeFonciere other = (AvisTaxeFonciere) obj;
 		return Objects.equals(dateEtablissement, other.dateEtablissement)
 				&& Objects.equals(debiteurLegaux, other.debiteurLegaux)
-				&& numeroFiscal == other.numeroFiscal
 				&& Double.doubleToLongBits(totalCotisation) == Double.doubleToLongBits(other.totalCotisation);
 	}
 }

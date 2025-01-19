@@ -39,7 +39,7 @@ public class FactureEauImpl implements FactureEauDAO {
     public FactureEau findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture_eau WHERE id_facture_eau = ?";
+        String query = "SELECT Id_Facture_eau, Partie_fixe, Consommation, Reference_facture FROM db1_sae.Facture_eau WHERE id_facture_eau = ?";
 
         try {
             // Préparation de la requête SQL avec l'identifiant de la facture
@@ -78,7 +78,7 @@ public class FactureEauImpl implements FactureEauDAO {
     	List<FactureEau> facturesEau = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture_eau";
+        String query = "SELECT Id_Facture_eau, Partie_fixe, Consommation, Reference_facture FROM db1_sae.Facture_eau";
         
         try {
             statement = connection.prepareStatement(query);

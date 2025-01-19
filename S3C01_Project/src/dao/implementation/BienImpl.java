@@ -35,7 +35,7 @@ public class BienImpl implements BienDAO {
     public Bien findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Bien WHERE Id_Bien = ?";
+        String query = "SELECT Id_Bien, Etage, Adresse, Ville, Code_postal, Superficie, Nombre_de_piece, Meuble, Accessoire_prive, Accessoire_commun, Id_Contrat_location, Est_garage FROM db1_sae.Bien WHERE Id_Bien = ?";
         
         try {
             // Préparation de la requête SQL avec l'ID du bien
@@ -65,7 +65,7 @@ public class BienImpl implements BienDAO {
     	List<Bien> biens = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Bien";
+        String query = "SELECT Id_Bien, Etage, Adresse, Ville, Code_postal, Superficie, Nombre_de_piece, Meuble, Accessoire_prive, Accessoire_commun, Id_Contrat_location, Est_garage FROM db1_sae.Bien";
         
         try {
             statement = connection.prepareStatement(query);
@@ -254,7 +254,7 @@ public class BienImpl implements BienDAO {
 				ArrayList<String> factureList = new ArrayList<>();
 	            while (result.next()) {
 	            	 String address = result.getString(1);
-	            	 String ville = result.getString(2);	            	 
+	            	 String ville = result.getString(2);
 	            	 factureList.add(address + " | " + ville);
 	            }
 	            factureNumbers = factureList.toArray(new String[0]);
@@ -262,7 +262,6 @@ public class BienImpl implements BienDAO {
 		}catch (Exception e) {
 			ExceptionStorageHandler.logException(e, connection);
 		}
-		
 		return factureNumbers;
 	}
 
@@ -407,5 +406,60 @@ public class BienImpl implements BienDAO {
 		}finally {
 			DatabaseConnection.closeStatement(statement);
 		}
+	}
+
+	@Override
+	public List<List<String>> getAdresses() {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_AllAdresses()}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<>();
+					cell.add(result.getString(1) != null ? result.getString(1) : stringUnknown);
+					cell.add(result.getString(3) != null ? result.getString(3): stringUnknown);
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.logException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
+
+	@Override
+	public List<List<String>> procGetBienWithCl() {
+	    CallableStatement statement = null;
+	    ResultSet result = null;
+	    String query = "{CALL db1_sae.get_bienWithCl()}";
+	    List<List<String>> arrayRes = new ArrayList<>();
+	    String stringUnknownProc = "Unknown";
+
+	    try {
+	        statement = connection.prepareCall(query);
+	        if (statement.execute()) {
+	            result = statement.getResultSet();
+	            while (result.next()) {
+	                ArrayList<String> cell = new ArrayList<>();
+	                cell.add(result.getString(2) != null ? result.getString(2) : stringUnknownProc);
+	                cell.add(result.getString(1) != null ? result.getString(1) : stringUnknownProc);
+	                arrayRes.add(cell);
+	            }
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.logException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeResult(result);
+	        DatabaseConnection.closeStatement(statement);
+	    }
+	    return arrayRes;
 	}
 }

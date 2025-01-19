@@ -39,7 +39,7 @@ public class FactureGazImpl implements FactureGazDAO {
     public FactureGaz findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture_gaz WHERE id_facture_gaz = ?";
+        String query = "SELECT Id_Facture_gaz, Consommation_m3, Prix_m3_gaz, Reference_facture FROM db1_sae.Facture_gaz WHERE id_facture_gaz = ?";
 
         try {
             // Préparation de la requête SQL avec l'identifiant de la facture
@@ -79,7 +79,7 @@ public class FactureGazImpl implements FactureGazDAO {
     	List<FactureGaz> facturesGaz = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture_gaz";
+        String query = "SELECT Id_Facture_gaz, Consommation_m3, Prix_m3_gaz, Reference_facture FROM db1_sae.Facture_gaz";
         
         try {
             statement = connection.prepareStatement(query);

@@ -31,7 +31,7 @@ public class ContratLocationImpl implements ContratLocationDAO {
 	public ContratLocation findOne(long id) {
 		PreparedStatement statement = null;
 		ResultSet result = null;
-		String query = "SELECT * FROM db1_sae.Contrat_location WHERE Id_Contrat_location = ?";
+		String query = "SELECT Id_Contrat_location, Montant_loyer, Date_debut, Date_fin, Modalite_chauffage, Modalite_eau_chaude_sanitaire, Date_versement FROM db1_sae.Contrat_location WHERE Id_Contrat_location = ?";
 		
 		try {
 			statement = connection.prepareStatement(query);
@@ -66,19 +66,13 @@ public class ContratLocationImpl implements ContratLocationDAO {
 	        statement.setString(5, entity.getModaliteEauChaudeSanitaire());
 	        statement.setDate(6, entity.getDateVersement());
 
-	        int affectedRows = statement.executeUpdate();
-	        if (affectedRows == 0) {
-	            throw new SQLException("Creating ContratLocation failed, no rows affected.");
-	        }
-
-	        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-	            if (generatedKeys.next()) {
-	                int id = generatedKeys.getInt(1);
-	                entity.setNumeroLocation(id);
-	            } else {
-	                throw new SQLException("Creating ContratLocation failed, no ID obtained.");
-	            }
-	        }
+	        if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setNumeroLocation(id);
+                }
+            }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        ExceptionStorageHandler.logException(e, connection);
@@ -100,7 +94,7 @@ public class ContratLocationImpl implements ContratLocationDAO {
     	List<ContratLocation> contrats = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Contrat_location";
+        String query = "SELECT Id_Contrat_location, Montant_loyer, Date_debut, Date_fin, Modalite_chauffage, Modalite_eau_chaude_sanitaire, Date_versement FROM db1_sae.Contrat_location";
         
         try {
             statement = connection.prepareStatement(query);

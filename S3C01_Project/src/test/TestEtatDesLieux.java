@@ -76,7 +76,7 @@ public class TestEtatDesLieux {
 	public void testInsert() {
 		EtatDesLieux edl = new EtatDesLieux(Date.valueOf("2023-12-06"),4, "Bien",false);
 		etatDesLieuxDAO.insert(edl);
-		assertEquals(edl, etatDesLieuxDAO.findOne(idInsertSetup++));
+		assertEquals(edl, etatDesLieuxDAO.findOne(edl.getIdEtatDesLieux()));
 
 	}
 	

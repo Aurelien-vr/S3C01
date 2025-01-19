@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class ContratColocationImpl implements ContratColocationDAO {
     public ContratColocation findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Contrat_colocation WHERE id_contrat_colocation = ?";
+        String query = "SELECT Id_Contrat_colocation, Clause_solidarite, Part_des_charges, Id_Contrat_location FROM db1_sae.Contrat_colocation WHERE id_contrat_colocation = ?";
 
         try {
             // Préparation de la requête SQL avec l'identifiant
@@ -68,7 +69,7 @@ public class ContratColocationImpl implements ContratColocationDAO {
     	List<ContratColocation> listContratColocation = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Contrat_colocation";
+        String query = "SELECT Id_Contrat_colocation, Clause_solidarite, Part_des_charges, Id_Contrat_location FROM db1_sae.Contrat_colocation";
         
         try {
             statement = connection.prepareStatement(query);
@@ -104,9 +105,17 @@ public class ContratColocationImpl implements ContratColocationDAO {
     	String query = "INSERT INTO db1_sae.Contrat_colocation(clause_solidarite, part_des_charges)  VALUES (?,?)";
    		
    		try {
-   			statement = connection.prepareStatement(query);
+   			statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
     		statement.setBoolean(1, entity.isClauseSolidarite());
     		statement.setBigDecimal(2, entity.getPartDesCharges());
+    		
+    		if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setIdContratColocation(id);
+                }
+            }
     		
    		} catch (Exception e) {
    			ExceptionStorageHandler.logException(e, connection);
@@ -170,6 +179,7 @@ public class ContratColocationImpl implements ContratColocationDAO {
     public ContratColocation createEntities(ResultSet result) throws SQLException {
         // Création de l'entité Contrat_colocation à partir des données du ResultSet
         ContratColocation contrat = new ContratColocation();
+        contrat.setIdContratColocation(result.getInt(1));
         contrat.setClauseSolidarite(result.getBoolean("clause_solidarite"));
         contrat.setPartDesCharges(result.getBigDecimal("part_des_charges"));
         return contrat; // Retourne l'entité Contrat_colocation construite

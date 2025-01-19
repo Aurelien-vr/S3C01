@@ -41,7 +41,7 @@ public class TravauxImpl implements TravauxDAO {
     public Travaux findOne(long numeroFacture) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Travaux WHERE numero_facture = ?";
+        String query = "SELECT Numero_facture, Date_travaux, Nature, IBAN, Reduction, Montant, Montant_non_deductible, Reduction_special, Reference_facture FROM db1_sae.Travaux WHERE numero_facture = ?";
 
         try {
             // Préparation de la requête SQL avec le numéro de facture
@@ -81,7 +81,7 @@ public class TravauxImpl implements TravauxDAO {
     	List<Travaux> tras = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Travaux";
+        String query = "SELECT Numero_facture, Date_travaux, Nature, IBAN, Reduction, Montant, Montant_non_deductible, Reduction_special, Reference_facture FROM db1_sae.Travaux";
         
         try {
             statement = connection.prepareStatement(query);

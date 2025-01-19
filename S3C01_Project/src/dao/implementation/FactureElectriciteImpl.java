@@ -39,7 +39,7 @@ public class FactureElectriciteImpl implements FactureElectriciteDAO {
     public FactureElectricite findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture_electricite WHERE id_facture_electricite = ?";
+        String query = "SELECT Id_Facture_electricite, Compteur_electricite, Prix_kw_electricite, Reference_facture FROM db1_sae.Facture_electricite WHERE id_facture_electricite = ?";
 
         try {
             // Préparation de la requête SQL avec l'identifiant de la facture
@@ -79,7 +79,7 @@ public class FactureElectriciteImpl implements FactureElectriciteDAO {
     	List<FactureElectricite> facturesElectricites = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture_electricite";
+        String query = "SELECT Id_Facture_electricite, Compteur_electricite, Prix_kw_electricite, Reference_facture FROM db1_sae.Facture_electricite";
         
         try {
             statement = connection.prepareStatement(query);

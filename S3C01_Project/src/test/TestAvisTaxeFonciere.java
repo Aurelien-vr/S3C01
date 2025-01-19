@@ -78,7 +78,7 @@ public class TestAvisTaxeFonciere {
 	public void testInsert() {
 		AvisTaxeFonciere taxe = new AvisTaxeFonciere(Date.valueOf("2019-10-09"),"Coucou and co",15);
 		avisTaxeFonciereDAO.insert(taxe);
-		assertEquals(taxe, avisTaxeFonciereDAO.findOne(idInsertSetup++));
+		assertEquals(taxe, avisTaxeFonciereDAO.findOne(taxe.getNumeroFiscal()));
 
 	}
 	

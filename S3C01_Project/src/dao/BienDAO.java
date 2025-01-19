@@ -9,10 +9,12 @@ import dao.entities.Bien;
  */
 public interface BienDAO extends DAO<Bien> {
 	public List<List<String>> bienStatus();
-	String[] getAllAdresses();
+	public String[] getAllAdresses();
+	public List<List<String>> getAdresses();
 	public List<List<String>> procPageBien();
+	public List<List<String>> procGetBienWithCl();
 	public String[] procGetClNotInBien();
-	void insertFK(int id, int idContratLocation);
+	public void insertFK(int id, int idContratLocation);
 	public List<List<String>> procBienSansContrat();
 	public String procAdressOfFacture(String refFacture);
 	void procDeletBienCascade(int idBien);

@@ -81,7 +81,7 @@ public class TestTravaux {
 	public void testInsert() {
 		Travaux tra = new Travaux(Date.valueOf("2024-09-09"), "Tres bien", "09456543210",new BigDecimal(73).setScale(2, RoundingMode.DOWN), new BigDecimal(55).setScale(2, RoundingMode.DOWN), new BigDecimal(50).setScale(2, RoundingMode.DOWN), new BigDecimal(7).setScale(2, RoundingMode.DOWN));
 		travauxDAO.insert(tra);
-		assertEquals(tra, travauxDAO.findOne(idInsertSetup++));
+		assertEquals(tra, travauxDAO.findOne(tra.getNumeroFacture()));
 
 	}
 	

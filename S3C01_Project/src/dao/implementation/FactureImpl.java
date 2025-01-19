@@ -39,7 +39,7 @@ public class FactureImpl implements FactureDAO {
     public Facture findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture WHERE Reference_facture = ?";
+        String query = "SELECT Reference_facture, Type_facture, Date_facture, Montant_facture, Moyen_paiement, MontantNonDeductible, Id_Bien, Reduction, Id_Charge FROM db1_sae.Facture WHERE Reference_facture = ?";
 
         try {
             statement = connection.prepareStatement(query);
@@ -62,27 +62,29 @@ public class FactureImpl implements FactureDAO {
     
     @Override
     public Facture findOneRef(String reference) {
-        PreparedStatement statement = null;
-        ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture WHERE Reference_facture = ?";
+    	 String query = "SELECT Reference_facture, Type_facture, Date_facture, Montant_facture, Moyen_paiement, MontantNonDeductible, Id_Bien, Reduction, Id_Charge FROM db1_sae.Facture WHERE Reference_facture = ?";
+         Facture facture = null;
 
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setString(1, reference); // Utilisation de setString pour le paramètre String
-            result = statement.executeQuery();
+         try (PreparedStatement statement = connection.prepareStatement(query)) {
+             statement.setString(1, reference);
+             try (ResultSet resultSet = statement.executeQuery()) {
+                 if (resultSet.next()) {
+                     facture = new Facture();
+                     facture.setReferenceFacture(resultSet.getString("Reference_facture"));
+                     facture.setTypeFacture(resultSet.getString("Type_facture"));
+                     facture.setDateFacture(resultSet.getDate("Date_facture"));
+                     facture.setMontantFacture(resultSet.getBigDecimal("Montant_facture"));
+                     facture.setMoyenPaiement(resultSet.getString("Moyen_paiement"));
+                 }
+             }
+         } catch (Exception e) {
+             ExceptionStorageHandler.logException(e, connection);
+             e.printStackTrace();
+         }
 
-            if (result.next()) {
-                return createEntities(result);
-            }
-        } catch (Exception e) {
-            ExceptionStorageHandler.logException(e, connection);
-        } finally {
-            DatabaseConnection.closeStatement(statement);
-            DatabaseConnection.closeResult(result);
-        }
-
-        return null;
+         return facture;
     }
+
 
     /**
      * Recherche toutes les factures (fonctionnalité à implémenter).
@@ -94,7 +96,7 @@ public class FactureImpl implements FactureDAO {
     	List<Facture> facts = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Facture";
+        String query = "SELECT Reference_facture, Type_facture, Date_facture, Montant_facture, Moyen_paiement, MontantNonDeductible, Id_Bien, Reduction, Id_Charge FROM db1_sae.Facture";
         
         try {
             statement = connection.prepareStatement(query);
@@ -128,27 +130,22 @@ public class FactureImpl implements FactureDAO {
      * @param entity L'entité Facture à insérer.
      */
     @Override
-    public void insert(Facture entity) {
-    	PreparedStatement statement = null;
-    	String query = "INSERT INTO db1_sae.Facture(reference_facture, type_facture , date_facture , montant_facture, moyen_paiement) VALUES (?,?,?,?,?)";
-   		
-   		try {
-   			statement = connection.prepareStatement(query);
-   			statement.setString(1,entity.getReferenceFacture());
-    		statement.setString(2, entity.getTypeFacture());
-    		statement.setDate(3, entity.getDateFacture());
-    		statement.setBigDecimal(4, entity.getMontantFacture());
-    		statement.setString(5, entity.getMoyenPaiement());
+    public void insert(Facture facture) {
+    	 String query = "INSERT INTO db1_sae.Facture(reference_facture, type_facture, date_facture, montant_facture, moyen_paiement, montantNonDeductible, reduction) " +
+                 "VALUES (?, ?, ?, ?, ?, 0, 0)";
 
-   		}catch (java.sql.SQLIntegrityConstraintViolationException e) {
-            if ("23000".equals(e.getSQLState()) && e.getErrorCode() == 1062) {
-                entity.setReferenceFacture("ERROR CODE 1062");
-             }
-         }  catch (Exception e) {
-   			ExceptionStorageHandler.logException(e, connection);
-   		}finally {
-   			DatabaseConnection.closeStatement(statement);
-   		}
+	  try (PreparedStatement statement = connection.prepareStatement(query)) {
+	      // Set parameters for the prepared statement
+	      statement.setString(1, facture.getReferenceFacture());
+	      statement.setString(2, facture.getTypeFacture());
+	      statement.setDate(3, facture.getDateFacture());
+	      statement.setBigDecimal(4, facture.getMontantFacture());
+	      statement.setString(5, facture.getMoyenPaiement());
+        // Execute the update
+        statement.executeUpdate();
+        } catch (SQLException e) {
+            ExceptionStorageHandler.logException(e, connection);
+        }
     }
 
     /**
@@ -209,14 +206,18 @@ public class FactureImpl implements FactureDAO {
      * @throws SQLException Si une erreur SQL se produit lors de la lecture des données.
      */
     @Override
-    public Facture createEntities(ResultSet result) throws SQLException {
+    public Facture createEntities(ResultSet result){
         // Création de l'entité Facture à partir des données du ResultSet
         Facture facture = new Facture();
-        facture.setReferenceFacture(result.getString("Reference_facture"));
-        facture.setTypeFacture(result.getString("Type_facture"));
-        facture.setDateFacture(result.getDate("Date_facture"));
-        facture.setMontantFacture(result.getBigDecimal("Montant_facture"));
-        facture.setMoyenPaiement(result.getString("Moyen_paiement"));
+        try {        	
+			facture.setReferenceFacture(result.getString(1));
+			facture.setTypeFacture(result.getString("Type_facture"));
+			facture.setDateFacture(result.getDate("Date_facture"));
+			facture.setMontantFacture(result.getBigDecimal("Montant_facture"));
+			facture.setMoyenPaiement(result.getString("Moyen_paiement"));
+		} catch (SQLException e) {
+			ExceptionStorageHandler.logException(e, connection);
+		}
         return facture;
     }
 
@@ -252,6 +253,7 @@ public class FactureImpl implements FactureDAO {
 	        statement = connection.prepareStatement(query);
 	        statement.setString(2, refFacture);
 	        statement.setInt(1, idBien);
+	        statement.executeUpdate();
 
 	    }catch (Exception e) {
 	        ExceptionStorageHandler.logException(e, connection);
@@ -268,9 +270,9 @@ public class FactureImpl implements FactureDAO {
 	    
 	    try {
 	        statement = connection.prepareStatement(query);
-	        statement.setString(2, refFacture);
 	        statement.setInt(1, idCharge);
-
+	        statement.setString(2, refFacture);
+	        statement.executeUpdate();
 	    } catch (Exception e) {
 	        ExceptionStorageHandler.logException(e, connection);
 	    } finally {

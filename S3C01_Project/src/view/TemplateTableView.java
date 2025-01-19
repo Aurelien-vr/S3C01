@@ -141,6 +141,7 @@ public class TemplateTableView extends TemplateMenuView{
             table.getColumnModel().getColumn(lastColumnIndex - 1).setCellRenderer(new ButtonRenderer());
             table.getColumnModel().getColumn(lastColumnIndex - 1).setCellEditor(new ButtonEditor(new JCheckBox(), editIdContratBien));
         }
+        
     }
 
     public void updateFooter(JLabel... labels) {

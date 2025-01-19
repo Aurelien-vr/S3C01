@@ -34,7 +34,7 @@ public class EnumererImpl implements EnumererDAO {
     public Enumerer findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Enumerer WHERE id_solde_de_tout_compte = ?";
+        String query = "SELECT Reference_facture, Id_Solde_de_tout_compte FROM db1_sae.Enumerer WHERE id_solde_de_tout_compte = ?";
 
         try {
             statement = connection.prepareStatement(query);
@@ -62,7 +62,7 @@ public class EnumererImpl implements EnumererDAO {
         List<Enumerer> enumererList = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Enumerer";
+        String query = "SELECT Reference_facture, Id_Solde_de_tout_compte FROM db1_sae.Enumerer";
 
         try {
             statement = connection.prepareStatement(query);

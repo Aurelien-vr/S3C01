@@ -20,14 +20,14 @@ public class ChargeController extends TemplateTableController {
         super();
         viewCharge.setTitleHeader("Charges de location");
         updateFooter();
-        openAjoutChargePage();
         actionDeleteButton();
         addEventHandlers();
+        buttonEditAddCharge();
         logoLabel();
         fillTable();
         actionToggleButton();
         
-        viewCharge.setTableModel(modelTable, 3);
+        viewCharge.setTableModel(modelTable);
         viewCharge.setVisible(true);
     }
     
@@ -67,6 +67,18 @@ public class ChargeController extends TemplateTableController {
         }
     }
     
+    private void buttonEditAddCharge() {
+    	viewCharge.getAjoutChargeButton().addActionListener(e->{
+    		String rep = ErrorMessage.optionDialog();
+    		if("Create".equals(rep)) {
+    			new ChargeAjoutController(false);
+    		}else if("Edit".equals(rep)){
+    			new ChargeAjoutController(true);
+    		}
+    		viewCharge.dispose();
+    	});
+    }
+    
     private void actionDeleteButton() {
         viewCharge.getDeleteButton().addActionListener(e -> {
             int selectedRow = viewCharge.getTable().getSelectedRow();
@@ -78,13 +90,6 @@ public class ChargeController extends TemplateTableController {
                 fillTable();
                 viewCharge.setTableModel(modelTable, 1);
             }
-        });
-    }
-    
-    private void openAjoutChargePage() {
-        viewCharge.getAjoutChargeButton().addActionListener(e -> {
-            new ChargeAjoutController();
-            viewCharge.dispose();
         });
     }
     

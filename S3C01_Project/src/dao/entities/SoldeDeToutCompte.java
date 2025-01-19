@@ -150,7 +150,6 @@ public class SoldeDeToutCompte {
 			return false;
 		SoldeDeToutCompte other = (SoldeDeToutCompte) obj;
 		return Objects.equals(caution, other.caution) && idContratLocation == other.idContratLocation
-				&& idSoldeDeToutCompte == other.idSoldeDeToutCompte
 				&& Objects.equals(provisionPourCharges, other.provisionPourCharges)
 				&& Objects.equals(resteADevoir, other.resteADevoir);
 	}

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class RegularisationChargesImpl implements RegularisationChargesDAO {
     public RegularisationCharges findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Regularisation_charges WHERE id_charge_locataire = ?";
+        String query = "SELECT Id_Charge_locataire, Date_effet, Charge_eau, Charge_ordure_menagere, Charge_eclairage, Provision_pour_charge, Indice, Entretien, Id_Contrat_location FROM db1_sae.Regularisation_charges WHERE id_charge_locataire = ?";
 
         try {
             // Préparation de la requête SQL avec l'identifiant du locataire
@@ -77,7 +78,7 @@ public class RegularisationChargesImpl implements RegularisationChargesDAO {
     	List<RegularisationCharges> regus = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Regularisation_charges";
+        String query = "SELECT Id_Charge_locataire, Date_effet, Charge_eau, Charge_ordure_menagere, Charge_eclairage, Provision_pour_charge, Indice, Entretien, Id_Contrat_location FROM db1_sae.Regularisation_charges";
         
         try {
             statement = connection.prepareStatement(query);
@@ -114,7 +115,7 @@ public class RegularisationChargesImpl implements RegularisationChargesDAO {
     	String query = "INSERT INTO db1_sae.Regularisation_charges(date_effet, charge_eau, charge_ordure_menagere, charge_eclairage, provision_pour_charge, indice, entretien) VALUES (?,?,?,?,?,?,?)";
    		
    		try {
-   			statement = connection.prepareStatement(query);
+   			statement = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
    			statement.setDate(1,entity.getDateEffet());
     		statement.setBigDecimal(2, entity.getChargeEau());
     		statement.setBigDecimal(3, entity.getChargeOrdureMenagere());
@@ -122,6 +123,14 @@ public class RegularisationChargesImpl implements RegularisationChargesDAO {
     		statement.setBigDecimal(5, entity.getProvisionPourCharge());
     		statement.setBigDecimal(6, entity.getIndice());
     		statement.setString(7, entity.getEntretien());
+    		
+    		if (statement.executeUpdate() > 0) {
+                ResultSet result = statement.getGeneratedKeys();
+                if (result.next()) {
+                    int id = result.getInt(1);
+                    entity.setIdChargeLocataire(id);
+                }
+            }
     			
 
    		} catch (Exception e) {

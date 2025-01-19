@@ -170,7 +170,7 @@ public class EtatDesLieux {
 		EtatDesLieux other = (EtatDesLieux) obj;
 		return Objects.equals(dateSignature, other.dateSignature) && estEntrer == other.estEntrer
 				&& Objects.equals(etatsDesElement, other.etatsDesElement)
-				&& idContratLocation == other.idContratLocation && idEtatDesLieux == other.idEtatDesLieux
+				&& idContratLocation == other.idContratLocation
 				&& nombreCles == other.nombreCles;
 	}
 }

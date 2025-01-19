@@ -127,7 +127,7 @@ public class ContratColocation {
 		if (getClass() != obj.getClass())
 			return false;
 		ContratColocation other = (ContratColocation) obj;
-		return clauseSolidarite == other.clauseSolidarite && idContratColocation == other.idContratColocation
+		return clauseSolidarite == other.clauseSolidarite
 				&& idContratLocation == other.idContratLocation
 				&& Objects.equals(partDesCharges, other.partDesCharges);
 	}

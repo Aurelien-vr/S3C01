@@ -9,8 +9,7 @@ public class Charge {
 	
 	public Charge() {}
 	
-	public Charge(int idCharge, Date dateCharge) {
-		this.idCharge = idCharge;
+	public Charge(Date dateCharge) {
 		this.dateCharge = dateCharge;
 	}
 
@@ -46,6 +45,10 @@ public class Charge {
 		Charge other = (Charge) obj;
 		return Objects.equals(dateCharge, other.dateCharge) && idCharge == other.idCharge;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Charge [idCharge=" + idCharge + ", dateCharge=" + dateCharge + "]";
+	}
 	
 }

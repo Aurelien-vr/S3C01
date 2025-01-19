@@ -148,7 +148,7 @@ public class DeclarationRevenu {
 			return false;
 		DeclarationRevenu other = (DeclarationRevenu) obj;
 		return Objects.equals(dateAcquisition, other.dateAcquisition) && idBien == other.idBien
-				&& idDeclarationRevenu == other.idDeclarationRevenu && locataires == other.locataires
+			    && locataires == other.locataires
 				&& Objects.equals(recetteImmeuble, other.recetteImmeuble);
 	}
 }

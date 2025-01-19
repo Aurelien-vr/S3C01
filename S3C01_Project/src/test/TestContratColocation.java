@@ -78,7 +78,7 @@ public class TestContratColocation {
 	public void testInsert() {
 		ContratColocation coloc = new ContratColocation(true,new BigDecimal(500).setScale(2, RoundingMode.DOWN));
 		contratColocationDAO.insert(coloc);
-		assertEquals(coloc, contratColocationDAO.findOne(idInsertSetup++));
+		assertEquals(coloc, contratColocationDAO.findOne(coloc.getIdContratColocation()));
 
 	}
 	

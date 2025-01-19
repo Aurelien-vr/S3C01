@@ -36,7 +36,7 @@ public class ChargeImpl implements ChargeDAO {
     public Charge findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Charge WHERE Id_Charge = ?";
+        String query = "SELECT Id_Charge, Date_Charge, Id_Contrat_Location FROM db1_sae.Charges WHERE Id_Charge = ?";
         
         try {
             // Préparation de la requête SQL avec l'ID de la charge
@@ -66,7 +66,7 @@ public class ChargeImpl implements ChargeDAO {
         List<Charge> charges = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Charge";
+        String query = "SELECT Id_Charge, Date_Charge, Id_Contrat_Location FROM db1_sae.Charges";
         
         try {
             statement = connection.prepareStatement(query);
@@ -92,21 +92,23 @@ public class ChargeImpl implements ChargeDAO {
     @Override
     public void insert(Charge entity) {
         PreparedStatement statement = null;
-        String query = "INSERT INTO db1_sae.Charge(Date_Charge) VALUES (?)";
+        String query = "INSERT INTO db1_sae.Charges(Date_Charge) VALUES (?)";
 
         try {
             statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setDate(1, entity.getDateCharge());
-
+            
             if (statement.executeUpdate() > 0) {
                 ResultSet result = statement.getGeneratedKeys();
                 if (result.next()) {
                     int id = result.getInt(1);
+                    System.out.println(id);
                     entity.setIdCharge(id);
                 }
             }
         } catch (Exception e) {
             ExceptionStorageHandler.logException(e, connection);
+            e.printStackTrace();
         } finally {
             DatabaseConnection.closeStatement(statement);
         }
@@ -120,7 +122,7 @@ public class ChargeImpl implements ChargeDAO {
     @Override
     public void update(Charge entity) {
         PreparedStatement statement = null;
-        String query = "UPDATE db1_sae.Charge SET Date_Charge = ? WHERE Id_Charge = ?";
+        String query = "UPDATE db1_sae.Charges SET Date_Charge = ? WHERE Id_Charge = ?";
         
         try {
             statement = connection.prepareStatement(query);
@@ -142,7 +144,7 @@ public class ChargeImpl implements ChargeDAO {
     @Override
     public void deleteById(long id) {
         PreparedStatement statement = null;
-        String query = "DELETE FROM db1_sae.Charge WHERE Id_Charge = ?";
+        String query = "DELETE FROM db1_sae.Charges WHERE Id_Charge = ?";
         
         try {
             statement = connection.prepareStatement(query);
@@ -176,13 +178,14 @@ public class ChargeImpl implements ChargeDAO {
 	@Override
 	public void insertFK(int idContratLocation, int idCharges) {
 	    PreparedStatement statement = null;
-	    String query = "UPDATE db1_sae.Charge SET Id_Contrat_Location = ?WHERE Id_Charge = ?";
+	    String query = "UPDATE db1_sae.Charges SET Id_Contrat_Location = ? WHERE Id_Charge = ?";
 	    
 	    try {
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, idContratLocation);
 	        statement.setInt(2, idCharges);
-
+	        statement.executeUpdate();        
+	        
 	    }catch (Exception e) {
 	        ExceptionStorageHandler.logException(e, connection);
 	    } finally {
@@ -203,7 +206,7 @@ public class ChargeImpl implements ChargeDAO {
 				result = statement.getResultSet();
 				while(result.next()) {
 					ArrayList<String> cell = new ArrayList<>();
-					fillCells(result, cell);
+					fillCell(2,8,result, cell);
 
 					arrayRes.add(cell);
 				}
@@ -230,7 +233,7 @@ public class ChargeImpl implements ChargeDAO {
 				result = statement.getResultSet();
 				while(result.next()) {
 					ArrayList<String> cell = new ArrayList<>();
-					fillCells(result, cell);
+					fillCell(2,8,result, cell);
 					arrayRes.add(cell);
 				}
 			}
@@ -243,13 +246,150 @@ public class ChargeImpl implements ChargeDAO {
 		return arrayRes;
 	}
 
-	private void fillCells(ResultSet result, ArrayList<String> cell) throws SQLException {
-		cell.add(result.getString(2) != null ? result.getString(2) : stringUnknown);
-		cell.add(result.getString(3) != null ? result.getString(3): stringUnknown);
-		cell.add(result.getString(4) != null ? result.getString(4): stringUnknown);
-		cell.add(result.getString(5) != null ? result.getString(5): stringUnknown);
-		cell.add(result.getString(6) != null ? result.getString(6): stringUnknown);
-		cell.add(result.getString(7) != null ? result.getString(7): stringUnknown);
-		cell.add(result.getString(8) != null ? result.getString(8): stringUnknown);
+	@Override
+	public List<List<String>> procFactureFromCharge(int inputYear, int idBien) {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_factureFromCharge(?,?)}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			
+			statement.setInt(1, inputYear);
+			statement.setInt(2, idBien);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<>();
+					fillCell(1,8,result, cell);
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.logException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
 	}
+
+	private void fillCell(int start, int end, ResultSet result, ArrayList<String> cell) throws SQLException {
+		for (int i = start; i <= end; i++) {
+		    cell.add(result.getString(i) != null ? result.getString(i) : stringUnknown);
+		}
+	}
+
+	@Override
+	public List<List<String>> procYearFromFacture(int idBien) {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_yearFromChargeByBien(?)}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			
+			statement.setInt(1, idBien);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<>();
+					fillCell(1,2,result, cell);
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.logException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
+
+	@Override
+	public List<List<String>> procFactureFromBien(int idBien) {
+		CallableStatement statement = null;
+		ResultSet result = null;
+		String query = "{CALL db1_sae.get_factureFromBien(?)}";
+		List<List<String>> arrayRes = new ArrayList<>();
+		
+		try {
+			statement = connection.prepareCall(query);
+			
+			statement.setInt(1, idBien);
+			if(statement.execute()) {
+				result = statement.getResultSet();
+				while(result.next()) {
+					ArrayList<String> cell = new ArrayList<>();
+					fillCell(1,8,result, cell);
+					arrayRes.add(cell);
+				}
+			}
+		} catch (Exception e) {
+			ExceptionStorageHandler.logException(e, connection);
+		}finally {
+			DatabaseConnection.closeResult(result);
+			DatabaseConnection.closeStatement(statement);
+		}
+		return arrayRes;
+	}
+
+	@Override
+	public int procIdCharge(int idCl, int year) {
+	    CallableStatement statement = null;
+	    ResultSet result = null;
+	    String query = "{CALL db1_sae.get_idChargeFromYearAndIdCL(?,?)}";
+	    int res = -1; // Initialize with a default value
+
+	    try {
+	        statement = connection.prepareCall(query);
+	        statement.setInt(1, idCl);
+	        statement.setInt(2, year);
+
+	        if (statement.execute()) {
+	            result = statement.getResultSet();
+	            if (result.next()) { // Check if there is at least one row in the result
+	                res = result.getInt(1); // Get the first column value
+	            }
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.logException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeResult(result);
+	        DatabaseConnection.closeStatement(statement);
+	    }
+
+	    return res;
+	}
+
+	@Override
+	public int progGetIdClFromIdBien(int idBien) {
+	    CallableStatement statement = null;
+	    ResultSet result = null;
+	    String query = "{CALL db1_sae.get_clIdFromIdBien(?)}";
+	    int res = -1; // Initialize with a default value
+
+	    try {
+	        statement = connection.prepareCall(query);
+	        statement.setInt(1, idBien);
+
+	        if (statement.execute()) {
+	            result = statement.getResultSet();
+	            if (result.next()) { // Check if there is at least one row in the result
+	                res = result.getInt(1); // Get the first column value
+	            }
+	        }
+	    } catch (Exception e) {
+	        ExceptionStorageHandler.logException(e, connection);
+	    } finally {
+	        DatabaseConnection.closeResult(result);
+	        DatabaseConnection.closeStatement(statement);
+	    }
+
+	    return res;
+	}
+
 }

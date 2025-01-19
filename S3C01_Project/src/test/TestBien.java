@@ -201,7 +201,7 @@ public class TestBien {
 	    
 	    public void testProcedureGetBiens() {
 	        String sql = "{ CALL db1_sae.get_biens() }";
-	        String sqlVerif = "SELECT * FROM db1_sae.Bien LIMIT 1"; // Récupère la première ligne
+	        String sqlVerif = "SELECT Id_Bien, Etage, Adresse, Ville, Code_postal, Superficie, Nombre_de_piece, Meuble, Accessoire_prive, Accessoire_commun, Id_Contrat_location, Est_garage FROM db1_sae.Bien LIMIT 1"; // Récupère la première ligne
 	        try (CallableStatement callableStatement = connection.prepareCall(sql)) {
 	            try (ResultSet resultSet = callableStatement.executeQuery()) {
 	                // Vérifie si le ResultSet contient des résultats

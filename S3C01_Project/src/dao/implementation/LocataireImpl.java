@@ -42,7 +42,7 @@ public class LocataireImpl implements LocataireDAO {
     public Locataire findOne(long id) {
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Locataire WHERE id_locataire = ?";
+        String query = "SELECT Id_Locataire, Nom, Prenom, Date_de_naissance, IBAN, Id_Contrat_location FROM db1_sae.Locataire WHERE id_locataire = ?";
 
         try {
             // Préparation de la requête SQL avec l'identifiant du locataire
@@ -82,7 +82,7 @@ public class LocataireImpl implements LocataireDAO {
     	List<Locataire> locs = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
-        String query = "SELECT * FROM db1_sae.Locataire";
+        String query = "SELECT Id_Locataire, Nom, Prenom, Date_de_naissance, IBAN, Id_Contrat_location FROM db1_sae.Locataire";
         
         try {
             statement = connection.prepareStatement(query);
