@@ -11,6 +11,8 @@ Ce projet est une application de gestion de biens immobiliers permettant d'enreg
 - **Gestion des locataires** : Ajout et consultation des informations sur les locataires.
 - **Consultation des informations financières** : Suivi des loyers et des paiements.
 
+- **Collocation non traitée**
+
 ## Technologies utilisées
 
 - **Java** : Langage de programmation principal pour le développement de l'application.
