@@ -253,6 +253,7 @@ public class TravauxImpl implements TravauxDAO {
 	        statement = connection.prepareStatement(query);
 	        statement.setString(1, facture);
 	        statement.setInt(2, id);
+	        statement.executeUpdate();
 
 	    } catch (Exception e) {
 	        ExceptionStorageHandler.logException(e, connection);

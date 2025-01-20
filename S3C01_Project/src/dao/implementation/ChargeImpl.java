@@ -102,7 +102,6 @@ public class ChargeImpl implements ChargeDAO {
                 ResultSet result = statement.getGeneratedKeys();
                 if (result.next()) {
                     int id = result.getInt(1);
-                    System.out.println(id);
                     entity.setIdCharge(id);
                 }
             }
@@ -188,11 +187,14 @@ public class ChargeImpl implements ChargeDAO {
 	        
 	    }catch (Exception e) {
 	        ExceptionStorageHandler.logException(e, connection);
+	        e.printStackTrace();
 	    } finally {
 	        DatabaseConnection.closeStatement(statement);
 	    }
 	}
-
+	
+	
+	
 	@Override
 	public List<List<String>> procGetCharges() {
 		CallableStatement statement = null;

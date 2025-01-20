@@ -146,13 +146,13 @@ public class ContratLocationAjoutController extends TemplateAjoutController {
             Date dateVersement = transformStringToDate(viewContratLocation.getFieldDateVersement().getText());
             //Recupere le l'indice de la combo box afin de recuperer l'id placer dans la liste de données recuperer par la procédure SQL
             int bienId = Integer.parseInt(dataBienSansContrat.get(viewContratLocation.getComboBien().getSelectedIndex()).get(1));
-            int locataireId = Integer.parseInt(dataBienSansContrat.get(viewContratLocation.getComboLocataire().getSelectedIndex()).get(1));
+            int locataireId = Integer.parseInt(dataLocaSansContrat.get(viewContratLocation.getComboLocataire().getSelectedIndex()).get(1));
             
             //create the contrat location with the data for inserting it
             ContratLocation contratLocation = new ContratLocation(montant, dateDebut, dateFin, modaliteChauffage, modaliteEauChaude, dateVersement);
             contratLocationDAO.insert(contratLocation);
             // Lie le bien et le locataire au contrat de location en recuperant la clé auto générer  de contrat location
-            contratLocationDAO.procUpdateFkBienLocation(contratLocation.getNumeroLocation(), bienId, locataireId);
+            contratLocationDAO.procUpdateFkBienLocation(locataireId,bienId, contratLocation.getNumeroLocation());
         } catch (NumberFormatException e) {
             ErrorMessage.errorDialog("Erreur lors de l'insertion des données dans la base de données");
         }

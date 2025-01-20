@@ -165,7 +165,7 @@ public class LocataireAjoutController extends TemplateAjoutController {
             if ((viewAjoutLocataire.getComboContratLocation().getSelectedItem() != defaultVal && viewAjoutLocataire.getComboBoxBien().getSelectedItem() == defaultVal) ||
                 (viewAjoutLocataire.getComboContratLocation().getSelectedItem() == defaultVal && viewAjoutLocataire.getComboBoxBien().getSelectedItem() != defaultVal)) {
                    ErrorMessage.errorDialog("Les 2 champs doivent être \"Créé seul\" ou aucun");
-            } else {                
+            } else {          
                 modelLocataire.insert(locataire);
             }
             
@@ -188,10 +188,10 @@ public class LocataireAjoutController extends TemplateAjoutController {
         viewAjoutLocataire.getComboContratLocation().addItem(defaultVal);
         viewAjoutLocataire.getComboBoxBien().addItem(defaultVal);
         for(String item : listCB){            
-            viewAjoutLocataire.getComboContratLocation().addItem(item);
+            viewAjoutLocataire.getComboBoxBien().addItem(item);
         }
         for(List<String> list: dataCbBien) {
-            viewAjoutLocataire.getComboBoxBien().addItem(list.get(0));
+            viewAjoutLocataire.getComboContratLocation().addItem(list.get(0));
         }
     }
     

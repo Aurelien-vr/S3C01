@@ -217,7 +217,7 @@ public class LocataireImpl implements LocataireDAO {
             statement = connection.prepareStatement(query);
             statement.setInt(1, idContratLocation);
             statement.setInt(2, idLocataire);
-
+            statement.executeUpdate();            
         } catch (Exception e) {
             ExceptionStorageHandler.logException(e, connection);
         } finally {

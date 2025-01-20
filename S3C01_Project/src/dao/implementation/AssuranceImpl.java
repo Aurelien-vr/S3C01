@@ -238,6 +238,7 @@ public class AssuranceImpl implements AssuranceDAO {
 	        statement = connection.prepareStatement(query);
 	        statement.setInt(1, selectedIdBien);
 	        statement.setInt(2, numeroContrat);
+	        statement.executeUpdate();
 	    }catch (Exception e) {
 	        ExceptionStorageHandler.logException(e, connection);
 	    } finally {

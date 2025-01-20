@@ -282,6 +282,7 @@ public class ContratLocationImpl implements ContratLocationDAO {
 		        statement.execute();
 		    }catch (Exception e) {
 				ExceptionStorageHandler.logException(e, connection);
+				e.printStackTrace();
 			}finally {
 				DatabaseConnection.closeStatement(statement);
 			}

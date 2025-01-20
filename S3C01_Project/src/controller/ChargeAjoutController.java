@@ -15,6 +15,7 @@ import dao.entities.Charge;
 import dao.entities.Facture;
 import db_connection.DatabaseConnection;
 import exception.ExceptionStorageHandler;
+import utilities.ErrorMessage;
 
 public class ChargeAjoutController extends TemplateAjoutController {
 
@@ -31,8 +32,8 @@ public class ChargeAjoutController extends TemplateAjoutController {
 
     public ChargeAjoutController(boolean edit) {
         this.edit = edit;
-        addEventHandlers();
         viewAjoutCharge = new ChargeAjoutView(edit);
+        addEventHandlers();
         initialize();
     }
 
@@ -51,8 +52,10 @@ public class ChargeAjoutController extends TemplateAjoutController {
         viewAjoutCharge.getAddFactureButton().addActionListener(e -> {
             String ref = (String) viewAjoutCharge.getComboFacture().getSelectedItem();
             Facture facture = modelfacture.findOneRef(ref);
-            modelTable.addRow(new Object[]{facture.getReferenceFacture(), facture.getTypeFacture(), facture.getDateFacture(), facture.getMontantFacture()});
-            factures.add(facture);
+            if(facture!=null) {
+            	modelTable.addRow(new Object[]{facture.getReferenceFacture(), facture.getTypeFacture(), facture.getDateFacture(), facture.getMontantFacture()});
+            	factures.add(facture);
+            }
         });
     }
     private void poupulateCb() {
@@ -136,25 +139,34 @@ public class ChargeAjoutController extends TemplateAjoutController {
     }
 
     private void validate() {
-    	int idCl = modelCharge.progGetIdClFromIdBien(Integer.parseInt(cbAdresses.get(viewAjoutCharge.getComboAdresse().getSelectedIndex()).get(1)));
-    	
-        if(edit) {
-        	int idCharge = modelCharge.procIdCharge(idCl,Integer.parseInt((String)viewAjoutCharge.getComboDate().getSelectedItem()));
-        	for(Facture facture: factures) {
-        		modelfacture.insertFKCharges(idCharge, facture.getReferenceFacture());
-        	}
-        }else{
-        	java.sql.Date sqlDate = fromFieldToSqlDate();
-        	Charge charge = new Charge(sqlDate);
-        	modelCharge.insert(charge);
-        	modelCharge.insertFK(idCl, charge.getIdCharge());
-        	
-        	for(Facture facture: factures) {
-        		modelfacture.insertFKCharges(charge.getIdCharge(), facture.getReferenceFacture());
-        	}
-        }
-        new ChargeController();
-        viewAjoutCharge.dispose();
+    	try {
+    		
+    		int idCl = modelCharge.progGetIdClFromIdBien(Integer.parseInt(cbAdresses.get(viewAjoutCharge.getComboAdresse().getSelectedIndex()).get(1)));
+    		if(idCl!=-1) {
+    			if(edit) {
+    				int idCharge = modelCharge.procIdCharge(idCl,Integer.parseInt((String)viewAjoutCharge.getComboDate().getSelectedItem()));
+    				for(Facture facture: factures) {
+    					modelfacture.insertFKCharges(idCharge, facture.getReferenceFacture());
+    				}
+    			}else{
+    				java.sql.Date sqlDate = fromFieldToSqlDate();
+    				Charge charge = new Charge(sqlDate);
+    				modelCharge.insert(charge);
+    				modelCharge.insertFK(idCl, charge.getIdCharge());
+    				
+    				for(Facture facture: factures) {
+    					modelfacture.insertFKCharges(charge.getIdCharge(), facture.getReferenceFacture());
+    				}
+    			}
+    			new ChargeController();
+    			viewAjoutCharge.dispose();
+    		}else {
+    			ErrorMessage.errorDialog("Erreur lors de l'insertion");
+    			viewAjoutCharge.dispose();
+    		}
+    	}catch (Exception e) {
+    	    ErrorMessage.errorDialog("Une erreur s'est produite lors de l'insertion : " + e.getMessage());
+		}
     }
 
 	private java.sql.Date fromFieldToSqlDate() {

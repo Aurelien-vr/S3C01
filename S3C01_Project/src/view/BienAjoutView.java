@@ -36,9 +36,9 @@ public class BienAjoutView extends TemplateAjoutView {
     private JLabel labNombrePiece = new JLabel("Nombre de pièces:");
     private JSpinner spinnerNombrePiece = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
     private JCheckBox checkMeuble = new JCheckBox("Meublé");
-    private JLabel labAccesoirPrive = new JLabel("Accesoir privé:");
+    private JLabel labAccesoirPrive = new JLabel("Accessoire privé:");
     private JTextField fieldAccesoirPrive = new JTextField(10);
-    private JLabel labAccesoirCommun = new JLabel("Accesoir commun:");
+    private JLabel labAccesoirCommun = new JLabel("Accessoire commun:");
     private JTextField fieldAccesoirCommun = new JTextField(10);
     private JCheckBox checkGarage = new JCheckBox("Garage");
     private JLabel labContratLocation = new JLabel("Contrat location disponible:");

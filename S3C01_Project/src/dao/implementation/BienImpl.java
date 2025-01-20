@@ -331,6 +331,7 @@ public class BienImpl implements BienDAO {
             statement = connection.prepareStatement(query);
             statement.setInt(1, idContratLocation);
             statement.setInt(2, id);
+            statement.executeUpdate();
         } catch (Exception e) {
             ExceptionStorageHandler.logException(e, connection);
         } finally {
