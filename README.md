@@ -1,5 +1,7 @@
 # Gestion de Bien Immobilier - Projet Java avec mysql et JDBC
 
+**realiser par: Aurelien Vincent--Randonnier, Lionel Benazech,Aymen Chlabi, Lucie Masselin,Annabelle Mosna,Daria Shulhina**
+
 Ce projet est une application de gestion de biens immobiliers permettant d'enregistrer, de consulter, de modifier et de supprimer des informations relatives aux contrats de location, aux propriétés et aux locataires. L'application utilise **Java** pour la logique métier et **JDBC** pour interagir avec une base de données **MySQL**.
 
 ## Fonctionnalités principales
