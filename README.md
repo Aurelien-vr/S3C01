@@ -1,4 +1,4 @@
-# Gestion de Bien Immobilier - Projet Java avec JDBC
+# Gestion de Bien Immobilier - Projet Java avec mysql et JDBC
 
 Ce projet est une application de gestion de biens immobiliers permettant d'enregistrer, de consulter, de modifier et de supprimer des informations relatives aux contrats de location, aux propriétés et aux locataires. L'application utilise **Java** pour la logique métier et **JDBC** pour interagir avec une base de données **MySQL**.
 
@@ -15,6 +15,7 @@ Ce projet est une application de gestion de biens immobiliers permettant d'enreg
 - **JDBC (Java Database Connectivity)** : API pour la connexion à la base de données MySQL.
 - **MySQL** : Base de données utilisée pour stocker les informations des biens immobiliers, des locataires et des contrats.
 - **Eclipse** : IDE utilisé pour le développement de l'application.
+- **DBeaver** : Accéder à la base de données via l'utilisation de DBeaver
 
 ## Prérequis
 
